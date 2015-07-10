@@ -22,7 +22,7 @@ namespace Xbim.ExpressParser.Schemas {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SchemasStructures {
+    public class SchemasStructures {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Xbim.ExpressParser.Schemas {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Xbim.ExpressParser.Schemas.SchemasStructures", typeof(SchemasStructures).Assembly);
@@ -51,7 +51,7 @@ namespace Xbim.ExpressParser.Schemas {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -74,7 +74,7 @@ namespace Xbim.ExpressParser.Schemas {
         ///    &lt;Type&gt;IfcPersonAndOrganization&lt;/Type&gt;
         ///    &lt;Type&gt;IfcPostalAddress&lt;/Typ [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string IFC2x3_TC1 {
+        public static string IFC2x3_TC1 {
             get {
                 return ResourceManager.GetString("IFC2x3_TC1", resourceCulture);
             }
@@ -95,7 +95,7 @@ namespace Xbim.ExpressParser.Schemas {
         ///    &lt;Type&gt;IfcPostalAddress&lt;/Type&gt;
         ///   [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string IFC4 {
+        public static string IFC4 {
             get {
                 return ResourceManager.GetString("IFC4", resourceCulture);
             }

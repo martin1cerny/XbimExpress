@@ -22,7 +22,7 @@ namespace Xbim.ExpressParser.Schemas {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SchemasDefinitions {
+    public class SchemasDefinitions {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Xbim.ExpressParser.Schemas {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Xbim.ExpressParser.Schemas.SchemasDefinitions", typeof(SchemasDefinitions).Assembly);
@@ -51,7 +51,7 @@ namespace Xbim.ExpressParser.Schemas {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,32 +61,65 @@ namespace Xbim.ExpressParser.Schemas {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to (* 
+        ///LPM/6 Express Schema (Long Form) Formal Release
+        ///
+        ///Dated July 21st 2003
+        ///
+        ///   This schema incorporates the changes made to STEP Parts 41, 42, 43 and 45
+        ///   The EXPRESS constructs contained in LPM/5 taken from those parts have
+        ///   been amended to be accordance with the following documents:
+        ///   - ISO 10303-41 2nd Edition (ISO TC 184/SC4/WG12 N525 2000-05-30)
+        ///   - ISO 10303-42 2nd Edition (ISO TC 184/SC4/WG12 N617 2000-09-23 as modified by TC1 WG12 N616)
+        ///   - ISO 10303-43 2nd Edition
+        ///   - ISO 10303-45  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static byte[] CIS2_lpm6 {
+        public static string CIS2_lpm61 {
             get {
-                object obj = ResourceManager.GetObject("CIS2_lpm6", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("CIS2_lpm61", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to (*
+        ///Copyright by:
+        ///International Alliance for Interoperability, 1996-2007
+        ///
+        ///All rights reserved. No part of this documentation may be
+        ///reproduced, stored in a retrieval system, or transmitted
+        ///in any form or by any means, without the prior written
+        ///permission of the owner.
+        ///
+        ///Contents:
+        ///full IFC object model EXPRESS definitions for the IFC2x Edition 3 Technical Corrigendum 1 release
+        ///
+        ///- express longform distribution
+        ///- compiled for EXPRESS version 1 technical corrigendum 2
+        ///
+        ///Issue date:
+        ///July 10, 2007
+        ///        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static byte[] IFC2X3_TC1 {
+        public static string IFC2X3_TC1 {
             get {
-                object obj = ResourceManager.GetObject("IFC2X3_TC1", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("IFC2X3_TC1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to (*
+        ///Copyright by:
+        ///buildingSMART International Ltd, 1996-2013
+        ///Any technical documentation made available by buildingSMART International Limited 
+        ///is the copyrighted work of buildingSMART International Limited and is owned by the 
+        ///buildingSMART International Limited. It may be photocopied, used in software development, 
+        ///or translated into another computer language without prior written consent from 
+        ///buildingSMART International Limited provided that full attribution is given. 
+        ///Prior written consent is re [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static byte[] IFC4 {
+        public static string IFC4 {
             get {
-                object obj = ResourceManager.GetObject("IFC4", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("IFC4", resourceCulture);
             }
         }
     }

@@ -3,10 +3,10 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.0
-// Machine:  CENTAURUS
-// DateTime: 30.9.2014 17:16:48
-// UserName: Martin
-// Input file <Parser.y - 30.9.2014 17:16:45>
+// Machine:  C13300493
+// DateTime: 10/07/2015 14:33:05
+// UserName: mxfm2
+// Input file <Parser.y - 10/07/2015 14:32:33>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -66,10 +66,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 30.9.2014 17:16:45
+  // Verbatim content from Parser.y - 10/07/2015 14:32:33
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 30.9.2014 17:16:45
+  // End verbatim content from Parser.y - 10/07/2015 14:32:33
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -463,45 +463,45 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
     {
       case 2: // schema_definition -> SCHEMA, IDENTIFIER, ';', definitions, END_SCHEMA, ';'
 #line 86 "Parser.y"
-{ Finished(); }
+{ }
         break;
       case 11: // type_definition -> TYPE, IDENTIFIER, '=', identifier_or_type, ';', END_TYPE, 
                //                    ';'
 #line 104 "Parser.y"
-{ CheckTypeExists(ValueStack[ValueStack.Depth-6].strVal); }
+{  }
         break;
       case 12: // type_definition -> TYPE, IDENTIFIER, '=', enumerable, OF, identifier_or_type, 
                //                    ';', END_TYPE, ';'
 #line 105 "Parser.y"
-{ CheckTypeExists(ValueStack[ValueStack.Depth-8].strVal); }
+{  }
         break;
       case 13: // type_definition -> TYPE, IDENTIFIER, '=', identifier_or_type, ';', 
                //                    where_section, END_TYPE, ';'
 #line 106 "Parser.y"
-{ CheckTypeExists(ValueStack[ValueStack.Depth-7].strVal); }
+{  }
         break;
       case 14: // type_definition -> TYPE, IDENTIFIER, '=', enumerable, OF, identifier_or_type, 
                //                    ';', where_section, END_TYPE, ';'
 #line 107 "Parser.y"
-{ CheckTypeExists(ValueStack[ValueStack.Depth-9].strVal); }
+{  }
         break;
       case 15: // enumeration -> TYPE, IDENTIFIER, '=', ENUMERATION_OF, identifier_list, ';', 
                //                END_TYPE, ';'
 #line 111 "Parser.y"
-{ CreateEnumeration(ValueStack[ValueStack.Depth-7].strVal, (List<string>)(ValueStack[ValueStack.Depth-4].val));  CheckTypeExists(ValueStack[ValueStack.Depth-7].strVal); }
+{  }
         break;
       case 16: // select_type -> TYPE, IDENTIFIER, '=', SELECT, identifier_list, ';', END_TYPE, 
                //                ';'
 #line 115 "Parser.y"
-{ CreateSelectInterface(ValueStack[ValueStack.Depth-7].strVal, (List<string>)(ValueStack[ValueStack.Depth-4].val));  CheckTypeExists(ValueStack[ValueStack.Depth-7].strVal); }
+{  }
         break;
       case 17: // entity -> ENTITY, IDENTIFIER, sections, END_ENTITY, ';'
 #line 119 "Parser.y"
-{ CheckTypeExists(ValueStack[ValueStack.Depth-4].strVal); }
+{ }
         break;
       case 18: // entity -> ENTITY, IDENTIFIER, ';', sections, END_ENTITY, ';'
 #line 120 "Parser.y"
-{ CheckTypeExists(ValueStack[ValueStack.Depth-5].strVal); }
+{ }
         break;
       case 19: // identifier_list -> '(', identifiers, ')'
 #line 124 "Parser.y"

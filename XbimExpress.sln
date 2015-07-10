@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.ExpressParser", "Xbim.ExpressParser\Xbim.ExpressParser.csproj", "{191A6A46-CD32-427D-846D-86D78A76074E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B027FD0A-A830-42E6-9305-1F7948CA863C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.ExpressParser.Tests", "Xbim.ExpressParser.Tests\Xbim.ExpressParser.Tests.csproj", "{70ACA548-1E13-4DA6-A8A3-B50B14850F61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +19,15 @@ Global
 		{191A6A46-CD32-427D-846D-86D78A76074E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{191A6A46-CD32-427D-846D-86D78A76074E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{191A6A46-CD32-427D-846D-86D78A76074E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70ACA548-1E13-4DA6-A8A3-B50B14850F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70ACA548-1E13-4DA6-A8A3-B50B14850F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70ACA548-1E13-4DA6-A8A3-B50B14850F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70ACA548-1E13-4DA6-A8A3-B50B14850F61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{70ACA548-1E13-4DA6-A8A3-B50B14850F61} = {B027FD0A-A830-42E6-9305-1F7948CA863C}
 	EndGlobalSection
 EndGlobal

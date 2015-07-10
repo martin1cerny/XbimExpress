@@ -18,7 +18,8 @@ namespace Xbim.ExpressParser.Schemas
         public List<string> Types { get; set; }
     }
 
-    public class Schema
+    [XmlRoot("Schema")]
+    public class SchemaStructure
     {
         [XmlAttribute]
         public string Name { get; set; }
@@ -26,18 +27,24 @@ namespace Xbim.ExpressParser.Schemas
         [XmlElement("Domain")]
         public List<Domain> Domains { get; set; }
 
-        public static Schema LoadIFC2x3()
+        public static SchemaStructure Load(Stream structure)
         {
-            var txtReader = new StringReader(SchemasStructures.IFC2x3_TC1);
-            var serializer = new XmlSerializer(typeof(Schema));
-            return (Schema)serializer.Deserialize(txtReader);
+            var serializer = new XmlSerializer(typeof(SchemaStructure));
+            return (SchemaStructure)serializer.Deserialize(structure);
         }
 
-        public static Schema LoadIFC4()
+        public static SchemaStructure LoadIfc2X3()
+        {
+            var txtReader = new StringReader(SchemasStructures.IFC2x3_TC1);
+            var serializer = new XmlSerializer(typeof(SchemaStructure));
+            return (SchemaStructure)serializer.Deserialize(txtReader);
+        }
+
+        public static SchemaStructure LoadIfc4()
         {
             var txtReader = new StringReader(SchemasStructures.IFC4);
-            var serializer = new XmlSerializer(typeof(Schema));
-            return (Schema)serializer.Deserialize(txtReader);
+            var serializer = new XmlSerializer(typeof(SchemaStructure));
+            return (SchemaStructure)serializer.Deserialize(txtReader);
         }
 
         public Domain GetDomainForType(string type)
