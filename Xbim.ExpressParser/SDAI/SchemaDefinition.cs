@@ -6,13 +6,28 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public class SchemaDefinition
+    public class SchemaDefinition : SchemaEntity
     {
         public string Name { get; set; }
         public string Identification { get; set; }
-        public List<EntityDefinition> Entities { get; set; }
-        public List<DefinedType> Types { get; set; }
-        public List<GlobalRule> GlobalRules { get; set; }
 
+        #region Inverse members
+
+        public IEnumerable<EntityDefinition> Entities
+        {
+            get { return SchemaModel.Get<EntityDefinition>(def => def.ParentSchema == this); }
+        }
+
+        public IEnumerable<DefinedType> Types
+        {
+            get { return SchemaModel.Get<DefinedType>(def => def.ParentSchema == this); }
+        }
+
+        public IEnumerable<GlobalRule> GlobalRules
+        {
+            get { return SchemaModel.Get<GlobalRule>(r => r.ParentSchema == this); }
+        }
+
+        #endregion
     }
 }

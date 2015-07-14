@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public class AggregationType: BaseType
+    public abstract class AggregationType: SchemaEntity, BaseType
     {
+        public BaseType ElementType { get; set; }
     }
 }

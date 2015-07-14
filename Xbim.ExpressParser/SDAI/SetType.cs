@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public class SelectType:SchemaEntity, ConstructedType
+    public class SetType: VariableSizeAggregationType
     {
-        public List<NamedType> Selections { get; set; }
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public class SelectType:SchemaEntity, ConstructedType
+    public class ListType: VariableSizeAggregationType
     {
-        public List<NamedType> Selections { get; set; }
+        public bool UniqueFlag { get; set; }
     }
 }

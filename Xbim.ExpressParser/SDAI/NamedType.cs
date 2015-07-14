@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public class NamedType: BaseType, TypeOrRule
+    public abstract class NamedType : SchemaEntity, BaseType, TypeOrRule
     {
+        public ExpressId Name { get; set; }
+        public List<WhereRule> WhereRules { get; set; }
+        public SchemaDefinition ParentSchema { get; set; }
     }
 }

@@ -8,6 +8,11 @@ namespace Xbim.ExpressParser.SDAI
 {
     public struct ExpressId
     {
+        public ExpressId(string value)
+        {
+            Value = value;
+        }
+
         public bool Equals(ExpressId other)
         {
             return string.Equals(Value, other.Value);

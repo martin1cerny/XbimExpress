@@ -70,6 +70,41 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SchemasStructures.resx</DependentUpon>
     </Compile>
+    <Compile Include="SDAI\AggregationType.cs" />
+    <Compile Include="SDAI\ArrayType.cs" />
+    <Compile Include="SDAI\Attribute.cs" />
+    <Compile Include="SDAI\BagType.cs" />
+    <Compile Include="SDAI\BaseType.cs" />
+    <Compile Include="SDAI\BinaryType.cs" />
+    <Compile Include="SDAI\BooleanType.cs" />
+    <Compile Include="SDAI\ConstructedType.cs" />
+    <Compile Include="SDAI\DefinedType.cs" />
+    <Compile Include="SDAI\DerivedAttribute.cs" />
+    <Compile Include="SDAI\EntityDefinition.cs" />
+    <Compile Include="SDAI\EnumerationType.cs" />
+    <Compile Include="SDAI\ExplicitAttribute.cs" />
+    <Compile Include="SDAI\ExplicitOrDerived.cs" />
+    <Compile Include="SDAI\InverseAttribute.cs" />
+    <Compile Include="SDAI\ListType.cs" />
+    <Compile Include="SDAI\ObjectInfoId.cs" />
+    <Compile Include="SDAI\ExpressId.cs" />
+    <Compile Include="SDAI\GlobalRule.cs" />
+    <Compile Include="SDAI\IntegerType.cs" />
+    <Compile Include="SDAI\LogicalType.cs" />
+    <Compile Include="SDAI\NamedType.cs" />
+    <Compile Include="SDAI\NumberType.cs" />
+    <Compile Include="SDAI\RealType.cs" />
+    <Compile Include="SDAI\SchemaDefinition.cs" />
+    <Compile Include="SDAI\SchemaEntity.cs" />
+    <Compile Include="SDAI\SchemaModel.cs" />
+    <Compile Include="SDAI\SelectType.cs" />
+    <Compile Include="SDAI\SetType.cs" />
+    <Compile Include="SDAI\SimpleType.cs" />
+    <Compile Include="SDAI\StringType.cs" />
+    <Compile Include="SDAI\TypeOrRule.cs" />
+    <Compile Include="SDAI\UnderlyingType.cs" />
+    <Compile Include="SDAI\VariableSizeAggregationType.cs" />
+    <Compile Include="SDAI\WhereRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Parser\makeparser.bat" />

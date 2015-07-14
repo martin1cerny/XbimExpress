@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public abstract class SimpleType: BaseType, UnderlyingType
+    public abstract class SimpleType: SchemaEntity, BaseType, UnderlyingType
     {
     }
 }

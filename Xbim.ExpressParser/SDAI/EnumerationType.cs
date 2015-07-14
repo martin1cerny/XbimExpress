@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public class EnumerationType: ConstructedType
+    public class EnumerationType: SchemaEntity, ConstructedType
     {
+        public List<ExpressId> Elements { get; set; }
     }
 }

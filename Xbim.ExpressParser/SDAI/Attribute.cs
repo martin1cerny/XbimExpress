@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public class SelectType:SchemaEntity, ConstructedType
+    public abstract class Attribute: SchemaEntity
     {
-        public List<NamedType> Selections { get; set; }
+        public ExpressId Name { get; set; }
+        public EntityDefinition ParentEntity { get; set; }
     }
 }
