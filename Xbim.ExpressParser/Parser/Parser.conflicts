@@ -1,92 +1,92 @@
-// Parser Conflict Information for grammar file "Parser.y - 10/07/2015 14:32:33"
+// Parser Conflict Information for grammar file "Parser.y - 14/07/2015 15:50:17"
 
 Shift/Reduce conflict on symbol "IDENTIFIER", parser will shift
- Reduce 50:	where_section -> WHERE, where_rules
+ Reduce 51:	where_section -> WHERE, where_rules
  Shift "IDENTIFIER":	State-22 -> State-24
   Items for From-state State 22
-    50 where_section: WHERE where_rules .
+    51 where_section: WHERE where_rules .
 	-lookahead: END_TYPE, END_ENTITY, IDENTIFIER, WHERE, UNIQUE, INVERSE, 
                 DERIVE, SUBTYPE_OF, SUPERTYPE_OF, ABSTRACT
-    52 where_rules: where_rules . where_rule 
+    53 where_rules: where_rules . where_rule 
   Items for Next-state State 24
-    53 where_rule: IDENTIFIER . ':' error ';' 
-    54 where_rule: IDENTIFIER . ':' SELF IN string_array ';' 
-    55 where_rule: IDENTIFIER . ':' SELF comparer number ';' 
-    56 where_rule: IDENTIFIER . ':' SELF comparer IDENTIFIER ';' 
-    57 where_rule: IDENTIFIER . ':' accessor comparer number ';' 
-    58 where_rule: IDENTIFIER . ':' accessor comparer IDENTIFIER ';' 
-    59 where_rule: IDENTIFIER . ':' '{' number comparer SELF comparer number '}' ';' 
+    54 where_rule: IDENTIFIER . ':' error ';' 
+    55 where_rule: IDENTIFIER . ':' SELF IN string_array ';' 
+    56 where_rule: IDENTIFIER . ':' SELF comparer number ';' 
+    57 where_rule: IDENTIFIER . ':' SELF comparer IDENTIFIER ';' 
+    58 where_rule: IDENTIFIER . ':' accessor comparer number ';' 
+    59 where_rule: IDENTIFIER . ':' accessor comparer IDENTIFIER ';' 
+    60 where_rule: IDENTIFIER . ':' '{' number comparer SELF comparer number '}' ';' 
 
 Shift/Reduce conflict on symbol "'.'", parser will shift
- Reduce 101:	accessor -> SELF, BACKSLASH, accessor
+ Reduce 103:	accessor -> SELF, BACKSLASH, accessor
  Shift "'.'":	State-46 -> State-47
   Items for From-state State 46
-    101 accessor: SELF BACKSLASH accessor .
+    103 accessor: SELF BACKSLASH accessor .
 	-lookahead: '.', GT, LT, GTE, LTE, NEQ, '=', ':'
-    100 accessor: accessor . '.' IDENTIFIER 
+    102 accessor: accessor . '.' IDENTIFIER 
   Items for Next-state State 47
-    100 accessor: accessor '.' . IDENTIFIER 
+    102 accessor: accessor '.' . IDENTIFIER 
 
 Shift/Reduce conflict on symbol "IDENTIFIER", parser will shift
- Reduce 35:	section -> parameter_section
- Shift "IDENTIFIER":	State-140 -> State-142
-  Items for From-state State 140
-    35 section: parameter_section .
+ Reduce 36:	section -> parameter_section
+ Shift "IDENTIFIER":	State-147 -> State-149
+  Items for From-state State 147
+    36 section: parameter_section .
 	-lookahead: END_ENTITY, IDENTIFIER, WHERE, UNIQUE, INVERSE, DERIVE, 
                 SUBTYPE_OF, SUPERTYPE_OF, ABSTRACT
-    42 parameter_section: parameter_section . parameter_definition 
-  Items for Next-state State 142
-    43 parameter_definition: IDENTIFIER . ':' parameter_definition_right ';' 
-    44 parameter_definition: IDENTIFIER . ':' OPTIONAL parameter_definition_right ';' 
+    43 parameter_section: parameter_section . parameter_definition 
+  Items for Next-state State 149
+    44 parameter_definition: IDENTIFIER . ':' parameter_definition_right ';' 
+    45 parameter_definition: IDENTIFIER . ':' OPTIONAL parameter_definition_right ';' 
 
 Shift/Reduce conflict on symbol "IDENTIFIER", parser will shift
- Reduce 69:	unique_section -> UNIQUE, unique_rules
- Shift "IDENTIFIER":	State-165 -> State-167
-  Items for From-state State 165
-    69 unique_section: UNIQUE unique_rules .
+ Reduce 70:	unique_section -> UNIQUE, unique_rules
+ Shift "IDENTIFIER":	State-172 -> State-174
+  Items for From-state State 172
+    70 unique_section: UNIQUE unique_rules .
 	-lookahead: END_ENTITY, IDENTIFIER, WHERE, UNIQUE, INVERSE, DERIVE, 
                 SUBTYPE_OF, SUPERTYPE_OF, ABSTRACT
-    73 unique_rules: unique_rules . unique_rule 
-  Items for Next-state State 167
-    70 unique_rule: IDENTIFIER . ':' IDENTIFIER ';' 
-    71 unique_rule: IDENTIFIER . ':' identifiers ';' 
+    74 unique_rules: unique_rules . unique_rule 
+  Items for Next-state State 174
+    71 unique_rule: IDENTIFIER . ':' IDENTIFIER ';' 
+    72 unique_rule: IDENTIFIER . ':' identifiers ';' 
 
 Shift/Reduce conflict on symbol "';'", parser will shift
  Reduce 20:	identifiers -> IDENTIFIER
- Shift "';'":	State-169 -> State-170
-  Items for From-state State 169
-    70 unique_rule: IDENTIFIER ':' IDENTIFIER . ';' 
+ Shift "';'":	State-176 -> State-177
+  Items for From-state State 176
+    71 unique_rule: IDENTIFIER ':' IDENTIFIER . ';' 
     20 identifiers: IDENTIFIER .
 	-lookahead: ';', ','
-  Items for Next-state State 170
-    70 unique_rule: IDENTIFIER ':' IDENTIFIER ';' .
+  Items for Next-state State 177
+    71 unique_rule: IDENTIFIER ':' IDENTIFIER ';' .
 	-lookahead: IDENTIFIER, END_ENTITY, WHERE, UNIQUE, INVERSE, DERIVE, 
                 SUBTYPE_OF, SUPERTYPE_OF, ABSTRACT
 
 Shift/Reduce conflict on symbol "IDENTIFIER", parser will shift
- Reduce 74:	inverse_section -> INVERSE, inverse_rules
- Shift "IDENTIFIER":	State-176 -> State-178
-  Items for From-state State 176
-    74 inverse_section: INVERSE inverse_rules .
+ Reduce 75:	inverse_section -> INVERSE, inverse_rules
+ Shift "IDENTIFIER":	State-183 -> State-185
+  Items for From-state State 183
+    75 inverse_section: INVERSE inverse_rules .
 	-lookahead: END_ENTITY, IDENTIFIER, WHERE, UNIQUE, INVERSE, DERIVE, 
                 SUBTYPE_OF, SUPERTYPE_OF, ABSTRACT
-    76 inverse_rules: inverse_rules . inverse_rule 
-  Items for Next-state State 178
-    77 inverse_rule: IDENTIFIER . ':' enumerable OF IDENTIFIER FOR IDENTIFIER ';' 
-    78 inverse_rule: IDENTIFIER . ':' IDENTIFIER FOR IDENTIFIER ';' 
+    77 inverse_rules: inverse_rules . inverse_rule 
+  Items for Next-state State 185
+    78 inverse_rule: IDENTIFIER . ':' enumerable OF IDENTIFIER FOR IDENTIFIER ';' 
+    79 inverse_rule: IDENTIFIER . ':' IDENTIFIER FOR IDENTIFIER ';' 
 
 Shift/Reduce conflict on symbol "IDENTIFIER", parser will shift
- Reduce 79:	derive_section -> DERIVE, derive_rules
- Shift "IDENTIFIER":	State-193 -> State-195
-  Items for From-state State 193
-    79 derive_section: DERIVE derive_rules .
+ Reduce 80:	derive_section -> DERIVE, derive_rules
+ Shift "IDENTIFIER":	State-200 -> State-202
+  Items for From-state State 200
+    80 derive_section: DERIVE derive_rules .
 	-lookahead: END_ENTITY, IDENTIFIER, WHERE, UNIQUE, INVERSE, DERIVE, 
                 SUBTYPE_OF, SUPERTYPE_OF, ABSTRACT
-    81 derive_rules: derive_rules . derive_rule 
-  Items for Next-state State 195
-    82 derive_rule: IDENTIFIER . ':' identifier_or_type ASSIGNMENT error ';' 
-    83 derive_rule: IDENTIFIER . ':' enumerable OF identifier_or_type ASSIGNMENT error ';' 
-    84 derive_rule: IDENTIFIER . ':' enumerable OF enumerable OF identifier_or_type ASSIGNMENT error ';' 
-    99 accessor: IDENTIFIER . '.' IDENTIFIER 
+    82 derive_rules: derive_rules . derive_rule 
+  Items for Next-state State 202
+    83 derive_rule: IDENTIFIER . ':' identifier_or_type ASSIGNMENT error ';' 
+    84 derive_rule: IDENTIFIER . ':' enumerable OF identifier_or_type ASSIGNMENT error ';' 
+    85 derive_rule: IDENTIFIER . ':' enumerable OF enumerable OF identifier_or_type ASSIGNMENT error ';' 
+    101 accessor: IDENTIFIER . '.' IDENTIFIER 
 
 // End conflict information for parser

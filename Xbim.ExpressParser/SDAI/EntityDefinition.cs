@@ -26,7 +26,7 @@ namespace Xbim.ExpressParser.SDAI
         /// </summary>
         public IEnumerable<ExplicitAttribute> ExplicitAttributes
         {
-            get { return SchemaModel.Get<ExplicitAttribute>(e => e.ParentEntity == this).OrderBy(a => a.Order); }
+            get { return SchemaModel.Get<ExplicitAttribute>(e => e.ParentEntity == this); }
         }
 
         /// <summary>
@@ -36,15 +36,16 @@ namespace Xbim.ExpressParser.SDAI
         {
             get
             {
-                var all = ExplicitAttributes.ToList();
-                if (Supertypes == null)
-                    return all;
-
-                foreach (var supertype in Supertypes)
+                //enumerate parent attributes first
+                if(Supertypes != null)
+                    foreach (var attribute in Supertypes.SelectMany(supertype => supertype.AllExplicitAttributes))
+                    {
+                        yield return attribute;
+                    }
+                foreach (var attribute in ExplicitAttributes)
                 {
-                    all.AddRange(supertype.AllExplicitAttributes);
+                    yield return attribute;
                 }
-                return all.OrderBy(a => a.Order);
             }
         }
 

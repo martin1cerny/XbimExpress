@@ -2,32 +2,32 @@
 =============================================================================
 NFSA Summary for input file <Scanner.lex>
 =============================================================================
-Total NFSA states = 1729
+Total NFSA states = 1749
 Number of Start Conditions = 1
 Start condition INITIAL:
-  number of patterns = 77, number of nfsa states = 438, accept states = 77
+  number of patterns = 79, number of nfsa states = 450, accept states = 79
 =============================================================================
-GPLEX: NFSA built.   40 msec
+GPLEX: NFSA built.   21 msec
 =============================================================================
-GPLEX: DFSA built.  180 msec
+GPLEX: DFSA built.   77 msec
 =============================================================================
-GPLEX: DFSA minimized.  122 msec
+GPLEX: DFSA minimized.   29 msec
 =============================================================================
-GPLEX: Shortest strings found.   11 msec
+GPLEX: Shortest strings found.    4 msec
 =============================================================================
 DFSA Summary
 =============================================================================
 Number of dfsa instances = 1
 Start condition INITIAL:
-  number of dfsa states = 280, number of accept states = 253
+  number of dfsa states = 288, number of accept states = 261
 =============================================================================
-GPLEX: C# file emitted.   50 msec
+GPLEX: C# file emitted.   40 msec
 =============================================================================
 GPLEX Summary
 =============================================================================
-Total number of states = 259, total accept states = 241, backup states = 11
-Original state number was 281, minimized machine has 259 states
-Nextstate table compression was 75.03%, 16,559 entries Vs 66,304
+Total number of states = 267, total accept states = 249, backup states = 11
+Original state number was 289, minimized machine has 267 states
+Nextstate table compression was 74.90%, 17,159 entries Vs 68,352
 
 Backup state report --- 
 In <0>, after "" automaton could accept "[a-zA-Z0-9_]*" in state 1
@@ -45,22 +45,22 @@ In <0>, after "SUPERTYPE" automaton could accept "[a-zA-Z0-9_]*" in state 69
 In <0>, after "SUBTYPE" automaton could accept "[a-zA-Z0-9_]*" in state 74
 --- after ''\x20'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "ENUMERATION" automaton could accept "[a-zA-Z0-9_]*" in state 164
+In <0>, after "ENUMERATION" automaton could accept "[a-zA-Z0-9_]*" in state 170
 --- after ''\x20'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "+." automaton could accept "[\-\+]?[0-9]*[\.][0-9]*" in state 231
+In <0>, after "+." automaton could accept "[\-\+]?[0-9]*[\.][0-9]*" in state 239
 --- after ''.'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "+0" automaton could accept "[\-\+]?[0-9]+" in state 238
+In <0>, after "+0" automaton could accept "[\-\+]?[0-9]+" in state 246
 --- after ''E'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "(**)" automaton could accept "(\(\*)(.*(\r\n)*)*(\*\))" in state 239
+In <0>, after "(**)" automaton could accept "(\(\*)(.*(\r\n)*)*(\*\))" in state 247
 --- after ''\0'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "''" automaton could accept "[\']([\n]|[\000\011-\046\050-\176\201-\237\240-\377]|[\047][\047])*[\']" in state 240
+In <0>, after "''" automaton could accept "[\']([\n]|[\000\011-\046\050-\176\201-\237\240-\377]|[\047][\047])*[\']" in state 248
 --- after ''''' automaton is in a non-accept state and might need to backup
 
-In <0>, after "\"\"" automaton could accept "[\"]([\n]|[\000\011-\046\050-\176\201-\237\240-\377]|[\047][\047])*[\"]" in state 241
+In <0>, after "\"\"" automaton could accept "[\"]([\n]|[\000\011-\046\050-\176\201-\237\240-\377]|[\047][\047])*[\"]" in state 249
 --- after ''\0'' automaton is in a non-accept state and might need to backup
 
 =============================================================================

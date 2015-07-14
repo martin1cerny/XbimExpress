@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpressParser.cs" />
+    <Compile Include="Extensions\ExpressIdExtensions.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParserHelper.cs" />
     <Compile Include="Parser\Scanner.cs" />

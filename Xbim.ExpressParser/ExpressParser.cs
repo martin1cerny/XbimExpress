@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Xbim.ExpressParser.SDAI;
 
 namespace Xbim.ExpressParser
 {
@@ -19,6 +20,11 @@ namespace Xbim.ExpressParser
         /// </summary>
         public IEnumerable<ErrorLocation> ErrorLocations { get; private set; }
 
+        /// <summary>
+        /// Instance of the schema definition. This represents an abstract model of the schema. It is usable for
+        /// comparison of different schemas or for code generation. Schema is heavily inspired by SDAI schema.
+        /// </summary>
+        public SchemaModel SchemaInstance { get; private set; }
 
         /// <summary>
         /// This function starts parsing of the schema input. Function returns true if parser didn't crash. 
@@ -54,6 +60,7 @@ namespace Xbim.ExpressParser
 
             Errors = scanner.Errors;
             ErrorLocations = scanner.ErrorLocations;
+            SchemaInstance = parser.Model;
 
             return result;
         }

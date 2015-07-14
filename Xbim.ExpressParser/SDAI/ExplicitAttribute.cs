@@ -11,10 +11,5 @@ namespace Xbim.ExpressParser.SDAI
         public BaseType Domain { get; set; }
         public ExplicitAttribute Redeclaring { get; set; }
         public bool OptionalFlag { get; set; }
-
-        /// <summary>
-        /// This is only important for serialization/deserialization/late binding
-        /// </summary>
-        public int Order { get; set; }
     }
 }

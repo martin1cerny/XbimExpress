@@ -59,9 +59,11 @@
 "BOOLEAN"	 		{ return (int)(Tokens.BOOLEAN); }
 "BINARY"	 		{ return (int)(Tokens.BINARY); }
 "REAL"				{ return (int)(Tokens.REAL); }
+"LOGICAL"			{ return (int)(Tokens.LOGICAL); }
 "ARRAY"				{ return (int)(Tokens.ARRAY); }
 "LIST"				{ return (int)(Tokens.LIST); }
 "SET"				{ return (int)(Tokens.SET); }
+"BAG"				{ return (int)(Tokens.BAG); }
        
 "OF"				{ return (int)(Tokens.OF); }
 "FOR"				{ return (int)(Tokens.FOR); }

@@ -8,6 +8,7 @@
 %visibility internal
 
 %using System.Linq.Expressions
+%using Xbim.ExpressParser.SDAI
 
 
 %start schema_definition
@@ -25,11 +26,13 @@
 %token	INTEGER	
 %token	STRING	
 %token	BOOLEAN	
+%token	LOGICAL	
 %token  BINARY	
 %token	REAL		
 %token	ARRAY
 %token	LIST
 %token  SET
+%token  BAG
 %token  IDENTIFIER
 
 %token  OF
@@ -83,7 +86,7 @@
 
 %%
 schema_definition 
-	: SCHEMA IDENTIFIER ';' definitions END_SCHEMA ';'											{ }
+	: SCHEMA IDENTIFIER ';' definitions END_SCHEMA ';'											{ Model.Schema.Name = $2.strVal; Model.Schema.Identification = $2.strVal; Finish();}
 	;
 
 definitions
@@ -101,23 +104,23 @@ definition
 	;
 
 type_definition 
-	: TYPE IDENTIFIER '=' identifier_or_type ';' END_TYPE ';'									{  }
-	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' END_TYPE ';'						{  }
-	| TYPE IDENTIFIER '=' identifier_or_type ';' where_section END_TYPE ';'						{  }
-	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' where_section END_TYPE ';'		{  }
+	: TYPE IDENTIFIER '=' identifier_or_type ';' END_TYPE ';'									{ CreateType($2.strVal); }
+	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' END_TYPE ';'						{ CreateType($2.strVal); }
+	| TYPE IDENTIFIER '=' identifier_or_type ';' where_section END_TYPE ';'						{ CreateType($2.strVal); }
+	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' where_section END_TYPE ';'		{ CreateType($2.strVal); }
 	;
 
 enumeration
-	: TYPE IDENTIFIER '=' ENUMERATION_OF identifier_list ';' END_TYPE ';'						{  }
+	: TYPE IDENTIFIER '=' ENUMERATION_OF identifier_list ';' END_TYPE ';'						{ CreateEnumeration($2.strVal, (List<string>)($5.val)); }
 	;
 
 select_type 
-	: TYPE IDENTIFIER '=' SELECT  identifier_list ';' END_TYPE ';'								{  }
+	: TYPE IDENTIFIER '=' SELECT  identifier_list ';' END_TYPE ';'								{ CreateSelectType($2.strVal, (List<string>)($5.val)); }
 	; 
 
 entity
-	: ENTITY IDENTIFIER sections END_ENTITY ';'													{ }
-	| ENTITY IDENTIFIER ';' sections END_ENTITY ';'												{ }
+	: ENTITY IDENTIFIER sections END_ENTITY ';'													{ CreateEntity($2.strVal, $3.val as List<ValueType>); }
+	| ENTITY IDENTIFIER ';' sections END_ENTITY ';'												{ CreateEntity($2.strVal, $4.val as List<ValueType>); }
 	;
 
 identifier_list
@@ -130,18 +133,19 @@ identifiers
 	;
 
 type
-	: REAL
-	| BOOLEAN
-	| BINARY
-	| STRING
-	| INTEGER
-	| type '(' INTEGER ')'
-	| type '(' INTEGER ')' FIXED
+	: REAL									{ $$.val = Model.PredefinedSimpleTypes.RealType; }
+	| BOOLEAN								{ $$.val = Model.PredefinedSimpleTypes.BooleanType; }
+	| BINARY								{ $$.val = Model.PredefinedSimpleTypes.BinaryType; }
+	| STRING								{ $$.val = Model.PredefinedSimpleTypes.StringType; }
+	| INTEGER								{ $$.val = Model.PredefinedSimpleTypes.IntegerType; }
+	| LOGICAL								{ $$.val = Model.PredefinedSimpleTypes.LogicalType; }
+	| type '(' INTEGER ')'					{ $$.val = Model.New<ArrayType>(t => {t.ElementType = $1.val as BaseType; t.UpperIndex = $3.intVal;}); }
+	| type '(' INTEGER ')' FIXED			{ $$.val = Model.New<ArrayType>(t => {t.ElementType = $1.val as BaseType; t.UpperIndex = $3.intVal;}); }
 	;
 
-identifier_or_type
-	: IDENTIFIER
-	| type
+identifier_or_type							
+	: IDENTIFIER							{ $$.strVal = $1.strVal; $$.tokVal = Tokens.IDENTIFIER; }
+	| type									{ $$.val = $1.val; $$.tokVal = Tokens.TYPE; }
 	;
 
 number
@@ -149,36 +153,36 @@ number
 	| REAL
 	;
 
-sections
-	: section
-	| sections section
+sections																		
+	: section																	{ $$.val = new List<ValueType>{(ValueType)$1}; }
+	| sections section															{ ($1.val as List<ValueType>).Add((ValueType)$2); $$.val = $1.val;}
 	;
 	
-section
-	: parameter_section
-	| where_section
-	| unique_section
-	| inverse_section
-	| derive_section
-	| inheritance_section ';'
+section																			
+	: parameter_section															{ $$.val = $1.val; $$.tokVal = Tokens.SELF; }
+	| where_section																{ $$.val = $1.val; $$.tokVal = Tokens.WHERE; }
+	| unique_section															{ $$.val = $1.val; $$.tokVal = Tokens.UNIQUE; }
+	| inverse_section															{ $$.val = $1.val; $$.tokVal = Tokens.INVERSE; }
+	| derive_section															{ $$.val = $1.val; $$.tokVal = Tokens.DERIVE; }
+	| inheritance_section ';'													{ $$.val = $1.val; $$.tokVal = Tokens.ABSTRACT; }
 	;
 
 parameter_section
-	: parameter_definition
-	| parameter_section parameter_definition 
+	: parameter_definition														{ $$.val = new List<ExplicitAttribute>{ $1.val as ExplicitAttribute }; }
+	| parameter_section parameter_definition 									{ ($1.val as List<ExplicitAttribute>).Add($2.val as ExplicitAttribute); $$.val = $1.val; }
 	;
 
 parameter_definition
-	: IDENTIFIER ':' parameter_definition_right ';'
-	| IDENTIFIER ':' OPTIONAL parameter_definition_right ';'
+	: IDENTIFIER ':' parameter_definition_right ';'								{ $$.val = NameAttribute((ExplicitAttribute)($3.val), $1.strVal, false); }
+	| IDENTIFIER ':' OPTIONAL parameter_definition_right ';'					{ $$.val = NameAttribute((ExplicitAttribute)($4.val), $1.strVal, true); }
 	;
 
 parameter_definition_right
-	: identifier_or_type
-	| enumerable OF identifier_or_type
-	| enumerable OF UNIQUE identifier_or_type
-	| enumerable OF enumerable OF identifier_or_type
-	| enumerable OF UNIQUE enumerable OF identifier_or_type
+	: identifier_or_type														{ $$.val = CreateSimpleAttribute($1); }
+	| enumerable OF identifier_or_type											{  }
+	| enumerable OF UNIQUE identifier_or_type									{  }
+	| enumerable OF enumerable OF identifier_or_type							{  }
+	| enumerable OF UNIQUE enumerable OF identifier_or_type						{  }
 	;
 
 where_section
@@ -269,9 +273,10 @@ optional_integer
 	;
 
 enumerable
-	: SET '[' INTEGER ':' optional_integer ']'
-	| LIST '[' INTEGER ':' optional_integer ']'
-	| ARRAY '[' INTEGER ':' optional_integer ']'
+	: SET '[' INTEGER ':' optional_integer ']'				{ $$.val = Model.New<SetType>(); }
+	| LIST '[' INTEGER ':' optional_integer ']'				{ $$.val = Model.New<ListType>(); }
+	| ARRAY '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<ArrayType>(); }
+	| BAG '[' INTEGER ':' optional_integer ']'				{ $$.val = Model.New<BagType>(); }
 	;
 
 inheritance_section

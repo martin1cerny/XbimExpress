@@ -23,6 +23,16 @@ namespace Xbim.ExpressParser.SDAI
             get { return SchemaModel.Get<DefinedType>(def => def.ParentSchema == this); }
         }
 
+        public IEnumerable<EnumerationType> Enumerations
+        {
+            get { return SchemaModel.Get<EnumerationType>(def => def.ParentSchema == this); }
+        }
+
+        public IEnumerable<SelectType> SelectTypes
+        {
+            get { return SchemaModel.Get<SelectType>(def => def.ParentSchema == this); }
+        }
+
         public IEnumerable<GlobalRule> GlobalRules
         {
             get { return SchemaModel.Get<GlobalRule>(r => r.ParentSchema == this); }
