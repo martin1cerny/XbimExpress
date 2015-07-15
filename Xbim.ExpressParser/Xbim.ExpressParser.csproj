@@ -104,6 +104,7 @@
     <Compile Include="SDAI\StringType.cs" />
     <Compile Include="SDAI\TypeOrRule.cs" />
     <Compile Include="SDAI\UnderlyingType.cs" />
+    <Compile Include="SDAI\UniquenessRule.cs" />
     <Compile Include="SDAI\VariableSizeAggregationType.cs" />
     <Compile Include="SDAI\WhereRule.cs" />
   </ItemGroup>

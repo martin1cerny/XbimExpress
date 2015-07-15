@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 15/07/2015 08:44:35
+// DateTime: 15/07/2015 11:57:12
 // UserName: mxfm2
-// Input file <Parser.y - 15/07/2015 08:44:26>
+// Input file <Parser.y - 15/07/2015 11:57:09>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -67,16 +67,16 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 15/07/2015 08:44:26
+  // Verbatim content from Parser.y - 15/07/2015 11:57:09
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 15/07/2015 08:44:26
+  // End verbatim content from Parser.y - 15/07/2015 11:57:09
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
 #pragma warning restore 649
   private static Rule[] rules = new Rule[104];
-  private static State[] states = new State[263];
+  private static State[] states = new State[264];
   private static string[] nonTerms = new string[] {
       "schema_definition", "$accept", "definitions", "definition", "type_definition", 
       "enumeration", "select_type", "entity", "function", "rule", "identifier_or_type", 
@@ -93,7 +93,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
     states[2] = new State(-1);
     states[3] = new State(new int[]{138,4});
     states[4] = new State(new int[]{59,5});
-    states[5] = new State(new int[]{148,11,152,141,159,250,161,256},new int[]{-3,6,-4,262,-5,10,-6,138,-7,139,-8,140,-9,249,-10,255});
+    states[5] = new State(new int[]{148,11,152,141,159,250,161,256},new int[]{-3,6,-4,263,-5,10,-6,138,-7,139,-8,140,-9,249,-10,255});
     states[6] = new State(new int[]{147,7,148,11,152,141,159,250,161,256},new int[]{-4,9,-5,10,-6,138,-7,139,-8,140,-9,249,-10,255});
     states[7] = new State(new int[]{59,8});
     states[8] = new State(-2);
@@ -346,11 +346,12 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
     states[255] = new State(-10);
     states[256] = new State(new int[]{138,257});
     states[257] = new State(new int[]{140,258});
-    states[258] = new State(new int[]{126,259});
-    states[259] = new State(new int[]{162,260});
-    states[260] = new State(new int[]{59,261});
-    states[261] = new State(-100);
-    states[262] = new State(-3);
+    states[258] = new State(new int[]{40,100},new int[]{-14,259});
+    states[259] = new State(new int[]{126,260});
+    states[260] = new State(new int[]{162,261});
+    states[261] = new State(new int[]{59,262});
+    states[262] = new State(-100);
+    states[263] = new State(-3);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
@@ -453,7 +454,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
     rules[97] = new Rule(-40, new int[]{155,40,143,-14,41});
     rules[98] = new Rule(-40, new int[]{156,155,40,143,-14,41});
     rules[99] = new Rule(-9, new int[]{159,138,126,160,59});
-    rules[100] = new Rule(-10, new int[]{161,138,140,126,162,59});
+    rules[100] = new Rule(-10, new int[]{161,138,140,-14,126,162,59});
     rules[101] = new Rule(-31, new int[]{138,46,138});
     rules[102] = new Rule(-31, new int[]{-31,46,138});
     rules[103] = new Rule(-31, new int[]{164,179,-31});
@@ -478,22 +479,22 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
       case 11: // type_definition -> TYPE, IDENTIFIER, '=', identifier_or_type, ';', END_TYPE, 
                //                    ';'
 #line 107 "Parser.y"
-{ CreateType(ValueStack[ValueStack.Depth-6].strVal); }
+{ CreateType(ValueStack[ValueStack.Depth-6].strVal, null); }
         break;
       case 12: // type_definition -> TYPE, IDENTIFIER, '=', enumerable, OF, identifier_or_type, 
                //                    ';', END_TYPE, ';'
 #line 108 "Parser.y"
-{ CreateType(ValueStack[ValueStack.Depth-8].strVal); }
+{ CreateType(ValueStack[ValueStack.Depth-8].strVal, null); }
         break;
       case 13: // type_definition -> TYPE, IDENTIFIER, '=', identifier_or_type, ';', 
                //                    where_section, END_TYPE, ';'
 #line 109 "Parser.y"
-{ CreateType(ValueStack[ValueStack.Depth-7].strVal); }
+{ CreateType(ValueStack[ValueStack.Depth-7].strVal, ValueStack[ValueStack.Depth-3].val as List<WhereRule>); }
         break;
       case 14: // type_definition -> TYPE, IDENTIFIER, '=', enumerable, OF, identifier_or_type, 
                //                    ';', where_section, END_TYPE, ';'
 #line 110 "Parser.y"
-{ CreateType(ValueStack[ValueStack.Depth-9].strVal); }
+{ CreateType(ValueStack[ValueStack.Depth-9].strVal, ValueStack[ValueStack.Depth-3].val as List<WhereRule>); }
         break;
       case 15: // enumeration -> TYPE, IDENTIFIER, '=', ENUMERATION_OF, identifier_list, ';', 
                //                END_TYPE, ';'
@@ -595,7 +596,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 41: // section -> inheritance_section, ';'
 #line 167 "Parser.y"
-{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-2].val; CurrentSemanticValue.tokVal = Tokens.ABSTRACT; }
+{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-2].val; CurrentSemanticValue.tokVal = Tokens.ABSTRACT; CurrentSemanticValue.boolVal = ValueStack[ValueStack.Depth-2].tokVal == Tokens.ABSTRACT;}
         break;
       case 42: // parameter_section -> parameter_definition
 #line 171 "Parser.y"
@@ -636,9 +637,46 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line 185 "Parser.y"
 { CurrentSemanticValue.val = CreateEnumerableOfEnumerableAttribute(ValueStack[ValueStack.Depth-6].val as AggregationType, ValueStack[ValueStack.Depth-3].val as AggregationType, ValueStack[ValueStack.Depth-1], true); }
         break;
+      case 51: // where_section -> WHERE, where_rules
+#line 189 "Parser.y"
+{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-1].val; }
+        break;
+      case 52: // where_rules -> where_rule
+#line 193 "Parser.y"
+{ CurrentSemanticValue.val = new List<WhereRule>{ ValueStack[ValueStack.Depth-1].val as WhereRule }; }
+        break;
+      case 53: // where_rules -> where_rules, where_rule
+#line 194 "Parser.y"
+{ (ValueStack[ValueStack.Depth-2].val as List<WhereRule>).Add(ValueStack[ValueStack.Depth-1].val as WhereRule); CurrentSemanticValue.val = ValueStack[ValueStack.Depth-2].val; }
+        break;
       case 54: // where_rule -> IDENTIFIER, ':', error, ';'
 #line 198 "Parser.y"
-{ yyerrok(); }
+{ CurrentSemanticValue.val = CreateWhereRule(ValueStack[ValueStack.Depth-4].strVal); yyerrok(); }
+        break;
+      case 55: // where_rule -> IDENTIFIER, ':', SELF, IN, string_array, ';'
+#line 199 "Parser.y"
+{ CurrentSemanticValue.val = CreateWhereRule(ValueStack[ValueStack.Depth-6].strVal); }
+        break;
+      case 56: // where_rule -> IDENTIFIER, ':', SELF, comparer, number, ';'
+#line 200 "Parser.y"
+{ CurrentSemanticValue.val = CreateWhereRule(ValueStack[ValueStack.Depth-6].strVal); }
+        break;
+      case 57: // where_rule -> IDENTIFIER, ':', SELF, comparer, IDENTIFIER, ';'
+#line 201 "Parser.y"
+{ CurrentSemanticValue.val = CreateWhereRule(ValueStack[ValueStack.Depth-6].strVal); }
+        break;
+      case 58: // where_rule -> IDENTIFIER, ':', accessor, comparer, number, ';'
+#line 202 "Parser.y"
+{ CurrentSemanticValue.val = CreateWhereRule(ValueStack[ValueStack.Depth-6].strVal); }
+        break;
+      case 59: // where_rule -> IDENTIFIER, ':', accessor, comparer, IDENTIFIER, ';'
+#line 203 "Parser.y"
+{ CurrentSemanticValue.val = CreateWhereRule(ValueStack[ValueStack.Depth-6].strVal); }
+        break;
+      case 60: // where_rule -> IDENTIFIER, ':', '{', number, comparer, SELF, comparer, number, 
+               //               '}', ';'
+#line 204 "Parser.y"
+{ CurrentSemanticValue.val = CreateWhereRule(ValueStack[ValueStack.Depth-10].strVal); }
         break;
       case 67: // string_array -> '[', strings, ']'
 #line 217 "Parser.y"
@@ -652,23 +690,76 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line 222 "Parser.y"
 { var list = (List<string>)(ValueStack[ValueStack.Depth-3].val); list.Add(ValueStack[ValueStack.Depth-1].strVal); CurrentSemanticValue.val = list; }
         break;
+      case 70: // unique_section -> UNIQUE, unique_rules
+#line 226 "Parser.y"
+{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-1].val; }
+        break;
+      case 71: // unique_rule -> IDENTIFIER, ':', IDENTIFIER, ';'
+#line 230 "Parser.y"
+{ CurrentSemanticValue.val = CreateUniquenessRule(ValueStack[ValueStack.Depth-4].strVal, new [] {ValueStack[ValueStack.Depth-2].strVal} ); }
+        break;
+      case 72: // unique_rule -> IDENTIFIER, ':', identifiers, ';'
+#line 231 "Parser.y"
+{ CurrentSemanticValue.val = CreateUniquenessRule(ValueStack[ValueStack.Depth-4].strVal, ValueStack[ValueStack.Depth-2].val as List<string>); }
+        break;
+      case 73: // unique_rules -> unique_rule
+#line 235 "Parser.y"
+{ CurrentSemanticValue.val = new List<UniquenessRule>{ ValueStack[ValueStack.Depth-1].val as UniquenessRule }; }
+        break;
+      case 74: // unique_rules -> unique_rules, unique_rule
+#line 236 "Parser.y"
+{ (ValueStack[ValueStack.Depth-2].val as List<UniquenessRule>).Add(ValueStack[ValueStack.Depth-1].val as UniquenessRule); CurrentSemanticValue.val = ValueStack[ValueStack.Depth-2].val; }
+        break;
+      case 75: // inverse_section -> INVERSE, inverse_rules
+#line 240 "Parser.y"
+{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-1].val; }
+        break;
+      case 76: // inverse_rules -> inverse_rule
+#line 244 "Parser.y"
+{ CurrentSemanticValue.val = new List<InverseAttribute>{ ValueStack[ValueStack.Depth-1].val as InverseAttribute }; }
+        break;
+      case 77: // inverse_rules -> inverse_rules, inverse_rule
+#line 245 "Parser.y"
+{ (ValueStack[ValueStack.Depth-2].val as List<InverseAttribute>).Add(ValueStack[ValueStack.Depth-1].val as InverseAttribute); CurrentSemanticValue.val = ValueStack[ValueStack.Depth-2].val; }
+        break;
+      case 78: // inverse_rule -> IDENTIFIER, ':', enumerable, OF, IDENTIFIER, FOR, IDENTIFIER, 
+               //                 ';'
+#line 249 "Parser.y"
+{ CurrentSemanticValue.val = CreateInverseAtribute(ValueStack[ValueStack.Depth-8].strVal, ValueStack[ValueStack.Depth-4].strVal, ValueStack[ValueStack.Depth-2].strVal); }
+        break;
+      case 79: // inverse_rule -> IDENTIFIER, ':', IDENTIFIER, FOR, IDENTIFIER, ';'
+#line 250 "Parser.y"
+{ CurrentSemanticValue.val = CreateInverseAtribute(ValueStack[ValueStack.Depth-6].strVal, ValueStack[ValueStack.Depth-4].strVal, ValueStack[ValueStack.Depth-2].strVal); }
+        break;
+      case 80: // derive_section -> DERIVE, derive_rules
+#line 254 "Parser.y"
+{CurrentSemanticValue.val = ValueStack[ValueStack.Depth-1].val;}
+        break;
+      case 81: // derive_rules -> derive_rule
+#line 258 "Parser.y"
+{ CurrentSemanticValue.val = new List<DerivedAttribute>{ValueStack[ValueStack.Depth-1].val as DerivedAttribute}; }
+        break;
+      case 82: // derive_rules -> derive_rules, derive_rule
+#line 259 "Parser.y"
+{ (ValueStack[ValueStack.Depth-2].val as List<DerivedAttribute>).Add(ValueStack[ValueStack.Depth-1].val as DerivedAttribute); CurrentSemanticValue.val = ValueStack[ValueStack.Depth-2].val;}
+        break;
       case 83: // derive_rule -> IDENTIFIER, ':', identifier_or_type, ASSIGNMENT, error, ';'
 #line 263 "Parser.y"
-{ yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-6].strVal); yyerrok(); }
         break;
       case 84: // derive_rule -> IDENTIFIER, ':', enumerable, OF, identifier_or_type, ASSIGNMENT, 
                //                error, ';'
 #line 264 "Parser.y"
-{ yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-8].strVal); yyerrok(); }
         break;
       case 85: // derive_rule -> IDENTIFIER, ':', enumerable, OF, enumerable, OF, 
                //                identifier_or_type, ASSIGNMENT, error, ';'
 #line 265 "Parser.y"
-{ yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-10].strVal); yyerrok(); }
         break;
       case 86: // derive_rule -> accessor, ':', identifier_or_type, ASSIGNMENT, error, ';'
 #line 266 "Parser.y"
-{ yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-6].val as List<string>); yyerrok(); }
         break;
       case 90: // enumerable -> SET, '[', INTEGER, ':', optional_integer, ']'
 #line 276 "Parser.y"
@@ -711,13 +802,13 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line 294 "Parser.y"
 { yyerrok(); }
         break;
-      case 100: // rule -> RULE, IDENTIFIER, FOR, error, END_RULE, ';'
+      case 100: // rule -> RULE, IDENTIFIER, FOR, identifier_list, error, END_RULE, ';'
 #line 299 "Parser.y"
-{ yyerrok(); }
+{CreateGlobalRule(ValueStack[ValueStack.Depth-6].strVal, ValueStack[ValueStack.Depth-4].val as List<string>); yyerrok(); }
         break;
       case 101: // accessor -> IDENTIFIER, '.', IDENTIFIER
 #line 303 "Parser.y"
-{ CurrentSemanticValue.val = new List<string>(){ValueStack[ValueStack.Depth-3].strVal, ValueStack[ValueStack.Depth-2].strVal}; }
+{ CurrentSemanticValue.val = new List<string>(){ValueStack[ValueStack.Depth-3].strVal, ValueStack[ValueStack.Depth-1].strVal}; }
         break;
       case 102: // accessor -> accessor, '.', IDENTIFIER
 #line 304 "Parser.y"

@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public class WhereRule: SchemaEntity
+    public class UniquenessRule: SchemaEntity
     {
         public ExpressId? Label { get; set; }
-        public TypeOrRule ParentItem { get; set; }
+        public List<Attribute> Attributes { get; set; }
+        public EntityDefinition ParentEntity { get; set; }
 
-        #region Extensions
-        public string Description { get; set; }
-        #endregion
     }
 }

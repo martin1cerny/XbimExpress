@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <Parser.y - 15/07/2015 08:44:26>
+//  GPPG error listing for yacc source file <Parser.y - 15/07/2015 11:57:09>
 // ==========================================================================
 //  Version:  1.5.0
 //  Machine:  C13300493
-//  DateTime: 15/07/2015 08:44:35
+//  DateTime: 15/07/2015 11:57:12
 //  UserName: mxfm2
 // ==========================================================================
 
@@ -115,10 +115,10 @@ definition
 	;
 
 type_definition 
-	: TYPE IDENTIFIER '=' identifier_or_type ';' END_TYPE ';'									{ CreateType($2.strVal); }
-	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' END_TYPE ';'						{ CreateType($2.strVal); }
-	| TYPE IDENTIFIER '=' identifier_or_type ';' where_section END_TYPE ';'						{ CreateType($2.strVal); }
-	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' where_section END_TYPE ';'		{ CreateType($2.strVal); }
+	: TYPE IDENTIFIER '=' identifier_or_type ';' END_TYPE ';'									{ CreateType($2.strVal, null); }
+	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' END_TYPE ';'						{ CreateType($2.strVal, null); }
+	| TYPE IDENTIFIER '=' identifier_or_type ';' where_section END_TYPE ';'						{ CreateType($2.strVal, $6.val as List<WhereRule>); }
+	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' where_section END_TYPE ';'		{ CreateType($2.strVal, $8.val as List<WhereRule>); }
 	;
 
 enumeration
@@ -175,7 +175,7 @@ section
 	| unique_section															{ $$.val = $1.val; $$.tokVal = Tokens.UNIQUE; }
 	| inverse_section															{ $$.val = $1.val; $$.tokVal = Tokens.INVERSE; }
 	| derive_section															{ $$.val = $1.val; $$.tokVal = Tokens.DERIVE; }
-	| inheritance_section ';'													{ $$.val = $1.val; $$.tokVal = Tokens.ABSTRACT; }
+	| inheritance_section ';'													{ $$.val = $1.val; $$.tokVal = Tokens.ABSTRACT; $$.boolVal = $1.tokVal == Tokens.ABSTRACT;}
 	;
 
 parameter_section
@@ -196,23 +196,23 @@ parameter_definition_right
 	| enumerable OF UNIQUE enumerable OF identifier_or_type						{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $4.val as AggregationType, $6, true); }
 	;
 
-where_section
-	: WHERE where_rules
+where_section																
+	: WHERE where_rules														{ $$.val = $2.val; }
 	;
 
 where_rules
-	: where_rule
-	| where_rules where_rule 
+	: where_rule															{ $$.val = new List<WhereRule>{ $1.val as WhereRule }; }
+	| where_rules where_rule 												{ ($1.val as List<WhereRule>).Add($2.val as WhereRule); $$.val = $1.val; }
 	;
 
 where_rule
-	: IDENTIFIER ':' error ';'												{ yyerrok(); }
-	| IDENTIFIER ':' SELF IN string_array ';'
-	| IDENTIFIER ':' SELF comparer number ';'
-	| IDENTIFIER ':' SELF comparer IDENTIFIER ';'
-	| IDENTIFIER ':' accessor comparer number ';'
-	| IDENTIFIER ':' accessor comparer IDENTIFIER ';'
-	| IDENTIFIER ':' '{' number comparer SELF comparer number '}' ';'
+	: IDENTIFIER ':' error ';'												{ $$.val = CreateWhereRule($1.strVal); yyerrok(); }
+	| IDENTIFIER ':' SELF IN string_array ';'								{ $$.val = CreateWhereRule($1.strVal); }
+	| IDENTIFIER ':' SELF comparer number ';'								{ $$.val = CreateWhereRule($1.strVal); }
+	| IDENTIFIER ':' SELF comparer IDENTIFIER ';'							{ $$.val = CreateWhereRule($1.strVal); }
+	| IDENTIFIER ':' accessor comparer number ';'							{ $$.val = CreateWhereRule($1.strVal); }
+	| IDENTIFIER ':' accessor comparer IDENTIFIER ';'						{ $$.val = CreateWhereRule($1.strVal); }
+	| IDENTIFIER ':' '{' number comparer SELF comparer number '}' ';'		{ $$.val = CreateWhereRule($1.strVal); }
 	;
 
 comparer
@@ -234,47 +234,47 @@ strings
 	;
 
 unique_section
-	: UNIQUE unique_rules
+	: UNIQUE unique_rules					{ $$.val = $2.val; }
 	;
 
 unique_rule
-	: IDENTIFIER ':' IDENTIFIER ';'
-	| IDENTIFIER ':' identifiers ';'
+	: IDENTIFIER ':' IDENTIFIER ';'			{ $$.val = CreateUniquenessRule($1.strVal, new [] {$3.strVal} ); }
+	| IDENTIFIER ':' identifiers ';'		{ $$.val = CreateUniquenessRule($1.strVal, $3.val as List<string>); }
 	;
 	
 unique_rules 
-	: unique_rule
-	| unique_rules unique_rule 
+	: unique_rule							{ $$.val = new List<UniquenessRule>{ $1.val as UniquenessRule }; }
+	| unique_rules unique_rule 				{ ($1.val as List<UniquenessRule>).Add($2.val as UniquenessRule); $$.val = $1.val; }
 	;
 
 inverse_section
-	: INVERSE inverse_rules
+	: INVERSE inverse_rules														{ $$.val = $2.val; }
 	;
 
 inverse_rules
-	: inverse_rule
-	| inverse_rules inverse_rule 
+	: inverse_rule																{ $$.val = new List<InverseAttribute>{ $1.val as InverseAttribute }; }
+	| inverse_rules inverse_rule 												{ ($1.val as List<InverseAttribute>).Add($2.val as InverseAttribute); $$.val = $1.val; }
 	;
 
 inverse_rule
-	: IDENTIFIER ':' enumerable OF IDENTIFIER FOR IDENTIFIER ';'
-	| IDENTIFIER ':' IDENTIFIER FOR IDENTIFIER ';'
+	: IDENTIFIER ':' enumerable OF IDENTIFIER FOR IDENTIFIER ';'				{ $$.val = CreateInverseAtribute($1.strVal, $5.strVal, $7.strVal); }
+	| IDENTIFIER ':' IDENTIFIER FOR IDENTIFIER ';'								{ $$.val = CreateInverseAtribute($1.strVal, $3.strVal, $5.strVal); }
 	;
 
 derive_section
-	: DERIVE derive_rules
+	: DERIVE derive_rules																		{$$.val = $2.val;}
 	;
 
 derive_rules
-	: derive_rule
-	| derive_rules derive_rule 
+	: derive_rule																				{ $$.val = new List<DerivedAttribute>{$1.val as DerivedAttribute}; }
+	| derive_rules derive_rule 																	{ ($1.val as List<DerivedAttribute>).Add($2.val as DerivedAttribute); $$.val = $1.val;}
 	;
 
 derive_rule
-	: IDENTIFIER ':' identifier_or_type ASSIGNMENT error ';'									{ yyerrok(); }
-	| IDENTIFIER ':' enumerable  OF identifier_or_type ASSIGNMENT error ';'						{ yyerrok(); }
-	| IDENTIFIER ':' enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'		{ yyerrok(); }
-	| accessor ':' identifier_or_type ASSIGNMENT error ';'										{ yyerrok(); }
+	: IDENTIFIER ':' identifier_or_type ASSIGNMENT error ';'									{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	| IDENTIFIER ':' enumerable  OF identifier_or_type ASSIGNMENT error ';'						{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	| IDENTIFIER ':' enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'		{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	| accessor ':' identifier_or_type ASSIGNMENT error ';'										{ $$.val = CreateDerivedAttribute($1.val as List<string>); yyerrok(); }
 	;
 
 optional_integer
@@ -307,11 +307,11 @@ function
 
 
 rule
-	: RULE  IDENTIFIER  FOR error END_RULE ';'							{ yyerrok(); }
+	: RULE  IDENTIFIER  FOR identifier_list error END_RULE ';'							{CreateGlobalRule($2.strVal, $4.val as List<string>); yyerrok(); }
 	;
 
 accessor
-	: IDENTIFIER '.' IDENTIFIER		{ $$.val = new List<string>(){$1.strVal, $2.strVal}; }
+	: IDENTIFIER '.' IDENTIFIER		{ $$.val = new List<string>(){$1.strVal, $3.strVal}; }
 	| accessor '.' IDENTIFIER		{ var list = (List<string>)($1.val); list.Add($3.strVal); $$.val = list; }
 	| SELF BACKSLASH accessor		{ $$.val = $3.val; }
 	;

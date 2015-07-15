@@ -39,6 +39,9 @@ namespace Xbim.ExpressParser.SDAI
             var namedType = result as NamedType;
             if (namedType != null)
                 namedType.ParentSchema = Schema;
+            var rule = result as GlobalRule;
+            if (rule != null)
+                rule.ParentSchema = Schema;
 
             _entities.Add(result);
             return result;

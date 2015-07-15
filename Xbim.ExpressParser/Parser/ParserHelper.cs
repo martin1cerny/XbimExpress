@@ -10,6 +10,7 @@ using System.IO;
 using System.Management.Instrumentation;
 using Microsoft.CSharp;
 using Xbim.ExpressParser.SDAI;
+using Attribute = Xbim.ExpressParser.SDAI.Attribute;
 
 // ReSharper disable once CheckNamespace
 namespace Xbim.ExpressParser
@@ -23,7 +24,10 @@ namespace Xbim.ExpressParser
             Model = new SchemaModel();
         }
 
-        private List<Action> ToDoActions = new List<Action>();
+        // ReSharper disable once InconsistentNaming
+        private readonly List<Action> ToDoActions = new List<Action>();
+        // ReSharper disable once InconsistentNaming
+        private readonly List<Action> ToDoPostActions = new List<Action>();
 
         //do all postprocessing, assignments and other operations
         private void Finish()
@@ -32,9 +36,13 @@ namespace Xbim.ExpressParser
             {
                 action();
             }
-
+            foreach (var action in ToDoPostActions)
+            {
+                action();
+            }
             //clear for the next processing/parsing
             ToDoActions.Clear();
+            ToDoPostActions.Clear();
         }
 
         private void CreateEnumeration(string name, List<string> values)
@@ -75,25 +83,54 @@ namespace Xbim.ExpressParser
                 switch (section.tokVal)
                 {
                     case Tokens.UNIQUE:
+                        var unique = section.val as List<UniquenessRule>;
+                        if (unique != null && unique.Any())
+                            foreach (var attribute in unique)
+                                attribute.ParentEntity = entity;
                         break;
                     case Tokens.INVERSE:
+                        var inverse = section.val as List<InverseAttribute>;
+                        if (inverse != null && inverse.Any())
+                            foreach (var attribute in inverse)
+                                attribute.ParentEntity = entity;
                         break;
-                    case Tokens.DERIVE:
+                    case Tokens.DERIVE: //derives definitions
+                        var derived = section.val as List<DerivedAttribute>;
+                        if (derived != null && derived.Any())
+                            foreach (var attribute in derived)
+                                attribute.ParentEntity = entity;
                         break;
-                    case Tokens.ABSTRACT:
+                    case Tokens.ABSTRACT: //inheritance definition
+                        var isAbstract = section.boolVal;
+                        if (isAbstract)
+                            entity.Instantiable = false;
+
+                        var identifiers = section.val as List<string>;
+                        if(identifiers == null || !identifiers.Any())
+                        break;
+                        ToDoActions.Add(() =>
+                        {
+                            foreach (var type in identifiers.Select(typeName => Model.Get<EntityDefinition>(t => t.Name == typeName).FirstOrDefault()))
+                            {
+                                if(type == null)
+                                    throw new InstanceNotFoundException();
+                                if (entity.Supertypes == null) entity.Supertypes = new HashSet<EntityDefinition>();
+                                entity.Supertypes.Add(type);
+                            }
+                        });
                         break;
                     case Tokens.WHERE:
+                        var whereRules = section.val as List<WhereRule>;
+                        if (whereRules != null && whereRules.Any())
+                            foreach (var rule in whereRules)
+                                rule.ParentItem = entity;
                         break;
                         
                     case Tokens.SELF: //Parameter section
                         var attributes = section.val as List<ExplicitAttribute>;
                         if (attributes != null && attributes.Any())
-                        {
                             foreach (var attribute in attributes)
-                            {
                                 attribute.ParentEntity = entity;
-                            }
-                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -101,9 +138,89 @@ namespace Xbim.ExpressParser
             }
         }
 
-        private void CreateType(string name)
+        private UniquenessRule CreateUniquenessRule(string name, IEnumerable<string> attributes)
         {
-            Model.New<DefinedType>(e => e.Name = name);
+            var result = Model.New<UniquenessRule>(r => r.Label = name);
+            ToDoPostActions.Add(() =>
+            {
+                result.Attributes = new List<Attribute>();
+                foreach (var attribute in attributes)
+                {
+                    var entity = result.ParentEntity;
+                    if(entity == null)
+                        throw new Exception("UniquenessRule has to be defined for a specific entity.");
+                    var attr = entity.AllAttributes.FirstOrDefault(a => a.Name == attribute);
+                    if(attr == null)
+                        throw new InstanceNotFoundException();
+                    result.Attributes.Add(attr);
+                }
+            });
+            return result;
+        }
+
+        private WhereRule CreateWhereRule(string name)
+        {
+            var description = String.Format("{0},{1}", Scanner.yylloc.StartLine, Scanner.yylloc.EndLine);
+            var rule = Model.New<WhereRule>(r => { 
+                r.Label = name;
+                r.Description = description;
+            });
+            return rule;
+        }
+
+        private DerivedAttribute CreateDerivedAttribute(string name)
+        {
+            return Model.New<DerivedAttribute>(a => a.Name = name);
+        }
+
+        private DerivedAttribute CreateDerivedAttribute(IEnumerable<string> path)
+        {
+            var result = Model.New<DerivedAttribute>(a => a.Name = path.Last());
+            ToDoActions.Add(() =>
+            {
+                var type = Model.Get<EntityDefinition>(d => d.Name == path.First()).FirstOrDefault();
+                if(type == null) 
+                    throw new InstanceNotFoundException();
+                var attr = type.ExplicitAttributes.FirstOrDefault(a => a.Name == path.Last());
+                if (attr == null)
+                    throw new InstanceNotFoundException();
+                result.Redeclaring = attr;
+            });
+
+            return result;
+        }
+
+        private InverseAttribute CreateInverseAtribute(string name, string type, string attribute)
+        {
+            var result = Model.New<InverseAttribute>(a =>
+            {
+                a.Name = name;
+            });
+            ToDoActions.Add(() =>
+            {
+                var domain = Model.Schema.Entities.FirstOrDefault(e => e.Name == type);
+                if(domain == null)
+                    throw new InstanceNotFoundException();
+                var attr = domain.AllExplicitAttributes.FirstOrDefault(a => a.Name == attribute);
+                if (attr == null)
+                    throw new InstanceNotFoundException();
+                result.Domain = domain;
+                result.InvertedAttr = attr;
+            });
+
+            return result;
+        }
+
+
+        private void CreateType(string name, List<WhereRule> whereRules)
+        {
+            var type = Model.New<DefinedType>(e => e.Name = name);
+            if(whereRules == null) return;
+
+            foreach (var rule in whereRules)
+            {
+                rule.ParentItem = type;
+            }
         }
 
         private ExplicitAttribute CreateSimpleAttribute(ValueType data)
@@ -129,6 +246,7 @@ namespace Xbim.ExpressParser
         {
             attribute.Name = name;
             attribute.OptionalFlag = optional;
+            attribute.Line = Scanner.yylloc.StartLine;
             return attribute;
         }
 
@@ -177,6 +295,23 @@ namespace Xbim.ExpressParser
             }
             return result;
 
+        }
+
+        private void CreateGlobalRule(string name, IEnumerable<string> identifiers)
+        {
+            var rule = Model.New<GlobalRule>(r => r.Name = name);
+            ToDoActions.Add(() =>
+            {
+                rule.Entities = new List<EntityDefinition>();
+                foreach (var identifier in identifiers)
+                {
+                    var typeName = identifier;
+                    var type = Model.Get<EntityDefinition>(e => e.Name == typeName).FirstOrDefault();
+                    if (type == null)
+                        throw new InstanceNotFoundException();
+                    rule.Entities.Add(type);
+                }
+            });
         }
 
     }
