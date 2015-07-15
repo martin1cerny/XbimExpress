@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 14/07/2015 15:50:20
+// DateTime: 15/07/2015 08:44:35
 // UserName: mxfm2
-// Input file <Parser.y - 14/07/2015 15:50:17>
+// Input file <Parser.y - 15/07/2015 08:44:26>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -67,10 +67,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 14/07/2015 15:50:17
+  // Verbatim content from Parser.y - 15/07/2015 08:44:26
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 14/07/2015 15:50:17
+  // End verbatim content from Parser.y - 15/07/2015 08:44:26
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -620,21 +620,21 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 47: // parameter_definition_right -> enumerable, OF, identifier_or_type
 #line 182 "Parser.y"
-{  }
+{ CurrentSemanticValue.val = CreateEnumerableAttribute(ValueStack[ValueStack.Depth-3].val as AggregationType, ValueStack[ValueStack.Depth-1], false); }
         break;
       case 48: // parameter_definition_right -> enumerable, OF, UNIQUE, identifier_or_type
 #line 183 "Parser.y"
-{  }
+{ CurrentSemanticValue.val = CreateEnumerableAttribute(ValueStack[ValueStack.Depth-4].val as AggregationType, ValueStack[ValueStack.Depth-1], true); }
         break;
       case 49: // parameter_definition_right -> enumerable, OF, enumerable, OF, 
                //                               identifier_or_type
 #line 184 "Parser.y"
-{  }
+{ CurrentSemanticValue.val = CreateEnumerableOfEnumerableAttribute(ValueStack[ValueStack.Depth-5].val as AggregationType, ValueStack[ValueStack.Depth-3].val as AggregationType, ValueStack[ValueStack.Depth-1], false); }
         break;
       case 50: // parameter_definition_right -> enumerable, OF, UNIQUE, enumerable, OF, 
                //                               identifier_or_type
 #line 185 "Parser.y"
-{  }
+{ CurrentSemanticValue.val = CreateEnumerableOfEnumerableAttribute(ValueStack[ValueStack.Depth-6].val as AggregationType, ValueStack[ValueStack.Depth-3].val as AggregationType, ValueStack[ValueStack.Depth-1], true); }
         break;
       case 54: // where_rule -> IDENTIFIER, ':', error, ';'
 #line 198 "Parser.y"

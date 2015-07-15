@@ -108,7 +108,6 @@ namespace Xbim.ExpressParser
 
         private ExplicitAttribute CreateSimpleAttribute(ValueType data)
         {
-
             var result = Model.New<ExplicitAttribute>();
             if (data.tokVal == Tokens.TYPE)
             {
@@ -131,6 +130,53 @@ namespace Xbim.ExpressParser
             attribute.Name = name;
             attribute.OptionalFlag = optional;
             return attribute;
+        }
+
+        private ExplicitAttribute CreateEnumerableAttribute(AggregationType aggregationType, ValueType data, bool unique)
+        {
+            var result = Model.New<ExplicitAttribute>();
+            result.Domain = aggregationType;
+            aggregationType.UniqueElements = unique;
+
+            if (data.tokVal == Tokens.TYPE)
+            {
+                aggregationType.ElementType = data.val as SimpleType;
+            }
+            if (data.tokVal == Tokens.IDENTIFIER)
+            {
+                ToDoActions.Add(() =>
+                {
+                    aggregationType.ElementType = Model.Get<NamedType>(t => t.Name == data.strVal).FirstOrDefault();
+                    if (result.Domain == null)
+                        throw new InstanceNotFoundException();
+                });
+            }
+            return result;
+
+        }
+
+        private ExplicitAttribute CreateEnumerableOfEnumerableAttribute(AggregationType outerAggregation, AggregationType innerAggregation, ValueType data, bool unique)
+        {
+            var result = Model.New<ExplicitAttribute>();
+            result.Domain = outerAggregation;
+            outerAggregation.ElementType = innerAggregation;
+            outerAggregation.UniqueElements = unique;
+
+            if (data.tokVal == Tokens.TYPE)
+            {
+                innerAggregation.ElementType = data.val as SimpleType;
+            }
+            if (data.tokVal == Tokens.IDENTIFIER)
+            {
+                ToDoActions.Add(() =>
+                {
+                    innerAggregation.ElementType = Model.Get<NamedType>(t => t.Name == data.strVal).FirstOrDefault();
+                    if (result.Domain == null)
+                        throw new InstanceNotFoundException();
+                });
+            }
+            return result;
+
         }
 
     }

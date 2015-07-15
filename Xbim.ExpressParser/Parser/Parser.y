@@ -179,10 +179,10 @@ parameter_definition
 
 parameter_definition_right
 	: identifier_or_type														{ $$.val = CreateSimpleAttribute($1); }
-	| enumerable OF identifier_or_type											{  }
-	| enumerable OF UNIQUE identifier_or_type									{  }
-	| enumerable OF enumerable OF identifier_or_type							{  }
-	| enumerable OF UNIQUE enumerable OF identifier_or_type						{  }
+	| enumerable OF identifier_or_type											{ $$.val = CreateEnumerableAttribute($1.val as AggregationType, $3, false); }
+	| enumerable OF UNIQUE identifier_or_type									{ $$.val = CreateEnumerableAttribute($1.val as AggregationType, $4, true); }
+	| enumerable OF enumerable OF identifier_or_type							{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $3.val as AggregationType, $5, false); }
+	| enumerable OF UNIQUE enumerable OF identifier_or_type						{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $4.val as AggregationType, $6, true); }
 	;
 
 where_section

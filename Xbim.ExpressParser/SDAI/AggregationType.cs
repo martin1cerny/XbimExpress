@@ -9,5 +9,7 @@ namespace Xbim.ExpressParser.SDAI
     public abstract class AggregationType: SchemaEntity, BaseType
     {
         public BaseType ElementType { get; set; }
+
+        public bool UniqueElements { get; set; }
     }
 }
