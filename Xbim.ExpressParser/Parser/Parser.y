@@ -84,6 +84,9 @@
 %token NEQ
 %token BACKSLASH
 
+%token CONSTANT
+%token END_CONSTANT
+
 %%
 schema_definition 
 	: SCHEMA IDENTIFIER ';' definitions END_SCHEMA ';'											{ Model.Schema.Name = $2.strVal; Model.Schema.Identification = $2.strVal; Finish();}
@@ -101,6 +104,11 @@ definition
 	| entity
 	| function
 	| rule
+	| constant_definition
+	;
+
+constant_definition
+	: CONSTANT IDENTIFIER ':' IDENTIFIER ASSIGNMENT IDENTIFIER error END_CONSTANT ';'						{ yyerrok(); }
 	;
 
 type_definition 

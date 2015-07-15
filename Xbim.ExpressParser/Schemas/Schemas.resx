@@ -127,4 +127,7 @@
   <data name="IFC4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ifc4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="IFC4_ADD1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ifc4_add1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

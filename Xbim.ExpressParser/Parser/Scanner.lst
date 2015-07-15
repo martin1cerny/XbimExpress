@@ -2,32 +2,32 @@
 =============================================================================
 NFSA Summary for input file <Scanner.lex>
 =============================================================================
-Total NFSA states = 1749
+Total NFSA states = 1788
 Number of Start Conditions = 1
 Start condition INITIAL:
-  number of patterns = 79, number of nfsa states = 450, accept states = 79
+  number of patterns = 81, number of nfsa states = 472, accept states = 81
 =============================================================================
-GPLEX: NFSA built.   20 msec
+GPLEX: NFSA built.   22 msec
 =============================================================================
-GPLEX: DFSA built.   75 msec
+GPLEX: DFSA built.   83 msec
 =============================================================================
-GPLEX: DFSA minimized.   28 msec
+GPLEX: DFSA minimized.   29 msec
 =============================================================================
-GPLEX: Shortest strings found.    3 msec
+GPLEX: Shortest strings found.    5 msec
 =============================================================================
 DFSA Summary
 =============================================================================
 Number of dfsa instances = 1
 Start condition INITIAL:
-  number of dfsa states = 288, number of accept states = 261
+  number of dfsa states = 304, number of accept states = 277
 =============================================================================
-GPLEX: C# file emitted.   41 msec
+GPLEX: C# file emitted.   53 msec
 =============================================================================
 GPLEX Summary
 =============================================================================
-Total number of states = 267, total accept states = 249, backup states = 11
-Original state number was 289, minimized machine has 267 states
-Nextstate table compression was 74.90%, 17,159 entries Vs 68,352
+Total number of states = 282, total accept states = 265, backup states = 10
+Original state number was 305, minimized machine has 282 states
+Nextstate table compression was 74.75%, 18,232 entries Vs 72,192
 
 Backup state report --- 
 In <0>, after "" automaton could accept "[a-zA-Z0-9_]*" in state 1
@@ -39,28 +39,25 @@ In <0>, after "(" automaton could accept ""("" in state 7
 In <0>, after "." automaton could accept ""."" in state 10
 --- after ''.'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "SUPERTYPE" automaton could accept "[a-zA-Z0-9_]*" in state 69
+In <0>, after "SUPERTYPE" automaton could accept "[a-zA-Z0-9_]*" in state 70
 --- after ''\x20'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "SUBTYPE" automaton could accept "[a-zA-Z0-9_]*" in state 74
+In <0>, after "SUBTYPE" automaton could accept "[a-zA-Z0-9_]*" in state 75
 --- after ''\x20'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "ENUMERATION" automaton could accept "[a-zA-Z0-9_]*" in state 170
+In <0>, after "ENUMERATION" automaton could accept "[a-zA-Z0-9_]*" in state 171
 --- after ''\x20'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "+." automaton could accept "[\-\+]?[0-9]*[\.][0-9]*" in state 239
+In <0>, after "+." automaton could accept "[\-\+]?[0-9]*[\.][0-9]*" in state 255
 --- after ''.'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "+0" automaton could accept "[\-\+]?[0-9]+" in state 246
+In <0>, after "+0" automaton could accept "[\-\+]?[0-9]+" in state 262
 --- after ''E'' automaton is in a non-accept state and might need to backup
 
-In <0>, after "(**)" automaton could accept "(\(\*)(.*(\r\n)*)*(\*\))" in state 247
---- after ''\0'' automaton is in a non-accept state and might need to backup
-
-In <0>, after "''" automaton could accept "[\']([\n]|[\000\011-\046\050-\176\201-\237\240-\377]|[\047][\047])*[\']" in state 248
+In <0>, after "''" automaton could accept "[\']([\n]|[\000\011-\046\050-\176\201-\237\240-\377]|[\047][\047])*[\']" in state 264
 --- after ''''' automaton is in a non-accept state and might need to backup
 
-In <0>, after "\"\"" automaton could accept "[\"]([\n]|[\000\011-\046\050-\176\201-\237\240-\377]|[\047][\047])*[\"]" in state 249
+In <0>, after "\"\"" automaton could accept "[\"]([\n]|[\000\011-\046\050-\176\201-\237\240-\377]|[\047][\047])*[\"]" in state 265
 --- after ''\0'' automaton is in a non-accept state and might need to backup
 
 =============================================================================

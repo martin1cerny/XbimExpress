@@ -13,7 +13,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseIfc2x3()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(SchemasDefinitions.IFC2X3_TC1);
+            var result = parser.Parse(Schemas.Schemas.IFC2X3_TC1);
             Assert.IsTrue(result);
 
 
@@ -25,10 +25,26 @@ namespace Xbim.ExpressParser.Tests
         }
 
         [TestMethod]
-        public void ParseIfc2x4()
+        public void ParseIfc4()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(SchemasDefinitions.IFC4);
+            var result = parser.Parse(Schemas.Schemas.IFC4);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ParseIfc4Add1()
+        {
+            var parser = new ExpressParser();
+            var result = parser.Parse(Schemas.Schemas.IFC4_ADD1);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ParseCis2()
+        {
+            var parser = new ExpressParser();
+            var result = parser.Parse(Schemas.Schemas.CIS2_lpm61);
             Assert.IsTrue(result);
         }
     }

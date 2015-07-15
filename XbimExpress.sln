@@ -9,6 +9,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B027FD0A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.ExpressParser.Tests", "Xbim.ExpressParser.Tests\Xbim.ExpressParser.Tests.csproj", "{70ACA548-1E13-4DA6-A8A3-B50B14850F61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.IfcDomains", "Xbim.IfcDomains\Xbim.IfcDomains.csproj", "{F50B2F17-E1D7-484C-ADE6-2E18A5F0E050}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{F7E394B0-3188-44C2-8317-6C14EF009307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimSchemaComparer", "XbimSchemaComparer\XbimSchemaComparer.csproj", "{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,11 +29,20 @@ Global
 		{70ACA548-1E13-4DA6-A8A3-B50B14850F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70ACA548-1E13-4DA6-A8A3-B50B14850F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70ACA548-1E13-4DA6-A8A3-B50B14850F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F50B2F17-E1D7-484C-ADE6-2E18A5F0E050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F50B2F17-E1D7-484C-ADE6-2E18A5F0E050}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F50B2F17-E1D7-484C-ADE6-2E18A5F0E050}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F50B2F17-E1D7-484C-ADE6-2E18A5F0E050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{70ACA548-1E13-4DA6-A8A3-B50B14850F61} = {B027FD0A-A830-42E6-9305-1F7948CA863C}
+		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 	EndGlobalSection
 EndGlobal

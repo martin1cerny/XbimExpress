@@ -40,10 +40,12 @@ namespace Xbim.ExpressParser.SDAI
             return new ExpressId{Value = value};
         }
 
-        public static explicit operator string(ExpressId value)
+        public static implicit operator string(ExpressId value)
         {
             return value.Value;
         }
+
+       
 
         public static bool operator ==(ExpressId x, ExpressId y)
         {
