@@ -22,7 +22,7 @@
 [\r]					{} 
 [\0]+					{} 
 \/\/[^\r\n]*			{}		/*One line comment*/
-(\(\*)(.*(\r\n)*)*(\*\))		{}		/*Multiline comment*/
+(\(\*)(([^\*]*)(\r\n)*)*(\*\))		{}		/*Multiline comment*/
 
 
 /* ********************** Operators ************************** */
@@ -105,6 +105,8 @@
 "SIZEOF"			{ return (int)(Tokens.SIZEOF); }
 "QUERY"				{ return (int)(Tokens.QUERY); }
 
+"CONSTANT"			{ return (int)(Tokens.CONSTANT); }
+"END_CONSTANT"		{ return (int)(Tokens.END_CONSTANT); }
 
 
 

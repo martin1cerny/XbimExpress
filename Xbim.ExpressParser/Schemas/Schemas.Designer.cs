@@ -22,14 +22,14 @@ namespace Xbim.ExpressParser.Schemas {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SchemasDefinitions {
+    public class Schemas {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SchemasDefinitions() {
+        internal Schemas() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Xbim.ExpressParser.Schemas {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Xbim.ExpressParser.Schemas.SchemasDefinitions", typeof(SchemasDefinitions).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Xbim.ExpressParser.Schemas.Schemas", typeof(Schemas).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -120,6 +120,24 @@ namespace Xbim.ExpressParser.Schemas {
         public static string IFC4 {
             get {
                 return ResourceManager.GetString("IFC4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (*
+        ///Copyright by:
+        ///buildingSMART International Limited, 1996-2015
+        ///
+        ///Any technical documentation made available by buildingSMART International Limited
+        ///is the copyrighted work of buildingSMART International Limited and is owned by the 
+        ///buildingSMART International Limited. It may be photocopied, used in software development, 
+        ///or translated into another computer language without prior written consent from 
+        ///buildingSMART International Limited provided that full attribution is given. 
+        ///Prior written consent  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IFC4_ADD1 {
+            get {
+                return ResourceManager.GetString("IFC4_ADD1", resourceCulture);
             }
         }
     }

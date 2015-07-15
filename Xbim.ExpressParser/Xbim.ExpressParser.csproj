@@ -60,16 +60,10 @@
     <Compile Include="Parser\ScannerHelper.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schemas\SchemaStructure.cs" />
-    <Compile Include="Schemas\SchemasDefinitions.Designer.cs">
+    <Compile Include="Schemas\Schemas.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SchemasDefinitions.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Schemas\SchemasStructures.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SchemasStructures.resx</DependentUpon>
+      <DependentUpon>Schemas.resx</DependentUpon>
     </Compile>
     <Compile Include="SDAI\AggregationType.cs" />
     <Compile Include="SDAI\ArrayType.cs" />
@@ -109,6 +103,7 @@
     <Compile Include="SDAI\WhereRule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Schemas\IFC4_ADD1.txt" />
     <None Include="Parser\makeparser.bat" />
     <None Include="Parser\Parser.y" />
     <None Include="Parser\Scanner.lex" />
@@ -135,17 +130,9 @@
     <None Include="Parser\gppg.exe" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Schemas\IFC2x3_TC1.xml" />
-    <Content Include="Schemas\IFC4.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Schemas\SchemasDefinitions.resx">
+    <EmbeddedResource Include="Schemas\Schemas.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SchemasDefinitions.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Schemas\SchemasStructures.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SchemasStructures.Designer.cs</LastGenOutput>
+      <LastGenOutput>Schemas.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
