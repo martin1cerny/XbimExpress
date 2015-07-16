@@ -75,7 +75,7 @@ namespace Xbim.ExpressParser
             }
         }
 
-        private void CreateEntity(string name, List<ValueType> sections)
+        private void CreateEntity(string name, IEnumerable<ValueType> sections)
         {
             var entity = Model.New<EntityDefinition>(e => e.Name = name);
             foreach (var section in sections)
@@ -108,8 +108,6 @@ namespace Xbim.ExpressParser
                         var identifiers = section.val as List<string>;
                         if(identifiers == null || !identifiers.Any())
                         break;
-                        if(identifiers.Count > 1)
-                            throw  new Exception();
                         ToDoActions.Add(() =>
                         {
                             foreach (var type in identifiers.Select(typeName => Model.Get<EntityDefinition>(t => t.Name == typeName).FirstOrDefault()))
@@ -301,6 +299,31 @@ namespace Xbim.ExpressParser
             result.Domain = outerAggregation;
             outerAggregation.ElementType = innerAggregation;
             outerAggregation.UniqueElements = unique;
+
+            if (data.tokVal == Tokens.TYPE)
+            {
+                innerAggregation.ElementType = data.val as SimpleType;
+            }
+            if (data.tokVal == Tokens.IDENTIFIER)
+            {
+                ToDoActions.Add(() =>
+                {
+                    innerAggregation.ElementType = Model.Get<NamedType>(t => t.Name == data.strVal).FirstOrDefault();
+                    if (result.Domain == null)
+                        throw new InstanceNotFoundException();
+                });
+            }
+            return result;
+
+        }
+
+        private ExplicitAttribute CreateEnumerableOfEnumerableAttribute(AggregationType superOuterAggregation, AggregationType outerAggregation, AggregationType innerAggregation, ValueType data, bool unique)
+        {
+            var result = Model.New<ExplicitAttribute>();
+            result.Domain = superOuterAggregation;
+            superOuterAggregation.UniqueElements = unique;
+            superOuterAggregation.ElementType = outerAggregation;
+            outerAggregation.ElementType = innerAggregation;
 
             if (data.tokVal == Tokens.TYPE)
             {

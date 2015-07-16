@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.ExpressParser.Schemas;
@@ -45,6 +46,9 @@ namespace Xbim.ExpressParser.Tests
         {
             var parser = new ExpressParser();
             var result = parser.Parse(Schemas.Schemas.CIS2_lpm61);
+            var lastError = parser.Errors.LastOrDefault();
+            if (lastError != null)
+                Debug.WriteLine(lastError);
             Assert.IsTrue(result);
         }
     }
