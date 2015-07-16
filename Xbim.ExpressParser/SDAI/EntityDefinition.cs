@@ -74,6 +74,27 @@ namespace Xbim.ExpressParser.SDAI
             }
         }
 
+        public IEnumerable<EntityDefinition> AllSupertypes
+        {
+            get
+            {
+                var counter = 0;
+                if(Supertypes == null || !Supertypes.Any()) yield break;
+                foreach (var supertype in Supertypes)
+                {
+                    yield return supertype;
+                    foreach (var definition in supertype.AllSupertypes)
+                    {
+                        counter++;
+                        if(counter>20)
+                            throw new Exception();
+                        yield return definition;
+                    }
+                }
+
+            }
+        }
+
         /// <summary>
         /// Explicit attributes of this entity ordered by their occurance in the schema definition file.
         /// </summary>

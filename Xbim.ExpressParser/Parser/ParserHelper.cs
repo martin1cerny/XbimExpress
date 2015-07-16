@@ -108,6 +108,8 @@ namespace Xbim.ExpressParser
                         var identifiers = section.val as List<string>;
                         if(identifiers == null || !identifiers.Any())
                         break;
+                        if(identifiers.Count > 1)
+                            throw  new Exception();
                         ToDoActions.Add(() =>
                         {
                             foreach (var type in identifiers.Select(typeName => Model.Get<EntityDefinition>(t => t.Name == typeName).FirstOrDefault()))
