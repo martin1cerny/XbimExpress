@@ -16,9 +16,15 @@ namespace XbimSchemaComparer
     {
         static void Main(string[] args)
         {
-            var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1);
-            var ifc4 = GetSchema(Schemas.IFC4);
-            var schemas = new List<SchemaDefinition> {ifc2X3.Schema, ifc4.Schema};
+            Compare(
+                GetSchema(Schemas.IFC2X3_TC1), 
+                GetSchema(Schemas.IFC4_ADD1)
+                );
+        }
+
+        private static void Compare(SchemaModel ifc2X3, SchemaModel ifc4)
+        {
+            var schemas = new List<SchemaDefinition> { ifc2X3.Schema, ifc4.Schema };
             var ifc2X3Domain = DomainStructure.LoadIfc2X3();
             var ifc4Domain = DomainStructure.LoadIfc4();
 
@@ -38,7 +44,7 @@ namespace XbimSchemaComparer
             {
                 comparer.Compare(ifc2X3.Schema, ifc4.Schema);
             }
-            
+
 
             var w = new StringWriter();
             w.WriteLine("Number of entities:");
@@ -47,7 +53,7 @@ namespace XbimSchemaComparer
                 w.WriteLine("{0}: {1}", schema.Name, schema.Entities.Count());
             }
             w.WriteLine();
-           
+
             w.WriteLine("Number of types:");
             foreach (var schema in schemas)
             {
@@ -86,7 +92,8 @@ namespace XbimSchemaComparer
             }
 
             var log = w.ToString();
-            using (var file = File.CreateText("log.txt"))
+            var logName = String.Format("{0}_{1}.txt", ifc2X3.Schema.Name, ifc4.Schema.Name);
+            using (var file = File.CreateText(logName))
             {
                 file.Write(log);
                 file.Close();

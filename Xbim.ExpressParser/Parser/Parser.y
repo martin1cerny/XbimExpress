@@ -70,6 +70,7 @@
 %token  SELF
 %token  IN
 %token  AND
+%token  ANDOR
 %token  OR
 %token  XOR
 %token  NOT
@@ -133,7 +134,10 @@ entity
 	;
 
 identifier_list
-	: '(' identifiers ')'				{ $$.val = $2.val; }
+	: identifiers								{ $$.val = $1.val; }
+	| '(' identifier_list ')'					{ $$.val = $2.val; }
+	| ONEOF identifier_list 					{ $$.val = $2.val; }
+	| identifier_list ANDOR identifier_list		{ var list = (List<string>)($1.val); list.AddRange($3.val as List<string>); $$.val = list; }
 	;
 
 identifiers
@@ -206,10 +210,13 @@ where_rules
 
 where_rule
 	: IDENTIFIER ':' error ';'												{ $$.val = CreateWhereRule($1.strVal); yyerrok(); }
+	| IDENTIFIER ':' IDENTIFIER ':' comparer ':' '(' SELF ')' ';'			{ $$.val = CreateWhereRule($1.strVal); }
+	| IDENTIFIER ':' IDENTIFIER ':' comparer ':' IDENTIFIER ';'				{ $$.val = CreateWhereRule($1.strVal); }
 	| IDENTIFIER ':' SELF IN string_array ';'								{ $$.val = CreateWhereRule($1.strVal); }
 	| IDENTIFIER ':' SELF comparer number ';'								{ $$.val = CreateWhereRule($1.strVal); }
 	| IDENTIFIER ':' SELF comparer IDENTIFIER ';'							{ $$.val = CreateWhereRule($1.strVal); }
 	| IDENTIFIER ':' accessor comparer number ';'							{ $$.val = CreateWhereRule($1.strVal); }
+	| IDENTIFIER ':' accessor comparer accessor ';'							{ $$.val = CreateWhereRule($1.strVal); }
 	| IDENTIFIER ':' accessor comparer IDENTIFIER ';'						{ $$.val = CreateWhereRule($1.strVal); }
 	| IDENTIFIER ':' '{' number comparer SELF comparer number '}' ';'		{ $$.val = CreateWhereRule($1.strVal); }
 	;
@@ -296,8 +303,8 @@ inheritance_section
 
 inheritance_definition
 	: SUBTYPE_OF identifier_list								{ $$.val = $2.val; $$.tokVal = Tokens.NON_ABSTRACT; }
-	| SUPERTYPE_OF '(' ONEOF identifier_list ')'				{ $$.tokVal = Tokens.NON_ABSTRACT;  }
-	| ABSTRACT SUPERTYPE_OF '(' ONEOF identifier_list ')'		{ $$.tokVal = Tokens.ABSTRACT;  }
+	| SUPERTYPE_OF identifier_list								{ $$.val = null; $$.tokVal = Tokens.NON_ABSTRACT;  }
+	| ABSTRACT SUPERTYPE_OF identifier_list						{ $$.val = null; $$.tokVal = Tokens.ABSTRACT;  }
 	;
 
 function

@@ -99,6 +99,7 @@
 "SELF"				{ return (int)(Tokens.SELF); }
 "IN"				{ return (int)(Tokens.IN); }
 "AND"				{ return (int)(Tokens.AND); }
+"ANDOR"				{ return (int)(Tokens.ANDOR); }
 "OR"				{ return (int)(Tokens.OR); }
 "XOR"				{ return (int)(Tokens.XOR); }
 "NOT"				{ return (int)(Tokens.NOT); }
