@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace XbimSchemaComparer.Comparators
 {
-    public enum CommarisonResultType
+    public enum ComparisonResultType
     {
         Added,
         Removed,
-        Changed
+        Changed,
+        Identical
     }
 }

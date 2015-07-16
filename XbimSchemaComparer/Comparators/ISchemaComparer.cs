@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace XbimSchemaComparer.Comparators
 {
-    interface IComparator<TObject, TRepository>
+    public interface ISchemaComparer
+    {
+        IEnumerable<IComparisonResult> Compare(object oldObject, object newObject);
+        IEnumerable<IComparisonResult> Results { get; }
+    }
+    public interface ISchemaComparer<in TObject, out TResult> : ISchemaComparer where TResult : IComparisonResult
     {
         /// <summary>
         /// Name of the comparator should indocate which aspect this comparator compares.
@@ -21,14 +26,20 @@ namespace XbimSchemaComparer.Comparators
         /// <summary>
         /// This function should look up the corresponding object in repository and compare it.
         /// </summary>
-        /// <param name="objToCompare">Object to compare</param>
+        /// <param name="oldObject">Object to compare</param>
+        /// <param name="newObject">Object to compare</param>
         /// <returns></returns>
-        IComparisonResult<TObject> Compare(TObject objToCompare);
+        IEnumerable<TResult> Compare(TObject oldObject, TObject newObject);
 
         /// <summary>
         /// All comparison results of this comparator
         /// </summary>
-        IEnumerable<IComparisonResult<TObject>> Results { get; } 
+        IEnumerable<TResult> ComparisonResults { get; }
+
+        /// <summary>
+        /// This property should return TResult
+        /// </summary>
+        Type ResultType { get; }
 
     }
 }

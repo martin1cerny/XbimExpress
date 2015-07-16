@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public abstract class SchemaEntity
+    public interface ISchemaEntity
+    {
+        SchemaModel SchemaModel { get; }
+    }
+
+    public abstract class SchemaEntity : ISchemaEntity
     {
         public SchemaModel SchemaModel { get; internal set; }
     }
