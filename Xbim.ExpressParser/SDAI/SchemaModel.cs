@@ -53,7 +53,7 @@ namespace Xbim.ExpressParser.SDAI
         /// <typeparam name="T">Type of entities</typeparam>
         /// <param name="predicate">Optional predicate to select only some</param>
         /// <returns>Enumeration of entities of defined type</returns>
-        public IEnumerable<T> Get<T>(Func<T, bool> predicate = null) where T : SchemaEntity
+        public IEnumerable<T> Get<T>(Func<T, bool> predicate = null) where T : class, ISchemaEntity
         {
             return predicate == null ? _entities.Where<T>() : _entities.Where(predicate);
         }
@@ -67,18 +67,18 @@ namespace Xbim.ExpressParser.SDAI
         }
     }
 
-    internal class EntityDictionary : IDictionary<Type, List<SchemaEntity>>
+    internal class EntityDictionary : IDictionary<Type, List<ISchemaEntity>>
     {
-        private readonly Dictionary<Type, List<SchemaEntity>> _internal = new Dictionary<Type, List<SchemaEntity>>();
+        private readonly Dictionary<Type, List<ISchemaEntity>> _internal = new Dictionary<Type, List<ISchemaEntity>>();
 
         private bool IsValidType(Type type)
         {
-            if (type.IsAbstract || type.IsInterface || !typeof (SchemaEntity).IsAssignableFrom(type))
+            if (type.IsAbstract || type.IsInterface || !typeof (ISchemaEntity).IsAssignableFrom(type))
                 return false;
             return true;
         }
 
-        public IEnumerable<T> Where<T>(Func<T, bool> predicate = null) where T : SchemaEntity
+        public IEnumerable<T> Where<T>(Func<T, bool> predicate = null) where T : class, ISchemaEntity
         {
             var queryType = typeof (T);
             var resultTypes = _internal.Keys.Where(t => queryType.IsAssignableFrom(t));
@@ -87,9 +87,9 @@ namespace Xbim.ExpressParser.SDAI
                     .Where(result => predicate == null || predicate(result));
         }
 
-        public void Add(SchemaEntity entity)
+        public void Add(ISchemaEntity entity)
         {
-            Add(entity.GetType(), new List<SchemaEntity> {entity});
+            Add(entity.GetType(), new List<ISchemaEntity> {entity});
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Xbim.ExpressParser.SDAI
         /// </summary>
         /// <param name="key">Key which must be concrete type of schema entity</param>
         /// <param name="value"></param>
-        public void Add(Type key, List<SchemaEntity> value)
+        public void Add(Type key, List<ISchemaEntity> value)
         {
             if (!IsValidType(key))
                 throw new NotSupportedException("Key must be a concrete type of SchemaEntity");
@@ -123,17 +123,17 @@ namespace Xbim.ExpressParser.SDAI
             return _internal.Remove(key);
         }
 
-        public bool TryGetValue(Type key, out List<SchemaEntity> value)
+        public bool TryGetValue(Type key, out List<ISchemaEntity> value)
         {
             return _internal.TryGetValue(key, out value);
         }
 
-        public ICollection<List<SchemaEntity>> Values
+        public ICollection<List<ISchemaEntity>> Values
         {
             get { return _internal.Values; }
         }
 
-        public List<SchemaEntity> this[Type key]
+        public List<ISchemaEntity> this[Type key]
         {
             get
             {
@@ -144,7 +144,7 @@ namespace Xbim.ExpressParser.SDAI
                     return _internal[key];
                 else
                 {
-                    var result = new List<SchemaEntity>();
+                    var result = new List<ISchemaEntity>();
                     _internal.Add(key, result);
                     return result;
                 }
@@ -160,7 +160,7 @@ namespace Xbim.ExpressParser.SDAI
             }
         }
 
-        public void Add(KeyValuePair<Type, List<SchemaEntity>> item)
+        public void Add(KeyValuePair<Type, List<ISchemaEntity>> item)
         {
             Add(item.Key, item.Value);
         }
@@ -170,12 +170,12 @@ namespace Xbim.ExpressParser.SDAI
             _internal.Clear();
         }
 
-        public bool Contains(KeyValuePair<Type, List<SchemaEntity>> item)
+        public bool Contains(KeyValuePair<Type, List<ISchemaEntity>> item)
         {
             return _internal.Contains(item);
         }
 
-        public void CopyTo(KeyValuePair<Type, List<SchemaEntity>>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<Type, List<ISchemaEntity>>[] array, int arrayIndex)
         {
             throw new NotSupportedException();
         }
@@ -193,7 +193,7 @@ namespace Xbim.ExpressParser.SDAI
             get { return false; }
         }
 
-        public bool Remove(KeyValuePair<Type, List<SchemaEntity>> item)
+        public bool Remove(KeyValuePair<Type, List<ISchemaEntity>> item)
         {
             if (_internal.ContainsKey(item.Key) && _internal[item.Key] == item.Value)
                 return _internal.Remove(item.Key);
@@ -201,7 +201,7 @@ namespace Xbim.ExpressParser.SDAI
             throw new Exception("This item is not an item of this doctionary;");
         }
 
-        public IEnumerator<KeyValuePair<Type, List<SchemaEntity>>> GetEnumerator()
+        public IEnumerator<KeyValuePair<Type, List<ISchemaEntity>>> GetEnumerator()
         {
             return _internal.GetEnumerator();
         }

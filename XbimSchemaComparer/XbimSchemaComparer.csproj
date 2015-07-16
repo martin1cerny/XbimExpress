@@ -41,9 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comparators\CommarisonResultType.cs" />
-    <Compile Include="Comparators\IComparator.cs" />
-    <Compile Include="Comparators\IComparisonResult.cs" />
+    <Compile Include="Comparators\ComparisonResultType.cs" />
+    <Compile Include="Comparators\ISchemaComparer.cs" />
+    <Compile Include="Comparators\ComparisonResult.cs" />
+    <Compile Include="Comparators\Results\DefinedTypeComparisonResult.cs" />
+    <Compile Include="Comparators\Results\EntityComparisonResult.cs" />
+    <Compile Include="Comparators\Results\EnumerationComparisonResult.cs" />
+    <Compile Include="Comparators\Results\SchemaComparisonResult.cs" />
+    <Compile Include="Comparators\Results\NamedTypeComparisonResult.cs" />
+    <Compile Include="Comparators\Results\SelectComparisonResult.cs" />
+    <Compile Include="Comparators\SchemaComparers\AddedEnumerationsComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\NamedTypeAddedRemovedComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\AddedEntitiesComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\AddedSelectsComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\AddedTypesComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\RemovedEntitiesComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\RemovedEnumerationsComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\RemovedSelectsComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\RemovedTypesComparer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    interface ConstructedType
+    interface ConstructedType: UnderlyingType
     {
     }
 }

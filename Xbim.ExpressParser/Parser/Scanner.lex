@@ -55,6 +55,7 @@
 /* ********************** Keywords ************************** */
 
 "INTEGER"			{ return (int)(Tokens.INTEGER); }
+"NUMBER"			{ return (int)(Tokens.NUMBER); }
 "STRING"			{ return (int)(Tokens.STRING); }
 "BOOLEAN"	 		{ return (int)(Tokens.BOOLEAN); }
 "BINARY"	 		{ return (int)(Tokens.BINARY); }

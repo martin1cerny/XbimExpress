@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.ExpressParser;
 using Xbim.ExpressParser.Schemas;
 using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
+using XbimSchemaComparer.Comparators;
+using XbimSchemaComparer.Comparators.SchemaComparers;
 
 namespace XbimSchemaComparer
 {
@@ -21,27 +22,32 @@ namespace XbimSchemaComparer
             var ifc2X3Domain = DomainStructure.LoadIfc2X3();
             var ifc4Domain = DomainStructure.LoadIfc4();
 
+
+            var schemaComparers = new ISchemaComparer[]
+            {
+                new AddedEntitiesComparer(), 
+                new AddedSelectsComparer() , 
+                new AddedTypesComparer(),
+                new AddedEnumerationsComparer(), 
+                new RemovedEntitiesComparer(), 
+                new RemovedSelectsComparer(), 
+                new RemovedTypesComparer(),
+                new RemovedEnumerationsComparer()
+            };
+            foreach (var comparer in schemaComparers)
+            {
+                comparer.Compare(ifc2X3.Schema, ifc4.Schema);
+            }
+            
+
             var w = new StringWriter();
             w.WriteLine("Number of entities:");
             foreach (var schema in schemas)
             {
                 w.WriteLine("{0}: {1}", schema.Name, schema.Entities.Count());
             }
-            w.WriteLine("New entities in {0}:", ifc4.Schema.Name);
-            foreach (var entity in ifc4.Schema.Entities.Where(e => ifc2X3.Schema.Entities.All(et => et.Name != e.Name)))
-            {
-                w.WriteLine("{0} ({1})", entity.Name, ifc4Domain.GetDomainForType(entity.Name).Name);
-            }
             w.WriteLine();
-            w.WriteLine("Removed entities in {0}:", ifc4.Schema.Name);
-            foreach (var entity in ifc2X3.Schema.Entities.Where(e => ifc4.Schema.Entities.All(et => et.Name != e.Name)))
-            {
-                w.WriteLine("{0} ({1})", entity.Name, ifc2X3Domain.GetDomainForType(entity.Name).Name);
-            }
-            w.WriteLine();
-
-
-
+           
             w.WriteLine("Number of types:");
             foreach (var schema in schemas)
             {
@@ -70,7 +76,22 @@ namespace XbimSchemaComparer
             }
             w.WriteLine();
 
-            Console.WriteLine(w.ToString());
+            foreach (var cmp in schemaComparers)
+            {
+                foreach (var result in cmp.Results)
+                {
+                    w.WriteLine(result.Message);
+                }
+                w.WriteLine();
+            }
+
+            var log = w.ToString();
+            using (var file = File.CreateText("log.txt"))
+            {
+                file.Write(log);
+                file.Close();
+            }
+            Console.WriteLine(log);
             Console.ReadLine();
         }
 

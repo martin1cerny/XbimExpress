@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public interface UnderlyingType
+    public interface UnderlyingType: ISchemaEntity
     {
     }
 }

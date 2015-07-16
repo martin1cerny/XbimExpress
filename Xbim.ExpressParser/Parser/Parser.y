@@ -24,6 +24,7 @@
 
 
 %token	INTEGER	
+%token	NUMBER	
 %token	STRING	
 %token	BOOLEAN	
 %token	LOGICAL	
@@ -112,10 +113,10 @@ constant_definition
 	;
 
 type_definition 
-	: TYPE IDENTIFIER '=' identifier_or_type ';' END_TYPE ';'									{ CreateType($2.strVal, null); }
-	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' END_TYPE ';'						{ CreateType($2.strVal, null); }
-	| TYPE IDENTIFIER '=' identifier_or_type ';' where_section END_TYPE ';'						{ CreateType($2.strVal, $6.val as List<WhereRule>); }
-	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' where_section END_TYPE ';'		{ CreateType($2.strVal, $8.val as List<WhereRule>); }
+	: TYPE IDENTIFIER '=' identifier_or_type ';' END_TYPE ';'									{ CreateType($2.strVal, $4, null); }
+	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' END_TYPE ';'						{ CreateType($2.strVal, $6, null); }
+	| TYPE IDENTIFIER '=' identifier_or_type ';' where_section END_TYPE ';'						{ CreateType($2.strVal, $4, $6.val as List<WhereRule>); }
+	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' where_section END_TYPE ';'		{ CreateType($2.strVal, $6, $8.val as List<WhereRule>); }
 	;
 
 enumeration
@@ -146,6 +147,7 @@ type
 	| BINARY								{ $$.val = Model.PredefinedSimpleTypes.BinaryType; }
 	| STRING								{ $$.val = Model.PredefinedSimpleTypes.StringType; }
 	| INTEGER								{ $$.val = Model.PredefinedSimpleTypes.IntegerType; }
+	| NUMBER								{ $$.val = Model.PredefinedSimpleTypes.NumberType; }
 	| LOGICAL								{ $$.val = Model.PredefinedSimpleTypes.LogicalType; }
 	| type '(' INTEGER ')'					{ $$.val = Model.New<ArrayType>(t => {t.ElementType = $1.val as BaseType; t.UpperIndex = $3.intVal;}); }
 	| type '(' INTEGER ')' FIXED			{ $$.val = Model.New<ArrayType>(t => {t.ElementType = $1.val as BaseType; t.UpperIndex = $3.intVal;}); }

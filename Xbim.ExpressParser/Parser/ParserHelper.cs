@@ -212,9 +212,29 @@ namespace Xbim.ExpressParser
         }
 
 
-        private void CreateType(string name, List<WhereRule> whereRules)
+        private void CreateType(string name, ValueType typeBase, List<WhereRule> whereRules)
         {
             var type = Model.New<DefinedType>(e => e.Name = name);
+            switch (typeBase.tokVal)
+            {
+                    case Tokens.IDENTIFIER:
+                    ToDoActions.Add(() =>
+                    {
+                        var domain = Model.Get<NamedType>(t => t.Name == typeBase.strVal).FirstOrDefault();
+                        if(domain == null) 
+                            throw new InstanceNotFoundException();
+                        type.Domain = domain as UnderlyingType;
+                    });
+                    break;
+                    case Tokens.TYPE:
+                    type.Domain = typeBase.val as UnderlyingType;
+                    if(type.Domain == null) 
+                        throw new InstanceNotFoundException();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             if(whereRules == null) return;
 
             foreach (var rule in whereRules)
