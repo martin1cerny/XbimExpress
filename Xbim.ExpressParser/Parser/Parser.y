@@ -131,6 +131,7 @@ select_type
 entity
 	: ENTITY IDENTIFIER sections END_ENTITY ';'													{ CreateEntity($2.strVal, $3.val as List<ValueType>); }
 	| ENTITY IDENTIFIER ';' sections END_ENTITY ';'												{ CreateEntity($2.strVal, $4.val as List<ValueType>); }
+	| ENTITY IDENTIFIER ';' END_ENTITY ';'														{ CreateEntity($2.strVal, new ValueType[]{}); }
 	;
 
 identifier_list
@@ -195,8 +196,10 @@ parameter_definition_right
 	: identifier_or_type														{ $$.val = CreateSimpleAttribute($1); }
 	| enumerable OF identifier_or_type											{ $$.val = CreateEnumerableAttribute($1.val as AggregationType, $3, false); }
 	| enumerable OF UNIQUE identifier_or_type									{ $$.val = CreateEnumerableAttribute($1.val as AggregationType, $4, true); }
+	| enumerable OF OPTIONAL identifier_or_type									{ $$.val = CreateEnumerableAttribute($1.val as AggregationType, $4, true); }
 	| enumerable OF enumerable OF identifier_or_type							{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $3.val as AggregationType, $5, false); }
 	| enumerable OF UNIQUE enumerable OF identifier_or_type						{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $4.val as AggregationType, $6, true); }
+	| enumerable OF enumerable OF enumerable OF identifier_or_type				{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $3.val as AggregationType, $5.val as AggregationType, $7, false); }
 	;
 
 where_section																
@@ -246,6 +249,7 @@ unique_section
 unique_rule
 	: IDENTIFIER ':' IDENTIFIER ';'			{ $$.val = CreateUniquenessRule($1.strVal, new [] {$3.strVal} ); }
 	| IDENTIFIER ':' identifiers ';'		{ $$.val = CreateUniquenessRule($1.strVal, $3.val as List<string>); }
+	| IDENTIFIER ':' error ';'				{ $$.val = CreateUniquenessRule($1.strVal, new string[]{} ); yyerrok();}
 	;
 	
 unique_rules 
@@ -277,10 +281,13 @@ derive_rules
 	;
 
 derive_rule
-	: IDENTIFIER ':' identifier_or_type ASSIGNMENT error ';'									{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
-	| IDENTIFIER ':' enumerable  OF identifier_or_type ASSIGNMENT error ';'						{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
-	| IDENTIFIER ':' enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'		{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
-	| accessor ':' identifier_or_type ASSIGNMENT error ';'										{ $$.val = CreateDerivedAttribute($1.val as List<string>); yyerrok(); }
+	: IDENTIFIER ':' identifier_or_type ASSIGNMENT error ';'												{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	| IDENTIFIER ':' error ';'																				{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	| IDENTIFIER ':' enumerable  OF identifier_or_type ASSIGNMENT error ';'									{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	| IDENTIFIER ':' enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'					{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	| IDENTIFIER ':' enumerable  OF enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'	{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	| accessor ':' identifier_or_type ASSIGNMENT error ';'													{ $$.val = CreateDerivedAttribute($1.val as List<string>); yyerrok(); }
+	| accessor ':' error ';'																				{ $$.val = CreateDerivedAttribute($1.val as List<string>); yyerrok(); }
 	;
 
 optional_integer
