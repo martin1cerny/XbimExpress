@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
@@ -12,9 +11,11 @@ namespace Xbim.ExpressParser.SDAI
 
         public PredefinedSimpleTypes PredefinedSimpleTypes { get; private set; }
 
-        public SchemaModel()
+        public SchemaModel(bool init = true)
         {
-            Schema = new SchemaDefinition{SchemaModel = this};
+            if (!init) return;
+
+            Schema = new SchemaDefinition { SchemaModel = this };
             _entities.Add(Schema);
 
             PredefinedSimpleTypes = new PredefinedSimpleTypes(this);
@@ -71,11 +72,9 @@ namespace Xbim.ExpressParser.SDAI
     {
         private readonly Dictionary<Type, List<ISchemaEntity>> _internal = new Dictionary<Type, List<ISchemaEntity>>();
 
-        private bool IsValidType(Type type)
+        private static bool IsValidType(Type type)
         {
-            if (type.IsAbstract || type.IsInterface || !typeof (ISchemaEntity).IsAssignableFrom(type))
-                return false;
-            return true;
+            return !type.IsAbstract && !type.IsInterface && typeof (ISchemaEntity).IsAssignableFrom(type);
         }
 
         public IEnumerable<T> Where<T>(Func<T, bool> predicate = null) where T : class, ISchemaEntity
@@ -206,7 +205,7 @@ namespace Xbim.ExpressParser.SDAI
             return _internal.GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return _internal.GetEnumerator();
         }

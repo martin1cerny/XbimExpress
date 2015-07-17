@@ -42,15 +42,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comparators\ComparisonResultType.cs" />
+    <Compile Include="Comparators\EntityComparers\AttributeOrderComparer.cs" />
+    <Compile Include="Comparators\EntityComparers\DomainComparer.cs" />
     <Compile Include="Comparators\ISchemaComparer.cs" />
     <Compile Include="Comparators\ComparisonResult.cs" />
     <Compile Include="Comparators\Results\DefinedTypeComparisonResult.cs" />
+    <Compile Include="Comparators\Results\EntityAttributeComparisonResult.cs" />
     <Compile Include="Comparators\Results\EntityComparisonResult.cs" />
+    <Compile Include="Comparators\Results\EntityDomainComparisonResult.cs" />
     <Compile Include="Comparators\Results\EnumerationComparisonResult.cs" />
     <Compile Include="Comparators\Results\SchemaComparisonResult.cs" />
     <Compile Include="Comparators\Results\NamedTypeComparisonResult.cs" />
     <Compile Include="Comparators\Results\SelectComparisonResult.cs" />
     <Compile Include="Comparators\SchemaComparers\AddedEnumerationsComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\ChangedEntitiesComparer.cs" />
     <Compile Include="Comparators\SchemaComparers\NamedTypeSchemaComparer.cs" />
     <Compile Include="Comparators\SchemaComparers\NamedTypeAddedRemovedComparer.cs" />
     <Compile Include="Comparators\SchemaComparers\AddedEntitiesComparer.cs" />
