@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimSchemaComparer", "XbimSchemaComparer\XbimSchemaComparer.csproj", "{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.CodeGeneration", "Xbim.CodeGeneration\Xbim.CodeGeneration.csproj", "{6CFCAA6F-13E4-4330-B521-A1164784E302}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.CodeGeneration.Tests", "Xbim.CodeGeneration.Tests\Xbim.CodeGeneration.Tests.csproj", "{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,14 @@ Global
 		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CFCAA6F-13E4-4330-B521-A1164784E302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CFCAA6F-13E4-4330-B521-A1164784E302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CFCAA6F-13E4-4330-B521-A1164784E302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CFCAA6F-13E4-4330-B521-A1164784E302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +56,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{70ACA548-1E13-4DA6-A8A3-B50B14850F61} = {B027FD0A-A830-42E6-9305-1F7948CA863C}
 		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB} = {F7E394B0-3188-44C2-8317-6C14EF009307}
+		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B} = {B027FD0A-A830-42E6-9305-1F7948CA863C}
 	EndGlobalSection
 EndGlobal
