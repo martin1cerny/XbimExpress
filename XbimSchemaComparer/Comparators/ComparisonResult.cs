@@ -29,7 +29,6 @@ namespace XbimSchemaComparer.Comparators
             NewObject = newObject;
 
             //initialize result defaults
-            Message = "";
             ResultType = ComparisonResultType.Identical;
         }
 
@@ -37,7 +36,7 @@ namespace XbimSchemaComparer.Comparators
 
         public T NewObject { get; private set; }
 
-        public string Message { get; set; }
+        public virtual string Message { get; set; }
 
         public ComparisonResultType ResultType { get; set; }
 

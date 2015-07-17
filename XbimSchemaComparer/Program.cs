@@ -16,18 +16,20 @@ namespace XbimSchemaComparer
     {
         static void Main(string[] args)
         {
-            Compare(
-                GetSchema(Schemas.IFC2X3_TC1), 
-                GetSchema(Schemas.IFC4_ADD1)
-                );
+            var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1);
+            var ifc4Add1 = GetSchema(Schemas.IFC4_ADD1);
+            var ifc4 = GetSchema(Schemas.IFC4);
+            Compare( ifc2X3, ifc4Add1 );
+            Compare( ifc2X3, ifc4 );
+            Compare( ifc4, ifc4Add1);
+
+            Console.ReadLine();
         }
 
-        private static void Compare(SchemaModel ifc2X3, SchemaModel ifc4)
+        private static void Compare(SchemaModel modelA, SchemaModel modelB)
         {
-            var schemas = new List<SchemaDefinition> { ifc2X3.Schema, ifc4.Schema };
-            var ifc2X3Domain = DomainStructure.LoadIfc2X3();
-            var ifc4Domain = DomainStructure.LoadIfc4();
-
+            Console.WriteLine(@"Schemas to compare: {0}, {1}", modelA.Schema.Name, modelB.Schema.Name);
+            var schemas = new List<SchemaDefinition> { modelA.Schema, modelB.Schema };
 
             var schemaComparers = new ISchemaComparer[]
             {
@@ -38,68 +40,59 @@ namespace XbimSchemaComparer
                 new RemovedEntitiesComparer(), 
                 new RemovedSelectsComparer(), 
                 new RemovedTypesComparer(),
-                new RemovedEnumerationsComparer()
+                new RemovedEnumerationsComparer(),
+                new ChangedEntitiesComparer()
             };
             foreach (var comparer in schemaComparers)
             {
-                comparer.Compare(ifc2X3.Schema, ifc4.Schema);
+                comparer.Compare(modelA.Schema, modelB.Schema);
             }
 
 
             var w = new StringWriter();
             w.WriteLine("Number of entities:");
             foreach (var schema in schemas)
-            {
                 w.WriteLine("{0}: {1}", schema.Name, schema.Entities.Count());
-            }
             w.WriteLine();
 
             w.WriteLine("Number of types:");
             foreach (var schema in schemas)
-            {
                 w.WriteLine("{0}: {1}", schema.Name, schema.Types.Count());
-            }
             w.WriteLine();
 
             w.WriteLine("Number of enumerations:");
             foreach (var schema in schemas)
-            {
                 w.WriteLine("{0}: {1}", schema.Name, schema.Enumerations.Count());
-            }
             w.WriteLine();
 
             w.WriteLine("Number of select types:");
             foreach (var schema in schemas)
-            {
                 w.WriteLine("{0}: {1}", schema.Name, schema.SelectTypes.Count());
-            }
             w.WriteLine();
 
             w.WriteLine("Number of global rules:");
             foreach (var schema in schemas)
-            {
                 w.WriteLine("{0}: {1}", schema.Name, schema.GlobalRules.Count());
-            }
             w.WriteLine();
 
             foreach (var cmp in schemaComparers)
             {
+                w.WriteLine("{0} ({1}):", cmp.Name, cmp.Results.Count());
+                Console.WriteLine(@"{0} ({1}):", cmp.Name, cmp.Results.Count());
                 foreach (var result in cmp.Results)
-                {
                     w.WriteLine(result.Message);
-                }
                 w.WriteLine();
             }
 
             var log = w.ToString();
-            var logName = String.Format("{0}_{1}.txt", ifc2X3.Schema.Name, ifc4.Schema.Name);
+            var logName = String.Format("{0}_{1}.txt", modelA.Schema.Name, modelB.Schema.Name);
             using (var file = File.CreateText(logName))
             {
                 file.Write(log);
                 file.Close();
             }
-            Console.WriteLine(log);
-            Console.ReadLine();
+            Console.WriteLine(@"Comparison saved fo file: " + Path.Combine(Environment.CurrentDirectory, logName));
+            Console.WriteLine();
         }
 
         private static SchemaModel GetSchema(string data)

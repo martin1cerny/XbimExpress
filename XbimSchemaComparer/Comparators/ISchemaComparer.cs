@@ -10,13 +10,13 @@ namespace XbimSchemaComparer.Comparators
     {
         IEnumerable<IComparisonResult> Compare(object oldObject, object newObject);
         IEnumerable<IComparisonResult> Results { get; }
-    }
-    public interface ISchemaComparer<in TObject, out TResult> : ISchemaComparer where TResult : IComparisonResult
-    {
         /// <summary>
         /// Name of the comparator should indocate which aspect this comparator compares.
         /// </summary>
         string Name { get; }
+    }
+    public interface ISchemaComparer<in TObject, out TResult> : ISchemaComparer where TResult : IComparisonResult
+    {
 
         /// <summary>
         /// Id has to be unique and might be used in the future in automated deployments
