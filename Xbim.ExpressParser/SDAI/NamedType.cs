@@ -21,6 +21,11 @@ namespace Xbim.ExpressParser.SDAI
             get { return SchemaModel.Get<WhereRule>(r => r.ParentItem == this); }
         }
 
+        public IEnumerable<SelectType> IsInSelects
+        {
+            get { return SchemaModel.Get<SelectType>(s => s.Selections != null && s.Selections.Contains(this)); }
+        }
+
         #endregion
     }
 }
