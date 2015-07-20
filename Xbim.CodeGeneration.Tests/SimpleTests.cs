@@ -1,5 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xbim.CodeGeneration.Settings;
+using Xbim.ExpressParser.SDAI;
+using Xbim.IfcDomains;
 
 namespace Xbim.CodeGeneration.Tests
 {
@@ -7,10 +10,19 @@ namespace Xbim.CodeGeneration.Tests
     public class SimpleTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void GenerateIfc2X3()
         {
-            var g = new GenerateClasses();
-            g.Generate();
+            var settings = new GeneratorSettings
+            {
+                Namespace = "Xbim",
+                Structure = DomainStructure.LoadIfc2X3(),
+                OutputPath = "",
+                ClassSettings = new EntitySettings()
+            };
+            var schema = SchemaModel.LoadIfc2x3();
+
+            var generator = new Generator(settings, schema);
+            generator.Generate();
         }
     }
 }

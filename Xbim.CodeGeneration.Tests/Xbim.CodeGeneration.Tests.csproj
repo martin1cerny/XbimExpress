@@ -58,6 +58,14 @@
       <Project>{6cfcaa6f-13e4-4330-b521-a1164784e302}</Project>
       <Name>Xbim.CodeGeneration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Xbim.ExpressParser\Xbim.ExpressParser.csproj">
+      <Project>{191a6a46-cd32-427d-846d-86d78a76074e}</Project>
+      <Name>Xbim.ExpressParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xbim.IfcDomains\Xbim.IfcDomains.csproj">
+      <Project>{f50b2f17-e1d7-484c-ade6-2e18a5f0e050}</Project>
+      <Name>Xbim.IfcDomains</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

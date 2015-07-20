@@ -66,6 +66,25 @@ namespace Xbim.ExpressParser.SDAI
         {
             get; private set; 
         }
+
+        public static SchemaModel LoadIfc2x3()
+        {
+            return Load(Schemas.Schemas.IFC2X3_TC1);
+        }
+
+        public static SchemaModel LoadIfc4()
+        {
+            return  Load(Schemas.Schemas.IFC4);
+        }
+
+        public static SchemaModel Load(string schema)
+        {
+            var parser = new ExpressParser();
+            var result = parser.Parse(schema);
+            if (!result)
+                throw new Exception("Unexpected parser error: " + parser.Errors.LastOrDefault());
+            return parser.SchemaInstance;
+        }
     }
 
     internal class EntityDictionary : IDictionary<Type, List<ISchemaEntity>>
