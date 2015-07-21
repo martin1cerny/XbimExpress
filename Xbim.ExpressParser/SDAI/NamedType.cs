@@ -27,5 +27,10 @@ namespace Xbim.ExpressParser.SDAI
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

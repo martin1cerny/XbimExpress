@@ -1,0 +1,63 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Xbim.CodeGeneration.Helpers" #>
+
+<# foreach(var u in Using) { #>
+using <#= u #>;
+<# } #>
+
+namespace <#= Namespace #>
+{
+	public <#= IsAbstract ? "abstract" : "" #> partial class <#= Name #> <#= String.IsNullOrWhiteSpace(Inheritance)?"":":" #> <#= Inheritance #>
+	{
+		#region Explicit attribute fields
+<# foreach(var attribute in Type.ExplicitAttributes){ #>
+		private <#= TypeHelper.GetCSType(attribute.Domain) #> <#= GetPrivateFieldName(attribute) #>;
+<# } #>
+		#endregion
+	
+	
+		#region Explicit attributes
+<# foreach(var attribute in Type.ExplicitAttributes){ #>
+		//[EntityAttribute(<#= GetAttributeIndex(attribute) #>, EntityAttributeState.<#= attribute.OptionalFlag ? "Optional" : "Mandatory" #>)]
+		public <#= TypeHelper.GetCSType(attribute.Domain) #> <#= attribute.Name #> 
+		{ 
+			get 
+			{
+				//Activate();
+				return <#= GetPrivateFieldName(attribute) #>;
+			} 
+			set
+			{
+				//this.SetModelValue(this, 
+				//	ref <#= GetPrivateFieldName(attribute) #>, 
+				//	value, 
+				//	v => <#= GetPrivateFieldName(attribute) #> = v, 
+				//	"<#= attribute.Name #>");
+				<#= GetPrivateFieldName(attribute) #> = value;
+			} 
+		}
+	
+<# } #>
+		#endregion
+
+		#region Inverse attributes
+<# foreach(var attribute in Type.InverseAttributes){ 
+	var inverseType = attribute.Domain.Name; #>
+		public IEnumerable<<#=inverseType #>> <#= attribute.Name #> 
+		{ 
+			get 
+			{
+				yield break;
+				//return Model.Instances.Where<<#=inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> == this);
+			} 
+		}
+	
+<# } #>
+
+		#endregion
+	}
+}

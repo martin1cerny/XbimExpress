@@ -3,15 +3,12 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-
-<# foreach(var u in Using) { #>
-using <#= u #>;
-<# } #>
-
 namespace <#= Namespace #>
 {
-	public partial struct <#= Name #> <#= String.IsNullOrWhiteSpace(Inheritance)?"":":" #> <#= Inheritance #>
-	{ 
-		 
+	public enum <#= Name #>
+	{
+<# foreach(var element in Type.Elements) { #>
+		<#= element #> <#= element == Type.Elements.Last() ? "" : "," #>
+<# } #>
 	}
 }

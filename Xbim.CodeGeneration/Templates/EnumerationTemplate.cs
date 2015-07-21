@@ -18,9 +18,9 @@ namespace Xbim.CodeGeneration.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class SelectTypeTemplate : SelectTypeTemplateBase
+    public partial class EnumerationTemplate : EnumerationTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,56 +28,49 @@ namespace Xbim.CodeGeneration.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n");
+            this.Write("namespace ");
             
-            #line 7 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
- foreach(var u in Using) { 
-            
-            #line default
-            #line hidden
-            this.Write("using ");
-            
-            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(u));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n");
-            
-            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\r\nnamespace ");
-            
-            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+            #line 6 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\tpublic partial interface ");
+            this.Write("\r\n{\r\n\tpublic enum ");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write(" ");
+            this.Write("\r\n\t{\r\n");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(String.IsNullOrWhiteSpace(Inheritance)?"":":"));
+            #line 10 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
+ foreach(var element in Type.Elements) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t");
+            
+            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(element));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Inheritance));
+            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(element == Type.Elements.Last() ? "" : ","));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t\t\r\n\t}\r\n}");
+            this.Write("\r\n");
+            
+            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -89,7 +82,7 @@ namespace Xbim.CodeGeneration.Templates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class SelectTypeTemplateBase
+    public class EnumerationTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;
