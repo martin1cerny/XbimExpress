@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 20/07/2015 15:47:30
+// DateTime: 21/07/2015 15:38:27
 // UserName: mxfm2
-// Input file <Parser.y - 20/07/2015 15:46:46>
+// Input file <Parser.y - 21/07/2015 15:37:41>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -68,10 +68,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 20/07/2015 15:46:46
+  // Verbatim content from Parser.y - 21/07/2015 15:37:41
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 20/07/2015 15:46:46
+  // End verbatim content from Parser.y - 21/07/2015 15:37:41
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -680,7 +680,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 48: // section -> inheritance_section, ';'
 #line 182 "Parser.y"
-{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-2].val; CurrentSemanticValue.tokVal = Tokens.ABSTRACT; CurrentSemanticValue.boolVal = ValueStack[ValueStack.Depth-2].tokVal == Tokens.ABSTRACT;}
+{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-2].val; CurrentSemanticValue.tokVal = Tokens.ABSTRACT; CurrentSemanticValue.boolVal = (ValueStack[ValueStack.Depth-2].tokVal == Tokens.ABSTRACT);}
         break;
       case 49: // parameter_section -> parameter_definition
 #line 186 "Parser.y"

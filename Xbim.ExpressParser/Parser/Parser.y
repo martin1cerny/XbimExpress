@@ -179,7 +179,7 @@ section
 	| unique_section															{ $$.val = $1.val; $$.tokVal = Tokens.UNIQUE; }
 	| inverse_section															{ $$.val = $1.val; $$.tokVal = Tokens.INVERSE; }
 	| derive_section															{ $$.val = $1.val; $$.tokVal = Tokens.DERIVE; }
-	| inheritance_section ';'													{ $$.val = $1.val; $$.tokVal = Tokens.ABSTRACT; $$.boolVal = $1.tokVal == Tokens.ABSTRACT;}
+	| inheritance_section ';'													{ $$.val = $1.val; $$.tokVal = Tokens.ABSTRACT; $$.boolVal = ($1.tokVal == Tokens.ABSTRACT);}
 	;
 
 parameter_section
