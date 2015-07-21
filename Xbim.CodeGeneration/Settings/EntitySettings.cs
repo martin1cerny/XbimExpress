@@ -8,5 +8,10 @@ namespace Xbim.CodeGeneration.Settings
 {
     public class EntitySettings
     {
+        public EntitySettings()
+        {
+            BaseType = "PersistEntity";
+        }
+        public string BaseType { get; set; }
     }
 }

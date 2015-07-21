@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Xbim.CodeGeneration.Templates
+namespace Xbim.CodeGeneration.Templates.Infrastructure
 {
     using System.Linq;
     using System.Text;
@@ -18,9 +18,9 @@ namespace Xbim.CodeGeneration.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\CSProjectTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class SelectTypeTemplate : SelectTypeTemplateBase
+    public partial class CSProjectTemplate : CSProjectTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,56 +28,49 @@ namespace Xbim.CodeGeneration.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n");
+            this.Write(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<Project ToolsVersion=""12.0"" DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
+  <Import Project=""$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"" Condition=""Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"" />
+  <PropertyGroup>
+    <Configuration Condition="" '$(Configuration)' == '' "">Debug</Configuration>
+    <Platform Condition="" '$(Platform)' == '' "">AnyCPU</Platform>
+    <ProjectGuid>{207B20DA-7783-470F-9B35-E174DA9EE2FA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>");
             
-            #line 7 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
- foreach(var u in Using) { 
-            
-            #line default
-            #line hidden
-            this.Write("using ");
-            
-            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(u));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n");
-            
-            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\r\nnamespace ");
-            
-            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n{\r\n\tpublic partial interface ");
-            
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\CSProjectTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write(" ");
+            this.Write("</RootNamespace>\r\n    <AssemblyName>");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(String.IsNullOrWhiteSpace(Inheritance)?"":":"));
-            
-            #line default
-            #line hidden
-            this.Write(" ");
-            
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Inheritance));
+            #line 16 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\CSProjectTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t\t\r\n\t}\r\n}");
+            this.Write("</AssemblyName>\r\n    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>\r\n    <" +
+                    "FileAlignment>512</FileAlignment>\r\n  </PropertyGroup>\r\n  <PropertyGroup Conditio" +
+                    "n=\" \'$(Configuration)|$(Platform)\' == \'Debug|AnyCPU\' \">\r\n    <DebugSymbols>true<" +
+                    "/DebugSymbols>\r\n    <DebugType>full</DebugType>\r\n    <Optimize>false</Optimize>\r" +
+                    "\n    <OutputPath>bin\\Debug\\</OutputPath>\r\n    <DefineConstants>DEBUG;TRACE</Defi" +
+                    "neConstants>\r\n    <ErrorReport>prompt</ErrorReport>\r\n    <WarningLevel>4</Warnin" +
+                    "gLevel>\r\n  </PropertyGroup>\r\n  <PropertyGroup Condition=\" \'$(Configuration)|$(Pl" +
+                    "atform)\' == \'Release|AnyCPU\' \">\r\n    <DebugType>pdbonly</DebugType>\r\n    <Optimi" +
+                    "ze>true</Optimize>\r\n    <OutputPath>bin\\Release\\</OutputPath>\r\n    <DefineConsta" +
+                    "nts>TRACE</DefineConstants>\r\n    <ErrorReport>prompt</ErrorReport>\r\n    <Warning" +
+                    "Level>4</WarningLevel>\r\n  </PropertyGroup>\r\n  <ItemGroup>\r\n    <Reference Includ" +
+                    "e=\"System\" />\r\n    <Reference Include=\"System.Core\" />\r\n    <Reference Include=\"" +
+                    "System.Xml.Linq\" />\r\n    <Reference Include=\"System.Data.DataSetExtensions\" />\r\n" +
+                    "    <Reference Include=\"Microsoft.CSharp\" />\r\n    <Reference Include=\"System.Dat" +
+                    "a\" />\r\n    <Reference Include=\"System.Xml\" />\r\n  </ItemGroup>\r\n  <ItemGroup>\r\n  " +
+                    "</ItemGroup>\r\n  <Import Project=\"$(MSBuildToolsPath)\\Microsoft.CSharp.targets\" /" +
+                    ">\r\n  <!-- To modify your build process, add your task inside one of the targets " +
+                    "below and uncomment it. \r\n       Other similar extension points exist, see Micro" +
+                    "soft.Common.targets.\r\n  <Target Name=\"BeforeBuild\">\r\n  </Target>\r\n  <Target Name" +
+                    "=\"AfterBuild\">\r\n  </Target>\r\n  -->\r\n</Project>");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -89,7 +82,7 @@ namespace Xbim.CodeGeneration.Templates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class SelectTypeTemplateBase
+    public class CSProjectTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

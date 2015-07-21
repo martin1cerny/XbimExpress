@@ -14,7 +14,7 @@ namespace Xbim.CodeGeneration.Tests
         {
             var settings = new GeneratorSettings
             {
-                Namespace = "Xbim",
+                Namespace = null,
                 Structure = DomainStructure.LoadIfc2X3(),
                 OutputPath = "",
                 ClassSettings = new EntitySettings()

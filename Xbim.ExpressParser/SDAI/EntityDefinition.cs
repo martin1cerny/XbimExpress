@@ -98,6 +98,14 @@ namespace Xbim.ExpressParser.SDAI
         /// <summary>
         /// Explicit attributes of this entity ordered by their occurance in the schema definition file.
         /// </summary>
+        public IEnumerable<InverseAttribute> InverseAttributes
+        {
+            get { return SchemaModel.Get<InverseAttribute>(e => e.ParentEntity == this); }
+        }
+
+        /// <summary>
+        /// Explicit attributes of this entity ordered by their occurance in the schema definition file.
+        /// </summary>
         public IEnumerable<ExplicitAttribute> ExplicitAttributes
         {
             get { return SchemaModel.Get<ExplicitAttribute>(e => e.ParentEntity == this).OrderBy(a => a.Line); }

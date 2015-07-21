@@ -23,6 +23,16 @@ namespace Xbim.ExpressParser.Tests
             var wallExplicitAttrs = wall.AllExplicitAttributes.ToList();
             Assert.IsTrue(wallExplicitAttrs.Any(), "There should be some explicit attributes for a wall.");
             Assert.AreEqual(8, wallExplicitAttrs.Count, "There should be 8 explicit attributes for a wall.");
+
+            var bTypes = parser.SchemaInstance.Get<DefinedType>(t => t.Domain is BooleanType).ToList();
+            var bAttributes = parser.SchemaInstance.Get<ExplicitAttribute>(t => t.Domain is BooleanType || bTypes.Contains(t.Domain));
+            foreach (var attribute in bAttributes)
+            {
+                var typeName = attribute.Domain is SimpleType
+                    ? attribute.Domain.GetType().Name
+                    : ((NamedType) attribute.Domain).Name.ToString();
+                Debug.WriteLine("{0} -> {1} ({2})", attribute.ParentEntity.Name, attribute.Name, typeName);
+            }
         }
 
         [TestMethod]
