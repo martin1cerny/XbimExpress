@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <Parser.y - 20/07/2015 15:46:46>
+//  GPPG error listing for yacc source file <Parser.y - 21/07/2015 15:37:41>
 // ==========================================================================
 //  Version:  1.5.0
 //  Machine:  C13300493
-//  DateTime: 20/07/2015 15:47:30
+//  DateTime: 21/07/2015 15:38:27
 //  UserName: mxfm2
 // ==========================================================================
 
@@ -190,7 +190,7 @@ section
 	| unique_section															{ $$.val = $1.val; $$.tokVal = Tokens.UNIQUE; }
 	| inverse_section															{ $$.val = $1.val; $$.tokVal = Tokens.INVERSE; }
 	| derive_section															{ $$.val = $1.val; $$.tokVal = Tokens.DERIVE; }
-	| inheritance_section ';'													{ $$.val = $1.val; $$.tokVal = Tokens.ABSTRACT; $$.boolVal = $1.tokVal == Tokens.ABSTRACT;}
+	| inheritance_section ';'													{ $$.val = $1.val; $$.tokVal = Tokens.ABSTRACT; $$.boolVal = ($1.tokVal == Tokens.ABSTRACT);}
 	;
 
 parameter_section

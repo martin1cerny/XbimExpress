@@ -104,6 +104,8 @@ namespace Xbim.ExpressParser
                         var isAbstract = section.boolVal;
                         if (isAbstract)
                             entity.Instantiable = false;
+                        else
+                            entity.Instantiable = true;
 
                         var identifiers = section.val as List<string>;
                         if(identifiers == null || !identifiers.Any())

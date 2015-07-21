@@ -13,6 +13,11 @@ namespace <#= Namespace #>
 {
 	public <#= IsAbstract ? "abstract" : "" #> partial class <#= Name #> <#= String.IsNullOrWhiteSpace(Inheritance)?"":":" #> <#= Inheritance #>
 	{
+<# if (!IsAbstract) {#>
+		//internal constructor makes sure that objects are not created outside of the model/ assembly controlled area
+		internal <#= Name #>() { }
+<# } #>
+
 		#region Explicit attribute fields
 <# foreach(var attribute in Type.ExplicitAttributes){ #>
 		private <#= TypeHelper.GetCSType(attribute.Domain) #> <#= GetPrivateFieldName(attribute) #>;
