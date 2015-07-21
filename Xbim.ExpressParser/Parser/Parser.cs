@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 17/07/2015 09:50:11
+// DateTime: 20/07/2015 15:47:30
 // UserName: mxfm2
-// Input file <Parser.y - 17/07/2015 09:50:09>
+// Input file <Parser.y - 20/07/2015 15:46:46>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -68,10 +68,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 17/07/2015 09:50:09
+  // Verbatim content from Parser.y - 20/07/2015 15:46:46
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 17/07/2015 09:50:09
+  // End verbatim content from Parser.y - 20/07/2015 15:46:46
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -636,11 +636,11 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 35: // type -> type, '(', INTEGER, ')'
 #line 157 "Parser.y"
-{ CurrentSemanticValue.val = Model.New<ArrayType>(t => {t.ElementType = ValueStack[ValueStack.Depth-4].val as BaseType; t.UpperIndex = ValueStack[ValueStack.Depth-2].intVal;}); }
+{ CurrentSemanticValue.val = CreateArrayType(ValueStack[ValueStack.Depth-4].val as BaseType, ValueStack[ValueStack.Depth-2].intVal); }
         break;
       case 36: // type -> type, '(', INTEGER, ')', FIXED
 #line 158 "Parser.y"
-{ CurrentSemanticValue.val = Model.New<ArrayType>(t => {t.ElementType = ValueStack[ValueStack.Depth-5].val as BaseType; t.UpperIndex = ValueStack[ValueStack.Depth-3].intVal;}); }
+{ CurrentSemanticValue.val = CreateArrayType(ValueStack[ValueStack.Depth-5].val as BaseType, ValueStack[ValueStack.Depth-3].intVal); }
         break;
       case 37: // identifier_or_type -> IDENTIFIER
 #line 162 "Parser.y"

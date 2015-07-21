@@ -168,6 +168,11 @@ namespace Xbim.ExpressParser
             return rule;
         }
 
+        private ArrayType CreateArrayType(BaseType type, int upperIndex)
+        {
+            return Model.New<ArrayType>(t => {t.ElementType = type; t.UpperIndex = upperIndex;});
+        }
+
         private DerivedAttribute CreateDerivedAttribute(string name)
         {
             return Model.New<DerivedAttribute>(a => a.Name = name);
@@ -278,13 +283,18 @@ namespace Xbim.ExpressParser
 
             if (data.tokVal == Tokens.TYPE)
             {
-                aggregationType.ElementType = data.val as SimpleType;
+                aggregationType.ElementType = data.val as BaseType;
             }
             if (data.tokVal == Tokens.IDENTIFIER)
             {
                 ToDoActions.Add(() =>
                 {
                     aggregationType.ElementType = Model.Get<NamedType>(t => t.Name == data.strVal).FirstOrDefault();
+                    if (data.strVal == "IfcBinary")
+                    {
+                        var definition =
+                            aggregationType.SchemaModel.Get<EntityDefinition>(t => t.Attributes.Contains(result));
+                    }
                     if (result.Domain == null)
                         throw new InstanceNotFoundException();
                 });
