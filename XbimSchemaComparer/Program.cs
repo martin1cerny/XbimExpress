@@ -19,6 +19,7 @@ namespace XbimSchemaComparer
             var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1);
             var ifc4Add1 = GetSchema(Schemas.IFC4_ADD1);
             var ifc4 = GetSchema(Schemas.IFC4);
+
             Compare( ifc2X3, ifc4Add1 );
             Compare( ifc2X3, ifc4 );
             Compare( ifc4, ifc4Add1);

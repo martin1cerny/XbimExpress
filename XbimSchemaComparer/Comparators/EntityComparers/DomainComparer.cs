@@ -33,7 +33,7 @@ namespace XbimSchemaComparer.Comparators.EntityComparers
             var oldDomain = _oldDomains.GetDomainForType(oldObject.Name);
             var newDomain = _newDomains.GetDomainForType(newObject.Name);
 
-            if (oldDomain.Name == newDomain.Name) return results;
+            if (oldDomain.Name.ToLower() == newDomain.Name.ToLower()) return results;
 
             var result = new EntityDomainComparisonResult(oldObject, newObject)
             {

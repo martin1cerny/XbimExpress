@@ -50,17 +50,22 @@ namespace XbimSchemaComparer.Comparators.EntityComparers
                 });
             }
 
-            foreach (var attribute in sameNameAttributes)
+            foreach (var newAttribute in sameNameAttributes)
             {
-                var newIndex = newAttributes.IndexOf(attribute);
-                var oldIndex = oldAttributes.IndexOf(oldAttributes.FirstOrDefault(a => a.Name == attribute.Name));
-                if(newIndex == oldIndex) continue;
+                var oldAttribute = oldAttributes.FirstOrDefault(a => a.Name == newAttribute.Name);
+                if(oldAttribute == null) throw new Exception();
+
+                var newIndex = newAttributes.IndexOf(newAttribute);
+                var oldIndex = oldAttributes.IndexOf(oldAttribute);
+                if(newIndex == oldIndex && IsSameDomain(oldAttribute.Domain, newAttribute.Domain)) continue;
                 result.Differences.Add(new AttributeDifference
                 {
                     ResultType = ComparisonResultType.Changed,
-                    Attribute = attribute,
+                    Attribute = newAttribute,
                     NewIndex = newIndex,
-                    OldIndex = oldIndex
+                    OldIndex = oldIndex,
+                    NewDomain = newAttribute.Domain,
+                    OldDomain = oldAttribute.Domain
                 });
             }
 
@@ -69,6 +74,24 @@ namespace XbimSchemaComparer.Comparators.EntityComparers
             results.Add(result);
             _results.Add(result);
             return results;
+        }
+
+        private bool IsSameDomain(BaseType o, BaseType n)
+        {
+            if (o.GetType() != n.GetType()) return false;
+
+            var oNamed = o as NamedType;
+            var nNamed = n as NamedType;
+
+            if (oNamed != null && nNamed != null)
+                return oNamed.Name == nNamed.Name;
+
+            var oAggregate = o as AggregationType;
+            var nAggregate = n as AggregationType;
+            if (oAggregate != null && nAggregate != null)
+                return IsSameDomain(oAggregate.ElementType, nAggregate.ElementType);
+
+            return true;
         }
 
         public IEnumerable<EntityAttributeComparisonResult> ComparisonResults

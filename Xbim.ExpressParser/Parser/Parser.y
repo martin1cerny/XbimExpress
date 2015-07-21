@@ -154,8 +154,8 @@ type
 	| INTEGER								{ $$.val = Model.PredefinedSimpleTypes.IntegerType; }
 	| NUMBER								{ $$.val = Model.PredefinedSimpleTypes.NumberType; }
 	| LOGICAL								{ $$.val = Model.PredefinedSimpleTypes.LogicalType; }
-	| type '(' INTEGER ')'					{ $$.val = Model.New<ArrayType>(t => {t.ElementType = $1.val as BaseType; t.UpperIndex = $3.intVal;}); }
-	| type '(' INTEGER ')' FIXED			{ $$.val = Model.New<ArrayType>(t => {t.ElementType = $1.val as BaseType; t.UpperIndex = $3.intVal;}); }
+	| type '(' INTEGER ')'					{ $$.val = CreateArrayType($1.val as BaseType, $3.intVal); }
+	| type '(' INTEGER ')' FIXED			{ $$.val = CreateArrayType($1.val as BaseType, $3.intVal); }
 	;
 
 identifier_or_type							
