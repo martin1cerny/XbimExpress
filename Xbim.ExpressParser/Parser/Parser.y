@@ -115,9 +115,9 @@ constant_definition
 
 type_definition 
 	: TYPE IDENTIFIER '=' identifier_or_type ';' END_TYPE ';'									{ CreateType($2.strVal, $4, null); }
-	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' END_TYPE ';'						{ CreateType($2.strVal, $6, null); }
+	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' END_TYPE ';'						{ CreateTypeEnumerable($2.strVal, $4.val as AggregationType, $6, null); }
 	| TYPE IDENTIFIER '=' identifier_or_type ';' where_section END_TYPE ';'						{ CreateType($2.strVal, $4, $6.val as List<WhereRule>); }
-	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' where_section END_TYPE ';'		{ CreateType($2.strVal, $6, $8.val as List<WhereRule>); }
+	| TYPE IDENTIFIER '=' enumerable OF identifier_or_type ';' where_section END_TYPE ';'		{ CreateTypeEnumerable($2.strVal, $4.val as AggregationType, $6, $8.val as List<WhereRule>); }
 	;
 
 enumeration

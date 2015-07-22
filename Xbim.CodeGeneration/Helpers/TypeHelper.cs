@@ -30,18 +30,23 @@ namespace Xbim.CodeGeneration.Helpers
             if (aggr != null)
             {
                 if (aggr is ArrayType)
-                    return String.Format("List<{0}>", GetCSType(aggr.ElementType));
+                    return String.Format("{0}[]", GetCSType(aggr.ElementType));
                 if (aggr is BagType)
                     return String.Format("List<{0}>", GetCSType(aggr.ElementType));
                 if (aggr is ListType)
                     return String.Format("List<{0}>", GetCSType(aggr.ElementType));
                 if (aggr is SetType)
-                    return String.Format("List<{0}>", GetCSType(aggr.ElementType));
+                    return String.Format("HashSet<{0}>", GetCSType(aggr.ElementType));
 
             }
 
             //this shouldn't happen
             throw new NotSupportedException();
+        }
+
+        public static string GetCSType(UnderlyingType type)
+        {
+            return GetCSType(type as BaseType);
         }
     }
 }

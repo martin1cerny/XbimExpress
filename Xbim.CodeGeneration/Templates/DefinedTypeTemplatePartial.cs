@@ -33,6 +33,11 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        private string UnderlyingType
+        {
+            get { return TypeHelper.GetCSType(Type.Domain); }
+        }
+
         public string Name { get { return Type.Name; } }
 
         public string Inheritance
@@ -41,7 +46,10 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
                 //parents.Insert(0, _settings.TypeSettings.BaseType);
-                return String.Join(", ", parents);
+                var i = String.Join(", ", parents);
+                if (String.IsNullOrWhiteSpace(i))
+                    return "";
+                return ": " + i;
             }
         }
 
@@ -56,6 +64,14 @@ namespace Xbim.CodeGeneration.Templates
                 var selects = Type.IsInSelects.ToList();
 
                 namedOccurances.AddRange(selects);
+
+                var namedDomain = Type.Domain as NamedType;
+                if(namedDomain != null)
+                    namedOccurances.Add(namedDomain);
+
+                var aggregation = Type.Domain as AggregationType;
+                if(aggregation != null)
+                    result.Add("System.Collections.Generic");
 
                 foreach (var type in namedOccurances)
                 {

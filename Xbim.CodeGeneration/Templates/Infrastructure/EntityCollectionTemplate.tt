@@ -1,0 +1,24 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System.Collections.Generic;
+using System;
+
+namespace <#= Namespace #>
+{
+	public interface <#= Name #>
+	{
+		IEnumerable<T> Where<T>(Func<T, bool> expr) where T : <#= PersistEntityInterface #>;
+        IEnumerable<T> OfType<T>() where T : <#= PersistEntityInterface #>;
+        IEnumerable<T> OfType<T>(bool activate) where T : <#= PersistEntityInterface #>;
+        IEnumerable<<#= PersistEntityInterface #>> OfType(string StringType, bool activate);
+        <#= PersistEntityInterface #> New(Type t);
+        T New<T>(Action<T> initPropertiesFunc) where T : <#= PersistEntityInterface #>;
+        T New<T>() where T : <#= PersistEntityInterface #>;
+        <#= PersistEntityInterface #> this[int label] { get; }
+        long Count { get; }
+        long CountOf<T>() where T : <#= PersistEntityInterface #>;
+	}
+}

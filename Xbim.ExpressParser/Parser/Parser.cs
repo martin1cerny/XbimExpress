@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 21/07/2015 15:38:27
+// DateTime: 22/07/2015 14:15:48
 // UserName: mxfm2
-// Input file <Parser.y - 21/07/2015 15:37:41>
+// Input file <Parser.y - 22/07/2015 14:15:41>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -68,10 +68,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 21/07/2015 15:37:41
+  // Verbatim content from Parser.y - 22/07/2015 14:15:41
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 21/07/2015 15:37:41
+  // End verbatim content from Parser.y - 22/07/2015 14:15:41
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -548,7 +548,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
       case 14: // type_definition -> TYPE, IDENTIFIER, '=', enumerable, OF, identifier_or_type, 
                //                    ';', END_TYPE, ';'
 #line 118 "Parser.y"
-{ CreateType(ValueStack[ValueStack.Depth-8].strVal, ValueStack[ValueStack.Depth-4], null); }
+{ CreateTypeEnumerable(ValueStack[ValueStack.Depth-8].strVal, ValueStack[ValueStack.Depth-6].val as AggregationType, ValueStack[ValueStack.Depth-4], null); }
         break;
       case 15: // type_definition -> TYPE, IDENTIFIER, '=', identifier_or_type, ';', 
                //                    where_section, END_TYPE, ';'
@@ -558,7 +558,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
       case 16: // type_definition -> TYPE, IDENTIFIER, '=', enumerable, OF, identifier_or_type, 
                //                    ';', where_section, END_TYPE, ';'
 #line 120 "Parser.y"
-{ CreateType(ValueStack[ValueStack.Depth-9].strVal, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-3].val as List<WhereRule>); }
+{ CreateTypeEnumerable(ValueStack[ValueStack.Depth-9].strVal, ValueStack[ValueStack.Depth-7].val as AggregationType, ValueStack[ValueStack.Depth-5], ValueStack[ValueStack.Depth-3].val as List<WhereRule>); }
         break;
       case 17: // enumeration -> TYPE, IDENTIFIER, '=', ENUMERATION_OF, identifier_list, ';', 
                //                END_TYPE, ';'

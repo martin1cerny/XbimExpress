@@ -42,9 +42,9 @@ namespace Xbim.CodeGeneration.Templates
             get
             {
                 var parents = new List<string>();
-                if (Type.Supertypes == null || !Type.Supertypes.Any())
+                if (IsFirst)
                 {
-                    //parents.Add(_settings.ClassSettings.BaseType);
+                    parents.Add(_settings.PersistEntityInterface);
                 }
                 else
                     parents.AddRange(Type.Supertypes.Select(t => t.Name.ToString()));
@@ -53,9 +53,17 @@ namespace Xbim.CodeGeneration.Templates
                 parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
 
                 //merge to a single string
-                return String.Join(", ", parents);
+                var i = String.Join(", ", parents);
+                if (String.IsNullOrWhiteSpace(i)) return "";
+                return ": " + i;
             }
         }
+
+        private string ModelInterface { get { return _settings.ModelInterface; } }
+
+        private string AbstractKeyword { get { return IsAbstract ? "abstract" : ""; } }
+
+        private bool IsFirst { get { return Type.Supertypes == null || !Type.Supertypes.Any(); } }
 
         private string GetPrivateFieldName(ExplicitAttribute attribute)
         {
@@ -124,6 +132,13 @@ namespace Xbim.CodeGeneration.Templates
                 return GetNamedElementType(aggr);
 
             throw new NotSupportedException();
+        }
+
+        private string PersistEntityInterface { get { return _settings.PersistEntityInterface; } }
+
+        private bool IsAggregation(InverseAttribute attribute)
+        {
+            return attribute.InvertedAttr.Domain is AggregationType;
         }
     }
 }

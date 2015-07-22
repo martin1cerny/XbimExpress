@@ -10,6 +10,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     {
         public string Name { get; private set; }
 
+        public string Id { get { return Guid.NewGuid().ToString(); } }
+
         public CSProjectTemplate(string projectName)
         {
             Name = projectName;

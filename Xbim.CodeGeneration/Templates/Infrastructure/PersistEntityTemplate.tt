@@ -5,10 +5,9 @@
 <#@ import namespace="System.Collections.Generic" #>
 namespace <#= Namespace #>
 {
-	public enum <#= Name #>
+	public interface <#= Name #>
 	{
-<# foreach(var element in Type.Elements) { #>
-		@<#= element #> <#= element == Type.Elements.Last() ? "" : "," #>
-<# } #>
+		int EntityLabel {get; set;}
+		<#= ModelInterface #> Model { get; }
 	}
 }

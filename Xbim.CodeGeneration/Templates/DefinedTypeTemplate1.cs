@@ -66,18 +66,133 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(" ");
             
             #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(String.IsNullOrWhiteSpace(Inheritance)?"":":"));
-            
-            #line default
-            #line hidden
-            this.Write(" ");
-            
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Inheritance));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{ \r\n\t\t \r\n\t}\r\n}\r\n");
+            this.Write("\r\n\t{ \r\n\t\tprivate readonly ");
+            
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
+            
+            #line default
+            #line hidden
+            this.Write(" _theValue;\r\n\r\n        public object Value\r\n        {\r\n            get { return _" +
+                    "theValue; }\r\n        }\r\n\r\n        public override string ToString()\r\n        {\r\n" +
+                    "            return Value != null ? Value.ToString() : typeof(");
+            
+            #line 24 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
+            
+            #line default
+            #line hidden
+            this.Write(").Name;\r\n        }\r\n\r\n        public ");
+            
+            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
+            
+            #line default
+            #line hidden
+            this.Write(" val)\r\n        {\r\n            _theValue = val;\r\n        }\r\n\r\n        public stati" +
+                    "c implicit operator ");
+            
+            #line 32 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 32 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
+            
+            #line default
+            #line hidden
+            this.Write(" value)\r\n        {\r\n            return new ");
+            
+            #line 34 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("(value);\r\n        }\r\n\r\n        public static implicit operator ");
+            
+            #line 37 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 37 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(@" obj)
+        {
+            return obj._theValue;
+        }
+
+
+        public override bool Equals(object obj)
+        {
+			if (obj == null && Value == null)
+                return true;
+
+            if (obj == null)
+                return false;
+
+            if (GetType() != obj.GetType())
+                return false;
+
+            return ((");
+            
+            #line 54 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(") obj)._theValue == _theValue;\r\n        }\r\n\r\n        public static bool operator " +
+                    "==(");
+            
+            #line 57 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(" obj1, ");
+            
+            #line 57 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(" obj2)\r\n        {\r\n            return Equals(obj1, obj2);\r\n        }\r\n\r\n        p" +
+                    "ublic static bool operator !=(");
+            
+            #line 62 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(" obj1, ");
+            
+            #line 62 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(" obj2)\r\n        {\r\n            return !Equals(obj1, obj2);\r\n        }\r\n\r\n        " +
+                    "public override int GetHashCode()\r\n        {\r\n            return Value != null ?" +
+                    " _theValue.GetHashCode() : base.GetHashCode();\r\n        }\r\n\t}\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

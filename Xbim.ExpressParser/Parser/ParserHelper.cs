@@ -219,6 +219,42 @@ namespace Xbim.ExpressParser
         }
 
 
+        private void CreateTypeEnumerable(string name, AggregationType aggregation,  ValueType typeBase, List<WhereRule> whereRules)
+        {
+            var type = Model.New<DefinedType>(e =>
+            {
+                e.Name = name;
+                e.Domain = aggregation;
+            });
+
+            switch (typeBase.tokVal)
+            {
+                case Tokens.IDENTIFIER:
+                    ToDoActions.Add(() =>
+                    {
+                        var domain = Model.Get<NamedType>(t => t.Name == typeBase.strVal).FirstOrDefault();
+                        if (domain == null)
+                            throw new InstanceNotFoundException();
+                        aggregation.ElementType = domain;
+                    });
+                    break;
+                case Tokens.TYPE:
+                    aggregation.ElementType = typeBase.val as BaseType;
+                    if (type.Domain == null)
+                        throw new InstanceNotFoundException();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (whereRules == null) return;
+
+            foreach (var rule in whereRules)
+            {
+                rule.ParentItem = type;
+            }
+        }
+
         private void CreateType(string name, ValueType typeBase, List<WhereRule> whereRules)
         {
             var type = Model.New<DefinedType>(e => e.Name = name);

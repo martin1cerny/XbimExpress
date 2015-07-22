@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Xbim.CodeGeneration.Templates
+namespace Xbim.CodeGeneration.Templates.Infrastructure
 {
     using System.Linq;
     using System.Text;
@@ -18,9 +18,9 @@ namespace Xbim.CodeGeneration.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
+    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class EnumerationTemplate : EnumerationTemplateBase
+    public partial class ModelTemplate : ModelTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,49 +28,50 @@ namespace Xbim.CodeGeneration.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("namespace ");
+            this.Write("using System;\r\n\r\nnamespace ");
             
-            #line 6 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
+            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\tpublic enum ");
+            this.Write("\r\n{\r\n\tpublic interface ");
             
-            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
+            #line 10 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n");
+            this.Write("\r\n\t{\r\n\t    ");
             
-            #line 10 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
- foreach(var element in Type.Elements) { 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t@");
-            
-            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(element));
+            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.EntityCollentionInterface));
             
             #line default
             #line hidden
-            this.Write(" ");
+            this.Write(" Instances { get; }\r\n\r\n\t    int Activate(");
             
-            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(element == Type.Elements.Last() ? "" : ","));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n");
-            
-            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
- } 
+            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
             
             #line default
             #line hidden
-            this.Write("\t}\r\n}");
+            this.Write(" owningEntity, bool write);\r\n\t\t\r\n\t\t");
+            
+            #line 16 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.TransactionInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" BeginTransaction(string name);\r\n\r\n\t\tvoid SetValue<TProperty>( ");
+            
+            #line 18 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" target, \r\n\t\t\tref TProperty field, TProperty newValue,\r\n            Action<TPrope" +
+                    "rty> setter,\r\n            string notifyPropertyName);\r\n\t}\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -82,7 +83,7 @@ namespace Xbim.CodeGeneration.Templates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class EnumerationTemplateBase
+    public class ModelTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

@@ -40,9 +40,10 @@ namespace Xbim.CodeGeneration.Templates
             get
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
-                if (!String.IsNullOrWhiteSpace(_settings.SelectSettings.BaseType)) 
-                    parents.Insert(0, _settings.SelectSettings.BaseType);
-                return String.Join(", ", parents);
+                
+                var i = String.Join(", ", parents);
+                if (String.IsNullOrWhiteSpace(i)) return "";
+                return ": " + i;
             }
         }
 

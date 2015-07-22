@@ -10,8 +10,63 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-	public partial struct <#= Name #> <#= String.IsNullOrWhiteSpace(Inheritance)?"":":" #> <#= Inheritance #>
+	public partial struct <#= Name #> <#= Inheritance #>
 	{ 
-		 
+		private readonly <#= UnderlyingType #> _theValue;
+
+        public object Value
+        {
+            get { return _theValue; }
+        }
+
+        public override string ToString()
+        {
+            return Value != null ? Value.ToString() : typeof(<#= UnderlyingType #>).Name;
+        }
+
+        public <#= Name #>(<#= UnderlyingType #> val)
+        {
+            _theValue = val;
+        }
+
+        public static implicit operator <#= Name #>(<#= UnderlyingType #> value)
+        {
+            return new <#= Name #>(value);
+        }
+
+        public static implicit operator <#= UnderlyingType #>(<#= Name #> obj)
+        {
+            return obj._theValue;
+        }
+
+
+        public override bool Equals(object obj)
+        {
+			if (obj == null && Value == null)
+                return true;
+
+            if (obj == null)
+                return false;
+
+            if (GetType() != obj.GetType())
+                return false;
+
+            return ((<#= Name #>) obj)._theValue == _theValue;
+        }
+
+        public static bool operator ==(<#= Name #> obj1, <#= Name #> obj2)
+        {
+            return Equals(obj1, obj2);
+        }
+
+        public static bool operator !=(<#= Name #> obj1, <#= Name #> obj2)
+        {
+            return !Equals(obj1, obj2);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value != null ? _theValue.GetHashCode() : base.GetHashCode();
+        }
 	}
 }
