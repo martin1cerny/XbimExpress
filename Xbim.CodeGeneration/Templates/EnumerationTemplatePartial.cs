@@ -36,7 +36,7 @@ namespace Xbim.CodeGeneration.Templates
 
         public string Inheritance
         {
-            get { return null; }
+            get { return ""; }
         }
 
 

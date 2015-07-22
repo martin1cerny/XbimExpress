@@ -10,7 +10,8 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-	public partial interface <#= Name #> <#= String.IsNullOrWhiteSpace(Inheritance)?"":":" #> <#= Inheritance #>
+    // ReSharper disable once InconsistentNaming
+	public partial interface <#= Name #> <#= Inheritance #>
 	{
 		
 	}

@@ -41,6 +41,9 @@ namespace Xbim.ExpressParser.Tests
             var parser = new ExpressParser();
             var result = parser.Parse(Schemas.Schemas.IFC4);
             Assert.IsTrue(result);
+
+            var type =
+                parser.SchemaInstance.Get<DefinedType>(t => t.Name == "IfcPropertySetDefinitionSet").FirstOrDefault();
         }
 
         [TestMethod]

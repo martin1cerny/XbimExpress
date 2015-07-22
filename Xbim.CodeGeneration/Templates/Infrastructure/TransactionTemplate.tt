@@ -3,12 +3,13 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
+using System;
+
 namespace <#= Namespace #>
 {
-	public enum <#= Name #>
+	public interface <#= Name #>: IDisposable
 	{
-<# foreach(var element in Type.Elements) { #>
-		@<#= element #> <#= element == Type.Elements.Last() ? "" : "," #>
-<# } #>
+		void Commit();
+		void RollBack();
 	}
 }

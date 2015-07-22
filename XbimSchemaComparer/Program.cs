@@ -56,6 +56,11 @@ namespace XbimSchemaComparer
                 w.WriteLine("{0}: {1}", schema.Name, schema.Entities.Count());
             w.WriteLine();
 
+            w.WriteLine("Number of non-abstract entities:");
+            foreach (var schema in schemas)
+                w.WriteLine("{0}: {1}", schema.Name, schema.Entities.Count(e => e.Instantiable));
+            w.WriteLine();
+
             w.WriteLine("Number of types:");
             foreach (var schema in schemas)
                 w.WriteLine("{0}: {1}", schema.Name, schema.Types.Count());

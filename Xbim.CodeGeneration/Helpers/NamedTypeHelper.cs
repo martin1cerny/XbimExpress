@@ -27,20 +27,11 @@ namespace Xbim.CodeGeneration.Helpers
         {
             get
             {
-                var ns = Type.ParentSchema.Name;
-                if (Structure != null)
-                {
-                    var domain = Structure.GetDomainForType(Type.Name);
-                    if (domain != null)
-                        ns += "." + domain.Name;
-                }
-
-                if (String.IsNullOrWhiteSpace(ns)) ns = "Generated";
-                if (String.IsNullOrWhiteSpace(_settings.Namespace)) 
-                    return ns;
-
-                var baseNs = _settings.Namespace;
-                ns = String.Format("{0}.{1}", baseNs, ns);
+                var ns = _settings.Namespace;
+                if (Structure == null) return ns;
+                var domain = Structure.GetDomainForType(Type.Name);
+                if (domain != null)
+                    ns += "." + domain.Name;
                 return ns;
             }
         }

@@ -77,6 +77,16 @@ namespace Xbim.ExpressParser.SDAI
             return  Load(Schemas.Schemas.IFC4);
         }
 
+        public static SchemaModel LoadIfc4Add1()
+        {
+            return Load(Schemas.Schemas.IFC4_ADD1);
+        }
+
+        public static SchemaModel LoadCis2()
+        {
+            return Load(Schemas.Schemas.CIS2_lpm61);
+        }
+
         public static SchemaModel Load(string schema)
         {
             var parser = new ExpressParser();

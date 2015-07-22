@@ -34,10 +34,15 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
   <PropertyGroup>
     <Configuration Condition="" '$(Configuration)' == '' "">Debug</Configuration>
     <Platform Condition="" '$(Platform)' == '' "">AnyCPU</Platform>
-    <ProjectGuid>{207B20DA-7783-470F-9B35-E174DA9EE2FA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>");
+    <ProjectGuid>{");
+            
+            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\CSProjectTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Id));
+            
+            #line default
+            #line hidden
+            this.Write("}</ProjectGuid>\r\n    <OutputType>Library</OutputType>\r\n    <AppDesignerFolder>Pro" +
+                    "perties</AppDesignerFolder>\r\n    <RootNamespace>");
             
             #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\CSProjectTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));

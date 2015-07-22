@@ -11,38 +11,51 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-	public <#= IsAbstract ? "abstract" : "" #> partial class <#= Name #> <#= String.IsNullOrWhiteSpace(Inheritance)?"":":" #> <#= Inheritance #>
+	//[PersistedEntityAttribute]
+	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>
 	{
-<# if (!IsAbstract) {#>
+<# if (IsFirst) {#>
+		#region Implementation of <#= PersistEntityInterface #>
+		public int EntityLabel {get; set;}
+		public <#= ModelInterface #> Model { get; internal set; }
+
+		protected bool Activated = false;
+		#endregion
+
+<# }
+
+ if (!IsAbstract) {#>
 		//internal constructor makes sure that objects are not created outside of the model/ assembly controlled area
 		internal <#= Name #>() { }
-<# } #>
 
+<# } #>
 		#region Explicit attribute fields
 <# foreach(var attribute in Type.ExplicitAttributes){ #>
 		private <#= TypeHelper.GetCSType(attribute.Domain) #> <#= GetPrivateFieldName(attribute) #>;
 <# } #>
 		#endregion
 	
-	
 		#region Explicit attributes
 <# foreach(var attribute in Type.ExplicitAttributes){ #>
 		//[EntityAttribute(<#= GetAttributeIndex(attribute) #>, EntityAttributeState.<#= attribute.OptionalFlag ? "Optional" : "Mandatory" #>)]
-		public <#= TypeHelper.GetCSType(attribute.Domain) #> <#= attribute.Name #> 
+		public <#= TypeHelper.GetCSType(attribute.Domain) #> @<#= attribute.Name #> 
 		{ 
 			get 
 			{
-				//Activate();
+				if(!Activated) 
+				{
+					Model.Activate(this, true);
+					Activated = true;
+				}
 				return <#= GetPrivateFieldName(attribute) #>;
 			} 
 			set
 			{
-				//this.SetModelValue(this, 
-				//	ref <#= GetPrivateFieldName(attribute) #>, 
-				//	value, 
-				//	v => <#= GetPrivateFieldName(attribute) #> = v, 
-				//	"<#= attribute.Name #>");
-				<#= GetPrivateFieldName(attribute) #> = value;
+				Model.SetValue(this, 
+					ref <#= GetPrivateFieldName(attribute) #>, 
+					value, 
+					v => <#= GetPrivateFieldName(attribute) #> = v, 
+					"<#= attribute.Name #>");
 			} 
 		}
 	
@@ -52,12 +65,15 @@ namespace <#= Namespace #>
 		#region Inverse attributes
 <# foreach(var attribute in Type.InverseAttributes){ 
 	var inverseType = attribute.Domain.Name; #>
-		public IEnumerable<<#=inverseType #>> <#= attribute.Name #> 
+		public IEnumerable<<#=inverseType #>> @<#= attribute.Name #> 
 		{ 
 			get 
 			{
-				yield break;
-				//return Model.Instances.Where<<#=inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> == this);
+<# if (IsAggregation(attribute)) {#>
+				return Model.Instances.Where<<#=inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this));
+<# } else {#>
+				return Model.Instances.Where<<#=inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> == this);
+<# } #>
 			} 
 		}
 	

@@ -45,10 +45,7 @@
     <Compile Include="Helpers\TypeHelper.cs" />
     <Compile Include="ICodeTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\EntitySettings.cs" />
-    <Compile Include="Settings\DefinedTypeSettings.cs" />
     <Compile Include="Settings\GeneratorSettings.cs" />
-    <Compile Include="Settings\SelectTypeSettings.cs" />
     <Compile Include="Templates\DefinedTypeTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -72,6 +69,36 @@
       <DependentUpon>CSProjectTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\CSProjectTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\EntityCollectionTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityCollectionTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\EntityCollectionTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\EntityFactoryTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\EntityFactoryTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\ModelTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\ModelTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\PersistEntityTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PersistEntityTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\PersistEntityTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\TransactionTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransactionTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\TransactionTemplatePartial.cs" />
     <Compile Include="Templates\SelectTypeTemplatePartial.cs" />
     <Compile Include="Templates\DefinedTypeTemplatePartial.cs" />
     <Compile Include="Templates\SelectTypeTemplate.cs">
@@ -96,6 +123,26 @@
     <None Include="Templates\Infrastructure\CSProjectTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>CSProjectTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\EntityCollectionTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>EntityCollectionTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\EntityFactoryTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>EntityFactoryTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\ModelTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ModelTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\PersistEntityTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>PersistEntityTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\TransactionTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>TransactionTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\SelectTypeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
