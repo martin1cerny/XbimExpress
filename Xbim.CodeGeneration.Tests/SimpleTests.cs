@@ -20,22 +20,35 @@ namespace Xbim.CodeGeneration.Tests
             };
             var schema = SchemaModel.LoadIfc2x3();
 
-            var generator = new Generator(settings, schema);
-            generator.Generate();
+            Generator.Generate(settings, schema);
         }
 
         [TestMethod]
-        public void GenerateIfc4()
+        public void GenerateIfc2X3WithCommons()
+        {
+            var settings = new GeneratorSettings
+            {
+                Structure = DomainStructure.LoadIfc2X3(),
+                OutputPath = "Xbim.Ifc2x3",
+                InfrastructureOutputPath = "Xbim.Commons"
+            };
+            var schema = SchemaModel.LoadIfc2x3();
+
+            Generator.Generate(settings, schema);
+        }
+
+        [TestMethod]
+        public void GenerateIfc4WithCommons()
         {
             var settings = new GeneratorSettings
             {
                 Structure = DomainStructure.LoadIfc4(),
-                OutputPath = "Xbim.Ifc4"
+                OutputPath = "Xbim.Ifc4",
+                InfrastructureOutputPath = "Xbim.Commons"
             };
             var schema = SchemaModel.LoadIfc4();
 
-            var generator = new Generator(settings, schema);
-            generator.Generate();
+            Generator.Generate(settings, schema);
         }
 
         [TestMethod]
@@ -56,8 +69,7 @@ namespace Xbim.CodeGeneration.Tests
                 type.Name = "Cis" + String.Join("", upper);
             }
 
-            var generator = new Generator(settings, schema);
-            generator.Generate();
+            Generator.Generate(settings, schema);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace <#= Namespace #>
 	{
 		void Commit();
 		void RollBack();
+		void AddReversibleAction(Action action);
 	}
 }

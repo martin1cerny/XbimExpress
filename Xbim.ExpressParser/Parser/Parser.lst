@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <Parser.y - 22/07/2015 14:15:41>
+//  GPPG error listing for yacc source file <Parser.y - 24/07/2015 11:47:20>
 // ==========================================================================
 //  Version:  1.5.0
 //  Machine:  C13300493
-//  DateTime: 22/07/2015 14:15:48
+//  DateTime: 24/07/2015 11:47:22
 //  UserName: mxfm2
 // ==========================================================================
 
@@ -165,8 +165,8 @@ type
 	| INTEGER								{ $$.val = Model.PredefinedSimpleTypes.IntegerType; }
 	| NUMBER								{ $$.val = Model.PredefinedSimpleTypes.NumberType; }
 	| LOGICAL								{ $$.val = Model.PredefinedSimpleTypes.LogicalType; }
-	| type '(' INTEGER ')'					{ $$.val = CreateArrayType($1.val as BaseType, $3.intVal); }
-	| type '(' INTEGER ')' FIXED			{ $$.val = CreateArrayType($1.val as BaseType, $3.intVal); }
+	| type '(' INTEGER ')'					{ $$.val = $1.val; }
+	| type '(' INTEGER ')' FIXED			{ $$.val = $1.val; }
 	;
 
 identifier_or_type							

@@ -10,26 +10,30 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-	public static class EntityFactory
+	public sealed class <#= Name #> <#= Inheritance #>
 	{
-		public static T New<T>(<#= ModelInterface #> model) where T: <#= PersistEntity #>
+		public T New<T>(<#= ModelInterface #> model) where T: <#= PersistEntity #>
 		{
 			return (T)New(model, typeof(T));
 		}
 
-		public static T New<T>(<#= ModelInterface #> model, Action<T> init) where T: <#= PersistEntity #>
+		public T New<T>(<#= ModelInterface #> model, Action<T> init) where T: <#= PersistEntity #>
 		{
 			var o = New<T>(model);
 			init(o);
 			return o;
 		}
 
-		public static <#= PersistEntity #> New(<#= ModelInterface #> model, Type t)
+		public <#= PersistEntity #> New(<#= ModelInterface #> model, Type t)
 		{
+			//check that the type is from this assembly
+			if(t.Assembly != GetType().Assembly)
+				throw new Exception("This factory only creates types from its assembly");
+
 			return New(model, t.Name);
 		}
 
-		public static <#= PersistEntity #> New(<#= ModelInterface #> model, string typeName)
+		public <#= PersistEntity #> New(<#= ModelInterface #> model, string typeName)
 		{
 			if (model == null || typeName == null)
 				throw new ArgumentNullException();
@@ -38,7 +42,7 @@ namespace <#= Namespace #>
 			switch(name)
 			{
 <# foreach(var entity in NonAbstractEntities) {#>
-				case "<#= entity.Name.ToString().ToUpper() #>": return new <#= entity.Name #> {Model = model};
+				case "<#= entity.Name.ToString().ToUpper() #>": return new <#= entity.Name #> ( model );
 <# } #>
 				default:
 					throw new Exception("Type must be non-abstract type of <#= PersistEntity #>");

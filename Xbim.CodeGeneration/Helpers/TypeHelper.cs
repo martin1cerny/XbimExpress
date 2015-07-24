@@ -9,7 +9,20 @@ namespace Xbim.CodeGeneration.Helpers
 {
     public class TypeHelper
     {
-        public static string GetCSType(BaseType type)
+        public static string GetCSType(ExplicitAttribute attribute, string setName)
+        {
+            var domain = attribute.Domain;
+            var type = GetCSType(domain, setName);
+
+            if(attribute.OptionalFlag && (
+                (domain is SimpleType && !(domain is LogicalType) && !(domain is StringType)) ||
+                domain is DefinedType
+                ))
+            type += "?";
+            return type;
+        }
+
+        public static string GetCSType(BaseType type, string setName)
         {
             var simple = type as SimpleType;
             if (simple != null)
@@ -29,14 +42,15 @@ namespace Xbim.CodeGeneration.Helpers
             var aggr = type as AggregationType;
             if (aggr != null)
             {
-                if (aggr is ArrayType)
-                    return String.Format("{0}[]", GetCSType(aggr.ElementType));
-                if (aggr is BagType)
-                    return String.Format("List<{0}>", GetCSType(aggr.ElementType));
-                if (aggr is ListType)
-                    return String.Format("List<{0}>", GetCSType(aggr.ElementType));
-                if (aggr is SetType)
-                    return String.Format("HashSet<{0}>", GetCSType(aggr.ElementType));
+                return String.Format("{0}<{1}>", setName, GetCSType(aggr.ElementType, setName));
+                //if (aggr is ArrayType)
+                //    return String.Format("{0}<{1}>",setName, GetCSType(aggr.ElementType, setName));
+                //if (aggr is BagType)
+                //    return String.Format("{0}<{1}>", setName, GetCSType(aggr.ElementType, setName));
+                //if (aggr is ListType)
+                //    return String.Format("{0}<{1}>", setName, GetCSType(aggr.ElementType, setName));
+                //if (aggr is SetType)
+                //    return String.Format("{0}<{1}>", setName, GetCSType(aggr.ElementType, setName));
 
             }
 
@@ -44,9 +58,9 @@ namespace Xbim.CodeGeneration.Helpers
             throw new NotSupportedException();
         }
 
-        public static string GetCSType(UnderlyingType type)
+        public static string GetCSType(UnderlyingType type, string setName)
         {
-            return GetCSType(type as BaseType);
+            return GetCSType(type as BaseType, setName);
         }
     }
 }

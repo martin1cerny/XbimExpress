@@ -24,7 +24,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public string Namespace
         {
-            get { return _settings.Namespace; }
+            get { return _settings.InfrastructureNamespace; }
         }
 
         public string Inheritance

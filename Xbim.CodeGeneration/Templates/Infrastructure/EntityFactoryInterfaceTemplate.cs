@@ -7,21 +7,20 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Xbim.CodeGeneration.Templates
+namespace Xbim.CodeGeneration.Templates.Infrastructure
 {
     using System.Linq;
     using System.Text;
     using System.Collections.Generic;
-    using Xbim.CodeGeneration.Helpers;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class EntityTemplate : EntityTemplateBase
+    public partial class EntityFactoryInterfaceTemplate : EntityFactoryInterfaceTemplateBase
     {
 #line hidden
         /// <summary>
@@ -29,286 +28,105 @@ namespace Xbim.CodeGeneration.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n");
+            this.Write("using System;\r\n");
             
-            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 7 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
  foreach(var u in Using) { 
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(u));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 10 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\nnamespace ");
             
-            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\t//[PersistedEntityAttribute]\r\n\tpublic ");
+            this.Write("\r\n{\r\n\tpublic interface ");
             
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(AbstractKeyword));
-            
-            #line default
-            #line hidden
-            this.Write(" partial class @");
-            
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Inheritance));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n");
+            this.Write("\r\n\t{\r\n\t\tT New<T>(");
             
-            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- if (IsFirst) {
-            
-            #line default
-            #line hidden
-            this.Write("\t\t#region Implementation of ");
-            
-            #line 18 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntityInterface));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\tpublic int EntityLabel {get; set;}\r\n\t\tpublic ");
-            
-            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
             
             #line default
             #line hidden
-            this.Write(" Model { get; internal set; }\r\n\r\n\t\tprotected bool Activated = false;\r\n\t\t#endregio" +
-                    "n\r\n\r\n");
+            this.Write(" model) where T: ");
             
-            #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- }
-
- if (!IsAbstract) {
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
             
             #line default
             #line hidden
-            this.Write("\t\t//internal constructor makes sure that objects are not created outside of the m" +
-                    "odel/ assembly controlled area\r\n\t\tinternal ");
+            this.Write(";\r\n\r\n\t\tT New<T>(");
             
-            #line 29 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write("() { }\r\n\r\n");
-            
-            #line 31 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- } 
+            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
             
             #line default
             #line hidden
-            this.Write("\t\t#region Explicit attribute fields\r\n");
+            this.Write(" model, Action<T> init) where T: ");
             
-            #line 33 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- foreach(var attribute in Type.ExplicitAttributes){ 
-            
-            #line default
-            #line hidden
-            this.Write("\t\tprivate ");
-            
-            #line 34 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeHelper.GetCSType(attribute.Domain)));
+            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
             
             #line default
             #line hidden
-            this.Write(" ");
+            this.Write(";\r\n\r\n\t\t");
             
-            #line 34 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetPrivateFieldName(attribute)));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n");
-            
-            #line 35 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- } 
+            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
             
             #line default
             #line hidden
-            this.Write("\t\t#endregion\r\n\t\r\n\t\t#region Explicit attributes\r\n");
+            this.Write(" New(");
             
-            #line 39 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- foreach(var attribute in Type.ExplicitAttributes){ 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t//[EntityAttribute(");
-            
-            #line 40 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeIndex(attribute)));
+            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
             
             #line default
             #line hidden
-            this.Write(", EntityAttributeState.");
+            this.Write(" model, Type t);\r\n\r\n\t\t");
             
-            #line 40 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.OptionalFlag ? "Optional" : "Mandatory"));
-            
-            #line default
-            #line hidden
-            this.Write(")]\r\n\t\tpublic ");
-            
-            #line 41 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeHelper.GetCSType(attribute.Domain)));
+            #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
             
             #line default
             #line hidden
-            this.Write(" @");
+            this.Write(" New(");
             
-            #line 41 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" \r\n\t\t{ \r\n\t\t\tget \r\n\t\t\t{\r\n\t\t\t\tif(!Activated) \r\n\t\t\t\t{\r\n\t\t\t\t\tModel.Activate(this, tru" +
-                    "e);\r\n\t\t\t\t\tActivated = true;\r\n\t\t\t\t}\r\n\t\t\t\treturn ");
-            
-            #line 50 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetPrivateFieldName(attribute)));
+            #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
             
             #line default
             #line hidden
-            this.Write(";\r\n\t\t\t} \r\n\t\t\tset\r\n\t\t\t{\r\n\t\t\t\tModel.SetValue(this, \r\n\t\t\t\t\tref ");
-            
-            #line 55 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetPrivateFieldName(attribute)));
-            
-            #line default
-            #line hidden
-            this.Write(", \r\n\t\t\t\t\tvalue, \r\n\t\t\t\t\tv => ");
-            
-            #line 57 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetPrivateFieldName(attribute)));
-            
-            #line default
-            #line hidden
-            this.Write(" = v, \r\n\t\t\t\t\t\"");
-            
-            #line 58 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
-            
-            #line default
-            #line hidden
-            this.Write("\");\r\n\t\t\t} \r\n\t\t}\r\n\t\r\n");
-            
-            #line 62 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t#endregion\r\n\r\n\t\t#region Inverse attributes\r\n");
-            
-            #line 66 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- foreach(var attribute in Type.InverseAttributes){ 
-	var inverseType = attribute.Domain.Name; 
-            
-            #line default
-            #line hidden
-            this.Write("\t\tpublic IEnumerable<");
-            
-            #line 68 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
-            
-            #line default
-            #line hidden
-            this.Write("> @");
-            
-            #line 68 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" \r\n\t\t{ \r\n\t\t\tget \r\n\t\t\t{\r\n");
-            
-            #line 72 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- if (IsAggregation(attribute)) {
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\treturn Model.Instances.Where<");
-            
-            #line 73 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
-            
-            #line default
-            #line hidden
-            this.Write(">(e => e.");
-            
-            #line 73 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" != null &&  e.");
-            
-            #line 73 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
-            
-            #line default
-            #line hidden
-            this.Write(".Contains(this));\r\n");
-            
-            #line 74 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- } else {
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\treturn Model.Instances.Where<");
-            
-            #line 75 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
-            
-            #line default
-            #line hidden
-            this.Write(">(e => e.");
-            
-            #line 75 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" == this);\r\n");
-            
-            #line 76 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t} \r\n\t\t}\r\n\t\r\n");
-            
-            #line 80 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\t#endregion\r\n\t}\r\n}");
+            this.Write(" model, string typeName);\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -320,7 +138,7 @@ namespace Xbim.CodeGeneration.Templates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class EntityTemplateBase
+    public class EntityFactoryInterfaceTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Build.Construction;
 using Xbim.CodeGeneration.Settings;
 using Xbim.CodeGeneration.Templates;
@@ -15,94 +12,114 @@ namespace Xbim.CodeGeneration
 {
     public class Generator
     {
-        public GeneratorSettings Settings { get; private set; }
-        public SchemaModel SchemaModel { get; private set; }
-
-        private ProjectItemGroupElement _includeItemGroupElement;
-
-        public Generator(GeneratorSettings settings, SchemaModel schema)
+        public static bool Generate(GeneratorSettings settings, SchemaModel schema)
         {
-            Settings = settings;
-            SchemaModel = schema;
+            //get output paths
+            var modelPrjPath = GetDirectory(settings.OutputPath);
+            var infraPrjPath = settings.IsInfrastructureSeparate
+                ? GetDirectory(settings.InfrastructureOutputPath)
+                : modelPrjPath;
+
+            //get or create target CS projects
+            var modelProject = GetProject(modelPrjPath);
+            var infraProject = settings.IsInfrastructureSeparate ? GetProject(infraPrjPath) : modelProject;
+
+            //set namespaces
+            settings.Namespace = GetNamespace(modelProject);
+            settings.InfrastructureNamespace = settings.IsInfrastructureSeparate ? GetNamespace(infraProject) : settings.Namespace;
+
+            var modelTemplates = new List<ICodeTemplate>();
+            modelTemplates.AddRange(
+                schema.Get<DefinedType>().Select(type => new DefinedTypeTemplate(settings, type)));
+            modelTemplates.AddRange(schema.Get<SelectType>().Select(type => new SelectTypeTemplate(settings, type)));
+            modelTemplates.AddRange(
+                schema.Get<EntityDefinition>().Select(type => new EntityTemplate(settings, type)));
+            modelTemplates.AddRange(
+                schema.Get<EnumerationType>().Select(type => new EnumerationTemplate(settings, type)));
+            modelTemplates
+                .Add(new EntityFactoryTemplate(settings, schema));
+            modelTemplates
+                .Add(new ItemSetTemplate(settings));
+            foreach (var tmpl in modelTemplates)
+                ProcessTemplate(tmpl, modelProject);
+
+
+            var infrastructureTemplates = new List<ICodeTemplate>
+            {
+                new PersistEntityTemplate(settings),
+                new ModelTemplate(settings),
+                new EntityCollectionTemplate(settings),
+                new TransactionTemplate(settings),
+                new EntityFactoryInterfaceTemplate(settings)
+            };
+            foreach (var template in infrastructureTemplates)
+                ProcessTemplate(template, infraProject);
+
+
+            //make sure model project references infrastructural project
+            if (modelProject != infraProject)
+            {
+                ReferenceProject(infraProject, modelProject);
+            }
+
+            //save changes to the projects
+            modelProject.Save();
+            infraProject.Save();
+
+            return true;
         }
 
-        public bool Generate()
+        private static void ReferenceProject(ProjectRootElement referenced, ProjectRootElement referencing)
         {
-            var currentDir = Environment.CurrentDirectory;
-            try
+            //get project references 
+            const string itemType = "ProjectReference";
+            var references = referencing.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == itemType)) ??
+                           referencing.AddItemGroup();
+
+            var referencedPath = new Uri(referenced.FullPath, UriKind.Absolute);
+            var referencingPath = new Uri(Path.GetDirectoryName(referencing.FullPath) ?? "", UriKind.Absolute);
+
+            var relPath = referencingPath.MakeRelativeUri(referencedPath).ToString();
+
+            //check if it is not there already
+            if (references.Children.Any(c =>
             {
-                var path = Settings.OutputPath ?? "";
-                if (!String.IsNullOrWhiteSpace(path))
-                {
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-                    Environment.CurrentDirectory = path;
-                }
+                var itemElement = c as ProjectItemElement;
+                return itemElement != null && itemElement.Include == relPath;
+            })) return;
 
-                path = Environment.CurrentDirectory;
-                if (Directory.Exists(path))
-                {
-                    var projFile =
-                        Directory.EnumerateFiles(path, "*.csproj", SearchOption.TopDirectoryOnly).FirstOrDefault();
-                    if (projFile != null)
-                        OpenProject(projFile);
-                    else
-                        InitProject();
-                }
-                else
-                    InitProject();
-
-
-                foreach (
-                    var tmpl in SchemaModel.Get<DefinedType>().Select(type => new DefinedTypeTemplate(Settings, type)))
-                    ProcessTemplate(tmpl);
-
-                foreach (
-                    var tmpl in SchemaModel.Get<SelectType>().Select(type => new SelectTypeTemplate(Settings, type)))
-                    ProcessTemplate(tmpl);
-
-                foreach (
-                    var tmpl in SchemaModel.Get<EntityDefinition>().Select(type => new EntityTemplate(Settings, type)))
-                    ProcessTemplate(tmpl);
-
-                foreach (
-                    var tmpl in
-                        SchemaModel.Get<EnumerationType>().Select(type => new EnumerationTemplate(Settings, type)))
-                    ProcessTemplate(tmpl);
-
-
-                var infrastructureTemplates = new List<ICodeTemplate>
-                {
-                    new EntityFactoryTemplate(Settings, SchemaModel),
-                    new PersistEntityTemplate(Settings),
-                    new ModelTemplate(Settings),
-                    new EntityCollectionTemplate(Settings),
-                    new TransactionTemplate(Settings)
-                };
-                foreach (var template in infrastructureTemplates)
-                {
-                    ProcessTemplate(template);
-                }
-
-
-                //save changes to the project
-                _includeItemGroupElement.ContainingProject.Save();
-
-                return true;
-            }
-            finally
+            references.AddItem(itemType, relPath, new []
             {
-                //set current directory to the original path
-                Environment.CurrentDirectory = currentDir;
-            }
-            
+                new KeyValuePair<string, string>("Project", GetProjectId(referenced)), 
+                new KeyValuePair<string, string>("Name", Path.GetFileNameWithoutExtension(referenced.FullPath)) 
+            });
         }
 
-        private void WriteHeader(ICodeTemplate template)
+        private static ProjectRootElement GetProject(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
+            var suggestedName = new DirectoryInfo(directoryPath).Name;
+
+            var projFile =
+                Directory.EnumerateFiles(directoryPath, "*.csproj", SearchOption.TopDirectoryOnly).FirstOrDefault();
+            return projFile != null ? OpenProject(projFile) : InitProject(suggestedName, directoryPath);
+        }
+
+        private static string GetDirectory(string suggestedPath)
+        {
+            var path = String.IsNullOrWhiteSpace(suggestedPath) ? Environment.CurrentDirectory : suggestedPath;
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
+        }
+
+        private static void WriteHeader(ICodeTemplate template)
         {
             template.WriteLine("// ------------------------------------------------------------------------------");
             template.WriteLine("// <auto-generated>");
-            template.WriteLine("//     This code was generated by a tool Xbim.CodeGeneration from EXPRESS schema instance {0}.", SchemaModel.Schema.Name);
+            template.WriteLine("//     This code was generated by a tool Xbim.CodeGeneration ");
             template.WriteLine("//		{0}", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"));
             template.WriteLine("//  ");
             template.WriteLine("//     Changes to this file may cause incorrect behaviour and will be lost if");
@@ -111,38 +128,56 @@ namespace Xbim.CodeGeneration
             template.WriteLine("// ------------------------------------------------------------------------------");
         }
 
-        private void ProcessTemplate(ICodeTemplate template)
+        private static void ProcessTemplate(ICodeTemplate template, ProjectRootElement project)
         {
-            var localNamespace = template.Namespace.Substring(Settings.Namespace.Length);
-            var path = Path.Combine(localNamespace.Split(new []{'.'}, StringSplitOptions.RemoveEmptyEntries));
-            if (!Directory.Exists(path) && !String.IsNullOrWhiteSpace(path))
-                Directory.CreateDirectory(path);
+            var rootNamespace = GetNamespace(project);
+            var localNamespace = template.Namespace.Substring(rootNamespace.Length);
 
-            path = Path.Combine(path, template.Name + ".cs");
+            var fileName = template.Name + ".cs";
+            var localPath = Path.Combine(localNamespace.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries));
+            var projectPath = Path.GetDirectoryName(project.FullPath) ?? "";
+            var fullPath = Path.Combine(projectPath, localPath);
 
-            using (var file = File.CreateText(path))
+            if (!Directory.Exists(fullPath) && !String.IsNullOrWhiteSpace(fullPath))
+                Directory.CreateDirectory(fullPath);
+
+            var filePath = Path.Combine(fullPath, fileName);
+
+            using (var file = File.CreateText(filePath))
             {
                 WriteHeader(template);
                 var code = template.TransformText();
                 file.Write(code);
                 file.Close();
-
-                //add file to the project if it is not there already
-                AddCompilationItem(path);
             }
-            
 
+            var projectFilePath = Path.Combine(localPath, fileName);
+            AddCompilationItem(projectFilePath, project);
         }
 
-        private void InitProject()
+        private static string GetNamespace(ProjectRootElement project)
         {
-            var name = new DirectoryInfo(Environment.CurrentDirectory).Name;
-            //set global namespace for generated code
-            Settings.Namespace = name;
+            var element =
+                project.PropertyGroups.Select(
+                    g => g.Children.FirstOrDefault(e => ((ProjectPropertyElement) e).Name == "RootNamespace"))
+                    .FirstOrDefault(e => e != null) as ProjectPropertyElement;
+            return element != null ? element.Value : Path.GetFileNameWithoutExtension(project.FullPath);
+        }
 
+        private static string GetProjectId(ProjectRootElement project)
+        {
+            var element =
+                project.PropertyGroups.Select(
+                    g => g.Children.FirstOrDefault(e => ((ProjectPropertyElement)e).Name == "ProjectGuid"))
+                    .FirstOrDefault(e => e != null) as ProjectPropertyElement;
+            return element != null ? element.Value : "";
+        }
+
+        private static ProjectRootElement InitProject(string name, string directory)
+        {
             var tmpl = new CSProjectTemplate(name);
             var data = tmpl.TransformText();
-            var fileName = name + ".csproj";
+            var fileName = Path.Combine(directory, name + ".csproj");
 
             using (var w = File.CreateText(fileName))
             {
@@ -150,45 +185,32 @@ namespace Xbim.CodeGeneration
                 w.Close();
             }
 
-            OpenProject(fileName);
-            
+            return OpenProject(fileName);
         }
 
-        private void OpenProject(string path)
+        private static ProjectRootElement OpenProject(string path)
         {
-            var name = Path.GetFileNameWithoutExtension(path);
-            //set global namespace for generated code
-            Settings.Namespace = name;
-
             var projElement = ProjectRootElement.Open(path);
-
-            if(projElement == null)
+            if (projElement == null)
                 throw new Exception("Failed to open existing CS project: " + path);
 
-            // items to compile
-            _includeItemGroupElement = projElement.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == "Compile")) ??
-                                       projElement.AddItemGroup();
+            return projElement;
         }
 
-        private void AddCompilationItem(string item)
+        private static void AddCompilationItem(string item, ProjectRootElement project)
         {
+            const string itemType = "Compile";
+            var includes = project.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == itemType)) ??
+                           project.AddItemGroup();
+
             //check if it is not there already
-            if (_includeItemGroupElement.Children.Any(c =>
+            if (includes.Children.Any(c =>
             {
                 var itemElement = c as ProjectItemElement;
                 return itemElement != null && itemElement.Include == item;
             })) return;
 
-            _includeItemGroupElement.AddItem("Compile", item);
-        }
-
-        private void AddProjectItems(ProjectRootElement elem, string groupName, params string[] items)
-        {
-            var group = elem.AddItemGroup();
-            foreach (var item in items)
-            {
-                group.AddItem(groupName, item);
-            }
+            includes.AddItem(itemType, item);
         }
     }
 }

@@ -51,7 +51,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DefinedTypeTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\EntityTemplate.cs">
+    <Compile Include="Templates\EntityTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityTemplate.tt</DependentUpon>
@@ -75,12 +75,24 @@
       <DependentUpon>EntityCollectionTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\EntityCollectionTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\EntityFactoryInterfaceTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityFactoryInterfaceTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\EntityFactoryInterfaceTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\EntityFactoryTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\EntityFactoryTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Templates\Infrastructure\ItemSetTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemSetTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\ItemSetTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\ModelTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -114,7 +126,7 @@
     </None>
     <None Include="Templates\EntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityTemplate.cs</LastGenOutput>
+      <LastGenOutput>EntityTemplate1.cs</LastGenOutput>
     </None>
     <None Include="Templates\EnumerationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -128,9 +140,17 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EntityCollectionTemplate.cs</LastGenOutput>
     </None>
+    <None Include="Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>EntityFactoryInterfaceTemplate.cs</LastGenOutput>
+    </None>
     <None Include="Templates\Infrastructure\EntityFactoryTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EntityFactoryTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\ItemSetTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ItemSetTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\Infrastructure\ModelTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

@@ -45,6 +45,7 @@ namespace Xbim.CodeGeneration.Templates
                 if (IsFirst)
                 {
                     parents.Add(_settings.PersistEntityInterface);
+                    parents.Add("INotifyPropertyChanged");
                 }
                 else
                     parents.AddRange(Type.Supertypes.Select(t => t.Name.ToString()));
@@ -59,11 +60,22 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        private string GetCSType(ExplicitAttribute attribute)
+        {
+            return TypeHelper.GetCSType(attribute, _settings.ItemSetClassName);
+        }
+
         private string ModelInterface { get { return _settings.ModelInterface; } }
 
         private string AbstractKeyword { get { return IsAbstract ? "abstract" : ""; } }
 
         private bool IsFirst { get { return Type.Supertypes == null || !Type.Supertypes.Any(); } }
+        private bool IsFirstNonAbstract { 
+            get 
+            { 
+                return Type.Instantiable && (Type.Supertypes == null  ||  Type.AllSupertypes.All(t => !t.Instantiable)); 
+            } 
+        }
 
         private string GetPrivateFieldName(ExplicitAttribute attribute)
         {
@@ -87,7 +99,7 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var result = new List<string>();
                 var namedOccurances = new List<NamedType>();
-                var expl = Type.ExplicitAttributes.ToList();
+                var expl =  IsAbstract ? Type.ExplicitAttributes.ToList() : Type.AllExplicitAttributes.ToList();
 
                 var selects = Type.IsInSelects.ToList();
                 var supertypes = Type.Supertypes ?? new HashSet<EntityDefinition>();
@@ -113,8 +125,20 @@ namespace Xbim.CodeGeneration.Templates
                     result.Add(ns);
                 }
 
-                if (iAttributes.Any() || expl.Any(a => a.Domain is AggregationType))
+                if (iAttributes.Any() || !IsAbstract)
                     result.Add("System.Collections.Generic");
+
+                if (IsFirst)
+                {
+                    //for INotifyPropertyChanged
+                    result.Add("System.ComponentModel");
+    
+                    //for Action and Exception
+                    result.Add("System");
+                }
+
+                if (_settings.IsInfrastructureSeparate)
+                    result.Add(_settings.InfrastructureNamespace);
 
                 return result;
             }
@@ -139,6 +163,55 @@ namespace Xbim.CodeGeneration.Templates
         private bool IsAggregation(InverseAttribute attribute)
         {
             return attribute.InvertedAttr.Domain is AggregationType;
+        }
+
+        private IEnumerable<ExplicitAttribute> AggregatedExplicitAttributes
+        {
+            get { return Type.ExplicitAttributes.Where(t => t.Domain is AggregationType); }
+        }
+
+        private bool IsReferenceTypeAggregation(ExplicitAttribute attribute)
+        {
+            var agg = attribute.Domain as AggregationType;
+            if (agg == null) return false;
+            return
+                agg.ElementType is EntityDefinition ||
+                agg.ElementType is SelectType ||
+                agg.ElementType is StringType ||
+                agg.ElementType is LogicalType;
+        }
+
+        private bool IsValueTypeAggregation(ExplicitAttribute attribute)
+        {
+            var agg = attribute.Domain as AggregationType;
+            if (agg == null) return false;
+            return
+                agg.ElementType is SimpleType && 
+                !(agg.ElementType is StringType ||
+                agg.ElementType is LogicalType);
+        }
+
+        private bool IsReferenceType(ExplicitAttribute attribute)
+        {
+            if (attribute.OptionalFlag) return true;
+
+            return
+                attribute.Domain is EntityDefinition ||
+                attribute.Domain is SelectType ||
+                attribute.Domain is StringType ||
+                attribute.Domain is LogicalType ||
+                attribute.Domain is AggregationType;
+        }
+
+        private string GetAggregationElementType(ExplicitAttribute attribute)
+        {
+            var aggregationType = attribute.Domain as AggregationType;
+            if (aggregationType != null)
+            {
+                var type = aggregationType.ElementType;
+                return TypeHelper.GetCSType(type, _settings.ItemSetClassName);
+            }
+            throw new Exception("Aggregation type expected");
         }
     }
 }

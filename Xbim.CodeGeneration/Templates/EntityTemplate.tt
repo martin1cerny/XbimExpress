@@ -22,40 +22,38 @@ namespace <#= Namespace #>
 		protected bool Activated = false;
 		#endregion
 
-<# }
-
- if (!IsAbstract) {#>
-		//internal constructor makes sure that objects are not created outside of the model/ assembly controlled area
-		internal <#= Name #>() { }
-
 <# } #>
+		//internal constructor makes sure that objects are not created outside of the model/ assembly controlled area
+		internal <#= Name #>(<#= ModelInterface #> model) <# if (!IsFirst) {#>: base(model) <# } #>
+		{ 
+			Model = model; 
+<# foreach (var attribute in AggregatedExplicitAttributes){ #>
+			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( model );
+<# } #>
+		}
+
 		#region Explicit attribute fields
 <# foreach(var attribute in Type.ExplicitAttributes){ #>
-		private <#= TypeHelper.GetCSType(attribute.Domain) #> <#= GetPrivateFieldName(attribute) #>;
+		private <#= GetCSType(attribute) #> <#= GetPrivateFieldName(attribute) #>;
 <# } #>
 		#endregion
 	
 		#region Explicit attributes
 <# foreach(var attribute in Type.ExplicitAttributes){ #>
 		//[EntityAttribute(<#= GetAttributeIndex(attribute) #>, EntityAttributeState.<#= attribute.OptionalFlag ? "Optional" : "Mandatory" #>)]
-		public <#= TypeHelper.GetCSType(attribute.Domain) #> @<#= attribute.Name #> 
+		public <#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{ 
 			get 
 			{
-				if(!Activated) 
-				{
-					Model.Activate(this, true);
-					Activated = true;
-				}
+				if(Activated) return <#= GetPrivateFieldName(attribute) #>;
+				
+				Model.Activate(this, true);
+				Activated = true;
 				return <#= GetPrivateFieldName(attribute) #>;
 			} 
 			set
 			{
-				Model.SetValue(this, 
-					ref <#= GetPrivateFieldName(attribute) #>, 
-					value, 
-					v => <#= GetPrivateFieldName(attribute) #> = v, 
-					"<#= attribute.Name #>");
+				SetValue( v =>  <#= GetPrivateFieldName(attribute) #> = v, <#= GetPrivateFieldName(attribute) #>, value,  "<#= attribute.Name #>");
 			} 
 		}
 	
@@ -80,5 +78,92 @@ namespace <#= Namespace #>
 <# } #>
 
 		#endregion
+<# if (IsFirst) { #>
+		#region INotifyPropertyChanged implementation
+		 
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void NotifyPropertyChanged( string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+		#endregion
+
+		#region Transactional property setting
+
+		protected void SetValue<TProperty>(Action<TProperty> setter, TProperty oldValue, TProperty newValue, string notifyPropertyName)
+		{
+
+			if (!Model.IsTransactional)
+			{
+				setter(newValue);
+				NotifyPropertyChanged(notifyPropertyName);
+				return;
+			}
+
+			//check there is a transaction
+			var txn = Model.CurrentTransaction;
+			if (txn == null) throw new Exception("Operation out of transaction.");
+
+			Action undo = () => setter(oldValue);
+			txn.AddReversibleAction(undo);
+			setter(newValue);
+			NotifyPropertyChanged(notifyPropertyName);
+		}
+
+		#endregion
+<# } #>
+<# if (!IsAbstract) { #>
+
+		#region Index access
+		private readonly List<string> _attributeNames = new List<string>
+		{
+<# foreach(var attribute in Type.AllExplicitAttributes){ #>
+			"<#= attribute.Name #>",
+<# } #>
+		};
+
+		public IEnumerable<string> HasExplicitAttributes { get { return _attributeNames; } }
+
+		public <#= IsFirstNonAbstract ? "virtual" : "override" #> object GetValue(int index)
+		{
+			switch(index)
+			{
+<# foreach(var attribute in Type.AllExplicitAttributes){ #>
+				case <#= GetAttributeIndex(attribute) #>: 
+					return @<#= attribute.Name #>;
+<# } #>
+				default:
+					throw new System.IndexOutOfRangeException();
+			}
+		}
+
+		public <#= IsFirstNonAbstract ? "virtual" : "override" #> void SetValue(object value, int index)
+		{
+			switch(index)
+			{
+<# foreach(var attribute in Type.AllExplicitAttributes){ #>
+				case <#= GetAttributeIndex(attribute) #>:
+<#		if (IsReferenceTypeAggregation(attribute)) {#>
+					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
+<#		} else if (IsValueTypeAggregation(attribute)) {#>
+					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
+<#		} else if (IsReferenceType(attribute)) {#>
+					 @<#= attribute.Name #> = (<#= GetCSType(attribute) #>)value;
+<#		} else {#>
+					 if (value != null) @<#= attribute.Name #> = (<#= GetCSType(attribute) #>)value;
+<#		} #>
+					 break;
+<# } #>
+				default:
+					throw new System.IndexOutOfRangeException();
+			}
+		}
+		#endregion
+<# } #>
 	}
 }

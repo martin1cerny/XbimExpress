@@ -9,7 +9,19 @@ namespace Xbim.CodeGeneration.Settings
 {
     public class GeneratorSettings
     {
+        /// <summary>
+        /// General namespace for all model classes, enumerations and structures. It is only used internally and
+        /// it's value is set in the Generator class.
+        /// </summary>
         internal string Namespace { get; set; }
+
+        /// <summary>
+        /// General namespace for all infrastructure interfaces. It is only used internally and
+        /// it's value is set in the Generator class.
+        /// </summary>
+        internal string InfrastructureNamespace { get; set; }
+
+
         public GeneratorSettings()
         {
             //set defaults
@@ -18,7 +30,47 @@ namespace Xbim.CodeGeneration.Settings
             EntityCollentionInterface = "IEntityCollection";
             PersistEntityInterface = "IPersistEntity";
             TransactionInterface = "ITransaction";
+            ItemSetClassName = "ItemSet";
+            EntityFactory = "EntityFactory";
+            EntityFactoryInterface = "IEntityFactory";
         }
+
+
+
+        internal bool IsInfrastructureSeparate {
+            get
+            {
+                return !String.IsNullOrWhiteSpace(InfrastructureOutputPath) && InfrastructureOutputPath != OutputPath;
+            }
+        }
+
+        /// <summary>
+        /// Name of the static class which is the only point where you can insnantiate new 
+        /// entities. It is designed to be used from model or its entity collection
+        /// </summary>
+        public string EntityFactory { get; set; }
+
+        /// <summary>
+        /// Name of the entity factory interface. It is possible to write general models and 
+        /// serializers/deserializers using this interface alongside with the others.
+        /// </summary>
+        public string EntityFactoryInterface { get; set; }
+
+        /// <summary>
+        /// If you set this path to a different path from OutputPath interfaces will be 
+        /// created in a separate project. You can use this option if you want to
+        /// define common interfaces for multiple generated schemas.
+        /// </summary>
+        public string InfrastructureOutputPath { get; set; }
+
+        /// <summary>
+        /// Name of the class which will be used for all lists, sets and arrays in the generated code.
+        /// This class has only internal constructor and is integral part of the framework.
+        /// All attributes which hold this class are initiated by default so you just add objects to it.
+        /// It supports transactions so if your model is transactional it will use transactions
+        /// when items are added or removed.
+        /// </summary>
+        public string ItemSetClassName { get; set; }
 
         /// <summary>
         /// Output directory for the resulting files. If it doesn't exist it
@@ -45,7 +97,17 @@ namespace Xbim.CodeGeneration.Settings
         /// </summary>
         public string EntityCollentionInterface { get; set; }
 
+        /// <summary>
+        /// All entities implement this interface so you can use it for the most general search
+        /// accross the model.
+        /// </summary>
         public string PersistEntityInterface { get; set; }
+
+        /// <summary>
+        /// Interface for the basic transactions. All setters and collection operations
+        /// are transactional if the model is transactional (there is a flag in the interface).
+        /// You will have to implement this class as a part of your infrastructure.
+        /// </summary>
         public string TransactionInterface { get; set; }
 
         /// <summary>

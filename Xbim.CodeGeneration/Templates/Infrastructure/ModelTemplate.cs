@@ -42,36 +42,35 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t    ");
+            this.Write("\r\n\t{\r\n\r\n\t\tbool IsTransactional { get; }\r\n\t\t\r\n\t    ");
             
-            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.EntityCollentionInterface));
             
             #line default
             #line hidden
             this.Write(" Instances { get; }\r\n\r\n\t    int Activate(");
             
-            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
             
             #line default
             #line hidden
             this.Write(" owningEntity, bool write);\r\n\t\t\r\n\t\t");
             
-            #line 16 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.TransactionInterface));
             
             #line default
             #line hidden
-            this.Write(" BeginTransaction(string name);\r\n\r\n\t\tvoid SetValue<TProperty>( ");
+            this.Write(" BeginTransaction(string name);\r\n\t\t\r\n\t\t");
             
-            #line 18 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
+            #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.TransactionInterface));
             
             #line default
             #line hidden
-            this.Write(" target, \r\n\t\t\tref TProperty field, TProperty newValue,\r\n            Action<TPrope" +
-                    "rty> setter,\r\n            string notifyPropertyName);\r\n\t}\r\n}\r\n");
+            this.Write(" CurrentTransaction { get; }\r\n\t}\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
