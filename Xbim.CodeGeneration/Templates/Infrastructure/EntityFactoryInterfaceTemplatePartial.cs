@@ -41,7 +41,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             }
         }
 
-        private string PersistEntity { get { return _settings.PersistEntityInterface; } }
+        private string InstantiableEntityInterface { get { return _settings.InstantiableEntityInterface; } }
         private string ModelInterface { get { return _settings.ModelInterface; } }
     }
 }

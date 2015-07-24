@@ -42,7 +42,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\r\n\t\tbool IsTransactional { get; }\r\n\t\t\r\n\t    ");
+            this.Write("\r\n\t{\r\n\r\n\t\tbool IsTransactional { get; }\r\n\r\n\t    ");
             
             #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.EntityCollentionInterface));

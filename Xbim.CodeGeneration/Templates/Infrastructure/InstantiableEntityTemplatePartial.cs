@@ -7,18 +7,18 @@ using Xbim.CodeGeneration.Settings;
 
 namespace Xbim.CodeGeneration.Templates.Infrastructure
 {
-    public partial class EntityCollectionTemplate: ICodeTemplate
+    public partial class InstantiableEntityTemplate:ICodeTemplate
     {
         private readonly GeneratorSettings _settings;
 
-        public EntityCollectionTemplate(GeneratorSettings settings)
+        public InstantiableEntityTemplate(GeneratorSettings settings)
         {
             _settings = settings;
         }
 
         public string Name
         {
-            get { return _settings.EntityCollentionInterface; }
+            get { return _settings.InstantiableEntityInterface; }
         }
 
         public string Namespace
@@ -28,15 +28,12 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public string Inheritance
         {
-            get { return ""; }
+            get { return ": " + _settings.PersistEntityInterface; }
         }
 
         public IEnumerable<string> Using
         {
             get { yield break; }
         }
-
-        private string InstantiableEntityInterface { get { return _settings.InstantiableEntityInterface; } }
-        private string PersistEntityInterface { get { return _settings.PersistEntityInterface; } }
     }
 }

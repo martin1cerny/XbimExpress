@@ -33,6 +33,7 @@ namespace Xbim.CodeGeneration.Settings
             ItemSetClassName = "ItemSet";
             EntityFactory = "EntityFactory";
             EntityFactoryInterface = "IEntityFactory";
+            InstantiableEntityInterface = "IInstantiableEntity";
         }
 
 
@@ -43,6 +44,8 @@ namespace Xbim.CodeGeneration.Settings
                 return !String.IsNullOrWhiteSpace(InfrastructureOutputPath) && InfrastructureOutputPath != OutputPath;
             }
         }
+
+        public string InstantiableEntityInterface { get; set; }
 
         /// <summary>
         /// Name of the static class which is the only point where you can insnantiate new 

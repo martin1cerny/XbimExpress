@@ -51,7 +51,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DefinedTypeTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\EntityTemplate1.cs">
+    <Compile Include="Templates\EntityTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityTemplate.tt</DependentUpon>
@@ -87,6 +87,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Templates\Infrastructure\InstantiableEntityTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstantiableEntityTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\InstantiableEntityTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\ItemSetTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -126,7 +132,7 @@
     </None>
     <None Include="Templates\EntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityTemplate1.cs</LastGenOutput>
+      <LastGenOutput>EntityTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\EnumerationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -147,6 +153,10 @@
     <None Include="Templates\Infrastructure\EntityFactoryTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EntityFactoryTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\InstantiableEntityTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InstantiableEntityTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\Infrastructure\ItemSetTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
