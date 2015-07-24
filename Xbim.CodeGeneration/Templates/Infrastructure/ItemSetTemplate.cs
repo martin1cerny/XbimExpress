@@ -18,9 +18,9 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class EntityFactoryTemplate : EntityFactoryTemplateBase
+    public partial class ItemSetTemplate : ItemSetTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,144 +28,161 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using System;\r\n");
+            this.Write("\r\nusing System;\r\nusing System.Collections;\r\nusing System.Collections.Generic;\r\nus" +
+                    "ing System.Collections.Specialized;\r\nusing System.ComponentModel;\r\nusing System." +
+                    "Linq;\r\n");
             
-            #line 7 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
  foreach(var u in Using) { 
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(u));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\nnamespace ");
             
-            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\tpublic sealed class ");
+            this.Write("\r\n{\r\n    public class ");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write(" ");
+            this.Write("<T> : ICollection<T>, ICollection, INotifyCollectionChanged, INotifyPropertyChang" +
+                    "ed\r\n    {\r\n        private readonly List<T> _set;\r\n        private readonly ");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Inheritance));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t{\r\n\t\tpublic T New<T>(");
-            
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 22 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
             
             #line default
             #line hidden
-            this.Write(" model) where T: ");
+            this.Write(" _model;\r\n\r\n        protected List<T> Internal\r\n        {\r\n            get { retu" +
+                    "rn _set; }\r\n        }\r\n\r\n\r\n        internal ");
             
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            #line 30 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write("\r\n\t\t{\r\n\t\t\treturn (T)New(model, typeof(T));\r\n\t\t}\r\n\r\n\t\tpublic T New<T>(");
+            this.Write("(");
             
-            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 30 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
             
             #line default
             #line hidden
-            this.Write(" model, Action<T> init) where T: ");
+            this.Write(" model)\r\n        {\r\n            _set = new List<T>();\r\n            _model = model" +
+                    ";\r\n        }\r\n\r\n        internal ");
             
-            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\t{\r\n\t\t\tvar o = New<T>(model);\r\n\t\t\tinit(o);\r\n\t\t\treturn o;\r\n\t\t}\r\n\r\n\t\tpublic ");
-            
-            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write(" New(");
+            this.Write("(");
             
-            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
             
             #line default
             #line hidden
-            this.Write(" model, Type t)\r\n\t\t{\r\n\t\t\t//check that the type is from this assembly\r\n\t\t\tif(t.Ass" +
-                    "embly != GetType().Assembly)\r\n\t\t\t\tthrow new Exception(\"This factory only creates" +
-                    " types from its assembly\");\r\n\r\n\t\t\treturn New(model, t.Name);\r\n\t\t}\r\n\r\n\t\tpublic ");
-            
-            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
-            
-            #line default
-            #line hidden
-            this.Write(" New(");
-            
-            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
-            
-            #line default
-            #line hidden
-            this.Write(" model, string typeName)\r\n\t\t{\r\n\t\t\tif (model == null || typeName == null)\r\n\t\t\t\tthr" +
-                    "ow new ArgumentNullException();\r\n\r\n\t\t\tvar name = typeName.ToUpper();\r\n\t\t\tswitch(" +
-                    "name)\r\n\t\t\t{\r\n");
-            
-            #line 44 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
- foreach(var entity in NonAbstractEntities) {
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\tcase \"");
-            
-            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name.ToString().ToUpper()));
-            
-            #line default
-            #line hidden
-            this.Write("\": return new ");
-            
-            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" ( model );\r\n");
-            
-            #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\tthrow new Exception(\"Type must be non-abstract type of ");
-            
-            #line 48 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
-            
-            #line default
-            #line hidden
-            this.Write("\");\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n");
+            this.Write(" model, IEnumerable<T> collection)\r\n        {\r\n            _set = new List<T>(col" +
+                    "lection);\r\n            _model = model;\r\n        }\r\n\r\n        #region INotifyProp" +
+                    "ertyChanged Members\r\n\r\n        public event PropertyChangedEventHandler Property" +
+                    "Changed;\r\n\r\n        [NonSerialized]\r\n        private readonly PropertyChangedEve" +
+                    "ntArgs _countPropChangedEventArgs =\r\n            new PropertyChangedEventArgs(\"C" +
+                    "ount\");\r\n\r\n        private void NotifyCountChanged(int oldValue)\r\n        {\r\n   " +
+                    "         var propChanged = PropertyChanged;\r\n            if (propChanged != null" +
+                    " && oldValue != Internal.Count)\r\n                propChanged(this, _countPropCha" +
+                    "ngedEventArgs);\r\n        }\r\n\r\n        #endregion\r\n\r\n        #region INotifyColle" +
+                    "ctionChanged Members\r\n\r\n        public event NotifyCollectionChangedEventHandler" +
+                    " CollectionChanged;\r\n\r\n\r\n        #endregion\r\n\r\n        public T First\r\n        {" +
+                    "\r\n            get { return Internal.First(); }\r\n        }\r\n\r\n        public T Fi" +
+                    "rstOrDefault()\r\n        {\r\n            return Internal.FirstOrDefault();\r\n      " +
+                    "  }\r\n\r\n        public T FirstOrDefault(Func<T, bool> predicate)\r\n        {\r\n    " +
+                    "        return Internal.FirstOrDefault(predicate);\r\n        }\r\n\r\n        public " +
+                    "TF FirstOrDefault<TF>(Func<TF, bool> predicate)\r\n        {\r\n            return O" +
+                    "fType<TF>().FirstOrDefault<TF>(predicate);\r\n        }\r\n\r\n        public IEnumera" +
+                    "ble<TW> Where<TW>(Func<TW, bool> predicate)\r\n        {\r\n            return OfTyp" +
+                    "e<TW>().Where(predicate);\r\n        }\r\n\r\n\r\n        public IEnumerable<TO> OfType<" +
+                    "TO>()\r\n        {\r\n            return Internal.Count == 0 ? Enumerable.Empty<TO>(" +
+                    ") : Internal.OfType<TO>();\r\n        }\r\n\r\n        #region ICollection<T> Members\r" +
+                    "\n\r\n        public virtual void Add(T item)\r\n        {\r\n            if(_model.IsT" +
+                    "ransactional && _model.CurrentTransaction == null)\r\n                throw new Ex" +
+                    "ception(\"Operation out of transaction\");\r\n\r\n            var oldCount = Internal." +
+                    "Count;\r\n            Internal.Add(item);\r\n\r\n            if (_model.IsTransactiona" +
+                    "l)\r\n            {\r\n                Action undo = () => Internal.Remove(item);\r\n " +
+                    "               _model.CurrentTransaction.AddReversibleAction(undo);\r\n           " +
+                    " }\r\n\r\n            if (CollectionChanged != null)\r\n                CollectionChan" +
+                    "ged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add" +
+                    ", item));\r\n\r\n            NotifyCountChanged(oldCount);\r\n        }\r\n\r\n\r\n        p" +
+                    "ublic virtual void Clear()\r\n        {\r\n            if (_model.IsTransactional &&" +
+                    " _model.CurrentTransaction == null)\r\n                throw new Exception(\"Operat" +
+                    "ion out of transaction\");\r\n\r\n            var oldCount = Count;\r\n            Inte" +
+                    "rnal.Clear();\r\n            \r\n            if (_model.IsTransactional)\r\n          " +
+                    "  {\r\n                var oldItems = Internal.ToArray();\r\n                Action " +
+                    "undo = () => Internal.AddRange(oldItems);\r\n                _model.CurrentTransac" +
+                    "tion.AddReversibleAction(undo);\r\n            }\r\n\r\n            if (CollectionChan" +
+                    "ged != null)\r\n                CollectionChanged(this, new NotifyCollectionChange" +
+                    "dEventArgs(NotifyCollectionChangedAction.Reset));\r\n\r\n            NotifyCountChan" +
+                    "ged(oldCount);\r\n        }\r\n\r\n        public bool Contains(T item)\r\n        {\r\n  " +
+                    "          return Internal.Contains(item);\r\n        }\r\n\r\n        public void Copy" +
+                    "To(T[] array, int arrayIndex)\r\n        {\r\n            Internal.CopyTo(array, arr" +
+                    "ayIndex);\r\n        }\r\n\r\n        public int Count\r\n        {\r\n            get { r" +
+                    "eturn Internal.Count; }\r\n        }\r\n\r\n\r\n        public virtual bool Remove(T ite" +
+                    "m)\r\n        {\r\n            if (_model.IsTransactional && _model.CurrentTransacti" +
+                    "on == null)\r\n                throw new Exception(\"Operation out of transaction\")" +
+                    ";\r\n\r\n            var oldCount = Internal.Count;\r\n            var removed = Inter" +
+                    "nal.Remove(item);\r\n            if (!removed) return false;\r\n\r\n            if (_m" +
+                    "odel.IsTransactional)\r\n            {\r\n                Action undo = () => Intern" +
+                    "al.Add(item);\r\n                _model.CurrentTransaction.AddReversibleAction(und" +
+                    "o);\r\n            }\r\n\r\n            if (CollectionChanged != null)\r\n              " +
+                    "  CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionC" +
+                    "hangedAction.Remove, item));\r\n\r\n            NotifyCountChanged(oldCount);\r\n     " +
+                    "       return true;\r\n        }\r\n\r\n        #endregion\r\n\r\n        #region IEnumera" +
+                    "ble<T> Members\r\n\r\n        public IEnumerator<T> GetEnumerator()\r\n        {\r\n    " +
+                    "        return Internal.Count == 0 ? Enumerable.Empty<T>().GetEnumerator() : Int" +
+                    "ernal.GetEnumerator();\r\n        }\r\n\r\n        IEnumerator<T> IEnumerable<T>.GetEn" +
+                    "umerator()\r\n        {\r\n            if (Internal.Count == 0)\r\n                ret" +
+                    "urn Enumerable.Empty<T>().GetEnumerator();\r\n            else\r\n                re" +
+                    "turn Internal.GetEnumerator();\r\n        }\r\n\r\n        #endregion\r\n\r\n        #regi" +
+                    "on IEnumerable Members\r\n\r\n        IEnumerator IEnumerable.GetEnumerator()\r\n     " +
+                    "   {\r\n            return Internal.Count == 0 ? Enumerable.Empty<T>().GetEnumerat" +
+                    "or() : Internal.GetEnumerator();\r\n        }\r\n\r\n        #endregion\r\n\r\n        #re" +
+                    "gion ICollection<T> Members\r\n\r\n        void ICollection<T>.Add(T item)\r\n        " +
+                    "{\r\n            Add(item);\r\n        }\r\n\r\n        void ICollection<T>.Clear()\r\n   " +
+                    "     {\r\n            Clear();\r\n        }\r\n\r\n        bool ICollection<T>.Contains(" +
+                    "T item)\r\n        {\r\n            return Internal.Contains(item);\r\n        }\r\n\r\n  " +
+                    "      void ICollection<T>.CopyTo(T[] array, int arrayIndex)\r\n        {\r\n        " +
+                    "    Internal.CopyTo(array, arrayIndex);\r\n        }\r\n\r\n        int ICollection<T>" +
+                    ".Count\r\n        {\r\n            get { return Count; }\r\n        }\r\n\r\n        bool " +
+                    "ICollection<T>.IsReadOnly\r\n        {\r\n            get { return ((IList<T>)Intern" +
+                    "al).IsReadOnly; }\r\n        }\r\n\r\n        bool ICollection<T>.Remove(T item)\r\n    " +
+                    "    {\r\n            return Remove(item);\r\n        }\r\n\r\n        #endregion\r\n\r\n    " +
+                    "    #region ICollection Members\r\n\r\n        void ICollection.CopyTo(Array array, " +
+                    "int index)\r\n        {\r\n            CopyTo((T[])array, index);\r\n        }\r\n\r\n    " +
+                    "    int ICollection.Count\r\n        {\r\n            get { return Internal.Count; }" +
+                    "\r\n        }\r\n\r\n        bool ICollection.IsSynchronized\r\n        {\r\n            g" +
+                    "et { return ((ICollection)Internal).IsSynchronized; }\r\n        }\r\n\r\n        obje" +
+                    "ct ICollection.SyncRoot\r\n        {\r\n            get { return ((ICollection)Inter" +
+                    "nal).SyncRoot; }\r\n        }\r\n\r\n        #endregion\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -177,7 +194,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class EntityFactoryTemplateBase
+    public class ItemSetTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

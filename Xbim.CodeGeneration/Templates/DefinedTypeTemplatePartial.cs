@@ -35,7 +35,7 @@ namespace Xbim.CodeGeneration.Templates
 
         private string UnderlyingType
         {
-            get { return TypeHelper.GetCSType(Type.Domain); }
+            get { return TypeHelper.GetCSType(Type.Domain, _settings.ItemSetClassName); }
         }
 
         public string Name { get { return Type.Name; } }

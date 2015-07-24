@@ -70,7 +70,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("> OfType(string StringType, bool activate);\r\n        ");
+            this.Write("> OfType(string stringType, bool activate);\r\n        ");
             
             #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityCollectionTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntityInterface));

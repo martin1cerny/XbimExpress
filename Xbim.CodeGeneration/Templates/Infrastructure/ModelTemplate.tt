@@ -9,15 +9,15 @@ namespace <#= Namespace #>
 {
 	public interface <#= Name #>
 	{
+
+		bool IsTransactional { get; }
+		
 	    <#= _settings.EntityCollentionInterface  #> Instances { get; }
 
 	    int Activate(<#= _settings.PersistEntityInterface #> owningEntity, bool write);
 		
 		<#= _settings.TransactionInterface #> BeginTransaction(string name);
-
-		void SetValue<TProperty>( <#= _settings.PersistEntityInterface #> target, 
-			ref TProperty field, TProperty newValue,
-            Action<TProperty> setter,
-            string notifyPropertyName);
+		
+		<#= _settings.TransactionInterface #> CurrentTransaction { get; }
 	}
 }

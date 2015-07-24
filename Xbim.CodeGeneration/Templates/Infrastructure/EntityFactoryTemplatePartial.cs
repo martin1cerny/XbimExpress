@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Xbim.CodeGeneration.Helpers;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
@@ -22,7 +18,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public string Name
         {
-            get { return "EntityFactory"; }
+            get { return _settings.EntityFactory; }
         }
 
         public string Namespace
@@ -32,7 +28,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public string Inheritance
         {
-            get { return null; }
+            get { return _settings.IsInfrastructureSeparate ? ": " + _settings.EntityFactoryInterface : ""; }
         }
 
         public IEnumerable<string> Using
@@ -52,6 +48,9 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                     if (result.Contains(ns)) continue;
                     result.Add(ns);
                 }
+
+                if(_settings.IsInfrastructureSeparate)
+                    result.Add(_settings.InfrastructureNamespace);
 
                 return result;
                 

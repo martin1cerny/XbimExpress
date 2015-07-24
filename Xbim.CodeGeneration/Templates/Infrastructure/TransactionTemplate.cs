@@ -42,7 +42,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(": IDisposable\r\n\t{\r\n\t\tvoid Commit();\r\n\t\tvoid RollBack();\r\n\t}\r\n}");
+            this.Write(": IDisposable\r\n\t{\r\n\t\tvoid Commit();\r\n\t\tvoid RollBack();\r\n\t\tvoid AddReversibleActi" +
+                    "on(Action action);\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

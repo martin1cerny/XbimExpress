@@ -7,24 +7,23 @@ using Xbim.CodeGeneration.Settings;
 
 namespace Xbim.CodeGeneration.Templates.Infrastructure
 {
-    public partial class TransactionTemplate: ICodeTemplate
+    public partial class ItemSetTemplate: ICodeTemplate
     {
         private readonly GeneratorSettings _settings;
 
-        public TransactionTemplate(GeneratorSettings settings)
+        public ItemSetTemplate(GeneratorSettings settings)
         {
             _settings = settings;
         }
 
-
         public string Name
         {
-            get { return _settings.TransactionInterface; }
+            get { return _settings.ItemSetClassName; }
         }
 
         public string Namespace
         {
-            get { return _settings.InfrastructureNamespace; }
+            get { return _settings.Namespace; }
         }
 
         public string Inheritance
@@ -34,7 +33,15 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public IEnumerable<string> Using
         {
-            get { yield break; }
+            get
+            {
+                var result = new List<string>();
+                if (_settings.IsInfrastructureSeparate)
+                    result.Add(_settings.InfrastructureNamespace);
+                return result;
+            }
         }
+
+        private string ModelInterface { get { return _settings.ModelInterface; } }
     }
 }

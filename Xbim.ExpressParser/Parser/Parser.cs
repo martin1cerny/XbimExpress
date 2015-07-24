@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 22/07/2015 14:15:48
+// DateTime: 24/07/2015 11:47:22
 // UserName: mxfm2
-// Input file <Parser.y - 22/07/2015 14:15:41>
+// Input file <Parser.y - 24/07/2015 11:47:20>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -68,10 +68,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 22/07/2015 14:15:41
+  // Verbatim content from Parser.y - 24/07/2015 11:47:20
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 22/07/2015 14:15:41
+  // End verbatim content from Parser.y - 24/07/2015 11:47:20
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -636,11 +636,11 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 35: // type -> type, '(', INTEGER, ')'
 #line 157 "Parser.y"
-{ CurrentSemanticValue.val = CreateArrayType(ValueStack[ValueStack.Depth-4].val as BaseType, ValueStack[ValueStack.Depth-2].intVal); }
+{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-4].val; }
         break;
       case 36: // type -> type, '(', INTEGER, ')', FIXED
 #line 158 "Parser.y"
-{ CurrentSemanticValue.val = CreateArrayType(ValueStack[ValueStack.Depth-5].val as BaseType, ValueStack[ValueStack.Depth-3].intVal); }
+{ CurrentSemanticValue.val = ValueStack[ValueStack.Depth-5].val; }
         break;
       case 37: // identifier_or_type -> IDENTIFIER
 #line 162 "Parser.y"
