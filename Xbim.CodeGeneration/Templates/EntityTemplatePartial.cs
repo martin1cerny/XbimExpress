@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xbim.CodeGeneration.Helpers;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
+using Attribute = Xbim.ExpressParser.SDAI.Attribute;
 
 namespace Xbim.CodeGeneration.Templates
 {
@@ -53,6 +54,9 @@ namespace Xbim.CodeGeneration.Templates
                 //add any interfaces
                 parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
 
+                if(Type.Instantiable)
+                    parents.Add(_settings.InstantiableEntityInterface);
+
                 //merge to a single string
                 var i = String.Join(", ", parents);
                 if (String.IsNullOrWhiteSpace(i)) return "";
@@ -77,19 +81,37 @@ namespace Xbim.CodeGeneration.Templates
             } 
         }
 
-        private string GetPrivateFieldName(ExplicitAttribute attribute)
+        private string GetPrivateFieldName(Attribute attribute)
         {
             string name = attribute.Name;
             return "_" + name.First().ToString().ToLower() + name.Substring(1);
         }
 
 
-        private List<ExplicitAttribute> _attrCache; 
+        private List<ExplicitAttribute> _explAttrCache;
+
+        private List<ExplicitAttribute> ExplicitAttributes
+        {
+            get { return _explAttrCache ?? (_explAttrCache = Type.ExplicitAttributes.ToList()); }
+        }
+
+        private List<ExplicitAttribute> _allExplAttrCache;
+        private List<ExplicitAttribute> AllExplicitAttributes
+        {
+            get { return _allExplAttrCache ?? (_allExplAttrCache = Type.AllExplicitAttributes.ToList()); }
+        }
+
+        private List<InverseAttribute> _invAttrCache;
+        private List<InverseAttribute> InverseAttributes
+        {
+            get { return _invAttrCache ?? (_invAttrCache = Type.InverseAttributes.ToList()); }
+        }
+
         private int GetAttributeIndex(ExplicitAttribute attribute)
         { 
-            if (_attrCache == null) _attrCache = Type.AllExplicitAttributes.ToList();
-            return _attrCache.IndexOf(attribute);
+            return AllExplicitAttributes.IndexOf(attribute);
         }
+
 
 
         public IEnumerable<string> Using
@@ -99,7 +121,7 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var result = new List<string>();
                 var namedOccurances = new List<NamedType>();
-                var expl =  IsAbstract ? Type.ExplicitAttributes.ToList() : Type.AllExplicitAttributes.ToList();
+                var expl =  IsAbstract ? ExplicitAttributes : AllExplicitAttributes;
 
                 var selects = Type.IsInSelects.ToList();
                 var supertypes = Type.Supertypes ?? new HashSet<EntityDefinition>();
@@ -108,7 +130,7 @@ namespace Xbim.CodeGeneration.Templates
                     expl.Where(a => a.Domain is AggregationType)
                         .Select(a => GetNamedElementType(a.Domain as AggregationType))
                         .Where(t => t != null).ToList();
-                var iAttributes = Type.InverseAttributes.Select(a => a.Domain).ToList();
+                var iAttributes = InverseAttributes.Select(a => a.Domain).ToList();
 
                 namedOccurances.AddRange(selects);
                 namedOccurances.AddRange(supertypes);
@@ -167,7 +189,7 @@ namespace Xbim.CodeGeneration.Templates
 
         private IEnumerable<ExplicitAttribute> AggregatedExplicitAttributes
         {
-            get { return Type.ExplicitAttributes.Where(t => t.Domain is AggregationType); }
+            get { return ExplicitAttributes.Where(t => t.Domain is AggregationType); }
         }
 
         private bool IsReferenceTypeAggregation(ExplicitAttribute attribute)

@@ -38,8 +38,8 @@ namespace <#= Namespace #>
 <# } #>
 		#endregion
 	
-		#region Explicit attributes
-<# foreach(var attribute in Type.ExplicitAttributes){ #>
+		#region Explicit attribute properties
+<# foreach(var attribute in ExplicitAttributes){ #>
 		//[EntityAttribute(<#= GetAttributeIndex(attribute) #>, EntityAttributeState.<#= attribute.OptionalFlag ? "Optional" : "Mandatory" #>)]
 		public <#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{ 
@@ -61,7 +61,7 @@ namespace <#= Namespace #>
 		#endregion
 
 		#region Inverse attributes
-<# foreach(var attribute in Type.InverseAttributes){ 
+<# foreach(var attribute in InverseAttributes){  
 	var inverseType = attribute.Domain.Name; #>
 		public IEnumerable<<#=inverseType #>> @<#= attribute.Name #> 
 		{ 
@@ -79,6 +79,7 @@ namespace <#= Namespace #>
 
 		#endregion
 <# if (IsFirst) { #>
+
 		#region INotifyPropertyChanged implementation
 		 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -122,7 +123,7 @@ namespace <#= Namespace #>
 		#region Index access
 		private readonly List<string> _attributeNames = new List<string>
 		{
-<# foreach(var attribute in Type.AllExplicitAttributes){ #>
+<# foreach(var attribute in AllExplicitAttributes){ #>
 			"<#= attribute.Name #>",
 <# } #>
 		};
@@ -133,7 +134,7 @@ namespace <#= Namespace #>
 		{
 			switch(index)
 			{
-<# foreach(var attribute in Type.AllExplicitAttributes){ #>
+<# foreach(var attribute in AllExplicitAttributes){ #>
 				case <#= GetAttributeIndex(attribute) #>: 
 					return @<#= attribute.Name #>;
 <# } #>
@@ -146,7 +147,7 @@ namespace <#= Namespace #>
 		{
 			switch(index)
 			{
-<# foreach(var attribute in Type.AllExplicitAttributes){ #>
+<# foreach(var attribute in AllExplicitAttributes){ #>
 				case <#= GetAttributeIndex(attribute) #>:
 <#		if (IsReferenceTypeAggregation(attribute)) {#>
 					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);

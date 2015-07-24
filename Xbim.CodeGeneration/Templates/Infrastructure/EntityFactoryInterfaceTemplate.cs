@@ -80,7 +80,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write(" model) where T: ");
             
             #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
@@ -94,14 +94,14 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write(" model, Action<T> init) where T: ");
             
             #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
             this.Write(";\r\n\r\n\t\t");
             
             #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
@@ -115,7 +115,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write(" model, Type t);\r\n\r\n\t\t");
             
             #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden

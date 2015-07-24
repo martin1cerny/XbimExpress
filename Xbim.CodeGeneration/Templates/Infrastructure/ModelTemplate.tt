@@ -11,7 +11,7 @@ namespace <#= Namespace #>
 	{
 
 		bool IsTransactional { get; }
-		
+
 	    <#= _settings.EntityCollentionInterface  #> Instances { get; }
 
 	    int Activate(<#= _settings.PersistEntityInterface #> owningEntity, bool write);

@@ -80,7 +80,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write(" model) where T: ");
             
             #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
@@ -94,14 +94,14 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write(" model, Action<T> init) where T: ");
             
             #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t{\r\n\t\t\tvar o = New<T>(model);\r\n\t\t\tinit(o);\r\n\t\t\treturn o;\r\n\t\t}\r\n\r\n\t\tpublic ");
             
             #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
@@ -117,7 +117,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                     " types from its assembly\");\r\n\r\n\t\t\treturn New(model, t.Name);\r\n\t\t}\r\n\r\n\t\tpublic ");
             
             #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
@@ -161,7 +161,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\tthrow new Exception(\"Type must be non-abstract type of ");
             
             #line 48 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntity));
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
