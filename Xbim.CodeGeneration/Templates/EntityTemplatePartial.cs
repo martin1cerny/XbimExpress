@@ -24,6 +24,7 @@ namespace Xbim.CodeGeneration.Templates
             _settings = settings;
             _helper = new NamedTypeHelper(type, settings);
             Type = type;
+            WhereRules = Type.WhereRules.ToList();
         }
 
         public string Namespace
@@ -235,5 +236,7 @@ namespace Xbim.CodeGeneration.Templates
             }
             throw new Exception("Aggregation type expected");
         }
+
+        public List<WhereRule> WhereRules { get; set; }
     }
 }

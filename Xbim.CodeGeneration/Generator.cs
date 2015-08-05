@@ -51,7 +51,8 @@ namespace Xbim.CodeGeneration
                 new EntityCollectionTemplate(settings),
                 new TransactionTemplate(settings),
                 new EntityFactoryInterfaceTemplate(settings),
-                new InstantiableEntityTemplate(settings)
+                new InstantiableEntityTemplate(settings),
+                new AttributesTemplate(settings)
             };
             foreach (var template in infrastructureTemplates)
                 ProcessTemplate(template, infraProject);
@@ -78,7 +79,8 @@ namespace Xbim.CodeGeneration
                            referencing.AddItemGroup();
 
             var referencedPath = new Uri(referenced.FullPath, UriKind.Absolute);
-            var referencingPath = new Uri(Path.GetDirectoryName(referencing.FullPath) ?? "", UriKind.Absolute);
+            var referencingPathString = (Path.GetDirectoryName(referencing.FullPath) ?? "") + Path.DirectorySeparatorChar;
+            var referencingPath = new Uri(referencingPathString , UriKind.Absolute);
 
             var relPath = referencingPath.MakeRelativeUri(referencedPath).ToString();
 

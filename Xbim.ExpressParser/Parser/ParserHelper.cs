@@ -77,7 +77,11 @@ namespace Xbim.ExpressParser
 
         private void CreateEntity(string name, IEnumerable<ValueType> sections)
         {
-            var entity = Model.New<EntityDefinition>(e => e.Name = name);
+            var entity = Model.New<EntityDefinition>(e =>
+            {
+                e.Name = name;
+                e.PersistanceName = name.ToUpperInvariant();
+            });
             foreach (var section in sections)
             {
                 switch (section.tokVal)
