@@ -83,6 +83,27 @@ namespace Xbim.ExpressParser.Schemas {
         /// <summary>
         ///   Looks up a localized string similar to (*
         ///Copyright by:
+        ///BIM Academy, Northumbria University, 2015
+        ///
+        ///License: Creative Commons Attribution 4.0 International Public License
+        ///(https://creativecommons.org/licenses/by/4.0/legalcode)
+        ///
+        ///This work is part of xBIM Toolkit (https://github.com/xBimTeam/)
+        ///
+        ///Contents:
+        ///Object model for COBie 2.4 in form of EXPRESS definitions based on COBie Responsibility Matrix. It reflects 
+        ///all relations in between different data objects and makes it possible to handle COBie data as an graph structure
+        ///rather than ta [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string COBieExpress {
+            get {
+                return ResourceManager.GetString("COBieExpress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (*
+        ///Copyright by:
         ///International Alliance for Interoperability, 1996-2007
         ///
         ///All rights reserved. No part of this documentation may be

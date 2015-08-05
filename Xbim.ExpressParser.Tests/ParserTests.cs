@@ -64,5 +64,16 @@ namespace Xbim.ExpressParser.Tests
                 Debug.WriteLine(lastError);
             Assert.IsTrue(result);
         }
+
+        [TestMethod]
+        public void ParseCobie()
+        {
+            var parser = new ExpressParser();
+            var result = parser.Parse(Schemas.Schemas.COBieExpress);
+            var lastError = parser.Errors.LastOrDefault();
+            if (lastError != null)
+                Debug.WriteLine(lastError);
+            Assert.IsTrue(result);
+        }
     }
 }

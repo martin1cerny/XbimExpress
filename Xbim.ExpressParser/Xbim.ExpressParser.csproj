@@ -103,6 +103,7 @@
     <Compile Include="SDAI\WhereRule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Schemas\COBieExpress.txt" />
     <Content Include="Schemas\IFC4_ADD1.txt" />
     <None Include="Parser\makeparser.bat" />
     <None Include="Parser\Parser.y" />

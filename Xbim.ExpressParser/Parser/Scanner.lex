@@ -2,7 +2,7 @@
 
 %namespace Xbim.ExpressParser
 
-%option verbose, summary, caseinsensitive, noPersistBuffer, out:Scanner.cs
+%option verbose, summary, noPersistBuffer, out:Scanner.cs
 %visibility internal
 
 %{

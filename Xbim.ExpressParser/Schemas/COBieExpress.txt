@@ -1,0 +1,347 @@
+﻿(*
+Copyright by:
+BIM Academy, Northumbria University, 2015
+
+License: Creative Commons Attribution 4.0 International Public License
+(https://creativecommons.org/licenses/by/4.0/legalcode)
+
+This work is part of xBIM Toolkit (https://github.com/xBimTeam/)
+
+Contents:
+Object model for COBie 2.4 in form of EXPRESS definitions based on COBie Responsibility Matrix. It reflects 
+all relations in between different data objects and makes it possible to handle COBie data as an graph structure
+rather than tabular spreadsheet data with weak name based references. COBie 2.4 definition is based on Facility Handower
+Model View Definition of IFC4 which is defined as an EXPRESS as well. However, definition in this file is far more simple
+and therefore easier to work with once data is extracted/converted from IFC4 data. It should also be possible to transpose
+data in between spreadsheet representation and STEP representation of the data. 
+
+Developed by:
+Martin Cerny (martin.cerny@northumbria.ac.uk)
+*)
+
+SCHEMA IFC2X3;
+
+TYPE SpatialDivision = SELECT
+	(Site
+	,Facility
+	,Floor
+	,Space);
+END_TYPE;
+
+TYPE AttributeValue = SELECT
+	(DateTimeValue
+	,StringValue
+	,IntegerValue
+	,FloatValue
+	,BooleanValue);
+END_TYPE;
+
+TYPE StringValue = STRING;
+END_TYPE;
+
+TYPE IntegerValue = INTEGER;
+END_TYPE;
+
+TYPE FloatValue = REAL;
+END_TYPE;
+
+TYPE BooleanValue = BOOLEAN;
+END_TYPE;
+
+ENTITY DateTimeValue
+	Year: INTEGER;
+	Month: INTEGER;
+	Day: INTEGER;
+	Hour: INTEGER;
+	Minute: INTEGER;
+	Second: REAL;
+	Timezone: OPTIONAL INTEGER;
+END_ENTITY;
+
+ENTITY PickList
+	Name: STRING;
+	ForType: OPTIONAL STRING;
+  INVERSE
+	Values: SET [0:?] OF PickValue FOR PickList;
+END_ENTITY;
+
+ENTITY PickValue
+	Value: STRING;
+	PickList: PickList;
+END_ENTITY;
+
+ENTITY PickKeyValue
+  SUBTYPE OF (PickValue);
+	Key: STRING;
+END_ENTITY;
+
+ENTITY Phase
+	Name: STRING;
+	Project: Project;
+END_ENTITY;
+
+ENTITY ExternalReference
+  ABSTRACT SUPERTYPE OF (ONEOF
+  (Asset, Contact, Assembly, Connection, Spare, Resource, Job, Impact, Document, Attribute, Coordinate, Issue));
+	CreatedBy: Contact;
+	CreatedOn: DateTimeValue;
+	ExternalSystem: OPTIONAL STRING;
+	ExternalObject: OPTIONAL STRING;
+	ExternalId: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Contact
+  SUBTYPE OF (ExternalReference);
+	Email: STRING;
+	Category: PickValue;
+	Company: STRING;
+	Phone: STRING;
+	Department: OPTIONAL STRING;
+	OrganizationCode: OPTIONAL STRING;
+	GivenName: OPTIONAL STRING;
+	FamilyName: OPTIONAL STRING;
+	Street: OPTIONAL STRING;
+	PostalBox: OPTIONAL STRING;
+	Town: OPTIONAL STRING;
+	StateRegion: OPTIONAL STRING;
+	PostalCode: OPTIONAL STRING;
+	Country: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Asset
+  ABSTRACT SUPERTYPE OF (ONEOF (Facility, Floor, Space, Zone, Type, Component, System))
+  SUBTYPE OF (ExternalReference);
+	Name: STRING;
+	Description: OPTIONAL STRING;
+	Category: LIST [1:?] OF PickKeyValue;
+    Impacts: LIST [1:?] OF Impact;
+    Documents: LIST [1:?] OF Document;
+    Attributes: LIST [1:?] OF Attribute;
+  INVERSE
+    CausingIssues: SET [0:?] OF Issue FOR Causing;
+    AffectedBy: SET [0:?] OF Issue FOR Affected;
+  UNIQUE
+	UR1: Name;
+END_ENTITY;
+
+ENTITY Facility
+ SUBTYPE OF (Asset);
+	LinearUnits: PickValue;
+	AreaUnits: PickValue;
+	VolumeUnits: PickValue;
+	CurrencyUnit: PickValue;
+	AreaMeasurement: STRING;
+	Project: Project;
+	Site: Site;
+	Phase: OPTIONAL Phase;
+  INVERSE
+    Floors: SET [1:?] OF Floor FOR Facility;
+END_ENTITY;
+
+ENTITY Project
+	Name: STRING;
+	Description: OPTIONAL STRING;
+	ExternalObject: OPTIONAL STRING;
+	ExternalId: OPTIONAL STRING;
+  INVERSE
+    Phases: SET [0:?] OF Phase FOR Project;
+    Facilities: SET [0:?] OF Facility FOR Project;
+END_ENTITY;
+
+ENTITY Site
+	Name: STRING;
+	Description: OPTIONAL STRING;
+	ExternalObject: OPTIONAL STRING;
+	ExternalId: OPTIONAL STRING;
+  INVERSE
+    Facilities: SET [0:?] OF Facility FOR Site;
+END_ENTITY;
+
+ENTITY Floor
+ SUBTYPE OF (Asset);
+	Elevation: OPTIONAL REAL;
+	Height: OPTIONAL REAL;
+	Facility: Facility;
+  INVERSE
+    Spaces: SET [0:?] OF Space FOR Floor;
+END_ENTITY;
+
+ENTITY Space
+ SUBTYPE OF (Asset);
+	RoomTag: OPTIONAL STRING;
+	UsableHeight: OPTIONAL REAL;
+	GrossArea: OPTIONAL REAL;
+	NetArea: OPTIONAL REAL;
+	Floor: Floor;
+  INVERSE
+    Components: SET [0:?] OF Component FOR Space;
+	Zones: SET [0:?] OF Zone FOR Spaces;
+END_ENTITY; 
+
+ENTITY Zone
+ SUBTYPE OF (Asset);
+	Spaces: LIST [0:?] OF Space;
+END_ENTITY; 
+
+ENTITY Type
+ SUBTYPE OF (Asset);
+	AssetType: PickValue;
+	Manufacturer: Contact;
+	ModelNumber: STRING;
+	Warranty: Warranty;
+	ReplacementCost: OPTIONAL REAL;
+	ExpectedLife: OPTIONAL REAL;
+	DurationUnit: OPTIONAL PickValue;
+	NominalLength: REAL;
+	NominalWidth: REAL;
+	NominalHeight: REAL;
+	ModelReference: OPTIONAL STRING;
+	Shape: OPTIONAL STRING;
+	Size: OPTIONAL STRING;
+	Color: OPTIONAL STRING;
+	Finish: OPTIONAL STRING;
+	Grade: OPTIONAL STRING;
+	Material: OPTIONAL STRING;
+	Constituents: OPTIONAL STRING;
+	Features: OPTIONAL STRING;
+	AccessibilityPerformance: OPTIONAL STRING;
+	CodePerformance: OPTIONAL STRING;
+	SustainabilityPerformance: OPTIONAL STRING;
+	AssemblyOf: LIST [1:?] OF Type;
+    Jobs: LIST [0:?] OF Job;
+  INVERSE
+    Components: SET [0:?] OF Component FOR Type;
+    Spares: SET [0:?] OF Spare FOR Type;
+END_ENTITY;
+
+ENTITY Warranty
+	Description: OPTIONAL STRING;
+	GuarantorParts: Contact;
+	DurationParts: REAL;
+	GuarantorLabor: Contact;
+	DurationLabor: REAL;
+	DurationUnit: PickValue;
+END_ENTITY;
+
+ENTITY Component
+ SUBTYPE OF (Asset);
+	SerialNumber: STRING;
+	InstallationDate: DateTimeValue;
+	WarrantyStartDate: DateTimeValue;
+	TagNumber: OPTIONAL STRING;
+	BarCode: OPTIONAL STRING;
+	AssetIdentifier: OPTIONAL STRING;
+	Type: Type;
+	Space: Space;
+	AssemblyOf: LIST [1:?] OF Component;
+  INVERSE
+    Systems: SET [0:?] OF System FOR Components;
+    ConnectedBefore: SET [0:?] OF Connection FOR ComponentA;
+    ConnectedAfter: SET [0:?] OF Connection FOR ComponentB;
+    Connecting: SET [0:?] OF Connection FOR RealizingComponent;
+END_ENTITY;
+
+ENTITY System
+ SUBTYPE OF (Asset);
+	Components: LIST [1:?] OF Component;
+END_ENTITY;
+
+ENTITY Connection
+  SUBTYPE OF (ExternalReference);
+    Name: STRING;
+	Description: OPTIONAL STRING;
+	ConnectionType: PickValue;
+	ComponentA: Component;
+	ComponentB: Component;
+	RealizingComponent: OPTIONAL Component;
+	PortNameA: OPTIONAL STRING;
+	PortNameB: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Spare
+  SUBTYPE OF (ExternalReference);
+    Name: STRING;
+	Description: OPTIONAL STRING;
+	SpareType: PickValue;
+	Type: Type;
+	Suppliers: LIST [0:?] OF Contact;
+	SetNumber: OPTIONAL STRING;
+	PartNumber: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Resource
+  SUBTYPE OF (ExternalReference);
+    Name: STRING;
+	Description: OPTIONAL STRING;
+	ResourceType: PickValue;
+END_ENTITY;
+
+ENTITY Job
+  SUBTYPE OF (ExternalReference);
+	TaskNumber: STRING;
+    Name: STRING;
+	Description: STRING;
+	JobType: PickValue;
+	JobStatusType: PickValue;
+	Duration: REAL;
+	DurationUnit: PickValue;
+	Start: REAL;
+	StartUnit: PickValue;
+	Frequency: REAL;
+	FrequencyUnit: PickValue;
+	Priors: Job;
+	Resources: LIST [0:?] OF Resource;
+  INVERSE
+    ForTypes: SET [1:?] OF Type FOR Jobs;
+END_ENTITY;
+
+ENTITY Impact
+  SUBTYPE OF (ExternalReference);
+    Name: STRING;
+	Description: OPTIONAL STRING;
+	ImpactType: PickValue;
+	ImpactStage: PickValue;
+	Value: REAL;
+	ImpactUnit: PickValue;
+	LeadInTime: REAL;
+	Duration: REAL;
+	LeadOutTime: REAL;
+	TimeUnit: PickValue;
+END_ENTITY;
+
+ENTITY Document
+  SUBTYPE OF (ExternalReference);
+    Name: STRING;
+	Description: OPTIONAL STRING;
+	DocumentType: PickValue;
+	ApprovalBy: PickValue;
+	Stage: PickValue;
+	URL: STRING;
+	Reference: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Attribute
+  SUBTYPE OF (ExternalReference);
+    Name: STRING;
+	Description: OPTIONAL STRING;
+	Stage: PickValue;
+	Value: AttributeValue;
+	Unit: OPTIONAL STRING;
+	AllowedValues: OPTIONAL LIST [0:?] OF STRING;
+END_ENTITY;
+
+ENTITY Issue
+  SUBTYPE OF (ExternalReference);
+    Name: STRING;
+	Description: STRING;
+	IssueType: PickValue;
+	Risk: PickValue;
+	Chance: PickValue;
+	Impact: PickValue;
+	Owner: Contact;
+	Mitigation: STRING;
+	Causing: Asset;
+	Affected: Asset;
+END_ENTITY;
+
+END_SCHEMA;
