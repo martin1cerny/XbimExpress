@@ -46,7 +46,8 @@ namespace Xbim.CodeGeneration.Templates
                 var parents = new List<string>();
                 if (IsFirst)
                 {
-                    parents.Add(_settings.PersistEntityInterface);
+                    if (!Type.Instantiable)  //avoid redundant inheritance
+                        parents.Add(_settings.PersistEntityInterface);
                     parents.Add("INotifyPropertyChanged");
                 }
                 else
@@ -55,6 +56,7 @@ namespace Xbim.CodeGeneration.Templates
                 //add any interfaces
                 parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
 
+                //sign types to be instantiable in entity factory
                 if(Type.Instantiable)
                     parents.Add(_settings.InstantiableEntityInterface);
 
@@ -81,6 +83,8 @@ namespace Xbim.CodeGeneration.Templates
                 return Type.Instantiable && (Type.Supertypes == null  ||  Type.AllSupertypes.All(t => !t.Instantiable)); 
             } 
         }
+
+        private string InstantiableInterface { get { return _settings.InstantiableEntityInterface; } }
 
         private string GetPrivateFieldName(Attribute attribute)
         {

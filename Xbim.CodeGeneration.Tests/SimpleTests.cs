@@ -17,7 +17,7 @@ namespace Xbim.CodeGeneration.Tests
             var settings = new GeneratorSettings
             {
                 Structure = DomainStructure.LoadIfc2X3(),
-                OutputPath = "Xbim.Ifc2x3"
+                OutputPath = "Xbim2.Ifc2x3"
             };
             var schema = SchemaModel.LoadIfc2x3();
 
