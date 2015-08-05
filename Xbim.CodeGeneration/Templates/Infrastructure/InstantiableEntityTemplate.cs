@@ -49,28 +49,31 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\nnamespace ");
+            this.Write("using System.Collections.Generic;\r\n\r\nnamespace ");
             
-            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\InstantiableEntityTemplate.tt"
+            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\InstantiableEntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n\tpublic interface @");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\InstantiableEntityTemplate.tt"
+            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\InstantiableEntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\InstantiableEntityTemplate.tt"
+            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\InstantiableEntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Inheritance));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t}\r\n}");
+            this.Write("\r\n\t{\r\n\t\tobject GetValue(string propertyName);\r\n\t\tobject GetValue(int propertyInde" +
+                    "x);\r\n\t\tvoid SetValue(string propertyName, object value);\r\n\t\tvoid SetValue(int pr" +
+                    "opertyIndex, object value);\r\n\t\tIEnumerable<string> PropertyNames { get; }\r\n\t}\r\n}" +
+                    "");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -81,6 +81,8 @@ namespace Xbim.ExpressParser
             {
                 e.Name = name;
                 e.PersistanceName = name.ToUpperInvariant();
+                //entities are instantiable by default
+                e.Instantiable = true;
             });
             foreach (var section in sections)
             {
@@ -106,10 +108,7 @@ namespace Xbim.ExpressParser
                         break;
                     case Tokens.ABSTRACT: //inheritance definition
                         var isAbstract = section.boolVal;
-                        if (isAbstract)
-                            entity.Instantiable = false;
-                        else
-                            entity.Instantiable = true;
+                        entity.Instantiable = !isAbstract;
 
                         var identifiers = section.val as List<string>;
                         if(identifiers == null || !identifiers.Any())

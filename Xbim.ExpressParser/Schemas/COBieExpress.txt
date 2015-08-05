@@ -54,8 +54,8 @@ ENTITY DateTimeValue
 	Day: INTEGER;
 	Hour: INTEGER;
 	Minute: INTEGER;
-	Second: REAL;
-	Timezone: OPTIONAL INTEGER;
+	Second: INTEGER;
+	Timezone: OPTIONAL REAL;
 END_ENTITY;
 
 ENTITY PickList

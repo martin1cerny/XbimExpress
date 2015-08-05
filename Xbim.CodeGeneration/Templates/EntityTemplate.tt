@@ -128,9 +128,9 @@ namespace <#= Namespace #>
 <# } #>
 		};
 
-		public <#= IsFirstNonAbstract ? "virtual" : "override" #> IEnumerable<string> ExplicitAttributes { get { return _attributeNames; } }
+		IEnumerable<string> <#= InstantiableInterface #>.PropertyNames { get { return _attributeNames; } }
 
-		public <#= IsFirstNonAbstract ? "virtual" : "override" #> object GetValue(int index)
+		object <#= InstantiableInterface #>.GetValue(int index)
 		{
 			switch(index)
 			{
@@ -143,12 +143,47 @@ namespace <#= Namespace #>
 			}
 		}
 
-		public <#= IsFirstNonAbstract ? "virtual" : "override" #> void SetValue(object value, int index)
+		object <#= InstantiableInterface #>.GetValue(string name)
+		{
+			switch(name)
+			{
+<# foreach(var attribute in AllExplicitAttributes){ #>
+				case "<#= attribute.Name #>":  
+					return @<#= attribute.Name #>;
+<# } #>
+				default:
+					throw new System.IndexOutOfRangeException();
+			}
+		}
+
+		void <#= InstantiableInterface #>.SetValue(int index, object value)
 		{
 			switch(index)
 			{
 <# foreach(var attribute in AllExplicitAttributes){ #>
 				case <#= GetAttributeIndex(attribute) #>:
+<#		if (IsReferenceTypeAggregation(attribute)) {#>
+					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
+<#		} else if (IsValueTypeAggregation(attribute)) {#>
+					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
+<#		} else if (IsReferenceType(attribute)) {#>
+					 @<#= attribute.Name #> = (<#= GetCSType(attribute) #>)value;
+<#		} else {#>
+					 if (value != null) @<#= attribute.Name #> = (<#= GetCSType(attribute) #>)value;
+<#		} #>
+					 break;
+<# } #>
+				default:
+					throw new System.IndexOutOfRangeException();
+			}
+		}
+
+		void <#= InstantiableInterface #>.SetValue(string propName, object value)
+		{
+			switch(propName)
+			{
+<# foreach(var attribute in AllExplicitAttributes){ #>
+				case "<#= attribute.Name #>":
 <#		if (IsReferenceTypeAggregation(attribute)) {#>
 					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
 <#		} else if (IsValueTypeAggregation(attribute)) {#>
