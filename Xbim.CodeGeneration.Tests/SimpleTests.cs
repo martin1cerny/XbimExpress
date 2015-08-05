@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.CodeGeneration.Settings;
+using Xbim.ExpressParser.Schemas;
 using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
 
@@ -47,6 +48,23 @@ namespace Xbim.CodeGeneration.Tests
                 InfrastructureOutputPath = "Xbim.Commons"
             };
             var schema = SchemaModel.LoadIfc4();
+
+            Generator.Generate(settings, schema);
+        }
+
+        [TestMethod]
+        public void GenerateCobieExpress()
+        {
+            var settings = new GeneratorSettings
+            {
+                OutputPath = "Xbim.CobieExpress",
+                InfrastructureOutputPath = "Xbim.Commons"
+            };
+            var schema = SchemaModel.Load(Schemas.COBieExpress);
+            foreach (var entity in schema.Schema.Entities)
+            {
+                entity.Name = "Cobie" + entity.Name;
+            }
 
             Generator.Generate(settings, schema);
         }
