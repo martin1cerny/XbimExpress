@@ -63,6 +63,12 @@
       <DependentUpon>EnumerationTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\EnumerationTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\AttributesTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AttributesTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\AttributesTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\CSProjectTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -137,6 +143,10 @@
     <None Include="Templates\EnumerationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EnumerationTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\AttributesTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>AttributesTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\Infrastructure\CSProjectTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

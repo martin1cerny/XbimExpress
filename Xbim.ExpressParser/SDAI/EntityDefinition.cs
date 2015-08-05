@@ -9,6 +9,8 @@ namespace Xbim.ExpressParser.SDAI
 {
     public class EntityDefinition : NamedType
     {
+        public string PersistanceName { get; internal set; }
+
         /// <summary>
         /// Usually just one supertype. Most of the OO programming languages don't 
         /// support multiple inheritance of concrete types.

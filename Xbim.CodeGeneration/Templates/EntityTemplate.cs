@@ -57,7 +57,14 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\t//[PersistedEntityAttribute]\r\n\tpublic ");
+            this.Write("\r\n{\r\n\t[EntityName(\"");
+            
+            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Type.PersistanceName));
+            
+            #line default
+            #line hidden
+            this.Write("\")]\r\n\tpublic ");
             
             #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(AbstractKeyword));
@@ -199,7 +206,7 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write("\t\t//[EntityAttribute(");
+            this.Write("\t\t[EntityAttribute(");
             
             #line 43 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeIndex(attribute)));
@@ -434,8 +441,15 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write("\t\t};\r\n\r\n\t\tpublic IEnumerable<string> HasExplicitAttributes { get { return _attrib" +
-                    "uteNames; } }\r\n\r\n\t\tpublic ");
+            this.Write("\t\t};\r\n\r\n\t\tpublic ");
+            
+            #line 131 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(IsFirstNonAbstract ? "virtual" : "override"));
+            
+            #line default
+            #line hidden
+            this.Write(" IEnumerable<string> ExplicitAttributes { get { return _attributeNames; } }\r\n\r\n\t\t" +
+                    "public ");
             
             #line 133 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(IsFirstNonAbstract ? "virtual" : "override"));
@@ -594,6 +608,41 @@ namespace Xbim.CodeGeneration.Templates
                     "dregion\r\n");
             
             #line 168 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\n");
+            
+            #line 170 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+ if (WhereRules.Any()) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t#region Where rules\r\n");
+            
+            #line 172 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+ foreach (var rule in WhereRules) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t/*");
+            
+            #line 173 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(rule.Description));
+            
+            #line default
+            #line hidden
+            this.Write("*/\r\n");
+            
+            #line 174 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t#endregion\r\n");
+            
+            #line 176 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default

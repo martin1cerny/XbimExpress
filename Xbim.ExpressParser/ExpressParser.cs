@@ -9,6 +9,8 @@ namespace Xbim.ExpressParser
 {
     public class ExpressParser
     {
+        private string _data;
+
         /// <summary>
         /// Check this for errors after you call Parse(). This only contains error messages without any other information.
         /// </summary>
@@ -35,6 +37,13 @@ namespace Xbim.ExpressParser
         /// <returns>True if parser finished regularly, False if it crashed unexpectedly</returns>
         public bool Parse(Stream schema)
         {
+            if (schema.CanSeek)
+            {
+                var reader = new StreamReader(schema);
+                _data = reader.ReadToEnd();
+                schema.Seek(0, SeekOrigin.Begin);
+            }
+            
             var scanner = new Scanner(schema);
             return Parse(scanner);
         }
@@ -48,6 +57,7 @@ namespace Xbim.ExpressParser
         /// <returns>True if parser finished regularly, False if it crashed unexpectedly</returns>
         public bool Parse(string schemaData)
         {
+            _data = schemaData;
             var scanner = new Scanner();
             scanner.SetSource(schemaData, 0);
             return Parse(scanner);
@@ -61,6 +71,32 @@ namespace Xbim.ExpressParser
             Errors = scanner.Errors;
             ErrorLocations = scanner.ErrorLocations;
             SchemaInstance = parser.Model;
+
+            //change where rules descriptions to actual content from the input data
+            var lines = _data.Split('\n');
+            var wrs = parser.Model.Get<WhereRule>();
+            foreach (var rule in wrs)
+            {
+                var positionStr = rule.Description;
+                if(String.IsNullOrWhiteSpace(positionStr)) continue;
+                var parts = positionStr.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if(parts.Length != 2) throw new Exception("Wrong format.");
+
+                var start = int.Parse(parts[0]);
+                var end = int.Parse(parts[1]);
+
+                var description = "";
+                for (var i = start-1; i < end; i++)
+                {
+                    description += lines[i] + "\n";
+                }
+                description = description.TrimEnd();
+
+                rule.Description = String.Format("{0}:{1}", rule.Label, description);
+            }
+
+            //clean for the next processing
+            _data = null;
 
             return result;
         }

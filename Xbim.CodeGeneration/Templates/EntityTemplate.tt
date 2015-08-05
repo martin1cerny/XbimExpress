@@ -11,7 +11,7 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-	//[PersistedEntityAttribute]
+	[EntityName("<#= Type.PersistanceName #>")]
 	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>
 	{
 <# if (IsFirst) {#>
@@ -40,7 +40,7 @@ namespace <#= Namespace #>
 	
 		#region Explicit attribute properties
 <# foreach(var attribute in ExplicitAttributes){ #>
-		//[EntityAttribute(<#= GetAttributeIndex(attribute) #>, EntityAttributeState.<#= attribute.OptionalFlag ? "Optional" : "Mandatory" #>)]
+		[EntityAttribute(<#= GetAttributeIndex(attribute) #>, EntityAttributeState.<#= attribute.OptionalFlag ? "Optional" : "Mandatory" #>)]
 		public <#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{ 
 			get 
@@ -128,7 +128,7 @@ namespace <#= Namespace #>
 <# } #>
 		};
 
-		public IEnumerable<string> HasExplicitAttributes { get { return _attributeNames; } }
+		public <#= IsFirstNonAbstract ? "virtual" : "override" #> IEnumerable<string> ExplicitAttributes { get { return _attributeNames; } }
 
 		public <#= IsFirstNonAbstract ? "virtual" : "override" #> object GetValue(int index)
 		{
@@ -164,6 +164,14 @@ namespace <#= Namespace #>
 					throw new System.IndexOutOfRangeException();
 			}
 		}
+		#endregion
+<# } #>
+
+<# if (WhereRules.Any()) { #>
+		#region Where rules
+<# foreach (var rule in WhereRules) {#>
+		/*<#= rule.Description #>*/
+<# } #>
 		#endregion
 <# } #>
 	}
