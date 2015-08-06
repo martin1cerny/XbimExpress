@@ -2,7 +2,7 @@
 
 %namespace Xbim.ExpressParser
 
-%option verbose, summary, noPersistBuffer, out:Scanner.cs
+%option verbose, summary, caseinsensitive, noPersistBuffer, out:Scanner.cs
 %visibility internal
 
 %{
@@ -15,13 +15,14 @@
 %{
 		
 %}
-/* ************  skip white chars and line comments ************** */
+/* ************  skip white chars and comments ************** */
 "\t"					{}
 " "						{}
 [\n]					{} 
 [\r]					{} 
 [\0]+					{} 
 \/\/[^\r\n]*			{}		/*One line comment*/
+(--)[^\r\n]*			{}		/*One line comment*/
 (\(\*)(([^\*]*)(\r\n)*)*(\*\))		{}		/*Multiline comment*/
 
 
@@ -83,8 +84,8 @@
 "SELECT"			{ return (int)(Tokens.SELECT); }
 "ENTITY"			{ return (int)(Tokens.ENTITY); }
 "END_ENTITY"		{ return (int)(Tokens.END_ENTITY); }
-"SUBTYPE OF"		{ return (int)(Tokens.SUBTYPE_OF); }
-"SUPERTYPE OF"		{ return (int)(Tokens.SUPERTYPE_OF); }
+"SUBTYPE"			{ return (int)(Tokens.SUBTYPE); }
+"SUPERTYPE"			{ return (int)(Tokens.SUPERTYPE); }
 "ABSTRACT"			{ return (int)(Tokens.ABSTRACT); }
 "DERIVE"			{ return (int)(Tokens.DERIVE); }
        
@@ -110,6 +111,9 @@
 "CONSTANT"			{ return (int)(Tokens.CONSTANT); }
 "END_CONSTANT"		{ return (int)(Tokens.END_CONSTANT); }
 
+"REFERENCE"			{ return (int)(Tokens.REFERENCE); }
+"FROM"			{ return (int)(Tokens.FROM); }
+"AS"			{ return (int)(Tokens.AS); }
 
 
 
@@ -123,7 +127,7 @@
 ".F." |
 true |
 false					{ return (int)SetValue(Tokens.BOOLEAN); }
-[a-zA-Z0-9_]*		        { yylval.strVal = yytext; return (int)(Tokens.IDENTIFIER); }
+[a-zA-Z0-9_@]*		        { yylval.strVal = yytext.Trim('@'); return (int)(Tokens.IDENTIFIER); }
 
 
 /* -----------------------  Epilog ------------------- */

@@ -133,4 +133,40 @@
   <data name="IFC4_ADD1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ifc4_add1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="ISO13584_generic_expressions_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>iso13584_generic_expressions_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Step41_application_context_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step41_application_context_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Step42_geometry_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step42_geometry_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Step43_representation_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step43_representation_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Step44_product_structure_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step44_product_structure_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Step45_material_property_definition_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step45_material_property_definition_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Step46_presentation_organization_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step46_presentation_organization_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Step47_shape_aspect_definition_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step47_shape_aspect_definition_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Step49_method_definition_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step49_method_definition_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Step50_mathematical_functions_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step50_mathematical_functions_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Step55_procedural_model_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step55_procedural_model_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Step56_state_observed_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>step56_state_observed_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
 </root>
