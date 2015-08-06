@@ -48,15 +48,8 @@ END_TYPE;
 TYPE BooleanValue = BOOLEAN;
 END_TYPE;
 
-ENTITY DateTimeValue
-	Year: INTEGER;
-	Month: INTEGER;
-	Day: INTEGER;
-	Hour: INTEGER;
-	Minute: INTEGER;
-	Second: INTEGER;
-	Timezone: OPTIONAL REAL;
-END_ENTITY;
+TYPE DateTimeValue = STRING;
+END_TYPE;
 
 ENTITY PickList
 	Name: STRING;
