@@ -10,21 +10,24 @@ namespace Xbim.ExpressParser.Tests
         [TestMethod]
         public void SchemaCreation()
         {
-            var model = new SchemaModel {Schema = {Name = "Sample Schema", Identification = "SAMPLE_TEST"}};
+            var model = new SchemaModel();
+            var schema = model.FirstSchema;
+            schema.Name = "Sample Schema";
+            schema.Identification = "SAMPLE_TEST";
 
-            var definedType = model.New((DefinedType t) =>
+            var definedType = model.New(schema, (DefinedType t) =>
             {
                 t.Name = "Identifier";
                 t.Domain = model.PredefinedSimpleTypes.StringType;
             });
 
-            var entity = model.New((EntityDefinition e) => { e.Name = "Model"; });
-            entity.AddAttribute(model.New((ExplicitAttribute a) =>
+            var entity = model.New(schema, (EntityDefinition e) => { e.Name = "Model"; });
+            entity.AddAttribute(model.New(schema, (ExplicitAttribute a) =>
             {
                 a.Name = "Name";
                 a.Domain = definedType;
             }));
-            entity.AddAttribute(model.New((ExplicitAttribute a) =>
+            entity.AddAttribute(model.New(schema, (ExplicitAttribute a) =>
             {
                 a.Name = "Description";
                 a.Domain = model.PredefinedSimpleTypes.StringType;

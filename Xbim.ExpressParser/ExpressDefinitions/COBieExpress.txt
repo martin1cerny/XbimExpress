@@ -109,7 +109,7 @@ ENTITY Contact
 END_ENTITY;
 
 ENTITY Asset
-  ABSTRACT SUPERTYPE OF (ONEOF (Facility, Floor, Space, Zone, Type, Component, System))
+  ABSTRACT SUPERTYPE OF (ONEOF (Facility, Floor, Space, Zone, @Type, Component, System))
   SUBTYPE OF (ExternalReference);
 	Name: STRING;
 	Description: OPTIONAL STRING;
@@ -183,7 +183,7 @@ ENTITY Zone
 	Spaces: LIST [0:?] OF Space;
 END_ENTITY; 
 
-ENTITY Type
+ENTITY @Type
  SUBTYPE OF (Asset);
 	AssetType: PickValue;
 	Manufacturer: Contact;
@@ -207,11 +207,11 @@ ENTITY Type
 	AccessibilityPerformance: OPTIONAL STRING;
 	CodePerformance: OPTIONAL STRING;
 	SustainabilityPerformance: OPTIONAL STRING;
-	AssemblyOf: LIST [1:?] OF Type;
+	AssemblyOf: LIST [1:?] OF @Type;
     Jobs: LIST [0:?] OF Job;
   INVERSE
-    Components: SET [0:?] OF Component FOR Type;
-    Spares: SET [0:?] OF Spare FOR Type;
+    Components: SET [0:?] OF Component FOR @Type;
+    Spares: SET [0:?] OF Spare FOR @Type;
 END_ENTITY;
 
 ENTITY Warranty
@@ -231,7 +231,7 @@ ENTITY Component
 	TagNumber: OPTIONAL STRING;
 	BarCode: OPTIONAL STRING;
 	AssetIdentifier: OPTIONAL STRING;
-	Type: Type;
+	@Type: @Type;
 	Space: Space;
 	AssemblyOf: LIST [1:?] OF Component;
   INVERSE
@@ -263,7 +263,7 @@ ENTITY Spare
     Name: STRING;
 	Description: OPTIONAL STRING;
 	SpareType: PickValue;
-	Type: Type;
+	@Type: @Type;
 	Suppliers: LIST [0:?] OF Contact;
 	SetNumber: OPTIONAL STRING;
 	PartNumber: OPTIONAL STRING;
@@ -292,7 +292,7 @@ ENTITY Job
 	Priors: Job;
 	Resources: LIST [0:?] OF Resource;
   INVERSE
-    ForTypes: SET [1:?] OF Type FOR Jobs;
+    ForTypes: SET [1:?] OF @Type FOR Jobs;
 END_ENTITY;
 
 ENTITY Impact
@@ -317,7 +317,7 @@ ENTITY Document
 	ApprovalBy: PickValue;
 	Stage: PickValue;
 	URL: STRING;
-	Reference: OPTIONAL STRING;
+	@Reference: OPTIONAL STRING;
 END_ENTITY;
 
 ENTITY Attribute

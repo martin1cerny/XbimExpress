@@ -24,9 +24,9 @@ namespace XbimSchemaComparer.Comparators.EntityComparers
         {
             var results = new List<EntityDomainComparisonResult>();
             if (_oldDomains == null)
-                _oldDomains = GetDomain(oldObject.SchemaModel.Schema);
+                _oldDomains = GetDomain(oldObject.SchemaModel.FirstSchema);
             if (_newDomains == null)
-                _newDomains = GetDomain(newObject.SchemaModel.Schema);
+                _newDomains = GetDomain(newObject.SchemaModel.FirstSchema);
             if (_oldDomains == null || _newDomains == null)
                 return results;
 

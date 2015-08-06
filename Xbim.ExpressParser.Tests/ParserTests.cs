@@ -1,8 +1,7 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xbim.ExpressParser.Schemas;
+using Xbim.ExpressParser.ExpressDefinitions;
 using Xbim.ExpressParser.SDAI;
 
 namespace Xbim.ExpressParser.Tests
@@ -14,7 +13,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseIfc2x3()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.Schemas.IFC2X3_TC1);
+            var result = parser.Parse(Schemas.IFC2X3_TC1);
             Assert.IsTrue(result);
 
 
@@ -39,7 +38,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseIfc4()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.Schemas.IFC4);
+            var result = parser.Parse(Schemas.IFC4);
             Assert.IsTrue(result);
 
             var type =
@@ -50,7 +49,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseIfc4Add1()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.Schemas.IFC4_ADD1);
+            var result = parser.Parse(Schemas.IFC4_ADD1);
             Assert.IsTrue(result);
         }
 
@@ -58,7 +57,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseCis2()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.Schemas.CIS2_lpm61);
+            var result = parser.Parse(Schemas.CIS2_lpm61);
             var lastError = parser.Errors.LastOrDefault();
             if (lastError != null)
                 Debug.WriteLine(lastError);
@@ -69,11 +68,37 @@ namespace Xbim.ExpressParser.Tests
         public void ParseCobie()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.Schemas.COBieExpress);
+            var result = parser.Parse(Schemas.COBieExpress);
             var lastError = parser.Errors.LastOrDefault();
             if (lastError != null)
                 Debug.WriteLine(lastError);
             Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ParseStep42()
+        {
+            var parser = new ExpressParser();
+            var data = GetFullStepDefinitions();
+            var result = parser.Parse(data);
+            var lastError = parser.Errors.LastOrDefault();
+            if (lastError != null)
+                Debug.WriteLine(lastError);
+            Assert.IsTrue(result);
+        }
+
+        private static string GetFullStepDefinitions()
+        {
+            var result = "";
+            result += Schemas.Step42_geometry_schema;
+                result += Schemas.Step43_representation_schema;
+                result += Schemas.Step41_application_context_schema;
+                result += Schemas.Step49_method_definition_schema;
+                result += Schemas.Step45_material_property_definition_schema;
+                result += Schemas.Step44_product_structure_schema;
+                result += Schemas.Step50_mathematical_functions_schema;
+                result += Schemas.ISO13584_generic_expressions_schema;
+            return result;
         }
     }
 }

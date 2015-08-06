@@ -15,8 +15,8 @@ namespace Xbim.ExpressParser.SDAI
         {
             if (!init) return;
 
-            Schema = new SchemaDefinition { SchemaModel = this };
-            _entities.Add(Schema);
+            //init first default schema
+            New<SchemaDefinition>(null);
 
             PredefinedSimpleTypes = new PredefinedSimpleTypes(this);
         }
@@ -25,27 +25,35 @@ namespace Xbim.ExpressParser.SDAI
         /// You should always use this function to create new entities in the schema
         /// </summary>
         /// <typeparam name="T">Type of the object to be created</typeparam>
+        /// <param name="schema"></param>
         /// <param name="initialization">Optional initialization routine for the object</param>
         /// <returns>New object of the defined type</returns>
-        public T New<T>(Action<T> initialization = null) where T : SchemaEntity, new()
+        public T New<T>(SchemaDefinition schema, Action<T> initialization = null) where T : SchemaEntity, new()
         {
-            if (typeof(T) == typeof(SchemaDefinition))
-                throw new Exception("SchemaDefinition is expected to be defined only once. That is done automatically in constructor of the model.");
 
             var result = new T {SchemaModel = this};
+            _entities.Add(result);
+
             if (initialization != null)
                 initialization(result);
+
+            if (result is SchemaDefinition)
+                return result;
 
             //set parent schema if it is a named type and schema is defined
             var namedType = result as NamedType;
             if (namedType != null)
-                namedType.ParentSchema = Schema;
+                namedType.ParentSchema = schema;
             var rule = result as GlobalRule;
             if (rule != null)
-                rule.ParentSchema = Schema;
+                rule.ParentSchema = schema;
 
-            _entities.Add(result);
             return result;
+        }
+
+        public void Remove(SchemaEntity entity)
+        {
+            _entities[entity.GetType()].Remove(entity);
         }
 
         /// <summary>
@@ -60,31 +68,53 @@ namespace Xbim.ExpressParser.SDAI
         }
 
         /// <summary>
-        /// First definition in the model. There should only be one in the model.
+        /// First definition in the model.
         /// </summary>
-        public SchemaDefinition Schema
+        public SchemaDefinition FirstSchema
         {
-            get; private set; 
+            get { return Get<SchemaDefinition>().FirstOrDefault(); }
+        }
+
+        /// <summary>
+        /// All schema definitions in the model.
+        /// </summary>
+        public IEnumerable<SchemaDefinition> Schemas
+        {
+            get { return Get<SchemaDefinition>(); }
         }
 
         public static SchemaModel LoadIfc2x3()
         {
-            return Load(Schemas.Schemas.IFC2X3_TC1);
+            return Load(ExpressDefinitions.Schemas.IFC2X3_TC1);
         }
 
         public static SchemaModel LoadIfc4()
         {
-            return  Load(Schemas.Schemas.IFC4);
+            return Load(ExpressDefinitions.Schemas.IFC4);
         }
 
         public static SchemaModel LoadIfc4Add1()
         {
-            return Load(Schemas.Schemas.IFC4_ADD1);
+            return Load(ExpressDefinitions.Schemas.IFC4_ADD1);
         }
 
         public static SchemaModel LoadCis2()
         {
-            return Load(Schemas.Schemas.CIS2_lpm61);
+            return Load(ExpressDefinitions.Schemas.CIS2_lpm61);
+        }
+
+        public static SchemaModel LoadStepGeometry()
+        {
+            var result = "";
+            result += ExpressDefinitions.Schemas.Step42_geometry_schema;
+            result += ExpressDefinitions.Schemas.Step43_representation_schema;
+            result += ExpressDefinitions.Schemas.Step41_application_context_schema;
+            result += ExpressDefinitions.Schemas.Step49_method_definition_schema;
+            result += ExpressDefinitions.Schemas.Step45_material_property_definition_schema;
+            result += ExpressDefinitions.Schemas.Step44_product_structure_schema;
+            result += ExpressDefinitions.Schemas.Step50_mathematical_functions_schema;
+            result += ExpressDefinitions.Schemas.ISO13584_generic_expressions_schema;
+            return Load(result);
         }
 
         public static SchemaModel Load(string schema)
@@ -244,13 +274,13 @@ namespace Xbim.ExpressParser.SDAI
     {
         internal PredefinedSimpleTypes(SchemaModel model)
         {
-            IntegerType = model.New<IntegerType>();
-            RealType = model.New<RealType>();
-            StringType = model.New<StringType>();
-            BinaryType = model.New<BinaryType>();
-            LogicalType = model.New<LogicalType>();
-            BooleanType = model.New<BooleanType>();
-            NumberType = model.New<NumberType>();
+            IntegerType = model.New<IntegerType>(null);
+            RealType = model.New<RealType>(null);
+            StringType = model.New<StringType>(null);
+            BinaryType = model.New<BinaryType>(null);
+            LogicalType = model.New<LogicalType>(null);
+            BooleanType = model.New<BooleanType>(null);
+            NumberType = model.New<NumberType>(null);
         }
 
         public IntegerType IntegerType { get; private set; }

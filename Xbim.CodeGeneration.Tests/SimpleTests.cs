@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.CodeGeneration.Settings;
-using Xbim.ExpressParser.Schemas;
+using Xbim.ExpressParser.ExpressDefinitions;
 using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
 
@@ -61,7 +61,7 @@ namespace Xbim.CodeGeneration.Tests
                 InfrastructureOutputPath = "Xbim.Commons"
             };
             var schema = SchemaModel.Load(Schemas.COBieExpress);
-            foreach (var entity in schema.Schema.Entities)
+            foreach (var entity in schema.Get<EntityDefinition>())
             {
                 entity.Name = "Cobie" + entity.Name;
             }
@@ -79,15 +79,34 @@ namespace Xbim.CodeGeneration.Tests
             var schema = SchemaModel.LoadCis2();
 
             //change names to be more like C#
-            foreach (var type in schema.Get<NamedType>())
+            ProcessNames(schema, "Cis");
+            Generator.Generate(settings, schema);
+        }
+
+        [TestMethod]
+        public void GenerateStep()
+        {
+            var settings = new GeneratorSettings
+            {
+                OutputPath = "Xbim.Step42"
+            };
+            var schema = SchemaModel.LoadStepGeometry();
+
+            //change names to be more like C#
+            ProcessNames(schema, "Stp");
+            Generator.Generate(settings, schema);
+        }
+
+        private static void ProcessNames(SchemaModel model, string prefix)
+        {
+            //change names to be more like C#
+            foreach (var type in model.Get<NamedType>())
             {
                 var name = type.Name.ToString();
                 var parts = name.Split('_');
                 var upper = parts.Select(p => p.First().ToString().ToUpper() + p.Substring(1).ToLower());
-                type.Name = "Cis" + String.Join("", upper);
+                type.Name = prefix + String.Join("", upper);
             }
-
-            Generator.Generate(settings, schema);
         }
     }
 }

@@ -11,7 +11,7 @@
 %using Xbim.ExpressParser.SDAI
 
 
-%start schema_definition
+%start root
 
 %union{
 		public string strVal;
@@ -53,8 +53,8 @@
 %token  SELECT
 %token  ENTITY
 %token  END_ENTITY
-%token  SUBTYPE_OF
-%token  SUPERTYPE_OF
+%token  SUBTYPE
+%token  SUPERTYPE
 %token  ABSTRACT
 %token  NON_ABSTRACT
 %token  DERIVE
@@ -89,9 +89,22 @@
 %token CONSTANT
 %token END_CONSTANT
 
+%token FROM
+%token REFERENCE
+%token AS
+
 %%
+root
+	: schema_definitions		{ Finish(); }
+	;
+
+schema_definitions
+	: schema_definition
+	| schema_definitions schema_definition
+	;
+
 schema_definition 
-	: SCHEMA IDENTIFIER ';' definitions END_SCHEMA ';'											{ Model.Schema.Name = $2.strVal; Model.Schema.Identification = $2.strVal; Finish();}
+	: SCHEMA IDENTIFIER ';' definitions END_SCHEMA ';'	{ FinishSchema($2.strVal); }
 	;
 
 definitions
@@ -107,10 +120,29 @@ definition
 	| function
 	| rule
 	| constant_definition
+	| reference
+	;
+
+reference
+	: REFERENCE FROM IDENTIFIER identifier_list ';'
+	| REFERENCE FROM IDENTIFIER alias_list ';'
+	| REFERENCE FROM IDENTIFIER ';'
+	;
+
+alias_list
+	: alias
+	| alias_list ',' alias
+	| alias_list ',' IDENTIFIER
+	| '(' alias_list ')'
+	;
+
+alias
+	: IDENTIFIER AS IDENTIFIER			{ AddAlias($1.strVal, $3.strVal); }
 	;
 
 constant_definition
 	: CONSTANT IDENTIFIER ':' IDENTIFIER ASSIGNMENT IDENTIFIER error END_CONSTANT ';'						{ yyerrok(); }
+	| CONSTANT IDENTIFIER ':' type ASSIGNMENT error END_CONSTANT ';'						{ yyerrok(); }
 	;
 
 type_definition 
@@ -126,6 +158,7 @@ enumeration
 
 select_type 
 	: TYPE IDENTIFIER '=' SELECT  identifier_list ';' END_TYPE ';'								{ CreateSelectType($2.strVal, (List<string>)($5.val)); }
+	| TYPE IDENTIFIER '=' SELECT  identifier_list ';' where_section END_TYPE ';'								{ CreateSelectType($2.strVal, (List<string>)($5.val)); }
 	; 
 
 entity
@@ -190,6 +223,8 @@ parameter_section
 parameter_definition
 	: IDENTIFIER ':' parameter_definition_right ';'								{ $$.val = NameAttribute((ExplicitAttribute)($3.val), $1.strVal, false); }
 	| IDENTIFIER ':' OPTIONAL parameter_definition_right ';'					{ $$.val = NameAttribute((ExplicitAttribute)($4.val), $1.strVal, true); }
+	| accessor ':' parameter_definition_right ';'								{ $$.val = RedefineAttribute((ExplicitAttribute)($3.val), $1.val as List<string>, false); }
+	| accessor ':' OPTIONAL parameter_definition_right ';'						{ $$.val = RedefineAttribute((ExplicitAttribute)($4.val), $1.val as List<string>, true); }
 	;
 
 parameter_definition_right
@@ -297,10 +332,14 @@ optional_integer
 	;
 
 enumerable
-	: SET '[' INTEGER ':' optional_integer ']'				{ $$.val = Model.New<SetType>(); }
-	| LIST '[' INTEGER ':' optional_integer ']'				{ $$.val = Model.New<ListType>(); }
-	| ARRAY '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<ArrayType>(); }
-	| BAG '[' INTEGER ':' optional_integer ']'				{ $$.val = Model.New<BagType>(); }
+	: SET '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<SetType>(null); }
+	| LIST '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<ListType>(null); }
+	| ARRAY '[' INTEGER ':' optional_integer ']'		{ $$.val = Model.New<ArrayType>(null); }
+	| BAG '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<BagType>(null); }
+	| SET												{ $$.val = Model.New<SetType>(null); }
+	| LIST												{ $$.val = Model.New<ListType>(null); }
+	| ARRAY 											{ $$.val = Model.New<ArrayType>(null); }
+	| BAG												{ $$.val = Model.New<BagType>(null); }
 	;
 
 inheritance_section
@@ -309,13 +348,16 @@ inheritance_section
 	;
 
 inheritance_definition
-	: SUBTYPE_OF identifier_list								{ $$.val = $2.val; $$.tokVal = Tokens.NON_ABSTRACT; }
-	| SUPERTYPE_OF identifier_list								{ $$.val = null; $$.tokVal = Tokens.NON_ABSTRACT;  }
-	| ABSTRACT SUPERTYPE_OF identifier_list						{ $$.val = null; $$.tokVal = Tokens.ABSTRACT;  }
+	: SUBTYPE OF identifier_list								{ $$.val = $3.val; $$.tokVal = Tokens.NON_ABSTRACT; }
+	| SUPERTYPE OF identifier_list								{ $$.val = null;   $$.tokVal = Tokens.NON_ABSTRACT;  }
+	| ABSTRACT SUPERTYPE OF identifier_list						{ $$.val = null;   $$.tokVal = Tokens.ABSTRACT;  }
+	| ABSTRACT SUPERTYPE										{ $$.val = null;   $$.tokVal = Tokens.ABSTRACT;  }
 	;
 
 function
-	: FUNCTION IDENTIFIER error END_FUNCTION ';'					{ yyerrok(); }
+	: FUNCTION IDENTIFIER error END_FUNCTION ';'						{ yyerrok(); }
+	| FUNCTION IDENTIFIER error END_FUNCTION ';' END_FUNCTION ';'		{ yyerrok(); }
+	| error END_FUNCTION ';'											{ yyerrok(); }
 	;
 
 

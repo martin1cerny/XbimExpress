@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Xbim.ExpressParser;
-using Xbim.ExpressParser.Schemas;
+using Xbim.ExpressParser.ExpressDefinitions;
 using Xbim.ExpressParser.SDAI;
-using Xbim.IfcDomains;
 using XbimSchemaComparer.Comparators;
 using XbimSchemaComparer.Comparators.SchemaComparers;
 
@@ -29,8 +27,8 @@ namespace XbimSchemaComparer
 
         private static void Compare(SchemaModel modelA, SchemaModel modelB)
         {
-            Console.WriteLine(@"Schemas to compare: {0}, {1}", modelA.Schema.Name, modelB.Schema.Name);
-            var schemas = new List<SchemaDefinition> { modelA.Schema, modelB.Schema };
+            Console.WriteLine(@"Schemas to compare: {0}, {1}", modelA.FirstSchema.Name, modelB.FirstSchema.Name);
+            var schemas = new List<SchemaDefinition> { modelA.FirstSchema, modelB.FirstSchema };
 
             var schemaComparers = new ISchemaComparer[]
             {
@@ -46,7 +44,7 @@ namespace XbimSchemaComparer
             };
             foreach (var comparer in schemaComparers)
             {
-                comparer.Compare(modelA.Schema, modelB.Schema);
+                comparer.Compare(modelA.FirstSchema, modelB.FirstSchema);
             }
 
 
@@ -91,7 +89,7 @@ namespace XbimSchemaComparer
             }
 
             var log = w.ToString();
-            var logName = String.Format("{0}_{1}.txt", modelA.Schema.Name, modelB.Schema.Name);
+            var logName = String.Format("{0}_{1}.txt", modelA.FirstSchema.Name, modelB.FirstSchema.Name);
             using (var file = File.CreateText(logName))
             {
                 file.Write(log);
