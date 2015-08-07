@@ -51,6 +51,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DefinedTypeTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Templates\EntityInterfaceTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityInterfaceTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\EntityInterfaceTemplatePartial.cs" />
     <Compile Include="Templates\EntityTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -135,6 +141,10 @@
     <None Include="Templates\DefinedTypeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>DefinedTypeTemplate1.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\EntityInterfaceTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>EntityInterfaceTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\EntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

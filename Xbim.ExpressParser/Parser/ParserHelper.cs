@@ -253,7 +253,11 @@ namespace Xbim.ExpressParser
 
         private InverseAttribute CreateInverseAtribute(string name, string type, string attribute)
         {
-            var result = Model.New<InverseAttribute>(_currentSchema, a => { a.Name = name; });
+            var result = Model.New<InverseAttribute>(_currentSchema, a =>
+            {
+                a.Name = name;
+                a.PersistentName = name;
+            });
             ToDoActions.Add(() =>
             {
                 var domain = Model.Get<EntityDefinition>().FirstOrDefault(e => e.Name == type) ??
@@ -381,6 +385,7 @@ namespace Xbim.ExpressParser
         private ExplicitAttribute NameAttribute(ExplicitAttribute attribute, string name, bool optional)
         {
             attribute.Name = name;
+            attribute.PersistentName = name;
             attribute.OptionalFlag = optional;
             attribute.Line = Scanner.yylloc.StartLine;
             return attribute;

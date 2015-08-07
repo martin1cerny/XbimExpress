@@ -34,6 +34,7 @@ namespace Xbim.CodeGeneration.Settings
             EntityFactory = "EntityFactory";
             EntityFactoryInterface = "IEntityFactory";
             InstantiableEntityInterface = "IInstantiableEntity";
+            GenerateAllAsInterfaces = false;
         }
 
 
@@ -44,6 +45,8 @@ namespace Xbim.CodeGeneration.Settings
                 return !String.IsNullOrWhiteSpace(InfrastructureOutputPath) && InfrastructureOutputPath != OutputPath;
             }
         }
+
+        public bool GenerateAllAsInterfaces { get; set; }
 
         public string InstantiableEntityInterface { get; set; }
 

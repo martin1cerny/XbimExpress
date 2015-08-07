@@ -301,7 +301,7 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(" \r\n\t\t{ \r\n\t\t\tget \r\n\t\t\t{\r\n");
             
             #line 70 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- if (IsAggregation(attribute)) {
+ if (IsDoubleAggregation(attribute)) {
             
             #line default
             #line hidden
@@ -326,10 +326,10 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write(".Contains(this));\r\n");
+            this.Write(".Any( i => i.Contains(this)));\r\n");
             
             #line 72 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- } else {
+ } else if (IsAggregation(attribute)){
             
             #line default
             #line hidden
@@ -347,23 +347,51 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write(" == this);\r\n");
+            this.Write(" != null &&  e.");
+            
+            #line 73 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
+            
+            #line default
+            #line hidden
+            this.Write(".Contains(this));\r\n");
             
             #line 74 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+ } else {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\treturn Model.Instances.Where<");
+            
+            #line 75 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
+            
+            #line default
+            #line hidden
+            this.Write(">(e => e.");
+            
+            #line 75 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" == this);\r\n");
+            
+            #line 76 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t\t} \r\n\t\t}\r\n\t\r\n");
             
-            #line 78 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 80 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n\t\t#endregion\r\n");
             
-            #line 81 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 83 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  if (IsFirst) { 
             
             #line default
@@ -408,13 +436,13 @@ namespace Xbim.CodeGeneration.Templates
 		#endregion
 ");
             
-            #line 120 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 122 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
             #line hidden
             
-            #line 121 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 123 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  if (!IsAbstract) { 
             
             #line default
@@ -422,63 +450,63 @@ namespace Xbim.CodeGeneration.Templates
             this.Write("\r\n\t\t#region Index access\r\n\t\tprivate readonly List<string> _attributeNames = new L" +
                     "ist<string>\r\n\t\t{\r\n");
             
-            #line 126 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 128 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  foreach(var attribute in AllExplicitAttributes){ 
             
             #line default
             #line hidden
             this.Write("\t\t\t\"");
             
-            #line 127 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 129 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
             this.Write("\",\r\n");
             
-            #line 128 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 130 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t};\r\n\r\n\t\tIEnumerable<string> ");
             
-            #line 131 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 133 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableInterface));
             
             #line default
             #line hidden
             this.Write(".PropertyNames { get { return _attributeNames; } }\r\n\r\n\t\tobject ");
             
-            #line 133 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 135 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableInterface));
             
             #line default
             #line hidden
             this.Write(".GetValue(int index)\r\n\t\t{\r\n\t\t\tswitch(index)\r\n\t\t\t{\r\n");
             
-            #line 137 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 139 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  foreach(var attribute in AllExplicitAttributes){ 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tcase ");
             
-            #line 138 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 140 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeIndex(attribute)));
             
             #line default
             #line hidden
             this.Write(": \r\n\t\t\t\t\treturn @");
             
-            #line 139 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 141 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 140 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 142 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
@@ -486,35 +514,35 @@ namespace Xbim.CodeGeneration.Templates
             this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\tthrow new System.IndexOutOfRangeException();\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\to" +
                     "bject ");
             
-            #line 146 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 148 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableInterface));
             
             #line default
             #line hidden
             this.Write(".GetValue(string name)\r\n\t\t{\r\n\t\t\tswitch(name)\r\n\t\t\t{\r\n");
             
-            #line 150 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 152 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  foreach(var attribute in AllExplicitAttributes){ 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tcase \"");
             
-            #line 151 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 153 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
             this.Write("\":  \r\n\t\t\t\t\treturn @");
             
-            #line 152 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 154 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 153 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 155 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
@@ -522,50 +550,29 @@ namespace Xbim.CodeGeneration.Templates
             this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\tthrow new System.IndexOutOfRangeException();\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tv" +
                     "oid ");
             
-            #line 159 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 161 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableInterface));
             
             #line default
             #line hidden
             this.Write(".SetValue(int index, object value)\r\n\t\t{\r\n\t\t\tswitch(index)\r\n\t\t\t{\r\n");
             
-            #line 163 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 165 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  foreach(var attribute in AllExplicitAttributes){ 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tcase ");
             
-            #line 164 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 166 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeIndex(attribute)));
             
             #line default
             #line hidden
             this.Write(":\r\n");
             
-            #line 165 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-		if (IsReferenceTypeAggregation(attribute)) {
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\t\t @");
-            
-            #line 166 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
-            
-            #line default
-            #line hidden
-            this.Write(".Add((");
-            
-            #line 166 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetAggregationElementType(attribute)));
-            
-            #line default
-            #line hidden
-            this.Write(")value);\r\n");
-            
             #line 167 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-		} else if (IsValueTypeAggregation(attribute)) {
+		if (IsReferenceTypeAggregation(attribute)) {
             
             #line default
             #line hidden
@@ -586,7 +593,7 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(")value);\r\n");
             
             #line 169 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-		} else if (IsReferenceType(attribute)) {
+		} else if (IsValueTypeAggregation(attribute)) {
             
             #line default
             #line hidden
@@ -597,21 +604,21 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write(" = (");
+            this.Write(".Add((");
             
             #line 170 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetCSType(attribute)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetAggregationElementType(attribute)));
             
             #line default
             #line hidden
-            this.Write(")value;\r\n");
+            this.Write(")value);\r\n");
             
             #line 171 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-		} else {
+		} else if (IsReferenceType(attribute)) {
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t\t if (value != null) @");
+            this.Write("\t\t\t\t\t @");
             
             #line 172 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
@@ -628,13 +635,34 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(")value;\r\n");
             
             #line 173 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+		} else {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t\t if (value != null) @");
+            
+            #line 174 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" = (");
+            
+            #line 174 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetCSType(attribute)));
+            
+            #line default
+            #line hidden
+            this.Write(")value;\r\n");
+            
+            #line 175 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
 		} 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t\t break;\r\n");
             
-            #line 175 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 177 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
@@ -642,50 +670,29 @@ namespace Xbim.CodeGeneration.Templates
             this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\tthrow new System.IndexOutOfRangeException();\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tv" +
                     "oid ");
             
-            #line 181 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 183 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableInterface));
             
             #line default
             #line hidden
             this.Write(".SetValue(string propName, object value)\r\n\t\t{\r\n\t\t\tswitch(propName)\r\n\t\t\t{\r\n");
             
-            #line 185 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 187 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  foreach(var attribute in AllExplicitAttributes){ 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tcase \"");
             
-            #line 186 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 188 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
             this.Write("\":\r\n");
             
-            #line 187 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-		if (IsReferenceTypeAggregation(attribute)) {
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\t\t @");
-            
-            #line 188 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
-            
-            #line default
-            #line hidden
-            this.Write(".Add((");
-            
-            #line 188 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetAggregationElementType(attribute)));
-            
-            #line default
-            #line hidden
-            this.Write(")value);\r\n");
-            
             #line 189 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-		} else if (IsValueTypeAggregation(attribute)) {
+		if (IsReferenceTypeAggregation(attribute)) {
             
             #line default
             #line hidden
@@ -706,7 +713,7 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(")value);\r\n");
             
             #line 191 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-		} else if (IsReferenceType(attribute)) {
+		} else if (IsValueTypeAggregation(attribute)) {
             
             #line default
             #line hidden
@@ -717,21 +724,21 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write(" = (");
+            this.Write(".Add((");
             
             #line 192 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetCSType(attribute)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetAggregationElementType(attribute)));
             
             #line default
             #line hidden
-            this.Write(")value;\r\n");
+            this.Write(")value);\r\n");
             
             #line 193 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-		} else {
+		} else if (IsReferenceType(attribute)) {
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t\t if (value != null) @");
+            this.Write("\t\t\t\t\t @");
             
             #line 194 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
@@ -748,13 +755,34 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(")value;\r\n");
             
             #line 195 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+		} else {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t\t if (value != null) @");
+            
+            #line 196 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" = (");
+            
+            #line 196 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetCSType(attribute)));
+            
+            #line default
+            #line hidden
+            this.Write(")value;\r\n");
+            
+            #line 197 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
 		} 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t\t break;\r\n");
             
-            #line 197 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 199 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
@@ -762,42 +790,42 @@ namespace Xbim.CodeGeneration.Templates
             this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\tthrow new System.IndexOutOfRangeException();\r\n\t\t\t}\r\n\t\t}\r\n\t\t#en" +
                     "dregion\r\n");
             
-            #line 203 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 205 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 205 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 207 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  if (WhereRules.Any()) { 
             
             #line default
             #line hidden
             this.Write("\t\t#region Where rules\r\n");
             
-            #line 207 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 209 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  foreach (var rule in WhereRules) {
             
             #line default
             #line hidden
             this.Write("\t\t/*");
             
-            #line 208 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 210 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(rule.Description));
             
             #line default
             #line hidden
             this.Write("*/\r\n");
             
-            #line 209 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 211 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t#endregion\r\n");
             
-            #line 211 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 213 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
  } 
             
             #line default
