@@ -70,11 +70,13 @@ namespace Xbim.CodeGeneration.Tests
         }
 
         [TestMethod]
-        public void GenerateCis()
+        public void GenerateCisAsInterfaces()
         {
             var settings = new GeneratorSettings
             {
-                OutputPath = "Xbim.CIS2"
+                OutputPath = "Xbim.CIS2",
+                GenerateAllAsInterfaces = true,
+                InfrastructureOutputPath = "Xbim.Commons"
             };
             var schema = SchemaModel.LoadCis2();
 
@@ -84,11 +86,12 @@ namespace Xbim.CodeGeneration.Tests
         }
 
         [TestMethod]
-        public void GenerateStep()
+        public void GenerateStepAsInterfaces()
         {
             var settings = new GeneratorSettings
             {
-                OutputPath = "Xbim.Step42"
+                OutputPath = "Xbim.Step42",
+                GenerateAllAsInterfaces = true
             };
             var schema = SchemaModel.LoadStepGeometry();
 
@@ -102,11 +105,23 @@ namespace Xbim.CodeGeneration.Tests
             //change names to be more like C#
             foreach (var type in model.Get<NamedType>())
             {
-                var name = type.Name.ToString();
-                var parts = name.Split('_');
-                var upper = parts.Select(p => p.First().ToString().ToUpper() + p.Substring(1).ToLower());
-                type.Name = prefix + String.Join("", upper);
+                type.Name = prefix + MakeCamelCaseFromUnderscore(type.Name);
+
+                var entity = type as EntityDefinition;
+                if(entity == null) continue;
+
+                foreach (var attribute in entity.Attributes)
+                {
+                    attribute.Name = MakeCamelCaseFromUnderscore(attribute.Name);
+                }
             }
+        }
+
+        private static string MakeCamelCaseFromUnderscore(string value)
+        {
+            var parts = value.Split('_');
+            var upper = parts.Select(p => p.First().ToString().ToUpper() + p.Substring(1).ToLower());
+            return String.Join("", upper);
         }
     }
 }

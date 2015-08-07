@@ -15,16 +15,31 @@ namespace Xbim.CodeGeneration.Templates
     {
         public EntityDefinition Type { get; private set; }
 
-        private readonly NamedTypeHelper _helper;
+        protected readonly NamedTypeHelper _helper;
 
-        private readonly GeneratorSettings _settings;
+        protected readonly GeneratorSettings _settings;
 
+        protected EntityTemplate(){}
         public EntityTemplate(GeneratorSettings settings, EntityDefinition type)
         {
             _settings = settings;
             _helper = new NamedTypeHelper(type, settings);
             Type = type;
             WhereRules = Type.WhereRules.ToList();
+            ExplicitAttributes = Type.ExplicitAttributes.ToList();
+            AllExplicitAttributes = MakeUniqueNameList(Type.AllExplicitAttributes).ToList();
+            InverseAttributes = Type.InverseAttributes.ToList();
+            AllInverseAttributes = MakeUniqueNameList(Type.AllInverseAttributes).ToList();
+        }
+
+        private IEnumerable<T> MakeUniqueNameList<T>(IEnumerable<T> rawAttributes) where T: Attribute
+        {
+            var seen = new HashSet<string>();
+            foreach (var attribute in rawAttributes.Where(attribute => !seen.Contains(attribute.Name)))
+            {
+                seen.Add(attribute.Name);
+                yield return attribute;
+            }
         }
 
         public string Namespace
@@ -39,7 +54,7 @@ namespace Xbim.CodeGeneration.Templates
 
         public string Name { get { return Type.Name; } }
 
-        public string Inheritance
+        public virtual string Inheritance
         {
             get
             {
@@ -51,7 +66,10 @@ namespace Xbim.CodeGeneration.Templates
                     parents.Add("INotifyPropertyChanged");
                 }
                 else
-                    parents.AddRange(Type.Supertypes.Select(t => t.Name.ToString()));
+                    parents.AddRange(Type.Supertypes.Select(t => 
+                        _settings.GenerateAllAsInterfaces ? 
+                        "I" + t.Name.ToString() : 
+                        t.Name.ToString()));
 
                 //add any interfaces
                 parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
@@ -67,59 +85,48 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        private string GetCSType(ExplicitAttribute attribute)
+        protected virtual string GetCSType(ExplicitAttribute attribute)
         {
-            return TypeHelper.GetCSType(attribute, _settings.ItemSetClassName);
+            return TypeHelper.GetCSType(attribute, _settings);
         }
 
-        private string ModelInterface { get { return _settings.ModelInterface; } }
+        protected string ModelInterface { get { return _settings.ModelInterface; } }
 
-        private string AbstractKeyword { get { return IsAbstract ? "abstract" : ""; } }
+        protected string AbstractKeyword { get { return IsAbstract ? "abstract" : ""; } }
 
-        private bool IsFirst { get { return Type.Supertypes == null || !Type.Supertypes.Any(); } }
-        private bool IsFirstNonAbstract { 
+        protected bool IsFirst { get { return Type.Supertypes == null || !Type.Supertypes.Any(); } }
+        protected bool IsFirstNonAbstract { 
             get 
             { 
                 return Type.Instantiable && (Type.Supertypes == null  ||  Type.AllSupertypes.All(t => !t.Instantiable)); 
             } 
         }
 
-        private string InstantiableInterface { get { return _settings.InstantiableEntityInterface; } }
+        protected string InstantiableInterface { get { return _settings.InstantiableEntityInterface; } }
 
-        private string GetPrivateFieldName(Attribute attribute)
+        protected string GetPrivateFieldName(Attribute attribute)
         {
             string name = attribute.Name;
             return "_" + name.First().ToString().ToLower() + name.Substring(1);
         }
 
 
-        private List<ExplicitAttribute> _explAttrCache;
+        protected List<ExplicitAttribute> ExplicitAttributes { get; private set; }
 
-        private List<ExplicitAttribute> ExplicitAttributes
-        {
-            get { return _explAttrCache ?? (_explAttrCache = Type.ExplicitAttributes.ToList()); }
-        }
+        protected List<ExplicitAttribute> AllExplicitAttributes { get; private set; }
 
-        private List<ExplicitAttribute> _allExplAttrCache;
-        private List<ExplicitAttribute> AllExplicitAttributes
-        {
-            get { return _allExplAttrCache ?? (_allExplAttrCache = Type.AllExplicitAttributes.ToList()); }
-        }
+        protected List<InverseAttribute> InverseAttributes { get; private set; }
+        
+        protected List<InverseAttribute> AllInverseAttributes { get; private set; }
 
-        private List<InverseAttribute> _invAttrCache;
-        private List<InverseAttribute> InverseAttributes
-        {
-            get { return _invAttrCache ?? (_invAttrCache = Type.InverseAttributes.ToList()); }
-        }
-
-        private int GetAttributeIndex(ExplicitAttribute attribute)
+        protected int GetAttributeIndex(ExplicitAttribute attribute)
         { 
             return AllExplicitAttributes.IndexOf(attribute);
         }
 
 
 
-        public IEnumerable<string> Using
+        public virtual IEnumerable<string> Using
         {
             //need to add namespaces for all inheritance and attributes
             get
@@ -155,6 +162,9 @@ namespace Xbim.CodeGeneration.Templates
                 if (iAttributes.Any() || !IsAbstract)
                     result.Add("System.Collections.Generic");
 
+                if(InverseAttributes.Any(IsDoubleAggregation))
+                    result.Add("System.Linq");
+
                 if (IsFirst)
                 {
                     //for INotifyPropertyChanged
@@ -171,7 +181,7 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        private NamedType GetNamedElementType(AggregationType aggregation)
+        protected NamedType GetNamedElementType(AggregationType aggregation)
         {
             if (aggregation.ElementType is SimpleType) return null;
 
@@ -185,19 +195,27 @@ namespace Xbim.CodeGeneration.Templates
             throw new NotSupportedException();
         }
 
-        private string PersistEntityInterface { get { return _settings.PersistEntityInterface; } }
+        protected string PersistEntityInterface { get { return _settings.PersistEntityInterface; } }
 
-        private bool IsAggregation(InverseAttribute attribute)
+        protected bool IsAggregation(InverseAttribute attribute)
         {
             return attribute.InvertedAttr.Domain is AggregationType;
         }
 
-        private IEnumerable<ExplicitAttribute> AggregatedExplicitAttributes
+        protected bool IsDoubleAggregation(InverseAttribute attribute)
+        {
+            var aggr = attribute.InvertedAttr.Domain as AggregationType;
+            if (aggr == null) return false;
+
+            return aggr.ElementType is AggregationType;
+        }
+
+        protected IEnumerable<ExplicitAttribute> AggregatedExplicitAttributes
         {
             get { return ExplicitAttributes.Where(t => t.Domain is AggregationType); }
         }
 
-        private bool IsReferenceTypeAggregation(ExplicitAttribute attribute)
+        protected bool IsReferenceTypeAggregation(ExplicitAttribute attribute)
         {
             var agg = attribute.Domain as AggregationType;
             if (agg == null) return false;
@@ -208,7 +226,7 @@ namespace Xbim.CodeGeneration.Templates
                 agg.ElementType is LogicalType;
         }
 
-        private bool IsValueTypeAggregation(ExplicitAttribute attribute)
+        protected bool IsValueTypeAggregation(ExplicitAttribute attribute)
         {
             var agg = attribute.Domain as AggregationType;
             if (agg == null) return false;
@@ -218,7 +236,7 @@ namespace Xbim.CodeGeneration.Templates
                 agg.ElementType is LogicalType);
         }
 
-        private bool IsReferenceType(ExplicitAttribute attribute)
+        protected bool IsReferenceType(ExplicitAttribute attribute)
         {
             if (attribute.OptionalFlag) return true;
 
@@ -230,13 +248,13 @@ namespace Xbim.CodeGeneration.Templates
                 attribute.Domain is AggregationType;
         }
 
-        private string GetAggregationElementType(ExplicitAttribute attribute)
+        protected string GetAggregationElementType(ExplicitAttribute attribute)
         {
             var aggregationType = attribute.Domain as AggregationType;
             if (aggregationType != null)
             {
                 var type = aggregationType.ElementType;
-                return TypeHelper.GetCSType(type, _settings.ItemSetClassName);
+                return TypeHelper.GetCSType(type, _settings);
             }
             throw new Exception("Aggregation type expected");
         }

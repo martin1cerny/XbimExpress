@@ -26,14 +26,18 @@ namespace Xbim.CodeGeneration
 
             //set namespaces
             settings.Namespace = GetNamespace(modelProject);
-            settings.InfrastructureNamespace = settings.IsInfrastructureSeparate ? GetNamespace(infraProject) : settings.Namespace;
+            settings.InfrastructureNamespace = settings.IsInfrastructureSeparate
+                ? GetNamespace(infraProject)
+                : settings.Namespace;
 
             var modelTemplates = new List<ICodeTemplate>();
             modelTemplates.AddRange(
                 schema.Get<DefinedType>().Select(type => new DefinedTypeTemplate(settings, type)));
             modelTemplates.AddRange(schema.Get<SelectType>().Select(type => new SelectTypeTemplate(settings, type)));
             modelTemplates.AddRange(
-                schema.Get<EntityDefinition>().Select(type => new EntityTemplate(settings, type)));
+                settings.GenerateAllAsInterfaces
+                    ? schema.Get<EntityDefinition>().Select(type => new EntityInterfaceTemplate(settings, type))
+                    : schema.Get<EntityDefinition>().Select(type => new EntityTemplate(settings, type)));
             modelTemplates.AddRange(
                 schema.Get<EnumerationType>().Select(type => new EnumerationTemplate(settings, type)));
             modelTemplates
@@ -76,11 +80,12 @@ namespace Xbim.CodeGeneration
             //get project references 
             const string itemType = "ProjectReference";
             var references = referencing.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == itemType)) ??
-                           referencing.AddItemGroup();
+                             referencing.AddItemGroup();
 
             var referencedPath = new Uri(referenced.FullPath, UriKind.Absolute);
-            var referencingPathString = (Path.GetDirectoryName(referencing.FullPath) ?? "") + Path.DirectorySeparatorChar;
-            var referencingPath = new Uri(referencingPathString , UriKind.Absolute);
+            var referencingPathString = (Path.GetDirectoryName(referencing.FullPath) ?? "") +
+                                        Path.DirectorySeparatorChar;
+            var referencingPath = new Uri(referencingPathString, UriKind.Absolute);
 
             var relPath = referencingPath.MakeRelativeUri(referencedPath).ToString();
 
@@ -91,10 +96,10 @@ namespace Xbim.CodeGeneration
                 return itemElement != null && itemElement.Include == relPath;
             })) return;
 
-            references.AddItem(itemType, relPath, new []
+            references.AddItem(itemType, relPath, new[]
             {
-                new KeyValuePair<string, string>("Project", GetProjectId(referenced)), 
-                new KeyValuePair<string, string>("Name", Path.GetFileNameWithoutExtension(referenced.FullPath)) 
+                new KeyValuePair<string, string>("Project", GetProjectId(referenced)),
+                new KeyValuePair<string, string>("Name", Path.GetFileNameWithoutExtension(referenced.FullPath))
             });
         }
 
@@ -171,7 +176,7 @@ namespace Xbim.CodeGeneration
         {
             var element =
                 project.PropertyGroups.Select(
-                    g => g.Children.FirstOrDefault(e => ((ProjectPropertyElement)e).Name == "ProjectGuid"))
+                    g => g.Children.FirstOrDefault(e => ((ProjectPropertyElement) e).Name == "ProjectGuid"))
                     .FirstOrDefault(e => e != null) as ProjectPropertyElement;
             return element != null ? element.Value : "";
         }

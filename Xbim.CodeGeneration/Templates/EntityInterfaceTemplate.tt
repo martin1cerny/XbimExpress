@@ -1,9 +1,8 @@
-﻿<#@ template language="C#" #>
+﻿<#@ template language="C#" inherits="EntityTemplate"#>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="Xbim.CodeGeneration.Helpers" #>
 
 <# foreach(var u in Using) { #>
 using <#= u #>;
@@ -11,10 +10,25 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-	[EntityName("<#= Type.PersistanceName #>")]
-	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>
+	public partial interface I<#= Name #> <#= Inheritance #>
 	{
-<# if (IsFirst) {#>
+		#region Explicit attributes
+<# foreach(var attribute in ExplicitAttributes){ #>
+		<#= GetCSType(attribute) #> @<#= attribute.Name #>  { get; set; }
+<# } #>
+		#endregion
+
+		#region Inverse attributes
+<# foreach(var attribute in InverseAttributes){   var inverseType = "I" + attribute.Domain.Name; #>
+		IEnumerable<<#=inverseType #>> @<#= attribute.Name #>  { get; }
+<# } #>
+		#endregion
+	}
+
+<# if (!IsAbstract) { #>
+	[EntityName("<#= Type.PersistanceName #>")]
+	public partial class @<#= Name #> : I<#= Name #>
+	{
 		#region Implementation of <#= PersistEntityInterface #>
 		public int EntityLabel {get; set;}
 		public <#= ModelInterface #> Model { get; internal set; }
@@ -22,9 +36,8 @@ namespace <#= Namespace #>
 		protected bool Activated = false;
 		#endregion
 
-<# } #>
 		//internal constructor makes sure that objects are not created outside of the model/ assembly controlled area
-		internal <#= Name #>(<#= ModelInterface #> model) <# if (!IsFirst) {#>: base(model) <# } #>
+		internal <#= Name #>(<#= ModelInterface #> model)
 		{ 
 			Model = model; 
 <# foreach (var attribute in AggregatedExplicitAttributes){ #>
@@ -33,13 +46,13 @@ namespace <#= Namespace #>
 		}
 
 		#region Explicit attribute fields
-<# foreach(var attribute in Type.ExplicitAttributes){ #>
+<# foreach(var attribute in AllExplicitAttributes){ #>
 		private <#= GetCSType(attribute) #> <#= GetPrivateFieldName(attribute) #>;
 <# } #>
 		#endregion
 	
 		#region Explicit attribute properties
-<# foreach(var attribute in ExplicitAttributes){ #>
+<# foreach(var attribute in AllExplicitAttributes){ #>
 		[EntityAttribute(<#= GetAttributeIndex(attribute) #>, EntityAttributeState.<#= attribute.OptionalFlag ? "Optional" : "Mandatory" #>)]
 		public <#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{ 
@@ -61,9 +74,9 @@ namespace <#= Namespace #>
 		#endregion
 
 		#region Inverse attributes
-<# foreach(var attribute in InverseAttributes){  
-	var inverseType = attribute.Domain.Name; #>
-		public IEnumerable<<#=inverseType #>> @<#= attribute.Name #> 
+<# foreach(var attribute in AllInverseAttributes){  
+	var inverseType = "I" + attribute.Domain.Name; #>
+		public IEnumerable<<#= inverseType #>> @<#= attribute.Name #> 
 		{ 
 			get 
 			{
@@ -78,12 +91,10 @@ namespace <#= Namespace #>
 		}
 	
 <# } #>
-
 		#endregion
-<# if (IsFirst) { #>
 
 		#region INotifyPropertyChanged implementation
-		 
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		protected void NotifyPropertyChanged( string propertyName)
@@ -119,8 +130,6 @@ namespace <#= Namespace #>
 		}
 
 		#endregion
-<# } #>
-<# if (!IsAbstract) { #>
 
 		#region Index access
 		private readonly List<string> _attributeNames = new List<string>
@@ -202,7 +211,6 @@ namespace <#= Namespace #>
 			}
 		}
 		#endregion
-<# } #>
 
 <# if (WhereRules.Any()) { #>
 		#region Where rules
@@ -212,4 +220,7 @@ namespace <#= Namespace #>
 		#endregion
 <# } #>
 	}
+
+<# } #>
+
 }

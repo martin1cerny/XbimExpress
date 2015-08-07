@@ -88,8 +88,8 @@ namespace Xbim.ExpressParser.SDAI
                     foreach (var definition in supertype.AllSupertypes)
                     {
                         counter++;
-                        if(counter>20)
-                            throw new Exception();
+                        if(counter>40)
+                            throw new Exception("Stack overflow exception comming soon! There is a loop in types inheritance!");
                         yield return definition;
                     }
                 }
@@ -98,11 +98,29 @@ namespace Xbim.ExpressParser.SDAI
         }
 
         /// <summary>
-        /// Explicit attributes of this entity ordered by their occurance in the schema definition file.
+        /// Inverse attributes of this entity.
         /// </summary>
         public IEnumerable<InverseAttribute> InverseAttributes
         {
             get { return SchemaModel.Get<InverseAttribute>(e => e.ParentEntity == this); }
+        }
+
+        /// <summary>
+        /// All inverse attributes of this entity including inherited ones.
+        /// </summary>
+        public IEnumerable<InverseAttribute> AllInverseAttributes
+        {
+            get
+            {
+                foreach (var attribute in AllSupertypes.SelectMany(supertype => supertype.InverseAttributes))
+                {
+                    yield return attribute;
+                }
+                foreach (var attribute in InverseAttributes)
+                {
+                    yield return attribute;
+                }
+            }
         }
 
         /// <summary>
