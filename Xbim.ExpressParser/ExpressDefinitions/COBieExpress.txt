@@ -73,12 +73,20 @@ ENTITY Phase
 	Project: Project;
 END_ENTITY;
 
+ENTITY ExternalSystem
+	Name: STRING;
+END_ENTITY;
+
+ENTITY CreatedInfo
+	CreatedBy: Contact;
+	CreatedOn: DateTimeValue;
+END_ENTITY;
+
 ENTITY ExternalReference
   ABSTRACT SUPERTYPE OF (ONEOF
   (Asset, Contact, Assembly, Connection, Spare, Resource, Job, Impact, Document, Attribute, Coordinate, Issue));
-	CreatedBy: Contact;
-	CreatedOn: DateTimeValue;
-	ExternalSystem: OPTIONAL STRING;
+	Created: CreatedInfo;
+	ExternalSystem: OPTIONAL ExternalSystem;
 	ExternalObject: OPTIONAL STRING;
 	ExternalId: OPTIONAL STRING;
 END_ENTITY;
