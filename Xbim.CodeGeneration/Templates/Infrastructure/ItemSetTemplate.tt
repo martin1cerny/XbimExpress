@@ -27,13 +27,13 @@ namespace <#= Namespace #>
         }
 
 
-        internal <#= Name #>(<#= ModelInterface #> model)
+        public <#= Name #>(<#= ModelInterface #> model)
         {
             _set = new List<T>();
             _model = model;
         }
 
-        internal <#= Name #>(<#= ModelInterface #> model, IEnumerable<T> collection)
+        public <#= Name #>(<#= ModelInterface #> model, IEnumerable<T> collection)
         {
             _set = new List<T>(collection);
             _model = model;

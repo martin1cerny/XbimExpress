@@ -70,8 +70,10 @@ namespace Xbim.CodeGeneration.Templates
                     namedOccurances.Add(namedDomain);
 
                 var aggregation = Type.Domain as AggregationType;
-                if(aggregation != null)
-                    result.Add("System.Collections.Generic");
+                //if(aggregation != null)
+                    //result.Add("System.Collections.Generic");
+                if (aggregation != null && _settings.IsInfrastructureSeparate)  
+                    result.Add(_settings.InfrastructureNamespace);
 
                 foreach (var type in namedOccurances)
                 {

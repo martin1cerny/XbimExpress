@@ -9,5 +9,6 @@ namespace <#= Namespace #>
 	{
 		int EntityLabel {get; set;}
 		<#= ModelInterface #> Model { get; }
+		bool Activated { get; }
 	}
 }

@@ -74,7 +74,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             #line default
             #line hidden
             this.Write(" _model;\r\n\r\n        protected List<T> Internal\r\n        {\r\n            get { retu" +
-                    "rn _set; }\r\n        }\r\n\r\n\r\n        internal ");
+                    "rn _set; }\r\n        }\r\n\r\n\r\n        public ");
             
             #line 30 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
@@ -89,7 +89,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             #line default
             #line hidden
             this.Write(" model)\r\n        {\r\n            _set = new List<T>();\r\n            _model = model" +
-                    ";\r\n        }\r\n\r\n        internal ");
+                    ";\r\n        }\r\n\r\n        public ");
             
             #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
