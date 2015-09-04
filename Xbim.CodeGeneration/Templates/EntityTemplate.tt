@@ -19,7 +19,9 @@ namespace <#= Namespace #>
 		public int EntityLabel {get; set;}
 		public <#= ModelInterface #> Model { get; internal set; }
 
-		protected bool Activated = false;
+		protected bool IsActivated = false;
+
+		public bool Activated { get { return IsActivated; } }
 		#endregion
 
 <# } #>
@@ -45,10 +47,10 @@ namespace <#= Namespace #>
 		{ 
 			get 
 			{
-				if(Activated) return <#= GetPrivateFieldName(attribute) #>;
+				if(IsActivated) return <#= GetPrivateFieldName(attribute) #>;
 				
 				Model.Activate(this, true);
-				Activated = true;
+				IsActivated = true;
 				return <#= GetPrivateFieldName(attribute) #>;
 			} 
 			set

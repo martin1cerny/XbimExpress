@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Xbim.Step21")]
+[assembly: AssemblyTitle("XbimEssentialsGenerator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Northumbria University")]
-[assembly: AssemblyProduct("Xbim.Step21")]
+[assembly: AssemblyProduct("XbimEssentialsGenerator")]
 [assembly: AssemblyCopyright("Copyright © Northumbria University 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("72ab1b6b-4385-4fb6-b47c-aa835e4a3920")]
+[assembly: Guid("d99d147a-c269-47e3-95b0-e35537e18428")]
 
 // Version information for an assembly consists of the following four values:
 //

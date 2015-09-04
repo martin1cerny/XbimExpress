@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.CodeGeneration", "Xbim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.CodeGeneration.Tests", "Xbim.CodeGeneration.Tests\Xbim.CodeGeneration.Tests.csproj", "{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.Step21", "Xbim.Step21\Xbim.Step21.csproj", "{750ED0D3-FEE2-4319-BCDB-E3BAC63FD1F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimEssentialsGenerator", "XbimEssentialsGenerator\XbimEssentialsGenerator.csproj", "{793BD244-1003-4CEA-833E-22569C8641B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +51,10 @@ Global
 		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{750ED0D3-FEE2-4319-BCDB-E3BAC63FD1F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{750ED0D3-FEE2-4319-BCDB-E3BAC63FD1F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{750ED0D3-FEE2-4319-BCDB-E3BAC63FD1F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{750ED0D3-FEE2-4319-BCDB-E3BAC63FD1F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{793BD244-1003-4CEA-833E-22569C8641B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793BD244-1003-4CEA-833E-22569C8641B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793BD244-1003-4CEA-833E-22569C8641B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793BD244-1003-4CEA-833E-22569C8641B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +63,6 @@ Global
 		{70ACA548-1E13-4DA6-A8A3-B50B14850F61} = {B027FD0A-A830-42E6-9305-1F7948CA863C}
 		{C8D8A236-685A-4F28-A67A-A8A42FC6C3BB} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 		{FCF606EB-88D2-40A4-9D2B-19EFF1A0198B} = {B027FD0A-A830-42E6-9305-1F7948CA863C}
+		{793BD244-1003-4CEA-833E-22569C8641B4} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 	EndGlobalSection
 EndGlobal

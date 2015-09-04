@@ -49,7 +49,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" Model { get; }\r\n\t}\r\n}");
+            this.Write(" Model { get; }\r\n\t\tbool Activated { get; }\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

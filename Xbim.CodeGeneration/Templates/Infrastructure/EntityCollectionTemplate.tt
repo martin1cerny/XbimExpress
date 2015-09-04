@@ -4,13 +4,14 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System;
 
 namespace <#= Namespace #>
 {
 	public interface <#= Name #>: IEnumerable<<#= PersistEntityInterface #>>
 	{
-		IEnumerable<T> Where<T>(Func<T, bool> expr) where T : <#= PersistEntityInterface #>;
+		IEnumerable<T> Where<T>(Expression<Func<T, bool>> expr) where T : <#= PersistEntityInterface #>;
         IEnumerable<T> OfType<T>() where T : <#= PersistEntityInterface #>;
         IEnumerable<T> OfType<T>(bool activate) where T : <#= PersistEntityInterface #>;
         IEnumerable<<#= PersistEntityInterface #>> OfType(string stringType, bool activate);

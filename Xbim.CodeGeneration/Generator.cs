@@ -42,8 +42,7 @@ namespace Xbim.CodeGeneration
                 schema.Get<EnumerationType>().Select(type => new EnumerationTemplate(settings, type)));
             modelTemplates
                 .Add(new EntityFactoryTemplate(settings, schema));
-            modelTemplates
-                .Add(new ItemSetTemplate(settings));
+
             foreach (var tmpl in modelTemplates)
                 ProcessTemplate(tmpl, modelProject);
 
@@ -56,7 +55,8 @@ namespace Xbim.CodeGeneration
                 new TransactionTemplate(settings),
                 new EntityFactoryInterfaceTemplate(settings),
                 new InstantiableEntityTemplate(settings),
-                new AttributesTemplate(settings)
+                new AttributesTemplate(settings),
+                new ItemSetTemplate(settings)
             };
             foreach (var template in infrastructureTemplates)
                 ProcessTemplate(template, infraProject);
