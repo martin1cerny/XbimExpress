@@ -7,19 +7,18 @@ using Xbim.CodeGeneration.Settings;
 
 namespace Xbim.CodeGeneration.Templates.Infrastructure
 {
-    public partial class PersistEntityTemplate: ICodeTemplate
+    public partial class ExpressTypeInterfaces: ICodeTemplate
     {
         private readonly GeneratorSettings _settings;
 
-        public PersistEntityTemplate(GeneratorSettings settings)
+        public ExpressTypeInterfaces(GeneratorSettings settings)
         {
             _settings = settings;
         }
 
-
         public string Name
         {
-            get { return _settings.PersistEntityInterface; }
+            get { return GetType().Name; }
         }
 
         public string Namespace
@@ -37,9 +36,6 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             get { yield break; }
         }
 
-        private string ModelInterface { get { return _settings.ModelInterface; } }
-
         private string PersistInterface { get { return _settings.PersistInterface; } }
-
     }
 }

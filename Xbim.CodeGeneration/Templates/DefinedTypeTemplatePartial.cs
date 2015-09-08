@@ -46,13 +46,15 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
                 //parents.Insert(0, _settings.TypeSettings.BaseType);
-                var i = String.Join(", ", parents);
-                if (String.IsNullOrWhiteSpace(i))
+                parents.Add("IExpressSelectType");
+                var i = string.Join(", ", parents);
+                if (string.IsNullOrWhiteSpace(i))
                     return "";
                 return ": " + i;
             }
         }
 
+        private string PersistInterface { get { return _settings.PersistInterface; } }
 
         public IEnumerable<string> Using
         {
@@ -72,7 +74,7 @@ namespace Xbim.CodeGeneration.Templates
                 var aggregation = Type.Domain as AggregationType;
                 //if(aggregation != null)
                     //result.Add("System.Collections.Generic");
-                if (aggregation != null && _settings.IsInfrastructureSeparate)  
+                if (_settings.IsInfrastructureSeparate)  
                     result.Add(_settings.InfrastructureNamespace);
 
                 foreach (var type in namedOccurances)

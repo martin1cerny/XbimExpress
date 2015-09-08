@@ -56,7 +56,9 @@ namespace Xbim.CodeGeneration
                 new EntityFactoryInterfaceTemplate(settings),
                 new InstantiableEntityTemplate(settings),
                 new AttributesTemplate(settings),
-                new ItemSetTemplate(settings)
+                new ItemSetTemplate(settings),
+                new PersistTemplate(settings),
+                new ExpressTypeInterfaces(settings)
             };
             foreach (var template in infrastructureTemplates)
                 ProcessTemplate(template, infraProject);

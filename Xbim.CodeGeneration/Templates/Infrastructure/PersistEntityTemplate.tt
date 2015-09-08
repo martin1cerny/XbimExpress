@@ -5,9 +5,9 @@
 <#@ import namespace="System.Collections.Generic" #>
 namespace <#= Namespace #>
 {
-	public interface <#= Name #>
+	public interface <#= Name #> 
 	{
-		int EntityLabel {get; set;}
+		int EntityLabel {get; }
 		<#= ModelInterface #> Model { get; }
 		bool Activated { get; }
 	}

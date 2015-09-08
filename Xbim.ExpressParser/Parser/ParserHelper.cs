@@ -115,6 +115,7 @@ namespace Xbim.ExpressParser
             }
         }
 
+        private int _lastEntityId = 0;
         private void CreateEntity(string name, IEnumerable<ValueType> sections)
         {
             var entity = Model.New<EntityDefinition>(_currentSchema, e =>
@@ -123,6 +124,7 @@ namespace Xbim.ExpressParser
                 e.PersistanceName = name.ToUpperInvariant();
                 //entities are instantiable by default
                 e.Instantiable = true;
+                e.TypeId = _lastEntityId++;
             });
             foreach (var section in sections)
             {

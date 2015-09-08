@@ -57,7 +57,7 @@
       <DependentUpon>EntityInterfaceTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\EntityInterfaceTemplatePartial.cs" />
-    <Compile Include="Templates\EntityTemplate1.cs">
+    <Compile Include="Templates\EntityTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityTemplate.tt</DependentUpon>
@@ -99,6 +99,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Templates\Infrastructure\ExpressTypeInterfacesPartial.cs" />
     <Compile Include="Templates\Infrastructure\InstantiableEntityTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -117,12 +118,23 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\ModelTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\PersistTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\PersistTemplate.cs">
+      <DependentUpon>PersistTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Templates\Infrastructure\PersistEntityTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PersistEntityTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\PersistEntityTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\ExpressTypeInterfaces.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExpressTypeInterfaces.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\Infrastructure\TransactionTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -148,7 +160,7 @@
     </None>
     <None Include="Templates\EntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityTemplate1.cs</LastGenOutput>
+      <LastGenOutput>EntityTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\EnumerationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -186,9 +198,17 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ModelTemplate.cs</LastGenOutput>
     </None>
+    <None Include="Templates\Infrastructure\PersistTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>PersistTemplate.cs</LastGenOutput>
+    </None>
     <None Include="Templates\Infrastructure\PersistEntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>PersistEntityTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\ExpressTypeInterfaces.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ExpressTypeInterfaces.cs</LastGenOutput>
     </None>
     <None Include="Templates\Infrastructure\TransactionTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

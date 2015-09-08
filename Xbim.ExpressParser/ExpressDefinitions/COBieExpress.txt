@@ -19,7 +19,7 @@ Developed by:
 Martin Cerny (martin.cerny@northumbria.ac.uk)
 *)
 
-SCHEMA IFC2X3;
+SCHEMA COBIE_EXPRESS;
 
 TYPE SpatialDivision = SELECT
 	(Site
@@ -89,6 +89,7 @@ ENTITY ExternalReference
 	ExternalSystem: OPTIONAL ExternalSystem;
 	ExternalObject: OPTIONAL STRING;
 	ExternalId: OPTIONAL STRING;
+	LocalId: INTEGER;
 END_ENTITY;
 
 ENTITY Contact

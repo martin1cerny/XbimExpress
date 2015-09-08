@@ -12,12 +12,12 @@ namespace <#= Namespace #>
 {
 	public interface <#= Name #> <#= Inheritance #>
 	{
-		T New<T>(<#= ModelInterface #> model) where T: <#= InstantiableEntityInterface #>;
+		T New<T>(<#= ModelInterface #> model, int entityLabel, bool activated) where T: <#= InstantiableEntityInterface #>;
 
-		T New<T>(<#= ModelInterface #> model, Action<T> init) where T: <#= InstantiableEntityInterface #>;
+		T New<T>(<#= ModelInterface #> model, Action<T> init, int entityLabel, bool activated) where T: <#= InstantiableEntityInterface #>;
 
-		<#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, Type t);
+		<#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, Type t, int entityLabel, bool activated);
 
-		<#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, string typeName);
+		<#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, string typeName, int entityLabel, bool activated);
 	}
 }

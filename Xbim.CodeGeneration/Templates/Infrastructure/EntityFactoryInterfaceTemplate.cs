@@ -77,7 +77,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" model) where T: ");
+            this.Write(" model, int entityLabel, bool activated) where T: ");
             
             #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
@@ -91,7 +91,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" model, Action<T> init) where T: ");
+            this.Write(" model, Action<T> init, int entityLabel, bool activated) where T: ");
             
             #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
@@ -112,7 +112,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" model, Type t);\r\n\r\n\t\t");
+            this.Write(" model, Type t, int entityLabel, bool activated);\r\n\r\n\t\t");
             
             #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
@@ -126,7 +126,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" model, string typeName);\r\n\t}\r\n}");
+            this.Write(" model, string typeName, int entityLabel, bool activated);\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

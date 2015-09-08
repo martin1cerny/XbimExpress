@@ -42,7 +42,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t\tint EntityLabel {get; set;}\r\n\t\t");
+            this.Write(" \r\n\t{\r\n\t\tint EntityLabel {get; }\r\n\t\t");
             
             #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\PersistEntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));

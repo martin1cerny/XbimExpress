@@ -11,17 +11,14 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-	[EntityName("<#= Type.PersistanceName #>")]
+	[EntityName("<#= Type.PersistanceName #>", <#= Type.TypeId #>)]
 	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>
 	{
 <# if (IsFirst) {#>
 		#region Implementation of <#= PersistEntityInterface #>
-		public int EntityLabel {get; set;}
+		public int EntityLabel {get; internal set;}
 		public <#= ModelInterface #> Model { get; internal set; }
-
-		protected bool IsActivated = false;
-
-		public bool Activated { get { return IsActivated; } }
+		public bool Activated { get; internal set; }
 		#endregion
 
 <# } #>
@@ -47,10 +44,10 @@ namespace <#= Namespace #>
 		{ 
 			get 
 			{
-				if(IsActivated) return <#= GetPrivateFieldName(attribute) #>;
+				if(Activated) return <#= GetPrivateFieldName(attribute) #>;
 				
 				Model.Activate(this, true);
-				IsActivated = true;
+				Activated = true;
 				return <#= GetPrivateFieldName(attribute) #>;
 			} 
 			set
@@ -213,5 +210,15 @@ namespace <#= Namespace #>
 <# } #>
 		#endregion
 <# } #>
+
+		#region <#= PersistInterface #> implementation
+<# if (!IsAbstract) { #>
+		void <#= PersistInterface #>.Set(int propIndex, IPropertyValue value)
+		{
+            throw new System.NotImplementedException();
+		}
+<# } #>
+		#endregion
+
 	}
 }
