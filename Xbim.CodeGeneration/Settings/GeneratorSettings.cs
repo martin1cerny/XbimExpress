@@ -29,6 +29,7 @@ namespace Xbim.CodeGeneration.Settings
             ModelInterface = "IModel";
             EntityCollentionInterface = "IEntityCollection";
             PersistEntityInterface = "IPersistEntity";
+            PersistInterface = "IPersist";
             TransactionInterface = "ITransaction";
             ItemSetClassName = "ItemSet";
             EntityFactory = "EntityFactory";
@@ -42,7 +43,7 @@ namespace Xbim.CodeGeneration.Settings
         internal bool IsInfrastructureSeparate {
             get
             {
-                return !String.IsNullOrWhiteSpace(InfrastructureOutputPath) && InfrastructureOutputPath != OutputPath;
+                return !string.IsNullOrWhiteSpace(InfrastructureOutputPath) && InfrastructureOutputPath != OutputPath;
             }
         }
 
@@ -108,6 +109,11 @@ namespace Xbim.CodeGeneration.Settings
         /// accross the model.
         /// </summary>
         public string PersistEntityInterface { get; set; }
+
+        /// <summary>
+        /// All persistent data items implement this interface.
+        /// </summary>
+        public string PersistInterface { get; set; }
 
         /// <summary>
         /// Interface for the basic transactions. All setters and collection operations

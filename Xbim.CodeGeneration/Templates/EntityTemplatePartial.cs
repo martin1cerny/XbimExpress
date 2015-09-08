@@ -181,6 +181,8 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        private string PersistInterface { get { return _settings.PersistInterface; } }
+
         protected NamedType GetNamedElementType(AggregationType aggregation)
         {
             if (aggregation.ElementType is SimpleType) return null;

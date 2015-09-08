@@ -192,7 +192,22 @@ namespace Xbim.CodeGeneration.Templates
             #line hidden
             this.Write(" obj2)\r\n        {\r\n            return !Equals(obj1, obj2);\r\n        }\r\n\r\n        " +
                     "public override int GetHashCode()\r\n        {\r\n            return Value != null ?" +
-                    " _theValue.GetHashCode() : base.GetHashCode();\r\n        }\r\n\t}\r\n}\r\n");
+                    " _theValue.GetHashCode() : base.GetHashCode();\r\n        }\r\n\r\n\t\t#region ");
+            
+            #line 72 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" implementation\r\n\t\t\r\n\t\tvoid ");
+            
+            #line 74 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
+            
+            #line default
+            #line hidden
+            this.Write(".Set(int propIndex, IPropertyValue value)\r\n\t\t{\r\n            throw new System.NotI" +
+                    "mplementedException();\r\n\t\t}\r\n\r\n\t\t#endregion\r\n\t}\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

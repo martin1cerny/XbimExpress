@@ -40,12 +40,14 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 	[AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class EntityNameAttribute : Attribute
     {
-        public EntityNameAttribute(string name)
+        public EntityNameAttribute(string name, int id)
         {
             Name = name;
+			TypeId = id;
         }
 
         public string Name { get; private set; }
+        public int TypeId { get; private set; }
     }
 
 	[AttributeUsage(AttributeTargets.Property)]

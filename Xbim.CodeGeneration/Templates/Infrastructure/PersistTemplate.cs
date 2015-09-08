@@ -18,9 +18,9 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\PersistTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class EntityFactoryTemplate : EntityFactoryTemplateBase
+    public partial class PersistTemplate : PersistTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,153 +28,31 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using System;\r\n");
+            this.Write("namespace ");
             
-            #line 7 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
- foreach(var u in Using) { 
-            
-            #line default
-            #line hidden
-            this.Write("using ");
-            
-            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(u));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n");
-            
-            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\r\nnamespace ");
-            
-            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 6 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\PersistTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\tpublic sealed class ");
+            this.Write("\r\n{\r\n\tpublic interface ");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\PersistTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write(" ");
-            
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Inheritance));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t{\r\n\t\tpublic T New<T>(");
-            
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
-            
-            #line default
-            #line hidden
-            this.Write(" model, int entityLabel, bool activated) where T: ");
-            
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\t{\r\n\t\t\treturn (T)New(model, typeof(T), entityLabel, activated);\r\n\t\t}\r\n\r\n\t\tpubl" +
-                    "ic T New<T>(");
-            
-            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
-            
-            #line default
-            #line hidden
-            this.Write(" model, Action<T> init, int entityLabel, bool activated) where T: ");
-            
-            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\t{\r\n\t\t\tvar o = New<T>(model, entityLabel, activated);\r\n\t\t\tinit(o);\r\n\t\t\treturn " +
-                    "o;\r\n\t\t}\r\n\r\n\t\tpublic ");
-            
-            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
-            
-            #line default
-            #line hidden
-            this.Write(" New(");
-            
-            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
-            
-            #line default
-            #line hidden
-            this.Write(@" model, Type t, int entityLabel, bool activated)
-		{
-			//check that the type is from this assembly
-			if(t.Assembly != GetType().Assembly)
-				throw new Exception(""This factory only creates types from its assembly"");
+            this.Write(@"
+	{
+		void Set(int propIndex, IPropertyValue value);
 
-			return New(model, t.Name, entityLabel, activated);
-		}
-
-		public ");
-            
-            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
-            
-            #line default
-            #line hidden
-            this.Write(" New(");
-            
-            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
-            
-            #line default
-            #line hidden
-            this.Write(" model, string typeName, int entityLabel, bool activated)\r\n\t\t{\r\n\t\t\tif (model == n" +
-                    "ull || typeName == null)\r\n\t\t\t\tthrow new ArgumentNullException();\r\n\r\n\t\t\tvar name " +
-                    "= typeName.ToUpper();\r\n\t\t\tswitch(name)\r\n\t\t\t{\r\n");
-            
-            #line 44 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
- foreach(var entity in NonAbstractEntities) {
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\tcase \"");
-            
-            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name.ToString().ToUpper()));
-            
-            #line default
-            #line hidden
-            this.Write("\": return new ");
-            
-            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" ( model ) { Activated = activated, EntityLabel = entityLabel };\r\n");
-            
-            #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\tthrow new Exception(\"Type must be non-abstract type of ");
-            
-            #line 48 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
-            
-            #line default
-            #line hidden
-            this.Write("\");\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n");
+        /// <summary>
+        ///   Validates the object against the Ifc schema where rule, returns empty string if the object complies or an error string indicating the reason for compliance failure
+        /// </summary>
+        /// <returns></returns>
+        //string WhereRule();
+	}
+}");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -186,7 +64,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class EntityFactoryTemplateBase
+    public class PersistTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

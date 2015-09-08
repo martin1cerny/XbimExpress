@@ -68,5 +68,14 @@ namespace <#= Namespace #>
         {
             return Value != null ? _theValue.GetHashCode() : base.GetHashCode();
         }
+
+		#region <#= PersistInterface #> implementation
+		
+		void <#= PersistInterface #>.Set(int propIndex, IPropertyValue value)
+		{
+            throw new System.NotImplementedException();
+		}
+
+		#endregion
 	}
 }
