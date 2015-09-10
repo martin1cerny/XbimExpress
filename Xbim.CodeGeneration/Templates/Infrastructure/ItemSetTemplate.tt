@@ -266,5 +266,9 @@ namespace <#= Namespace #>
         }
 
         #endregion
+
+		#region IndexAccess
+		
+		#endregion
     }
 }

@@ -93,6 +93,7 @@ namespace Xbim.CodeGeneration.Templates
         protected string ModelInterface { get { return _settings.ModelInterface; } }
 
         protected string AbstractKeyword { get { return IsAbstract ? "abstract" : ""; } }
+        protected string VirtualOverrideKeyword { get { return (IsAbstract ? "virtual" : "") + (IsFirst ? "" : " override"); } }
 
         protected bool IsFirst { get { return Type.Supertypes == null || !Type.Supertypes.Any(); } }
         protected bool IsFirstNonAbstract { 
