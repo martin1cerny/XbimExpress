@@ -182,7 +182,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                     "\r\n        }\r\n\r\n        bool ICollection.IsSynchronized\r\n        {\r\n            g" +
                     "et { return ((ICollection)Internal).IsSynchronized; }\r\n        }\r\n\r\n        obje" +
                     "ct ICollection.SyncRoot\r\n        {\r\n            get { return ((ICollection)Inter" +
-                    "nal).SyncRoot; }\r\n        }\r\n\r\n        #endregion\r\n    }\r\n}\r\n");
+                    "nal).SyncRoot; }\r\n        }\r\n\r\n        #endregion\r\n\r\n\t\t#region IndexAccess\r\n\t\t\r\n" +
+                    "\t\t#endregion\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -17,8 +17,24 @@ namespace <#= Namespace #>
 <# if (IsFirst) {#>
 		#region Implementation of <#= PersistEntityInterface #>
 		public int EntityLabel {get; internal set;}
+		
 		public <#= ModelInterface #> Model { get; internal set; }
+		
 		public bool Activated { get; internal set; }
+
+		public void Activate(bool write)
+		{
+			if (Activated) return; //activation can only happen once in a lifetime of the object
+
+			Model.Activate(this, write);
+			Activated = true;
+		}
+
+		public void Activate (Action activation)
+		{
+			activation();
+			Activated = true;
+		}
 		#endregion
 
 <# } #>
@@ -220,5 +236,9 @@ namespace <#= Namespace #>
 <# } #>
 		#endregion
 
+		public <#= VirtualOverrideKeyword #> string WhereRule() 
+		{
+			return "";
+		}
 	}
 }

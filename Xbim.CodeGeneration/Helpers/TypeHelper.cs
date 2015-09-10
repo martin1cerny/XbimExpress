@@ -17,7 +17,7 @@ namespace Xbim.CodeGeneration.Helpers
 
             if(attribute.OptionalFlag && (
                 (domain is SimpleType && !(domain is LogicalType) && !(domain is StringType)) ||
-                domain is DefinedType
+                domain is DefinedType || domain is EnumerationType
                 ))
             type += "?";
             return type;
@@ -30,10 +30,10 @@ namespace Xbim.CodeGeneration.Helpers
             {
                 if (simple is BinaryType) return "byte[]";
                 if (simple is BooleanType) return "bool";
-                if (simple is IntegerType) return "int";
+                if (simple is IntegerType) return "long";
                 if (simple is LogicalType) return "bool?";
-                if (simple is NumberType) return "float";
-                if (simple is RealType) return "float";
+                if (simple is NumberType) return "double";
+                if (simple is RealType) return "double";
                 if (simple is StringType) return "string";
             }
 
