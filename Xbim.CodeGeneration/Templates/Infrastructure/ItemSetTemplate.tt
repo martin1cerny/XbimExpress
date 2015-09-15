@@ -268,7 +268,36 @@ namespace <#= Namespace #>
         #endregion
 
 		#region IndexAccess
-		
+		public T this[int index]
+		{
+		    get
+		    {
+		        return Internal[index];
+		    }
+		    set
+		    {
+				if(_model.IsTransactional && _model.CurrentTransaction == null)
+				    throw new Exception("Operation out of transaction");
+
+				var oldValue = Internal[index];
+		        Internal[index] = value;
+
+				if (_model.IsTransactional)
+				{
+				    Action undo = () => Internal[index] = oldValue;
+				    _model.CurrentTransaction.AddReversibleAction(undo);
+				}
+
+				if (CollectionChanged != null)
+				    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, value));
+
+		    }
+		}
+
+		public int IndexOf(T item)
+		{
+			return Internal.IndexOf(item);
+		}
 		#endregion
     }
 }

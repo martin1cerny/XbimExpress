@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.CodeGeneration.Helpers;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
@@ -15,15 +12,15 @@ namespace Xbim.CodeGeneration.Templates
     {
         public EntityDefinition Type { get; private set; }
 
-        protected readonly NamedTypeHelper _helper;
+        protected readonly NamedTypeHelper Helper;
 
-        protected readonly GeneratorSettings _settings;
+        protected readonly GeneratorSettings Settings;
 
         protected EntityTemplate(){}
         public EntityTemplate(GeneratorSettings settings, EntityDefinition type)
         {
-            _settings = settings;
-            _helper = new NamedTypeHelper(type, settings);
+            Settings = settings;
+            Helper = new NamedTypeHelper(type, settings);
             Type = type;
             WhereRules = Type.WhereRules.ToList();
             ExplicitAttributes = Type.ExplicitAttributes.ToList();
@@ -46,7 +43,7 @@ namespace Xbim.CodeGeneration.Templates
         {
             get
             {
-                return _helper.FullNamespace;
+                return Helper.FullNamespace;
             }
         }
 
@@ -62,12 +59,12 @@ namespace Xbim.CodeGeneration.Templates
                 if (IsFirst)
                 {
                     if (!Type.Instantiable)  //avoid redundant inheritance
-                        parents.Add(_settings.PersistEntityInterface);
+                        parents.Add(Settings.PersistEntityInterface);
                     parents.Add("INotifyPropertyChanged");
                 }
                 else
                     parents.AddRange(Type.Supertypes.Select(t => 
-                        _settings.GenerateAllAsInterfaces ? 
+                        Settings.GenerateAllAsInterfaces ? 
                         "I" + t.Name.ToString() : 
                         t.Name.ToString()));
 
@@ -76,7 +73,7 @@ namespace Xbim.CodeGeneration.Templates
 
                 //sign types to be instantiable in entity factory
                 if(Type.Instantiable)
-                    parents.Add(_settings.InstantiableEntityInterface);
+                    parents.Add(Settings.InstantiableEntityInterface);
 
                 //merge to a single string
                 var i = String.Join(", ", parents);
@@ -87,13 +84,13 @@ namespace Xbim.CodeGeneration.Templates
 
         protected virtual string GetCSType(ExplicitAttribute attribute)
         {
-            return TypeHelper.GetCSType(attribute, _settings);
+            return TypeHelper.GetCSType(attribute, Settings);
         }
 
-        protected string ModelInterface { get { return _settings.ModelInterface; } }
+        protected string ModelInterface { get { return Settings.ModelInterface; } }
 
         protected string AbstractKeyword { get { return IsAbstract ? "abstract" : ""; } }
-        protected string VirtualOverrideKeyword { get { return (IsAbstract ? "virtual" : "") + (IsFirst ? "" : " override"); } }
+        protected string VirtualOverrideKeyword { get { return (IsFirst ? "virtual" : " override"); } }
 
         protected bool IsFirst { get { return Type.Supertypes == null || !Type.Supertypes.Any(); } }
         protected bool IsFirstNonAbstract { 
@@ -103,7 +100,7 @@ namespace Xbim.CodeGeneration.Templates
             } 
         }
 
-        protected string InstantiableInterface { get { return _settings.InstantiableEntityInterface; } }
+        protected string InstantiableInterface { get { return Settings.InstantiableEntityInterface; } }
 
         protected string GetPrivateFieldName(Attribute attribute)
         {
@@ -153,7 +150,7 @@ namespace Xbim.CodeGeneration.Templates
 
                 foreach (var type in namedOccurances)
                 {
-                    var helper = new NamedTypeHelper(type, _settings);
+                    var helper = new NamedTypeHelper(type, Settings);
                     var ns = helper.FullNamespace;
                     if (ns == Namespace) continue;
                     if(result.Contains(ns)) continue;
@@ -175,14 +172,14 @@ namespace Xbim.CodeGeneration.Templates
                     result.Add("System");
                 }
 
-                if (_settings.IsInfrastructureSeparate)
-                    result.Add(_settings.InfrastructureNamespace);
+                if (Settings.IsInfrastructureSeparate)
+                    result.Add(Settings.InfrastructureNamespace);
 
                 return result;
             }
         }
 
-        private string PersistInterface { get { return _settings.PersistInterface; } }
+        private string PersistInterface { get { return Settings.PersistInterface; } }
 
         protected NamedType GetNamedElementType(AggregationType aggregation)
         {
@@ -198,7 +195,7 @@ namespace Xbim.CodeGeneration.Templates
             throw new NotSupportedException();
         }
 
-        protected string PersistEntityInterface { get { return _settings.PersistEntityInterface; } }
+        protected string PersistEntityInterface { get { return Settings.PersistEntityInterface; } }
 
         protected bool IsAggregation(InverseAttribute attribute)
         {
@@ -257,7 +254,7 @@ namespace Xbim.CodeGeneration.Templates
             if (aggregationType != null)
             {
                 var type = aggregationType.ElementType;
-                return TypeHelper.GetCSType(type, _settings);
+                return TypeHelper.GetCSType(type, Settings);
             }
             throw new Exception("Aggregation type expected");
         }

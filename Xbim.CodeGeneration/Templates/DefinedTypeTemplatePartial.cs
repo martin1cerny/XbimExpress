@@ -46,7 +46,7 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
                 //parents.Insert(0, _settings.TypeSettings.BaseType);
-                parents.Add("IExpressSelectType");
+                parents.Add("IExpressType");
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i))
                     return "";
