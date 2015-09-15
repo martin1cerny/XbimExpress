@@ -228,17 +228,17 @@ namespace <#= Namespace #>
 <# } #>
 
 		#region <#= PersistInterface #> implementation
-<# if (!IsAbstract) { #>
-		void <#= PersistInterface #>.Set(int propIndex, IPropertyValue value)
+		public <#= VirtualOverrideKeyword #> void Parse(int propIndex, IPropertyValue value)
 		{
             throw new System.NotImplementedException();
 		}
-<# } #>
-		#endregion
-
+		
 		public <#= VirtualOverrideKeyword #> string WhereRule() 
 		{
-			return "";
+            throw new System.NotImplementedException();
 		}
+		#endregion
+
+		
 	}
 }

@@ -182,8 +182,17 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                     "\r\n        }\r\n\r\n        bool ICollection.IsSynchronized\r\n        {\r\n            g" +
                     "et { return ((ICollection)Internal).IsSynchronized; }\r\n        }\r\n\r\n        obje" +
                     "ct ICollection.SyncRoot\r\n        {\r\n            get { return ((ICollection)Inter" +
-                    "nal).SyncRoot; }\r\n        }\r\n\r\n        #endregion\r\n\r\n\t\t#region IndexAccess\r\n\t\t\r\n" +
-                    "\t\t#endregion\r\n    }\r\n}\r\n");
+                    "nal).SyncRoot; }\r\n        }\r\n\r\n        #endregion\r\n\r\n\t\t#region IndexAccess\r\n\t\tpu" +
+                    "blic T this[int index]\r\n\t\t{\r\n\t\t    get\r\n\t\t    {\r\n\t\t        return Internal[index" +
+                    "];\r\n\t\t    }\r\n\t\t    set\r\n\t\t    {\r\n\t\t\t\tif(_model.IsTransactional && _model.Current" +
+                    "Transaction == null)\r\n\t\t\t\t    throw new Exception(\"Operation out of transaction\"" +
+                    ");\r\n\r\n\t\t\t\tvar oldValue = Internal[index];\r\n\t\t        Internal[index] = value;\r\n\r" +
+                    "\n\t\t\t\tif (_model.IsTransactional)\r\n\t\t\t\t{\r\n\t\t\t\t    Action undo = () => Internal[in" +
+                    "dex] = oldValue;\r\n\t\t\t\t    _model.CurrentTransaction.AddReversibleAction(undo);\r\n" +
+                    "\t\t\t\t}\r\n\r\n\t\t\t\tif (CollectionChanged != null)\r\n\t\t\t\t    CollectionChanged(this, new" +
+                    " NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, value));\r\n\r" +
+                    "\n\t\t    }\r\n\t\t}\r\n\r\n\t\tpublic int IndexOf(T item)\r\n\t\t{\r\n\t\t\treturn Internal.IndexOf(i" +
+                    "tem);\r\n\t\t}\r\n\t\t#endregion\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

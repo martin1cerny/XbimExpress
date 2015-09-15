@@ -45,15 +45,15 @@ namespace Xbim.CodeGeneration.Templates
 
                 foreach (var type in namedOccurances)
                 {
-                    var helper = new NamedTypeHelper(type, _settings);
+                    var helper = new NamedTypeHelper(type, Settings);
                     var ns = helper.FullNamespace;
                     if (ns == Namespace) continue;
                     if (result.Contains(ns)) continue;
                     result.Add(ns);
                 }
 
-                if (_settings.IsInfrastructureSeparate)
-                    result.Add(_settings.InfrastructureNamespace);
+                if (Settings.IsInfrastructureSeparate)
+                    result.Add(Settings.InfrastructureNamespace);
 
                 return result;
             }

@@ -862,36 +862,23 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write(" implementation\r\n");
+            this.Write(" implementation\r\n\t\tpublic ");
             
             #line 231 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- if (!IsAbstract) { 
-            
-            #line default
-            #line hidden
-            this.Write("\t\tvoid ");
-            
-            #line 232 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
-            
-            #line default
-            #line hidden
-            this.Write(".Set(int propIndex, IPropertyValue value)\r\n\t\t{\r\n            throw new System.NotI" +
-                    "mplementedException();\r\n\t\t}\r\n");
-            
-            #line 236 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t#endregion\r\n\r\n\t\tpublic ");
-            
-            #line 239 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(VirtualOverrideKeyword));
             
             #line default
             #line hidden
-            this.Write(" string WhereRule() \r\n\t\t{\r\n\t\t\treturn \"\";\r\n\t\t}\r\n\t}\r\n}");
+            this.Write(" void Parse(int propIndex, IPropertyValue value)\r\n\t\t{\r\n            throw new Syst" +
+                    "em.NotImplementedException();\r\n\t\t}\r\n\t\t\r\n\t\tpublic ");
+            
+            #line 236 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(VirtualOverrideKeyword));
+            
+            #line default
+            #line hidden
+            this.Write(" string WhereRule() \r\n\t\t{\r\n            throw new System.NotImplementedException()" +
+                    ";\r\n\t\t}\r\n\t\t#endregion\r\n\r\n\t\t\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

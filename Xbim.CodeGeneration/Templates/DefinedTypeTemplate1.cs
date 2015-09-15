@@ -199,15 +199,45 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write(" implementation\r\n\t\t\r\n\t\tvoid ");
+            this.Write(" implementation\r\n\t\tvoid ");
             
-            #line 74 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 73 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
             
             #line default
             #line hidden
-            this.Write(".Set(int propIndex, IPropertyValue value)\r\n\t\t{\r\n            throw new System.NotI" +
-                    "mplementedException();\r\n\t\t}\r\n\r\n\t\t#endregion\r\n\t}\r\n}\r\n");
+            this.Write(".Parse(int propIndex, IPropertyValue value)\r\n\t\t{\r\n            throw new System.No" +
+                    "tImplementedException();\r\n\t\t}\r\n\r\n\t\tstring ");
+            
+            #line 78 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
+            
+            #line default
+            #line hidden
+            this.Write(@".WhereRule()
+		{
+            throw new System.NotImplementedException();
+		}
+		#endregion
+
+		#region IExpressType implementation
+		string IExpressType.ToPart21 { 
+			get 
+			{
+				throw new System.NotImplementedException();
+			}
+		}
+        System.Type IExpressType.UnderlyingSystemType { 
+			get 
+			{
+				throw new System.NotImplementedException();
+			}
+		}
+		#endregion
+
+	}
+}
+");
             return this.GenerationEnvironment.ToString();
         }
     }

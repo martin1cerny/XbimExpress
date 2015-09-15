@@ -70,12 +70,31 @@ namespace <#= Namespace #>
         }
 
 		#region <#= PersistInterface #> implementation
-		
-		void <#= PersistInterface #>.Set(int propIndex, IPropertyValue value)
+		void <#= PersistInterface #>.Parse(int propIndex, IPropertyValue value)
 		{
             throw new System.NotImplementedException();
 		}
 
+		string <#= PersistInterface #>.WhereRule()
+		{
+            throw new System.NotImplementedException();
+		}
 		#endregion
+
+		#region IExpressType implementation
+		string IExpressType.ToPart21 { 
+			get 
+			{
+				throw new System.NotImplementedException();
+			}
+		}
+        System.Type IExpressType.UnderlyingSystemType { 
+			get 
+			{
+				throw new System.NotImplementedException();
+			}
+		}
+		#endregion
+
 	}
 }

@@ -40,7 +40,7 @@ namespace Xbim.CodeGeneration.Templates
             get
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
-                
+                if (parents.Count == 0) parents.Add("IExpressSelectType");
                 var i = String.Join(", ", parents);
                 if (String.IsNullOrWhiteSpace(i)) return "";
                 return ": " + i;
@@ -68,6 +68,8 @@ namespace Xbim.CodeGeneration.Templates
                     if (result.Contains(ns)) continue;
                     result.Add(ns);
                 }
+
+                if(result.Count == 0) result.Add(_settings.InfrastructureNamespace);
 
                 return result;
             }

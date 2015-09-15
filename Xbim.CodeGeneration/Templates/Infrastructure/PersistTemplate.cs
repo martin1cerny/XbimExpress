@@ -44,13 +44,13 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             #line hidden
             this.Write(@"
 	{
-		void Set(int propIndex, IPropertyValue value);
-
-        /// <summary>
+		void Parse(int propIndex, IPropertyValue value);
+        
+		/// <summary>
         ///   Validates the object against the Ifc schema where rule, returns empty string if the object complies or an error string indicating the reason for compliance failure
         /// </summary>
         /// <returns></returns>
-        //string WhereRule();
+        string WhereRule();
 	}
 }");
             return this.GenerationEnvironment.ToString();
