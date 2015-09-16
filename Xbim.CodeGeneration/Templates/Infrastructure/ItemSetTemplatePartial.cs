@@ -23,7 +23,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public string Namespace
         {
-            get { return _settings.InfrastructureNamespace; }
+            get { return _settings.Namespace; }
         }
 
         public string Inheritance
@@ -43,5 +43,6 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         }
 
         private string ModelInterface { get { return _settings.ModelInterface; } }
+        private string PersistEntityInterface { get { return _settings.PersistEntityInterface; } }
     }
 }

@@ -16,10 +16,12 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-    public class <#= Name #><T> : ICollection<T>, ICollection, INotifyCollectionChanged, INotifyPropertyChanged
+    public class <#= Name #><T> : I<#= Name #><T>
     {
         private readonly List<T> _set;
         private readonly <#= ModelInterface #> _model;
+
+		public <#= PersistEntityInterface #> OwningEntity { get; private set; }
 
         protected List<T> Internal
         {
@@ -27,16 +29,25 @@ namespace <#= Namespace #>
         }
 
 
-        public <#= Name #>(<#= ModelInterface #> model)
+        public <#= Name #>(<#= PersistEntityInterface #> entity)
         {
             _set = new List<T>();
-            _model = model;
+            _model = entity.Model;
+			OwningEntity = entity;
         }
 
-        public <#= Name #>(<#= ModelInterface #> model, IEnumerable<T> collection)
+		public <#= Name #>(<#= PersistEntityInterface #> entity, int count)
+        {
+            _set = new List<T>(count);
+            _model = entity.Model;
+			OwningEntity = entity;
+        }
+
+        public <#= Name #>(<#= PersistEntityInterface #> entity, IEnumerable<T> collection)
         {
             _set = new List<T>(collection);
-            _model = model;
+            _model = entity.Model;
+			OwningEntity = entity;
         }
 
         #region INotifyPropertyChanged Members
@@ -60,39 +71,7 @@ namespace <#= Namespace #>
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-
         #endregion
-
-        public T First
-        {
-            get { return Internal.First(); }
-        }
-
-        public T FirstOrDefault()
-        {
-            return Internal.FirstOrDefault();
-        }
-
-        public T FirstOrDefault(Func<T, bool> predicate)
-        {
-            return Internal.FirstOrDefault(predicate);
-        }
-
-        public TF FirstOrDefault<TF>(Func<TF, bool> predicate)
-        {
-            return OfType<TF>().FirstOrDefault<TF>(predicate);
-        }
-
-        public IEnumerable<TW> Where<TW>(Func<TW, bool> predicate)
-        {
-            return OfType<TW>().Where(predicate);
-        }
-
-
-        public IEnumerable<TO> OfType<TO>()
-        {
-            return Internal.Count == 0 ? Enumerable.Empty<TO>() : Internal.OfType<TO>();
-        }
 
         #region ICollection<T> Members
 
@@ -106,8 +85,9 @@ namespace <#= Namespace #>
 
             if (_model.IsTransactional)
             {
-                Action undo = () => Internal.Remove(item);
-                _model.CurrentTransaction.AddReversibleAction(undo);
+                Action undoAction = () => Internal.Remove(item);
+                Action doAction = () => Internal.Add(item);
+                _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity);
             }
 
             if (CollectionChanged != null)
@@ -128,8 +108,9 @@ namespace <#= Namespace #>
             if (_model.IsTransactional)
             {
                 var oldItems = Internal.ToArray();
-                Action undo = () => Internal.AddRange(oldItems);
-                _model.CurrentTransaction.AddReversibleAction(undo);
+                Action doAction = () => Internal.Clear();
+                Action undoAction = () => Internal.AddRange(oldItems);
+                _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity);
             }
 
             if (CollectionChanged != null)
@@ -165,8 +146,9 @@ namespace <#= Namespace #>
 
             if (_model.IsTransactional)
             {
-                Action undo = () => Internal.Add(item);
-                _model.CurrentTransaction.AddReversibleAction(undo);
+                Action doAction = () => Internal.Remove(item);
+                Action undoAction = () => Internal.Add(item);
+                _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity);
             }
 
             if (CollectionChanged != null)
@@ -267,7 +249,7 @@ namespace <#= Namespace #>
 
         #endregion
 
-		#region IndexAccess
+		#region IList<T> members
 		public T this[int index]
 		{
 		    get
@@ -284,12 +266,13 @@ namespace <#= Namespace #>
 
 				if (_model.IsTransactional)
 				{
-				    Action undo = () => Internal[index] = oldValue;
-				    _model.CurrentTransaction.AddReversibleAction(undo);
+				    Action doAction = () => Internal[index] = value;
+				    Action undoAction = () => Internal[index] = oldValue;
+				    _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity);
 				}
 
 				if (CollectionChanged != null)
-				    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, value));
+				    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value));
 
 		    }
 		}
@@ -298,6 +281,87 @@ namespace <#= Namespace #>
 		{
 			return Internal.IndexOf(item);
 		}
-		#endregion
+
+
+        public void Insert(int index, T item)
+        {
+            if (_model.IsTransactional && _model.CurrentTransaction == null)
+                throw new Exception("Operation out of transaction");
+
+            var oldCount = Internal.Count;
+            Internal.Insert(index, item);
+
+            if (_model.IsTransactional)
+            {
+                Action undoAction = () => Internal.RemoveAt(index);
+                Action doAction = () => Internal.Insert(index, item);
+                _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity);
+            }
+
+            if (CollectionChanged != null)
+                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+
+            NotifyCountChanged(oldCount);
+        }
+
+        public void RemoveAt(int index)
+        {
+            var toRemove = Internal[index];
+            Remove(toRemove);
+        }
+        #endregion
+
+        #region IList members
+        int IList.Add(object value)
+        {
+            if (!(value is T)) return -1;
+
+            var v = (T) value;
+            Add(v);
+            return Internal.Count - 1;
+        }
+
+        bool IList.Contains(object value)
+        {
+            return ((IList)Internal).Contains(value);
+        }
+
+        int IList.IndexOf(object value)
+        {
+            return ((IList)Internal).IndexOf(value);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            Insert(index, (T)value);
+        }
+
+        bool IList.IsFixedSize
+        {
+            get { return false; }
+        }
+
+        bool IList.IsReadOnly
+        {
+            get { return _model.IsTransactional && _model.CurrentTransaction != null; }
+        }
+
+        void IList.Remove(object value)
+        {
+            Remove((T)value);
+        }
+
+        object IList.this[int index]
+        {
+            get
+            {
+                return this[index];
+            }
+            set
+            {
+                this[index] = value == null ? default(T) : (T)value;
+            }
+        }
+        #endregion
     }
 }
