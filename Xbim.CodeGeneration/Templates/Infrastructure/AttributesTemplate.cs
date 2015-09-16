@@ -43,11 +43,11 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         public EntityNameAttribute(string name, int id)
         {
             Name = name;
-			TypeId = id;
+			EntityTypeId = id;
         }
 
         public string Name { get; private set; }
-        public int TypeId { get; private set; }
+        public int EntityTypeId { get; private set; }
     }
 
 	[AttributeUsage(AttributeTargets.Property)]

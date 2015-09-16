@@ -52,18 +52,26 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\n    {\r\n    }\r\n\r\n\tpublic interface IExpressHeaderType\r\n    {\r\n    }\r\n\r\n\tpublic i" +
-                    "nterface IExpressEnumerable : IEnumerable\r\n    {\r\n        string ListType { get;" +
-                    " }\r\n        void Add(object o);\r\n    }\r\n\r\n\tpublic interface IExpressComplexType " +
-                    ": ");
-            
-            #line 33 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ExpressTypeInterfaces.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n    {\r\n        IEnumerable<object> Properties { get; }\r\n        void Add(object" +
-                    " o);\r\n    }\r\n}");
+            this.Write(@"
+    {
+    }
+
+	public interface IExpressHeaderType
+    {
+    }
+
+	public interface IExpressEnumerable : IEnumerable
+    {
+        string ListType { get; }
+        void Add(object o);
+    }
+
+	public interface IExpressComplexType : IExpressType
+    {
+        IEnumerable<object> Properties { get; }
+        void Add(object o);
+    }
+}");
             return this.GenerationEnvironment.ToString();
         }
     }

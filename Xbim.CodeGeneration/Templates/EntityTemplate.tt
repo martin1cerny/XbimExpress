@@ -4,6 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Xbim.CodeGeneration.Helpers" #>
+<#@ import namespace="Xbim.ExpressParser.SDAI" #>
 
 <# foreach(var u in Using) { #>
 using <#= u #>;
@@ -12,6 +13,7 @@ using <#= u #>;
 namespace <#= Namespace #>
 {
 	[EntityName("<#= Type.PersistanceName #>", <#= Type.TypeId #>)]
+	// ReSharper disable once PartialTypeWithSinglePart
 	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>
 	{
 <# if (IsFirst) {#>
@@ -138,14 +140,14 @@ namespace <#= Namespace #>
 <# if (!IsAbstract) { #>
 
 		#region Index access
-		private readonly List<string> _attributeNames = new List<string>
+		private static readonly List<string> AttributeNames = new List<string>
 		{
 <# foreach(var attribute in AllExplicitAttributes){ #>
 			"<#= attribute.Name #>",
 <# } #>
 		};
 
-		IEnumerable<string> <#= InstantiableInterface #>.PropertyNames { get { return _attributeNames; } }
+		IEnumerable<string> <#= InstantiableInterface #>.PropertyNames { get { return AttributeNames; } }
 
 		object <#= InstantiableInterface #>.GetValue(int index)
 		{
@@ -219,23 +221,90 @@ namespace <#= Namespace #>
 		#endregion
 <# } #>
 
-<# if (WhereRules.Any()) { #>
-		#region Where rules
-<# foreach (var rule in WhereRules) {#>
-		/*<#= rule.Description #>*/
-<# } #>
-		#endregion
-<# } #>
+
 
 		#region <#= PersistInterface #> implementation
 		public <#= VirtualOverrideKeyword #> void Parse(int propIndex, IPropertyValue value)
 		{
-            throw new System.NotImplementedException();
+<#	if (AllExplicitAttributes.Any()) { #>
+			switch (propIndex)
+			{
+<#		if (ParentAttributes.Any()){
+            foreach (var attribute in ParentAttributes)
+            { #>
+				case <#= GetAttributeIndex(attribute) #>: 
+<#          } #>
+					base.Parse(propIndex, value); 
+					return;
+<#
+		}
+		foreach (var attribute in ExplicitAttributes) { #>
+				case <#= GetAttributeIndex(attribute) #>: 
+<#			if (IsEntityOrSelectAggregation(attribute)) { #>
+					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( Model );
+					<#= GetPrivateFieldName(attribute) #>.Add((<#= GetAggregationElementType(attribute) #>)value.EntityVal);
+					return;
+<#				continue;
+			} 
+			if(attribute.Domain is EntityDefinition || attribute.Domain is SelectType){ #>
+					<#= GetPrivateFieldName(attribute) #> = (<#= GetCSType(attribute) #>)(value.EntityVal);
+					return;
+<#				continue;
+			}
+			var enumType = attribute.Domain as EnumerationType;
+			if(enumType != null){ #>
+                    <#= GetPrivateFieldName(attribute) #> = (<#= enumType.Name #>) System.Enum.Parse(typeof (<#= enumType.Name #>), value.EnumVal, true);
+					return;
+<#			continue;
+			}
+			if (IsComplexDefinedType(attribute)){
+				if(attribute.OptionalFlag) {#>
+					if (!<#= GetPrivateFieldName(attribute) #>.HasValue) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>();
+			        // ReSharper disable once PossibleNullReferenceException
+					((IExpressComplexType)<#= GetPrivateFieldName(attribute) #>).Add(value.<#= GetPropertyValueMember(attribute.Domain) #>);
+					return;
+<#					continue;
+                }
+				else
+                {#>
+					((IExpressComplexType)<#= GetPrivateFieldName(attribute) #>).Add(value.<#= GetPropertyValueMember(attribute.Domain) #>);
+					return;
+<#				}
+			}
+			if (IsSimpleOrDefinedType(attribute)){#>
+					<#= GetPrivateFieldName(attribute) #> = value.<#= GetPropertyValueMember(attribute.Domain) #>;
+					return;
+<#				continue;
+			}
+			if (IsSimpleOrDefinedTypeAggregation(attribute)){#>
+					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( Model );
+					<#= GetPrivateFieldName(attribute) #>.Add(value.<#= GetPropertyValueMember(attribute.Domain) #>);
+					return;
+<#				continue;
+			}
+
+			throw new System.NotImplementedException("Parsing code wasn't generated for attribute " + attribute.Name + " in entity " + Name);
+			
+		}#>
+				default:
+					throw new XbimParserException(string.Format("Attribute index {0} is out of range for {1}", propIndex + 1, GetType().Name.ToUpper()));
+			}
+<#	} else { #>
+			//there are no attributes defined for this entity
+            throw new System.IndexOutOfRangeException("There are no attributes defined for this entity");
+<#	}#>
 		}
 		
 		public <#= VirtualOverrideKeyword #> string WhereRule() 
 		{
+<# if (WhereRules.Any()) { #>
             throw new System.NotImplementedException();
+<# foreach (var rule in WhereRules) {#>
+		/*<#= rule.Description #>*/
+<# } #>
+<# }  else { #>
+			return "";
+<# } #>
 		}
 		#endregion
 

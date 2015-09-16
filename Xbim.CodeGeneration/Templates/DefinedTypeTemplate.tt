@@ -10,13 +10,14 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
+    // ReSharper disable once PartialTypeWithSinglePart
 	public partial struct <#= Name #> <#= Inheritance #>
 	{ 
-		private readonly <#= UnderlyingType #> _theValue;
-
-        public object Value
+		private <#= UnderlyingType #> _value;
+        
+		public object Value
         {
-            get { return _theValue; }
+            get { return _value; }
         }
 
         public override string ToString()
@@ -26,7 +27,7 @@ namespace <#= Namespace #>
 
         public <#= Name #>(<#= UnderlyingType #> val)
         {
-            _theValue = val;
+            _value = val;
         }
 
         public static implicit operator <#= Name #>(<#= UnderlyingType #> value)
@@ -36,7 +37,7 @@ namespace <#= Namespace #>
 
         public static implicit operator <#= UnderlyingType #>(<#= Name #> obj)
         {
-            return obj._theValue;
+            return obj._value;
         }
 
 
@@ -51,7 +52,11 @@ namespace <#= Namespace #>
             if (GetType() != obj.GetType())
                 return false;
 
-            return ((<#= Name #>) obj)._theValue == _theValue;
+<#	if (!IsComplex) { #>
+            return ((<#= Name #>) obj)._value == _value;
+<#	} else { #>
+            return System.Linq.Enumerable.SequenceEqual(((<#= Name #>) obj)._value, _value);
+<#	} #>
         }
 
         public static bool operator ==(<#= Name #> obj1, <#= Name #> obj2)
@@ -66,13 +71,23 @@ namespace <#= Namespace #>
 
         public override int GetHashCode()
         {
-            return Value != null ? _theValue.GetHashCode() : base.GetHashCode();
+            return Value != null ? _value.GetHashCode() : base.GetHashCode();
         }
 
 		#region <#= PersistInterface #> implementation
 		void <#= PersistInterface #>.Parse(int propIndex, IPropertyValue value)
 		{
-            throw new System.NotImplementedException();
+			if (propIndex != 0)
+				throw new XbimParserException(string.Format("Attribute index {0} is out of range for {1}", propIndex + 1, GetType().Name.ToUpper()));
+<#	if (IsComplex) { #>
+			if (_value == null)
+				_value = new <#= UnderlyingType #>();
+            _value.Add(value.<#= GetPropertyValueMember(Type.Domain) #>);
+
+<#	} 
+	else { #>
+            _value = value.<#= GetPropertyValueMember(Type.Domain) #>;
+<#	}#>            
 		}
 
 		string <#= PersistInterface #>.WhereRule()
@@ -91,10 +106,31 @@ namespace <#= Namespace #>
         System.Type IExpressType.UnderlyingSystemType { 
 			get 
 			{
-				throw new System.NotImplementedException();
+				return typeof(<#= UnderlyingType #>);
 			}
 		}
 		#endregion
+
+<# if (IsComplex) { #>
+		#region IExpressComplexType implementation
+		IEnumerable<object> IExpressComplexType.Properties
+        {
+            get
+            {
+				if(_value == null) yield break;
+	            foreach (var value in _value)
+	                yield return value;
+            }
+        }
+
+		void IExpressComplexType.Add(object o)
+	    {
+			if (_value == null)
+				_value = new <#= UnderlyingType #>();
+			 _value.Add((<#= UnderlyingArrayType #>) o);
+	    }
+		#endregion
+<# } #>
 
 	}
 }

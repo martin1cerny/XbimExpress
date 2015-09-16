@@ -30,7 +30,7 @@ namespace <#= Namespace #>
         void Add(object o);
     }
 
-	public interface IExpressComplexType : <#= PersistInterface #>
+	public interface IExpressComplexType : IExpressType
     {
         IEnumerable<object> Properties { get; }
         void Add(object o);

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
 
@@ -23,12 +19,12 @@ namespace Xbim.CodeGeneration.Helpers
             return type;
         }
 
-        public static string GetCSType(BaseType type, GeneratorSettings settings)
+        public static string GetCSType(BaseType type, GeneratorSettings settings, bool useList = false)
         {
             var simple = type as SimpleType;
             if (simple != null)
             {
-                if (simple is BinaryType) return "byte[]";
+                if (simple is BinaryType) return "long";
                 if (simple is BooleanType) return "bool";
                 if (simple is IntegerType) return "long";
                 if (simple is LogicalType) return "bool?";
@@ -47,16 +43,9 @@ namespace Xbim.CodeGeneration.Helpers
             var aggr = type as AggregationType;
             if (aggr != null)
             {
-                return String.Format("{0}<{1}>", settings.ItemSetClassName, GetCSType(aggr.ElementType, settings));
-                //if (aggr is ArrayType)
-                //    return String.Format("{0}<{1}>",setName, GetCSType(aggr.ElementType, setName));
-                //if (aggr is BagType)
-                //    return String.Format("{0}<{1}>", setName, GetCSType(aggr.ElementType, setName));
-                //if (aggr is ListType)
-                //    return String.Format("{0}<{1}>", setName, GetCSType(aggr.ElementType, setName));
-                //if (aggr is SetType)
-                //    return String.Format("{0}<{1}>", setName, GetCSType(aggr.ElementType, setName));
-
+                return useList ? 
+                    string.Format("List<{0}>", GetCSType(aggr.ElementType, settings))
+                    : string.Format("{0}<{1}>", settings.ItemSetClassName, GetCSType(aggr.ElementType, settings));
             }
 
             //this shouldn't happen
@@ -65,7 +54,12 @@ namespace Xbim.CodeGeneration.Helpers
 
         public static string GetCSType(UnderlyingType type, GeneratorSettings settings)
         {
-            return GetCSType(type as BaseType, settings);
+            while (true)
+            {
+                var nestedType = type as DefinedType;
+                if (nestedType == null) return GetCSType(type as BaseType, settings, true);
+                type = nestedType.Domain;
+            }
         }
     }
 }

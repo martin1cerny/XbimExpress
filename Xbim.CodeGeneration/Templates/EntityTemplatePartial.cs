@@ -109,6 +109,17 @@ namespace Xbim.CodeGeneration.Templates
         }
 
 
+        protected bool IsOwnAttribute(ExplicitAttribute attribute)
+        {
+            
+            return ExplicitAttributes.Contains(attribute);
+        }
+
+        protected IEnumerable<ExplicitAttribute> ParentAttributes { get
+        {
+            return AllExplicitAttributes.Where(a => !ExplicitAttributes.Contains(a));
+        } } 
+
         protected List<ExplicitAttribute> ExplicitAttributes { get; private set; }
 
         protected List<ExplicitAttribute> AllExplicitAttributes { get; private set; }
@@ -173,7 +184,14 @@ namespace Xbim.CodeGeneration.Templates
                 }
 
                 if (Settings.IsInfrastructureSeparate)
+                {
                     result.Add(Settings.InfrastructureNamespace);
+                    result.Add(Settings.InfrastructureNamespace + ".Exceptions");
+                }
+                else
+                {
+                    result.Add(Settings.Namespace + ".Exceptions");
+                }
 
                 return result;
             }
@@ -200,6 +218,107 @@ namespace Xbim.CodeGeneration.Templates
         protected bool IsAggregation(InverseAttribute attribute)
         {
             return attribute.InvertedAttr.Domain is AggregationType;
+        }
+
+        protected bool IsEntityOrSelectAggregation(ExplicitAttribute attribute)
+        {
+            var aggr = attribute.Domain as AggregationType;
+            if (aggr == null) return false;
+            return aggr.ElementType is EntityDefinition || aggr.ElementType is SelectType;
+        }
+
+        private static bool IsStringType(BaseType type)
+        {
+            if (type is StringType) return true;
+            var defType = type as DefinedType;
+            if(defType == null) return false;
+
+            return IsStringType(defType.Domain as BaseType);
+        }
+
+        private static bool IsIntType(BaseType type)
+        {
+            if (type is IntegerType) return true;
+            var defType = type as DefinedType;
+            if (defType == null) return false;
+
+            return IsIntType(defType.Domain as BaseType);
+        }
+
+        private static bool IsBoolType(BaseType type)
+        {
+            if (type is BooleanType || type is LogicalType) return true;
+            var defType = type as DefinedType;
+            if (defType == null) return false;
+
+            return IsBoolType(defType.Domain as BaseType);
+        }
+
+        private static bool IsRealType(BaseType type)
+        {
+            if (type is RealType) return true;
+            var defType = type as DefinedType;
+            if (defType == null) return false;
+
+            return IsRealType(defType.Domain as BaseType);
+        }
+
+        private static bool IsNumberType(BaseType type)
+        {
+            if (type is NumberType) return true;
+            var defType = type as DefinedType;
+            if (defType == null) return false;
+
+            return IsNumberType(defType.Domain as BaseType);
+        }
+
+        private static bool IsBinaryType(BaseType type)
+        {
+            if (type is BinaryType) return true;
+            var defType = type as DefinedType;
+            if (defType == null) return false;
+
+            return IsBinaryType(defType.Domain as BaseType);
+        }
+
+        public static string GetPropertyValueMember(BaseType domain)
+        {
+            var aggr = domain as AggregationType;
+            if (aggr != null) return GetPropertyValueMember(aggr.ElementType);
+
+            var def = domain as DefinedType;
+            if (def != null && def.Domain is AggregationType)
+                return GetPropertyValueMember((BaseType) def.Domain);
+
+            if (IsStringType(domain)) return "StringVal";
+            if (IsIntType(domain)) return "IntegerVal";
+            if (IsBoolType(domain)) return "BooleanVal";
+            if (IsRealType(domain)) return "RealVal";
+            if (IsNumberType(domain)) return "NumberVal";
+            if (IsBinaryType(domain)) return "HexadecimalVal";
+
+            throw new Exception("Unexpected type");
+        }
+
+        private bool IsComplexDefinedType(ExplicitAttribute attribute)
+        {
+            var def = attribute.Domain as DefinedType;
+            if (def == null) return false;
+            return def.Domain is AggregationType;
+        }
+
+        private bool IsSimpleOrDefinedTypeAggregation(ExplicitAttribute attribute)
+        {
+            var aggr = attribute.Domain as AggregationType;
+            if (aggr == null) return false;
+
+            return aggr.ElementType is SimpleType || aggr.ElementType is DefinedType;
+        }
+
+        private bool IsSimpleOrDefinedType(ExplicitAttribute attribute)
+        { 
+            var domain = attribute.Domain;
+            return domain is SimpleType || domain is DefinedType;
         }
 
         protected bool IsDoubleAggregation(InverseAttribute attribute)
