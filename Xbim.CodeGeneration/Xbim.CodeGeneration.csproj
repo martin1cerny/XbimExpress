@@ -46,7 +46,7 @@
     <Compile Include="ICodeTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\GeneratorSettings.cs" />
-    <Compile Include="Templates\DefinedTypeTemplate1.cs">
+    <Compile Include="Templates\DefinedTypeTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DefinedTypeTemplate.tt</DependentUpon>
@@ -152,7 +152,7 @@
   <ItemGroup>
     <None Include="Templates\DefinedTypeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>DefinedTypeTemplate1.cs</LastGenOutput>
+      <LastGenOutput>DefinedTypeTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\EntityInterfaceTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

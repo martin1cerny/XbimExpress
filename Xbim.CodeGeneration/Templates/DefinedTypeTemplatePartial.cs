@@ -38,15 +38,29 @@ namespace Xbim.CodeGeneration.Templates
             get { return TypeHelper.GetCSType(Type.Domain, _settings); }
         }
 
+        private string UnderlyingArrayType
+        {
+            get
+            {
+                var aggrType = Type.Domain as AggregationType;
+                if (aggrType == null) throw new Exception("Underlying type is not an array type. This is not a complex type.");
+                return TypeHelper.GetCSType(aggrType.ElementType, _settings);
+            }
+        }
+
         public string Name { get { return Type.Name; } }
+
+        private bool IsComplex
+        {
+            get { return Type.Domain is AggregationType; }
+        }
 
         public string Inheritance
         {
             get
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
-                //parents.Insert(0, _settings.TypeSettings.BaseType);
-                parents.Add("IExpressType");
+                parents.Add(IsComplex ? "IExpressComplexType" : "IExpressType");
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i))
                     return "";
@@ -71,11 +85,18 @@ namespace Xbim.CodeGeneration.Templates
                 if(namedDomain != null)
                     namedOccurances.Add(namedDomain);
 
-                var aggregation = Type.Domain as AggregationType;
-                //if(aggregation != null)
-                    //result.Add("System.Collections.Generic");
-                if (_settings.IsInfrastructureSeparate)  
+                if(IsComplex)
+                    result.Add("System.Collections.Generic");
+                if (_settings.IsInfrastructureSeparate)
+                {
                     result.Add(_settings.InfrastructureNamespace);
+                    result.Add(_settings.InfrastructureNamespace + ".Exceptions");
+                }
+                else
+                {
+                    result.Add(_settings.Namespace + ".Exceptions");
+                }
+
 
                 foreach (var type in namedOccurances)
                 {
@@ -88,6 +109,11 @@ namespace Xbim.CodeGeneration.Templates
 
                 return result;
             }
+        }
+
+        private static string GetPropertyValueMember(UnderlyingType domain)
+        {
+            return EntityTemplate.GetPropertyValueMember(domain as BaseType);
         }
     }
 }
