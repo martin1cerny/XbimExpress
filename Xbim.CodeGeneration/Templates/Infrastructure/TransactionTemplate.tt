@@ -4,13 +4,16 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 using System;
+using System.Collections.Generic;
 
 namespace <#= Namespace #>
 {
 	public interface <#= Name #>: IDisposable
 	{
+		string Name { get; }
 		void Commit();
 		void RollBack();
-		void AddReversibleAction(Action action);
+		void AddReversibleAction(Action doAction, Action undoAction, <#= PersistEntityInterface #> entity);
+		IEnumerable<<#= PersistEntityInterface #>> Modified { get; }
 	}
 }

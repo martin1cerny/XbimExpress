@@ -45,7 +45,7 @@ namespace <#= Namespace #>
 		{ 
 			Model = model; 
 <# foreach (var attribute in AggregatedExplicitAttributes){ #>
-			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( model );
+			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this );
 <# } #>
 		}
 
@@ -129,8 +129,9 @@ namespace <#= Namespace #>
 			var txn = Model.CurrentTransaction;
 			if (txn == null) throw new Exception("Operation out of transaction.");
 
-			Action undo = () => setter(oldValue);
-			txn.AddReversibleAction(undo);
+			Action doAction = () => setter(newValue);
+			Action undoAction = () => setter(oldValue);
+			txn.AddReversibleAction(doAction, undoAction, this);
 			setter(newValue);
 			NotifyPropertyChanged(notifyPropertyName);
 		}
@@ -241,7 +242,7 @@ namespace <#= Namespace #>
 		foreach (var attribute in ExplicitAttributes) { #>
 				case <#= GetAttributeIndex(attribute) #>: 
 <#			if (IsEntityOrSelectAggregation(attribute)) { #>
-					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( Model );
+					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this );
 					<#= GetPrivateFieldName(attribute) #>.Add((<#= GetAggregationElementType(attribute) #>)value.EntityVal);
 					return;
 <#				continue;
@@ -277,7 +278,7 @@ namespace <#= Namespace #>
 <#				continue;
 			}
 			if (IsSimpleOrDefinedTypeAggregation(attribute)){#>
-					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( Model );
+					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this );
 					<#= GetPrivateFieldName(attribute) #>.Add(value.<#= GetPropertyValueMember(attribute.Domain) #>);
 					return;
 <#				continue;
