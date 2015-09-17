@@ -29,26 +29,65 @@ namespace <#= Namespace #>
         }
 
 
-        public <#= Name #>(<#= PersistEntityInterface #> entity)
+        internal <#= Name #>(<#= PersistEntityInterface #> entity)
         {
             _set = new List<T>();
             _model = entity.Model;
 			OwningEntity = entity;
         }
 
-		public <#= Name #>(<#= PersistEntityInterface #> entity, int count)
+		internal <#= Name #>(<#= PersistEntityInterface #> entity, int count)
         {
             _set = new List<T>(count);
             _model = entity.Model;
 			OwningEntity = entity;
         }
 
-        public <#= Name #>(<#= PersistEntityInterface #> entity, IEnumerable<T> collection)
+        internal <#= Name #>(<#= PersistEntityInterface #> entity, IEnumerable<T> collection)
         {
             _set = new List<T>(collection);
             _model = entity.Model;
 			OwningEntity = entity;
         }
+
+		//this is to be only used internaly to add object outside of any transaction or event firing
+		//that is typically during parsing operation
+		internal void InternalAdd(T value)
+		{
+			Internal.Add(value);
+		}
+
+        #region I<#= Name #><T> Members
+        public T First
+        {
+            get { return Internal.First(); }
+        }
+
+        public T FirstOrDefault()
+        {
+            return Internal.FirstOrDefault();
+        }
+
+        public T FirstOrDefault(Func<T, bool> predicate)
+        {
+            return Internal.FirstOrDefault(predicate);
+        }
+
+        public TF FirstOrDefault<TF>(Func<TF, bool> predicate)
+        {
+            return OfType<TF>().FirstOrDefault(predicate);
+        }
+
+        public IEnumerable<TW> Where<TW>(Func<TW, bool> predicate)
+        {
+            return OfType<TW>().Where(predicate);
+        }
+
+        public IEnumerable<TO> OfType<TO>()
+        {
+            return Internal.Count == 0 ? Enumerable.Empty<TO>() : Internal.OfType<TO>();
+        }
+        #endregion
 
         #region INotifyPropertyChanged Members
 

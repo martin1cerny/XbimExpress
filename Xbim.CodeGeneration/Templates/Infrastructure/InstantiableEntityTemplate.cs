@@ -70,10 +70,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t\tobject GetValue(string propertyName);\r\n\t\tobject GetValue(int propertyInde" +
-                    "x);\r\n\t\tvoid SetValue(string propertyName, object value);\r\n\t\tvoid SetValue(int pr" +
-                    "opertyIndex, object value);\r\n\t\tIEnumerable<string> PropertyNames { get; }\r\n\t}\r\n}" +
-                    "");
+            this.Write("\r\n\t{\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -283,6 +283,8 @@ namespace Xbim.CodeGeneration.Templates
 
         public static string GetPropertyValueMember(BaseType domain)
         {
+            if (domain is EntityDefinition) return "EntityVal";
+
             var aggr = domain as AggregationType;
             if (aggr != null) return GetPropertyValueMember(aggr.ElementType);
 

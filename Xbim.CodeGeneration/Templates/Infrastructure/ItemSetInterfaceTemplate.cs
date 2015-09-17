@@ -73,7 +73,16 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" OwningEntity { get; }\r\n    }\r\n}\r\n");
+            this.Write(@" OwningEntity { get; }
+        T First { get; }
+        T FirstOrDefault();
+        T FirstOrDefault(Func<T, bool> predicate);
+        TF FirstOrDefault<TF>(Func<TF, bool> predicate);
+        IEnumerable<TW> Where<TW>(Func<TW, bool> predicate);
+        IEnumerable<TO> OfType<TO>();
+    }
+}
+");
             return this.GenerationEnvironment.ToString();
         }
     }

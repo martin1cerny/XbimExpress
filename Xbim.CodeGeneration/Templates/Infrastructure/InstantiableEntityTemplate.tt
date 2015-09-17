@@ -13,10 +13,5 @@ namespace <#= Namespace #>
 {
 	public interface @<#= Name #> <#= Inheritance #>
 	{
-		object GetValue(string propertyName);
-		object GetValue(int propertyIndex);
-		void SetValue(string propertyName, object value);
-		void SetValue(int propertyIndex, object value);
-		IEnumerable<string> PropertyNames { get; }
 	}
 }

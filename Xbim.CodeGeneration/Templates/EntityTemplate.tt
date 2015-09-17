@@ -138,91 +138,6 @@ namespace <#= Namespace #>
 
 		#endregion
 <# } #>
-<# if (!IsAbstract) { #>
-
-		#region Index access
-		private static readonly List<string> AttributeNames = new List<string>
-		{
-<# foreach(var attribute in AllExplicitAttributes){ #>
-			"<#= attribute.Name #>",
-<# } #>
-		};
-
-		IEnumerable<string> <#= InstantiableInterface #>.PropertyNames { get { return AttributeNames; } }
-
-		object <#= InstantiableInterface #>.GetValue(int index)
-		{
-			switch(index)
-			{
-<# foreach(var attribute in AllExplicitAttributes){ #>
-				case <#= GetAttributeIndex(attribute) #>: 
-					return @<#= attribute.Name #>;
-<# } #>
-				default:
-					throw new System.IndexOutOfRangeException();
-			}
-		}
-
-		object <#= InstantiableInterface #>.GetValue(string name)
-		{
-			switch(name)
-			{
-<# foreach(var attribute in AllExplicitAttributes){ #>
-				case "<#= attribute.Name #>":  
-					return @<#= attribute.Name #>;
-<# } #>
-				default:
-					throw new System.IndexOutOfRangeException();
-			}
-		}
-
-		void <#= InstantiableInterface #>.SetValue(int index, object value)
-		{
-			switch(index)
-			{
-<# foreach(var attribute in AllExplicitAttributes){ #>
-				case <#= GetAttributeIndex(attribute) #>:
-<#		if (IsReferenceTypeAggregation(attribute)) {#>
-					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
-<#		} else if (IsValueTypeAggregation(attribute)) {#>
-					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
-<#		} else if (IsReferenceType(attribute)) {#>
-					 @<#= attribute.Name #> = (<#= GetCSType(attribute) #>)value;
-<#		} else {#>
-					 if (value != null) @<#= attribute.Name #> = (<#= GetCSType(attribute) #>)value;
-<#		} #>
-					 break;
-<# } #>
-				default:
-					throw new System.IndexOutOfRangeException();
-			}
-		}
-
-		void <#= InstantiableInterface #>.SetValue(string propName, object value)
-		{
-			switch(propName)
-			{
-<# foreach(var attribute in AllExplicitAttributes){ #>
-				case "<#= attribute.Name #>":
-<#		if (IsReferenceTypeAggregation(attribute)) {#>
-					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
-<#		} else if (IsValueTypeAggregation(attribute)) {#>
-					 @<#= attribute.Name #>.Add((<#= GetAggregationElementType(attribute) #>)value);
-<#		} else if (IsReferenceType(attribute)) {#>
-					 @<#= attribute.Name #> = (<#= GetCSType(attribute) #>)value;
-<#		} else {#>
-					 if (value != null) @<#= attribute.Name #> = (<#= GetCSType(attribute) #>)value;
-<#		} #>
-					 break;
-<# } #>
-				default:
-					throw new System.IndexOutOfRangeException();
-			}
-		}
-		#endregion
-<# } #>
-
-
 
 		#region <#= PersistInterface #> implementation
 		public <#= VirtualOverrideKeyword #> void Parse(int propIndex, IPropertyValue value)
@@ -243,7 +158,7 @@ namespace <#= Namespace #>
 				case <#= GetAttributeIndex(attribute) #>: 
 <#			if (IsEntityOrSelectAggregation(attribute)) { #>
 					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this );
-					<#= GetPrivateFieldName(attribute) #>.Add((<#= GetAggregationElementType(attribute) #>)value.EntityVal);
+					<#= GetPrivateFieldName(attribute) #>.InternalAdd((<#= GetAggregationElementType(attribute) #>)value.EntityVal);
 					return;
 <#				continue;
 			} 
@@ -279,12 +194,15 @@ namespace <#= Namespace #>
 			}
 			if (IsSimpleOrDefinedTypeAggregation(attribute)){#>
 					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this );
-					<#= GetPrivateFieldName(attribute) #>.Add(value.<#= GetPropertyValueMember(attribute.Domain) #>);
+					<#= GetPrivateFieldName(attribute) #>.InternalAdd(value.<#= GetPropertyValueMember(attribute.Domain) #>);
 					return;
 <#				continue;
-			}
-
-			throw new System.NotImplementedException("Parsing code wasn't generated for attribute " + attribute.Name + " in entity " + Name);
+			}#>
+					//this is a special case which has to be handled in a partial class which is not generated.
+					//Parse<#= attribute.Name #>(propIndex, value);
+					//return;
+					throw new System.NotImplementedException("<#= string.Format("{0} in {1} is a special case of nested lists. It is not implemented for now.", attribute.Name, Name) #>");
+<#			Console.WriteLine("Parsing code wasn't generated for attribute " + attribute.Name + " of type "+ GetCSType(attribute) +" in entity " + Name);
 			
 		}#>
 				default:
@@ -308,7 +226,5 @@ namespace <#= Namespace #>
 <# } #>
 		}
 		#endregion
-
-		
 	}
 }

@@ -55,6 +55,16 @@ namespace Xbim.CodeGeneration.Templates
             get { return Type.Domain is AggregationType; }
         }
 
+        private bool IsComplexOfEntities
+        {
+            get
+            {
+                var aggr = Type.Domain as AggregationType;
+                if (aggr == null) return false;
+                return aggr.ElementType is EntityDefinition;
+            }
+        }
+
         public string Inheritance
         {
             get
