@@ -58,8 +58,7 @@ namespace Xbim.CodeGeneration.Templates
                 var parents = new List<string>();
                 if (IsFirst)
                 {
-                    if (!Type.Instantiable)  //avoid redundant inheritance
-                        parents.Add(Settings.PersistEntityInterface);
+                    parents.Add(Settings.PersistEntityInterface);
                     parents.Add("INotifyPropertyChanged");
                 }
                 else

@@ -9,18 +9,6 @@ namespace Xbim.ExpressParser.SDAI
 {
     public class EntityDefinition : NamedType
     {
-        /// <summary>
-        /// It might be necessary to change names of the types for a code generation for example to avoid name clashes
-        /// but original persistance name from schema needs to be retained for serialization/deserialization. 
-        /// This is an extension to SDAI schema.
-        /// </summary>
-        public string PersistanceName { get; internal set; }
-
-        /// <summary>
-        /// Id of the type is its order in EXPRESS schema file by default but it can be changed by user.
-        /// This might be used to codify type as an int for databases, indexing etc. This is an extension to SDAI schema.
-        /// </summary>
-        public int TypeId { get; set; }
 
         /// <summary>
         /// Usually just one supertype. Most of the OO programming languages don't 

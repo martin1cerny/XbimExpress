@@ -35,6 +35,8 @@ namespace Xbim.ExpressParser.SDAI
             return Value ?? base.ToString();
         }
 
+        public string ToUpper() {  return Value.ToUpperInvariant();  }
+
         public static implicit operator ExpressId(string value)
         {
             return new ExpressId{Value = value};

@@ -42,7 +42,14 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" \r\n\t{\r\n\t\tint EntityLabel {get; }\r\n\t\t");
+            this.Write(" : ");
+            
+            #line 10 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\PersistEntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t{\r\n\t\tint EntityLabel {get; }\r\n\t\t");
             
             #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\PersistEntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
@@ -50,7 +57,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             #line default
             #line hidden
             this.Write(" Model { get; }\r\n\t\tbool Activated { get; }\r\n\t\tvoid Activate (bool write);\r\n\t\tvoid" +
-                    " Activate (Action activation);\r\n\r\n\t\tstring WhereRule();\r\n\t}\r\n}");
+                    " Activate (Action activation);\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

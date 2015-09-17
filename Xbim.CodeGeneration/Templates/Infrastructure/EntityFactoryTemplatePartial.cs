@@ -63,6 +63,11 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         private IEnumerable<EntityDefinition> NonAbstractEntities { get
         {
             return _schema.Get<EntityDefinition>(d => d.Instantiable);
-        } } 
+        } }
+
+        private IEnumerable<DefinedType> DefinedTypes
+        {
+            get { return _schema.Get<DefinedType>(); }
+        } 
     }
 }

@@ -126,7 +126,22 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" model, string typeName, int entityLabel, bool activated);\r\n\t}\r\n}");
+            this.Write(" model, string typeName, int entityLabel, bool activated);\r\n\t\t\r\n\t\t");
+            
+            #line 23 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" New(");
+            
+            #line 23 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" model, int typeId, int entityLabel, bool activated);\r\n\r\n\t\tIExpressType New(strin" +
+                    "g typeName);\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

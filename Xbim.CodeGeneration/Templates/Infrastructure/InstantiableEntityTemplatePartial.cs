@@ -28,7 +28,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public string Inheritance
         {
-            get { return string.Format(": {0}, {1}", _settings.PersistEntityInterface, _settings.PersistInterface); }
+            get { return string.Format(": {0}", _settings.PersistEntityInterface); }
         }
 
         public IEnumerable<string> Using
