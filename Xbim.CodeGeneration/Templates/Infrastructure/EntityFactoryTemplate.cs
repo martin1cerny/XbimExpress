@@ -149,7 +149,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write("\t\t\t\tcase \"");
             
             #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name.ToString().ToUpper()));
+            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name.ToUpper()));
             
             #line default
             #line hidden
@@ -163,18 +163,128 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write(" ( model ) { Activated = activated, EntityLabel = entityLabel };\r\n");
             
             #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
- } 
+		if (entity.Name.ToUpper() != entity.PersistanceName.ToUpper()) { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\tthrow new Exception(\"Type must be non-abstract type of ");
+            this.Write("\t\t\t\tcase \"");
+            
+            #line 47 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(entity.PersistanceName.ToUpper()));
+            
+            #line default
+            #line hidden
+            this.Write("\": return new ");
+            
+            #line 47 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" ( model ) { Activated = activated, EntityLabel = entityLabel };\r\n");
             
             #line 48 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+		} 
+	} 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\treturn null;\r\n\t\t\t}\r\n\t\t}\r\n\t\tpublic ");
+            
+            #line 54 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(InstantiableEntityInterface));
             
             #line default
             #line hidden
-            this.Write("\");\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n");
+            this.Write(" New(");
+            
+            #line 54 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" model, int typeId, int entityLabel, bool activated)\r\n\t\t{\r\n\t\t\tif (model == null)\r" +
+                    "\n\t\t\t\tthrow new ArgumentNullException();\r\n\r\n\t\t\tswitch(typeId)\r\n\t\t\t{\r\n");
+            
+            #line 61 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+ foreach(var entity in NonAbstractEntities) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tcase ");
+            
+            #line 62 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(entity.TypeId));
+            
+            #line default
+            #line hidden
+            this.Write(": return new ");
+            
+            #line 62 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" ( model ) { Activated = activated, EntityLabel = entityLabel };\r\n");
+            
+            #line 63 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\treturn null;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic IExpressType New(string ty" +
+                    "peName)\r\n\t\t{\r\n\t\tif (typeName == null)\r\n\t\t\t\tthrow new ArgumentNullException();\r\n\r" +
+                    "\n\t\t\tvar name = typeName.ToUpper();\r\n\t\t\tswitch(name)\r\n\t\t\t{\r\n");
+            
+            #line 77 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+ foreach(var type in DefinedTypes) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tcase \"");
+            
+            #line 78 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(type.Name.ToUpper()));
+            
+            #line default
+            #line hidden
+            this.Write("\": return new ");
+            
+            #line 78 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(type.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" ();\r\n");
+            
+            #line 79 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+		if (type.Name.ToUpper() != type.PersistanceName.ToUpper()) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tcase \"");
+            
+            #line 80 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(type.PersistanceName.ToUpper()));
+            
+            #line default
+            #line hidden
+            this.Write("\": return new ");
+            
+            #line 80 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(type.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" ();\r\n");
+            
+            #line 81 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
+		}
+   } 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\treturn null;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

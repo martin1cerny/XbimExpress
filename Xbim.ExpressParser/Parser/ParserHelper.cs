@@ -283,6 +283,7 @@ namespace Xbim.ExpressParser
             var type = Model.New<DefinedType>(_currentSchema, e =>
             {
                 e.Name = name;
+                e.PersistanceName = name.ToUpperInvariant();
                 e.Domain = aggregation;
             });
 
@@ -317,7 +318,11 @@ namespace Xbim.ExpressParser
 
         private void CreateType(string name, ValueType typeBase, List<WhereRule> whereRules)
         {
-            var type = Model.New<DefinedType>(_currentSchema, e => e.Name = name);
+            var type = Model.New<DefinedType>(_currentSchema, e =>
+            {
+                e.Name = name;
+                e.PersistanceName = name.ToUpperInvariant();
+            });
             switch (typeBase.tokVal)
             {
                 case Tokens.IDENTIFIER:

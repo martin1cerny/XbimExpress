@@ -7,14 +7,12 @@ using System;
 
 namespace <#= Namespace #>
 {
-	public interface <#= Name #> 
+	public interface <#= Name #> : <#= PersistInterface #>
 	{
 		int EntityLabel {get; }
 		<#= ModelInterface #> Model { get; }
 		bool Activated { get; }
 		void Activate (bool write);
 		void Activate (Action activation);
-
-		string WhereRule();
 	}
 }

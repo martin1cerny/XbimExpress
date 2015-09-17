@@ -42,11 +42,48 @@ namespace <#= Namespace #>
 			switch(name)
 			{
 <# foreach(var entity in NonAbstractEntities) {#>
-				case "<#= entity.Name.ToString().ToUpper() #>": return new <#= entity.Name #> ( model ) { Activated = activated, EntityLabel = entityLabel };
-<# } #>
+				case "<#= entity.Name.ToUpper() #>": return new <#= entity.Name #> ( model ) { Activated = activated, EntityLabel = entityLabel };
+<#		if (entity.Name.ToUpper() != entity.PersistanceName.ToUpper()) { #>
+				case "<#= entity.PersistanceName.ToUpper() #>": return new <#= entity.Name #> ( model ) { Activated = activated, EntityLabel = entityLabel };
+<#		} 
+	} #>
 				default:
-					throw new Exception("Type must be non-abstract type of <#= InstantiableEntityInterface #>");
+					return null;
 			}
 		}
+		public <#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, int typeId, int entityLabel, bool activated)
+		{
+			if (model == null)
+				throw new ArgumentNullException();
+
+			switch(typeId)
+			{
+<# foreach(var entity in NonAbstractEntities) {#>
+				case <#= entity.TypeId #>: return new <#= entity.Name #> ( model ) { Activated = activated, EntityLabel = entityLabel };
+<# } #>
+				default:
+					return null;
+			}
+		}
+
+		public IExpressType New(string typeName)
+		{
+		if (typeName == null)
+				throw new ArgumentNullException();
+
+			var name = typeName.ToUpper();
+			switch(name)
+			{
+<# foreach(var type in DefinedTypes) {#>
+				case "<#= type.Name.ToUpper() #>": return new <#= type.Name #> ();
+<#		if (type.Name.ToUpper() != type.PersistanceName.ToUpper()) { #>
+				case "<#= type.PersistanceName.ToUpper() #>": return new <#= type.Name #> ();
+<#		}
+   } #>
+				default:
+					return null;
+			}
+		}
+
 	}
 }

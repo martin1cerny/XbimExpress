@@ -19,5 +19,9 @@ namespace <#= Namespace #>
 		<#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, Type t, int entityLabel, bool activated);
 
 		<#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, string typeName, int entityLabel, bool activated);
+		
+		<#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, int typeId, int entityLabel, bool activated);
+
+		IExpressType New(string typeName);
 	}
 }

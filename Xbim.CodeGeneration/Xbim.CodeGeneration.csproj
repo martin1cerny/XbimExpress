@@ -93,12 +93,12 @@
       <DependentUpon>EntityFactoryInterfaceTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\EntityFactoryInterfaceTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\EntityFactoryTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\EntityFactoryTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Templates\Infrastructure\EntityFactoryTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\ExpressTypeInterfacesPartial.cs" />
     <Compile Include="Templates\Infrastructure\InstantiableEntityTemplate.cs">
       <AutoGen>True</AutoGen>
