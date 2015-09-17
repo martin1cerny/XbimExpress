@@ -82,8 +82,11 @@ namespace <#= Namespace #>
 <#	if (IsComplex) { #>
 			if (_value == null)
 				_value = new <#= UnderlyingType #>();
+<#		if (IsComplexOfEntities) { #>
+            _value.Add(value.<#= GetPropertyValueMember(Type.Domain) #> as <#= UnderlyingArrayType #>);
+<#		} else { #>
             _value.Add(value.<#= GetPropertyValueMember(Type.Domain) #>);
-
+<#		} #>
 <#	} 
 	else { #>
             _value = value.<#= GetPropertyValueMember(Type.Domain) #>;

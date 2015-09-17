@@ -32,11 +32,11 @@ namespace XbimEssentialsGenerator
             Generator.Generate(settings, schema);
             Console.WriteLine(@"IFC2x3 generated");
 
-            //settings.Structure = DomainStructure.LoadIfc4();
-            //settings.OutputPath = "Xbim.Ifc4";
-            //schema = SchemaModel.LoadIfc4();
-            //Generator.Generate(settings, schema);
-            //Console.WriteLine(@"IFC4 generated");
+            settings.Structure = DomainStructure.LoadIfc4();
+            settings.OutputPath = "Xbim.Ifc4";
+            schema = SchemaModel.LoadIfc4();
+            Generator.Generate(settings, schema);
+            Console.WriteLine(@"IFC4 generated");
 
             settings.Structure = null;
             settings.OutputPath = "Xbim.CobieExpress";
