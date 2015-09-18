@@ -16,7 +16,7 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-    public interface <#= Name #><T> : IList<T>, IList, INotifyCollectionChanged, INotifyPropertyChanged
+    public interface <#= Name #><T> : IList<T>, IList, INotifyCollectionChanged, INotifyPropertyChanged, IExpressEnumerable
     {
 		<#= PersistEntityInterface #> OwningEntity { get; }
         T First { get; }

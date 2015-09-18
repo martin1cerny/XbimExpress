@@ -62,8 +62,6 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
 	public interface IExpressEnumerable : IEnumerable
     {
-        string ListType { get; }
-        void Add(object o);
     }
 
 	public interface IExpressComplexType : IExpressType

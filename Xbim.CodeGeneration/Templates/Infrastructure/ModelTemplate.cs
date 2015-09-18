@@ -63,9 +63,16 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" BeginTransaction(string name);\r\n\t\t\r\n\t\t");
+            this.Write(@" BeginTransaction(string name);
+		
+		/// <summary>
+        /// It is a good practise to implement this property with WeakReference back field so it gets disposed 
+		/// when transaction goes out of the scope. It would stay allive otherwise which is not desired unless you 
+		/// want to keep it for undo-redo sessions. But even it that case it should be referenced from elsewhere.
+        /// </summary>
+		");
             
-            #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 26 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.TransactionInterface));
             
             #line default

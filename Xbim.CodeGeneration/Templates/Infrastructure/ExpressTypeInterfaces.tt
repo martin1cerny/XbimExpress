@@ -26,8 +26,6 @@ namespace <#= Namespace #>
 
 	public interface IExpressEnumerable : IEnumerable
     {
-        string ListType { get; }
-        void Add(object o);
     }
 
 	public interface IExpressComplexType : IExpressType
