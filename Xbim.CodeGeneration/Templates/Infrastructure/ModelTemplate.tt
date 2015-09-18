@@ -18,6 +18,11 @@ namespace <#= Namespace #>
 		
 		<#= _settings.TransactionInterface #> BeginTransaction(string name);
 		
+		/// <summary>
+        /// It is a good practise to implement this property with WeakReference back field so it gets disposed 
+		/// when transaction goes out of the scope. It would stay allive otherwise which is not desired unless you 
+		/// want to keep it for undo-redo sessions. But even it that case it should be referenced from elsewhere.
+        /// </summary>
 		<#= _settings.TransactionInterface #> CurrentTransaction { get; }
 	}
 }

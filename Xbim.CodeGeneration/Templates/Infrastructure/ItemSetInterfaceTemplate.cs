@@ -65,8 +65,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("<T> : IList<T>, IList, INotifyCollectionChanged, INotifyPropertyChanged\r\n    {\r\n\t" +
-                    "\t");
+            this.Write("<T> : IList<T>, IList, INotifyCollectionChanged, INotifyPropertyChanged, IExpress" +
+                    "Enumerable\r\n    {\r\n\t\t");
             
             #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntityInterface));
