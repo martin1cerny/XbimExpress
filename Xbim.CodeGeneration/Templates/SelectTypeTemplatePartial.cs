@@ -41,8 +41,12 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
                 if (parents.Count == 0) parents.Add("IExpressSelectType");
-                var i = String.Join(", ", parents);
-                if (String.IsNullOrWhiteSpace(i)) return "";
+
+                if(Type.Selections.All(s => s is EntityDefinition))
+                    parents.Add(_settings.PersistEntityInterface);
+
+                var i = string.Join(", ", parents);
+                if (string.IsNullOrWhiteSpace(i)) return "";
                 return ": " + i;
             }
         }
@@ -69,7 +73,7 @@ namespace Xbim.CodeGeneration.Templates
                     result.Add(ns);
                 }
 
-                if(result.Count == 0) result.Add(_settings.InfrastructureNamespace);
+                if (result.Count == 0 || Type.Selections.All(s => s is EntityDefinition)) result.Add(_settings.InfrastructureNamespace);
 
                 return result;
             }

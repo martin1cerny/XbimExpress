@@ -326,16 +326,16 @@ derive_rule
 	;
 
 optional_integer
-	: INTEGER
-	| IDENTIFIER
-	| '?'
+	: INTEGER					{$$.intVal = $1.intVal;}
+	| IDENTIFIER				{$$.intVal = -1;}
+	| '?'						{$$.intVal = -1;}
 	;
 
 enumerable
-	: SET '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<SetType>(null); }
-	| LIST '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<ListType>(null); }
-	| ARRAY '[' INTEGER ':' optional_integer ']'		{ $$.val = Model.New<ArrayType>(null); }
-	| BAG '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<BagType>(null); }
+	: SET '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<SetType>(null, l => { l.LowerBound = $3.intVal; l.UpperBound = $5.intVal;} ); }
+	| LIST '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<ListType>(null, l => { l.LowerBound = $3.intVal; l.UpperBound = $5.intVal;} ); }
+	| ARRAY '[' INTEGER ':' optional_integer ']'		{ $$.val = Model.New<ArrayType>(null, l => { l.LowerIndex = $3.intVal; l.UpperIndex = $5.intVal;} ); }
+	| BAG '[' INTEGER ':' optional_integer ']'			{ $$.val = Model.New<BagType>(null, l => { l.LowerBound = $3.intVal; l.UpperBound = $5.intVal;} ); }
 	| SET												{ $$.val = Model.New<SetType>(null); }
 	| LIST												{ $$.val = Model.New<ListType>(null); }
 	| ARRAY 											{ $$.val = Model.New<ArrayType>(null); }

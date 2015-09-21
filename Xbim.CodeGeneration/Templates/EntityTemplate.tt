@@ -12,7 +12,8 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
-	[EntityName("<#= Type.PersistanceName #>", <#= Type.TypeId #>)]
+	[IndexedClass]
+	[ExpressType("<#= Type.PersistanceName #>", <#= Type.TypeId #>)]
 	// ReSharper disable once PartialTypeWithSinglePart
 	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>
 	{
@@ -24,7 +25,7 @@ namespace <#= Namespace #>
 		
 		public bool Activated { get; internal set; }
 
-		public void Activate(bool write)
+		void <#= PersistEntityInterface #>.Activate(bool write)
 		{
 			if (Activated) return; //activation can only happen once in a lifetime of the object
 
@@ -32,8 +33,10 @@ namespace <#= Namespace #>
 			Activated = true;
 		}
 
-		public void Activate (Action activation)
+		void <#= PersistEntityInterface #>.Activate (Action activation)
 		{
+			if (Activated) return; //activation can only happen once in a lifetime of the object
+			
 			activation();
 			Activated = true;
 		}
@@ -57,7 +60,10 @@ namespace <#= Namespace #>
 	
 		#region Explicit attribute properties
 <# foreach(var attribute in ExplicitAttributes){ #>
-		[EntityAttribute(<#= GetAttributeIndex(attribute) #>, EntityAttributeState.<#= attribute.OptionalFlag ? "Optional" : "Mandatory" #>)]
+<# if (IsPartOfInverse(attribute)) { #>
+		[IndexedProperty]
+<# } #>
+		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
 		public <#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{ 
 			get 
@@ -68,10 +74,12 @@ namespace <#= Namespace #>
 				Activated = true;
 				return <#= GetPrivateFieldName(attribute) #>;
 			} 
+<# if (!(attribute.Domain is AggregationType)) { #>
 			set
 			{
 				SetValue( v =>  <#= GetPrivateFieldName(attribute) #> = v, <#= GetPrivateFieldName(attribute) #>, value,  "<#= attribute.Name #>");
 			} 
+<# } #>
 		}
 	
 <# } #>
@@ -80,6 +88,7 @@ namespace <#= Namespace #>
 		#region Inverse attributes
 <# foreach(var attribute in InverseAttributes){  
 	var inverseType = attribute.Domain.Name; #>
+		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
 		public IEnumerable<<#=inverseType #>> @<#= attribute.Name #> 
 		{ 
 			get 

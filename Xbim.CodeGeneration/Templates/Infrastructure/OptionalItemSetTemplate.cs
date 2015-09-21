@@ -18,9 +18,9 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class ModelTemplate : ModelTemplateBase
+    public partial class OptionalItemSetTemplate : OptionalItemSetTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,57 +28,159 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using Xbim.Common.Step21;\r\n\r\nnamespace ");
+            this.Write("using System.Collections.Generic;\r\n");
             
-            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 7 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+ foreach(var u in Using) { 
+            
+            #line default
+            #line hidden
+            this.Write("using ");
+            
+            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(u));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\nnamespace ");
+            
+            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\tpublic interface ");
+            this.Write("\r\n{\r\n    public class ");
             
-            #line 10 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t\tIStepFileHeader Header { get; }\r\n\r\n\t\tbool IsTransactional { get; }\r\n\r\n\t  " +
-                    "  ");
+            this.Write("<T>: ");
             
-            #line 16 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.EntityCollentionInterface));
-            
-            #line default
-            #line hidden
-            this.Write(" Instances { get; }\r\n\r\n\t    int Activate(");
-            
-            #line 18 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ItemSet));
             
             #line default
             #line hidden
-            this.Write(" owningEntity, bool write);\r\n\t\t\r\n\t\t");
+            this.Write("<T>, IOptional");
             
-            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.TransactionInterface));
-            
-            #line default
-            #line hidden
-            this.Write(@" BeginTransaction(string name);
-		
-		/// <summary>
-        /// It is a good practise to implement this property with WeakReference back field so it gets disposed 
-		/// when transaction goes out of the scope. It would stay allive otherwise which is not desired unless you 
-		/// want to keep it for undo-redo sessions. But even it that case it should be referenced from elsewhere.
-        /// </summary>
-		");
-            
-            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.TransactionInterface));
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ItemSet));
             
             #line default
             #line hidden
-            this.Write(" CurrentTransaction { get; }\r\n\t}\r\n}\r\n");
+            this.Write("<T>\r\n    {\r\n        internal ");
+            
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("(IPersistEntity entity) : base(entity)\r\n        {\r\n            Initialized = fals" +
+                    "e;\r\n        }\r\n\r\n        internal ");
+            
+            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("(IPersistEntity entity, int count) : base(entity, count)\r\n        {\r\n            " +
+                    "Initialized = false;\r\n        }\r\n\r\n        internal ");
+            
+            #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(@"(IPersistEntity entity, IEnumerable<T> collection) : base(entity, collection)
+        {
+            Initialized = false;
+        }
+
+        public bool Initialized { get; private set; }
+
+        public void Initialize()
+        {
+            Initialized = true;
+        }
+
+        public void Uninitialize()
+        {
+            Clear();
+            Initialized = false;
+        }
+
+        public override void Add(T item)
+        {
+            if (!Initialized) Initialized = true;
+            base.Add(item);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null && !Initialized)
+                return true;
+
+            var second = obj as ");
+            
+            #line 54 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("<T>;\r\n            return second != null && ReferenceEquals(this, obj);\r\n        }" +
+                    "\r\n\r\n        public static bool operator ==(");
+            
+            #line 58 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("<T> a, ");
+            
+            #line 58 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(@"<T> b)
+        {
+            if (ReferenceEquals(a, b)) return true;
+
+            //if the list is not initialized, pretend to be . Value has to be boxed so that it is not a recursive call.
+            if ((a as object) == null && !b.Initialized)
+                return true;
+            if ((b as object) == null && !a.Initialized)
+                return true;
+
+            return false;
+        }
+
+        public static bool operator !=(");
+            
+            #line 71 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("<T> a, ");
+            
+            #line 71 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("<T> b)\r\n        {\r\n            return !(a == b);\r\n        }\r\n\r\n        public ove" +
+                    "rride int GetHashCode()\r\n        {\r\n            return Internal.GetHashCode();\r\n" +
+                    "        }\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -90,7 +192,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class ModelTemplateBase
+    public class OptionalItemSetTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

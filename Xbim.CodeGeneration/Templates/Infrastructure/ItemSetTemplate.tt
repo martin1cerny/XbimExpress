@@ -206,14 +206,6 @@ namespace <#= Namespace #>
             return Internal.Count == 0 ? Enumerable.Empty<T>().GetEnumerator() : Internal.GetEnumerator();
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            if (Internal.Count == 0)
-                return Enumerable.Empty<T>().GetEnumerator();
-            else
-                return Internal.GetEnumerator();
-        }
-
         #endregion
 
         #region IEnumerable Members

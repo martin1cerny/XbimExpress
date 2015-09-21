@@ -20,6 +20,9 @@ namespace Xbim.CodeGeneration
                 ? GetDirectory(settings.InfrastructureOutputPath)
                 : modelPrjPath;
 
+            //set schema IDs for this generation session
+            settings.SchemasIds = schema.Schemas.Select(s => s.Identification);
+
             //get or create target CS projects
             var modelProject = GetProject(modelPrjPath);
             var infraProject = settings.IsInfrastructureSeparate ? GetProject(infraPrjPath) : modelProject;
@@ -42,7 +45,10 @@ namespace Xbim.CodeGeneration
                 schema.Get<EnumerationType>().Select(type => new EnumerationTemplate(settings, type)));
             modelTemplates
                 .Add(new EntityFactoryTemplate(settings, schema));
+            
+            //inner model infrastructure
             modelTemplates.Add(new ItemSetTemplate(settings));
+            modelTemplates.Add(new OptionalItemSetTemplate(settings));
 
             foreach (var tmpl in modelTemplates)
                 ProcessTemplate(tmpl, modelProject);
@@ -58,6 +64,7 @@ namespace Xbim.CodeGeneration
                 new InstantiableEntityTemplate(settings),
                 new AttributesTemplate(settings),
                 new ItemSetInterfaceTemplate(settings),
+                new OptionalItemSetInterfaceTemplate(settings),
                 new PersistTemplate(settings),
                 new ExpressTypeInterfaces(settings)
             };

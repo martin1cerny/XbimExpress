@@ -122,6 +122,7 @@
     <None Include="Parser\Scanner.lex" />
     <Content Include="ExpressDefinitions\CIS2_lpm6.txt" />
     <Content Include="ExpressDefinitions\IFC4.txt" />
+    <None Include="SDAI\SDAI.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExpressDefinitions\IFC2X3_TC1.txt" />

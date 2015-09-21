@@ -75,8 +75,8 @@ namespace Xbim.CodeGeneration.Templates
                     parents.Add(Settings.InstantiableEntityInterface);
 
                 //merge to a single string
-                var i = String.Join(", ", parents);
-                if (String.IsNullOrWhiteSpace(i)) return "";
+                var i = string.Join(", ", parents);
+                if (string.IsNullOrWhiteSpace(i)) return "";
                 return ": " + i;
             }
         }
@@ -84,6 +84,148 @@ namespace Xbim.CodeGeneration.Templates
         protected virtual string GetCSType(ExplicitAttribute attribute)
         {
             return TypeHelper.GetCSType(attribute, Settings);
+        }
+
+        protected string GetAttributeState(Attribute attribute)
+        {
+            const string enu = "EntityAttributeState.";
+            var expl = attribute as ExplicitAttribute;
+            if (expl != null && expl.OptionalFlag)
+                return enu + "Optional";
+            if (expl != null)
+                return enu + "Mandatory";
+
+            var inverse = attribute as InverseAttribute;
+            if (inverse != null)
+                return enu + "Mandatory";
+
+            var derived = attribute as DerivedAttribute;
+            if (derived != null)
+                return derived.Redeclaring != null ? enu + "DerivedOverride" : enu + "Derived";
+
+            throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
+        }
+
+        private static BaseType GetDomain(Attribute attribute)
+        {
+            BaseType domain = null;
+            var expl = attribute as ExplicitAttribute;
+            if (expl != null)
+                domain = expl.Domain;
+            var inverse = attribute as InverseAttribute;
+            if (inverse != null)
+                domain = inverse.Domain;
+            var derived = attribute as DerivedAttribute;
+            if (derived != null)
+                domain = derived.Domain;
+
+            return domain;
+        }
+
+        private string GetAttributeType(BaseType domain)
+        {
+            const string enu = "EntityAttributeType.";
+            var list = domain as ListType;
+            if (list != null)
+                return list.UniqueFlag ? enu + "ListUnique" : enu + "List";
+
+            if (domain is SetType)
+                return enu + "Set";
+
+            if (domain is BagType)
+                return enu + "Bag";
+
+            var arr = domain as ArrayType;
+            if (arr != null)
+                return arr.UniqueFlag ? enu + "ArrayUnique" : enu + "Array";
+
+            if (domain is EntityDefinition || domain is SelectType)
+                return enu + "Class";
+
+            if (domain is SimpleType || domain is DefinedType)
+                return enu + "None";
+
+            if (domain is EnumerationType)
+                return enu + "Enum";
+
+            throw new NotSupportedException("Unexpected type " + domain.GetType());
+        }
+
+        protected string GetAttributeType(Attribute attribute)
+        {
+            if (attribute is InverseAttribute)
+                return "EntityAttributeType.Set";
+
+            var domain = GetDomain(attribute);
+
+            if(domain == null)
+                throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
+
+            return GetAttributeType(domain);
+        }
+
+        protected string GetAttributeMemberType(Attribute attribute)
+        {
+            var domain = GetDomain(attribute);
+            if(domain == null)
+                throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
+
+            var inv = attribute as InverseAttribute;
+            if (inv != null)
+                return GetAttributeType(inv.Domain);
+
+            var aggr = domain as AggregationType;
+            return aggr == null ? 
+                "EntityAttributeType.None" : 
+                GetAttributeType(aggr.ElementType);
+        }
+
+        protected int GetAttributeMinCardinality(Attribute attribute)
+        {
+            var domain = GetDomain(attribute);
+            if (domain == null)
+                throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
+
+            var aggr = domain as VariableSizeAggregationType;
+            if (aggr != null)
+                return aggr.LowerBound;
+
+            var arr = domain as ArrayType;
+            if (arr != null)
+                return arr.LowerIndex;
+
+            return -1;
+        }
+
+        protected int GetAttributeMaxCardinality(Attribute attribute)
+        {
+            var domain = GetDomain(attribute);
+            if (domain == null)
+                throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
+
+            var aggr = domain as VariableSizeAggregationType;
+            if (aggr != null) 
+                return aggr.UpperBound ?? -1;
+
+            var arr = domain as ArrayType;
+            if (arr != null)
+                return arr.UpperIndex;
+
+            return -1;
+        }
+
+        protected int GetAttributeOrder(Attribute attribute)
+        {
+            var expl = attribute as ExplicitAttribute;
+            if (expl != null)
+                return GetAttributeIndex(expl) + 1;
+
+            return -1;
+        }
+
+        protected bool IsPartOfInverse(ExplicitAttribute attribute)
+        {
+            return Type.SchemaModel.Get<InverseAttribute>(i => i.InvertedAttr == attribute).Any();
         }
 
         protected string ModelInterface { get { return Settings.ModelInterface; } }

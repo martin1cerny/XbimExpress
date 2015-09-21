@@ -1,4 +1,5 @@
-﻿namespace XbimEssentialsGenerator
+﻿// ReSharper disable InconsistentNaming
+namespace XbimEssentialsGenerator
 {
     /// <summary>
     /// This enumeration is coppied over from original IFC model and is used to set type IDs the same so 

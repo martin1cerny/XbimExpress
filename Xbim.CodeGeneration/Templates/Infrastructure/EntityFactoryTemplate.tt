@@ -4,6 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 using System;
+using System.Collections.Generic;
 <# foreach(var u in Using) { #>
 using <#= u #>;
 <# } #>
@@ -84,6 +85,9 @@ namespace <#= Namespace #>
 					return null;
 			}
 		}
+
+		private static List<string> _schemasIds = new List<string> { <#= string.Join(", ", SchemasIds.Select(i => "\"" + i + "\"")) #> };
+		public IEnumerable<string> SchemasIds { get { return _schemasIds; } }
 
 	}
 }

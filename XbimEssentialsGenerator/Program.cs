@@ -56,18 +56,29 @@ namespace XbimEssentialsGenerator
 
         private static void SetTypeNumbersForIfc2X3(SchemaModel model)
         {
-            var entities = model.Get<EntityDefinition>().ToList();
-            foreach (var definition in entities)
+            var max = -1;
+            var types = model.Get<NamedType>().ToList();
+
+            var values = Enum.GetValues(typeof (IfcEntityNameEnum)).Cast<short>();
+            foreach (var value in values)
             {
-                IfcEntityNameEnum entityEnum;
-                if (Enum.TryParse(definition.PersistanceName, true, out entityEnum))
+                var name = Enum.GetName(typeof (IfcEntityNameEnum), value).ToUpperInvariant();
+                var type = types.FirstOrDefault(t => t.PersistanceName == name);
+                if (type == null)
                 {
-                    definition.TypeId = (short)entityEnum;
+                    Console.WriteLine(@"Type not found: " + name);
+                    continue;
                 }
-                else
-                {
-                    Console.WriteLine(@"Type not found: " + definition.PersistanceName); 
-                }
+
+                type.TypeId = value;
+                if (value > max) max = value;
+                types.Remove(type);
+            }
+
+            //change all other type IDs so that there are no duplicates
+            foreach (var type in types)
+            {
+                type.TypeId = ++max;
             }
         }
     }

@@ -57,7 +57,7 @@
       <DependentUpon>EntityInterfaceTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\EntityInterfaceTemplatePartial.cs" />
-    <Compile Include="Templates\EntityTemplate.cs">
+    <Compile Include="Templates\EntityTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityTemplate.tt</DependentUpon>
@@ -106,6 +106,12 @@
       <DependentUpon>InstantiableEntityTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\InstantiableEntityTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\OptionalItemSetInterfaceTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\OptionalItemSetInterfaceTemplate.cs">
+      <DependentUpon>OptionalItemSetInterfaceTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Templates\Infrastructure\ItemSetInterfaceTemplate.cs">
       <DependentUpon>ItemSetInterfaceTemplate.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -124,6 +130,12 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\ModelTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\OptionalItemSetTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OptionalItemSetTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Infrastructure\OptionalItemSetTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\PersistTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\PersistTemplate.cs">
       <DependentUpon>PersistTemplate.tt</DependentUpon>
@@ -166,7 +178,7 @@
     </None>
     <None Include="Templates\EntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityTemplate.cs</LastGenOutput>
+      <LastGenOutput>EntityTemplate1.cs</LastGenOutput>
     </None>
     <None Include="Templates\EnumerationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -196,6 +208,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InstantiableEntityTemplate.cs</LastGenOutput>
     </None>
+    <None Include="Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>OptionalItemSetInterfaceTemplate.cs</LastGenOutput>
+    </None>
     <None Include="Templates\Infrastructure\ItemSetInterfaceTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ItemSetInterfaceTemplate.cs</LastGenOutput>
@@ -207,6 +223,10 @@
     <None Include="Templates\Infrastructure\ModelTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ModelTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Infrastructure\OptionalItemSetTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>OptionalItemSetTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\Infrastructure\PersistTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

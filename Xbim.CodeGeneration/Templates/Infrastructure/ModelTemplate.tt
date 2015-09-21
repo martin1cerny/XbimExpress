@@ -3,12 +3,13 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-using System;
+using Xbim.Common.Step21;
 
 namespace <#= Namespace #>
 {
 	public interface <#= Name #>
 	{
+		IStepFileHeader Header { get; }
 
 		bool IsTransactional { get; }
 

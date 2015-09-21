@@ -4,6 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 using System;
+using System.Collections.Generic;
 <# foreach(var u in Using) { #>
 using <#= u #>;
 <# } #>
@@ -23,5 +24,7 @@ namespace <#= Namespace #>
 		<#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, int typeId, int entityLabel, bool activated);
 
 		IExpressType New(string typeName);
+
+		IEnumerable<string> SchemasIds { get; }
 	}
 }

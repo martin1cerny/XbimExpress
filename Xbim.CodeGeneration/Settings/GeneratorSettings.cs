@@ -129,5 +129,7 @@ namespace Xbim.CodeGeneration.Settings
         /// </summary>
         public DomainStructure Structure { get; set; }
 
+        internal IEnumerable<string> SchemasIds { get; set; } 
+
     }
 }

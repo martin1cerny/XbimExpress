@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Xbim.ExpressParser.SDAI.AggregationType">
+    <Position X="1.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SDAI\AggregationType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Xbim.ExpressParser.SDAI.VariableSizeAggregationType">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SDAI\VariableSizeAggregationType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.ExpressParser.SDAI.ListType">
+    <Position X="6.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SDAI\ListType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.ExpressParser.SDAI.SetType">
+    <Position X="4.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SDAI\SetType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.ExpressParser.SDAI.ArrayType">
+    <Position X="1.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAABAAAQAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>SDAI\ArrayType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.ExpressParser.SDAI.BagType">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SDAI\BagType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Xbim.ExpressParser.SDAI.BaseType" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SDAI\BaseType.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

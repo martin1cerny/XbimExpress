@@ -68,6 +68,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         private IEnumerable<DefinedType> DefinedTypes
         {
             get { return _schema.Get<DefinedType>(); }
-        } 
+        }
+
+        private IEnumerable<string> SchemasIds { get { return _settings.SchemasIds; } }
     }
 }
