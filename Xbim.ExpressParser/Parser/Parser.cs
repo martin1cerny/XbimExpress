@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 06/08/2015 13:28:41
+// DateTime: 21.9.15 15:26:53
 // UserName: mxfm2
-// Input file <Parser.y - 06/08/2015 12:56:30>
+// Input file <Parser.y - 21.9.15 15:26:50>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -68,10 +68,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 06/08/2015 12:56:30
+  // Verbatim content from Parser.y - 21.9.15 15:26:50
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 06/08/2015 12:56:30
+  // End verbatim content from Parser.y - 21.9.15 15:26:50
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -980,21 +980,33 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line 325 "Parser.y"
 { CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-4].val as List<string>); yyerrok(); }
         break;
+      case 119: // optional_integer -> INTEGER
+#line 329 "Parser.y"
+{CurrentSemanticValue.intVal = ValueStack[ValueStack.Depth-1].intVal;}
+        break;
+      case 120: // optional_integer -> IDENTIFIER
+#line 330 "Parser.y"
+{CurrentSemanticValue.intVal = -1;}
+        break;
+      case 121: // optional_integer -> '?'
+#line 331 "Parser.y"
+{CurrentSemanticValue.intVal = -1;}
+        break;
       case 122: // enumerable -> SET, '[', INTEGER, ':', optional_integer, ']'
 #line 335 "Parser.y"
-{ CurrentSemanticValue.val = Model.New<SetType>(null); }
+{ CurrentSemanticValue.val = Model.New<SetType>(null, l => { l.LowerBound = ValueStack[ValueStack.Depth-4].intVal; l.UpperBound = ValueStack[ValueStack.Depth-2].intVal;} ); }
         break;
       case 123: // enumerable -> LIST, '[', INTEGER, ':', optional_integer, ']'
 #line 336 "Parser.y"
-{ CurrentSemanticValue.val = Model.New<ListType>(null); }
+{ CurrentSemanticValue.val = Model.New<ListType>(null, l => { l.LowerBound = ValueStack[ValueStack.Depth-4].intVal; l.UpperBound = ValueStack[ValueStack.Depth-2].intVal;} ); }
         break;
       case 124: // enumerable -> ARRAY, '[', INTEGER, ':', optional_integer, ']'
 #line 337 "Parser.y"
-{ CurrentSemanticValue.val = Model.New<ArrayType>(null); }
+{ CurrentSemanticValue.val = Model.New<ArrayType>(null, l => { l.LowerIndex = ValueStack[ValueStack.Depth-4].intVal; l.UpperIndex = ValueStack[ValueStack.Depth-2].intVal;} ); }
         break;
       case 125: // enumerable -> BAG, '[', INTEGER, ':', optional_integer, ']'
 #line 338 "Parser.y"
-{ CurrentSemanticValue.val = Model.New<BagType>(null); }
+{ CurrentSemanticValue.val = Model.New<BagType>(null, l => { l.LowerBound = ValueStack[ValueStack.Depth-4].intVal; l.UpperBound = ValueStack[ValueStack.Depth-2].intVal;} ); }
         break;
       case 126: // enumerable -> SET
 #line 339 "Parser.y"

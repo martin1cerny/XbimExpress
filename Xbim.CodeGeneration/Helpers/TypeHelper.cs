@@ -15,7 +15,10 @@ namespace Xbim.CodeGeneration.Helpers
                 (domain is SimpleType && !(domain is LogicalType) && !(domain is StringType)) ||
                 domain is DefinedType || domain is EnumerationType
                 ))
-            type += "?";
+                type += "?";
+            if (attribute.OptionalFlag && domain is AggregationType)
+                type = "Optional" + type;
+
             return type;
         }
 

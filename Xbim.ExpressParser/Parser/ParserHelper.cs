@@ -88,7 +88,7 @@ namespace Xbim.ExpressParser
         {
             Model.New(_currentSchema, (EnumerationType e) =>
             {
-                e.Name = name;
+                InitNamedType(e, name);
                 e.Elements = new List<ExpressId>();
                 e.Elements.AddRange(values);
             });
@@ -98,7 +98,7 @@ namespace Xbim.ExpressParser
         {
             var select = Model.New(_currentSchema, (SelectType e) =>
             {
-                e.Name = name;
+                InitNamedType(e, name);
                 e.Selections = new List<NamedType>();
             });
 
@@ -115,16 +115,21 @@ namespace Xbim.ExpressParser
             }
         }
 
-        private int _lastEntityId = 0;
+        private int _lastId = 0;
+        private void InitNamedType(NamedType nt, string name)
+        {
+            nt.Name = name;
+            nt.PersistanceName = name.ToUpperInvariant();
+            nt.TypeId = _lastId++;
+        }
+
         private void CreateEntity(string name, IEnumerable<ValueType> sections)
         {
             var entity = Model.New<EntityDefinition>(_currentSchema, e =>
             {
-                e.Name = name;
-                e.PersistanceName = name.ToUpperInvariant();
+                InitNamedType(e, name);
                 //entities are instantiable by default
                 e.Instantiable = true;
-                e.TypeId = _lastEntityId++;
             });
             foreach (var section in sections)
             {
@@ -282,8 +287,7 @@ namespace Xbim.ExpressParser
         {
             var type = Model.New<DefinedType>(_currentSchema, e =>
             {
-                e.Name = name;
-                e.PersistanceName = name.ToUpperInvariant();
+                InitNamedType(e, name);
                 e.Domain = aggregation;
             });
 
@@ -320,8 +324,7 @@ namespace Xbim.ExpressParser
         {
             var type = Model.New<DefinedType>(_currentSchema, e =>
             {
-                e.Name = name;
-                e.PersistanceName = name.ToUpperInvariant();
+                InitNamedType(e, name);
             });
             switch (typeBase.tokVal)
             {

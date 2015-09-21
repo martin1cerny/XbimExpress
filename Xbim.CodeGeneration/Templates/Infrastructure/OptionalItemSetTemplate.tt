@@ -1,0 +1,81 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System.Collections.Generic;
+<# foreach(var u in Using) { #>
+using <#= u #>;
+<# } #>
+
+namespace <#= Namespace #>
+{
+    public class <#= Name #><T>: <#= ItemSet #><T>, IOptional<#= ItemSet #><T>
+    {
+        internal <#= Name #>(IPersistEntity entity) : base(entity)
+        {
+            Initialized = false;
+        }
+
+        internal <#= Name #>(IPersistEntity entity, int count) : base(entity, count)
+        {
+            Initialized = false;
+        }
+
+        internal <#= Name #>(IPersistEntity entity, IEnumerable<T> collection) : base(entity, collection)
+        {
+            Initialized = false;
+        }
+
+        public bool Initialized { get; private set; }
+
+        public void Initialize()
+        {
+            Initialized = true;
+        }
+
+        public void Uninitialize()
+        {
+            Clear();
+            Initialized = false;
+        }
+
+        public override void Add(T item)
+        {
+            if (!Initialized) Initialized = true;
+            base.Add(item);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null && !Initialized)
+                return true;
+
+            var second = obj as <#= Name #><T>;
+            return second != null && ReferenceEquals(this, obj);
+        }
+
+        public static bool operator ==(<#= Name #><T> a, <#= Name #><T> b)
+        {
+            if (ReferenceEquals(a, b)) return true;
+
+            //if the list is not initialized, pretend to be . Value has to be boxed so that it is not a recursive call.
+            if ((a as object) == null && !b.Initialized)
+                return true;
+            if ((b as object) == null && !a.Initialized)
+                return true;
+
+            return false;
+        }
+
+        public static bool operator !=(<#= Name #><T> a, <#= Name #><T> b)
+        {
+            return !(a == b);
+        }
+
+        public override int GetHashCode()
+        {
+            return Internal.GetHashCode();
+        }
+    }
+}

@@ -10,6 +10,7 @@ using <#= u #>;
 
 namespace <#= Namespace #>
 {
+	[ExpressType("<#= Type.PersistanceName #>", <#= Type.TypeId #>)]
     // ReSharper disable once PartialTypeWithSinglePart
 	public partial struct <#= Name #> <#= Inheritance #>
 	{ 

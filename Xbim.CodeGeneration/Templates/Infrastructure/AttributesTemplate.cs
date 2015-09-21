@@ -35,88 +35,89 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\t[AttributeUsage(AttributeTargets.Class, Inherited = false)]\r\n    public sea" +
-                    "led class EntityNameAttribute : Attribute\r\n    {\r\n        public EntityNameAttri" +
-                    "bute(string name, int id)\r\n        {\r\n            Name = name;\r\n\t\t\tEntityTypeId " +
-                    "= id;\r\n        }\r\n\r\n        public string Name { get; private set; }\r\n        pu" +
-                    "blic int EntityTypeId { get; private set; }\r\n    }\r\n\r\n\t/// <summary>\r\n    ///   " +
-                    "The scope of the entity attribute\r\n    /// </summary>\r\n    public enum EntityAtt" +
-                    "ributeState\r\n    {\r\n        None = 0,\r\n        Optional = 1,\r\n        Mandatory," +
-                    "\r\n        Derived,\r\n        DerivedOverride\r\n    }\r\n\r\n    public enum EntityAttr" +
-                    "ibuteType\r\n    {\r\n        None = 0,\r\n        Class = 1,\r\n        Set,\r\n        E" +
-                    "num,\r\n        List,\r\n        ListUnique = 100\r\n    }\r\n\r\n    /// <summary>\r\n    /" +
-                    "// Indicates that this property plays a role in some inverse relation\r\n    /// <" +
-                    "/summary>\r\n    [AttributeUsage(AttributeTargets.Property)]\r\n    public sealed cl" +
-                    "ass IndexedProperty : Attribute\r\n    {\r\n    }\r\n\r\n    [AttributeUsage(AttributeTa" +
-                    "rgets.Class)]\r\n    public sealed class IndexedClass : Attribute\r\n    {\r\n    }\r\n\r" +
-                    "\n\r\n    [AttributeUsage(AttributeTargets.Property)]\r\n    public sealed class Enti" +
-                    "tyAttributeAttribute : Attribute\r\n    {\r\n        private readonly EntityAttribut" +
-                    "eState _state;\r\n        private readonly EntityAttributeType _entityType;\r\n     " +
-                    "   private readonly int _order;\r\n        private readonly int _maxCardinality = " +
-                    "-1;\r\n        private readonly int _minCardinality = -1;\r\n        private readonl" +
-                    "y EntityAttributeType _memberType = EntityAttributeType.Class;\r\n\r\n        public" +
-                    " EntityAttributeState State\r\n        {\r\n            get { return _state; }\r\n    " +
-                    "    }\r\n\r\n        public EntityAttributeType EntityType\r\n        {\r\n            g" +
-                    "et { return _entityType; }\r\n        }\r\n\r\n        public int Order\r\n        {\r\n  " +
-                    "          get { return _order; }\r\n        }\r\n\r\n        public int MinCardinality" +
-                    "\r\n        {\r\n            get { return _minCardinality; }\r\n        }\r\n\r\n        p" +
-                    "ublic int MaxCardinality\r\n        {\r\n            get { return _maxCardinality; }" +
-                    "\r\n        }\r\n\r\n        public EntityAttributeType MemberType\r\n        {\r\n       " +
-                    "     get { return _memberType; }\r\n        }\r\n\r\n        public EntityAttributeAtt" +
-                    "ribute()\r\n        {\r\n        }\r\n\r\n        public EntityAttributeAttribute(int or" +
-                    "der, EntityAttributeState state)\r\n        {\r\n            _state = state;\r\n      " +
-                    "      _order = order;\r\n            _entityType = EntityAttributeType.Class;\r\n   " +
-                    "     }\r\n\r\n        public EntityAttributeAttribute(int order, EntityAttributeStat" +
-                    "e state, EntityAttributeType entityType, EntityAttributeType memberType,\r\n      " +
-                    "                      int minCardinality, int maxCardinality)\r\n        {\r\n      " +
-                    "      _state = state;\r\n            _order = order;\r\n            _entityType = en" +
-                    "tityType;\r\n            _memberType = memberType;\r\n            _minCardinality = " +
-                    "minCardinality;\r\n            _maxCardinality = maxCardinality;\r\n        }\r\n\r\n   " +
-                    "     public EntityAttributeAttribute(int order, EntityAttributeState state, Enti" +
-                    "tyAttributeType entityType, int minCardinality,\r\n                            int" +
-                    " maxCardinality)\r\n        {\r\n            _state = state;\r\n            _order = o" +
-                    "rder;\r\n            _entityType = entityType;\r\n            _minCardinality = minC" +
-                    "ardinality;\r\n            _maxCardinality = maxCardinality;\r\n        }\r\n\r\n       " +
-                    " public EntityAttributeAttribute(int order, EntityAttributeState state, EntityAt" +
-                    "tributeType entityType, int minCardinality)\r\n        {\r\n            _state = sta" +
+            this.Write("\r\n{\r\n\t[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited" +
+                    " = false)]\r\n    public sealed class ExpressTypeAttribute : Attribute\r\n    {\r\n   " +
+                    "     public ExpressTypeAttribute(string name, int id)\r\n        {\r\n            Na" +
+                    "me = name;\r\n\t\t\tEntityTypeId = id;\r\n        }\r\n\r\n        public string Name { get" +
+                    "; private set; }\r\n        public int EntityTypeId { get; private set; }\r\n    }\r\n" +
+                    "\r\n\t/// <summary>\r\n    ///   The scope of the entity attribute\r\n    /// </summary" +
+                    ">\r\n    public enum EntityAttributeState\r\n    {\r\n        None = 0,\r\n        Optio" +
+                    "nal = 1,\r\n        Mandatory,\r\n        Derived,\r\n        DerivedOverride\r\n    }\r\n" +
+                    "\r\n    public enum EntityAttributeType\r\n    {\r\n        None = 0,\r\n        Class =" +
+                    " 1,\r\n        Enum,\r\n        Set,\r\n\t\tBag,\r\n\t\tArray,\r\n\t\tArrayUnique,\r\n        List" +
+                    ",\r\n        ListUnique = 100\r\n    }\r\n\r\n    /// <summary>\r\n    /// Indicates that " +
+                    "this property plays a role in some inverse relation\r\n    /// </summary>\r\n    [At" +
+                    "tributeUsage(AttributeTargets.Property)]\r\n    public sealed class IndexedPropert" +
+                    "y : Attribute\r\n    {\r\n    }\r\n\r\n    [AttributeUsage(AttributeTargets.Class)]\r\n   " +
+                    " public sealed class IndexedClass : Attribute\r\n    {\r\n    }\r\n\r\n\r\n    [AttributeU" +
+                    "sage(AttributeTargets.Property)]\r\n    public sealed class EntityAttributeAttribu" +
+                    "te : Attribute\r\n    {\r\n        private readonly EntityAttributeState _state;\r\n  " +
+                    "      private readonly EntityAttributeType _entityType;\r\n        private readonl" +
+                    "y int _order;\r\n        private readonly int _maxCardinality = -1;\r\n        priva" +
+                    "te readonly int _minCardinality = -1;\r\n        private readonly EntityAttributeT" +
+                    "ype _memberType = EntityAttributeType.Class;\r\n\r\n        public EntityAttributeSt" +
+                    "ate State\r\n        {\r\n            get { return _state; }\r\n        }\r\n\r\n        p" +
+                    "ublic EntityAttributeType EntityType\r\n        {\r\n            get { return _entit" +
+                    "yType; }\r\n        }\r\n\r\n        public int Order\r\n        {\r\n            get { re" +
+                    "turn _order; }\r\n        }\r\n\r\n        public int MinCardinality\r\n        {\r\n     " +
+                    "       get { return _minCardinality; }\r\n        }\r\n\r\n        public int MaxCardi" +
+                    "nality\r\n        {\r\n            get { return _maxCardinality; }\r\n        }\r\n\r\n   " +
+                    "     public EntityAttributeType MemberType\r\n        {\r\n            get { return " +
+                    "_memberType; }\r\n        }\r\n\r\n        public EntityAttributeAttribute()\r\n        " +
+                    "{\r\n        }\r\n\r\n        public EntityAttributeAttribute(int order, EntityAttribu" +
+                    "teState state)\r\n        {\r\n            _state = state;\r\n            _order = ord" +
+                    "er;\r\n            _entityType = EntityAttributeType.Class;\r\n        }\r\n\r\n        " +
+                    "public EntityAttributeAttribute(int order, EntityAttributeState state, EntityAtt" +
+                    "ributeType entityType, EntityAttributeType memberType,\r\n                        " +
+                    "    int minCardinality, int maxCardinality)\r\n        {\r\n            _state = sta" +
                     "te;\r\n            _order = order;\r\n            _entityType = entityType;\r\n       " +
-                    "     _minCardinality = minCardinality;\r\n        }\r\n\r\n        public EntityAttrib" +
-                    "uteAttribute(int order, EntityAttributeState state, EntityAttributeType entityTy" +
-                    "pe, EntityAttributeType memberType,\r\n                            int minCardinal" +
-                    "ity)\r\n        {\r\n            _state = state;\r\n            _order = order;\r\n     " +
-                    "       _entityType = entityType;\r\n            _memberType = memberType;\r\n       " +
-                    "     _minCardinality = minCardinality;\r\n        }\r\n\r\n        public EntityAttrib" +
-                    "uteAttribute(int order, EntityAttributeState state, EntityAttributeType entityTy" +
-                    "pe)\r\n        {\r\n            _state = state;\r\n            _order = order;\r\n      " +
-                    "      _entityType = entityType;\r\n        }\r\n\r\n        public EntityAttributeAttr" +
-                    "ibute(int order, EntityAttributeState state, EntityAttributeType entityType, Ent" +
-                    "ityAttributeType memberType)\r\n        {\r\n            _state = state;\r\n          " +
-                    "  _order = order;\r\n            _entityType = entityType;\r\n            _memberTyp" +
-                    "e = memberType;\r\n        }\r\n\r\n        public bool IsEnumerable\r\n        {\r\n     " +
+                    "     _memberType = memberType;\r\n            _minCardinality = minCardinality;\r\n " +
+                    "           _maxCardinality = maxCardinality;\r\n        }\r\n\r\n        public Entity" +
+                    "AttributeAttribute(int order, EntityAttributeState state, EntityAttributeType en" +
+                    "tityType, int minCardinality,\r\n                            int maxCardinality)\r\n" +
+                    "        {\r\n            _state = state;\r\n            _order = order;\r\n           " +
+                    " _entityType = entityType;\r\n            _minCardinality = minCardinality;\r\n     " +
+                    "       _maxCardinality = maxCardinality;\r\n        }\r\n\r\n        public EntityAttr" +
+                    "ibuteAttribute(int order, EntityAttributeState state, EntityAttributeType entity" +
+                    "Type, int minCardinality)\r\n        {\r\n            _state = state;\r\n            _" +
+                    "order = order;\r\n            _entityType = entityType;\r\n            _minCardinali" +
+                    "ty = minCardinality;\r\n        }\r\n\r\n        public EntityAttributeAttribute(int o" +
+                    "rder, EntityAttributeState state, EntityAttributeType entityType, EntityAttribut" +
+                    "eType memberType,\r\n                            int minCardinality)\r\n        {\r\n " +
+                    "           _state = state;\r\n            _order = order;\r\n            _entityType" +
+                    " = entityType;\r\n            _memberType = memberType;\r\n            _minCardinali" +
+                    "ty = minCardinality;\r\n        }\r\n\r\n        public EntityAttributeAttribute(int o" +
+                    "rder, EntityAttributeState state, EntityAttributeType entityType)\r\n        {\r\n  " +
+                    "          _state = state;\r\n            _order = order;\r\n            _entityType " +
+                    "= entityType;\r\n        }\r\n\r\n        public EntityAttributeAttribute(int order, E" +
+                    "ntityAttributeState state, EntityAttributeType entityType, EntityAttributeType m" +
+                    "emberType)\r\n        {\r\n            _state = state;\r\n            _order = order;\r" +
+                    "\n            _entityType = entityType;\r\n            _memberType = memberType;\r\n " +
+                    "       }\r\n\r\n        public bool IsEnumerable\r\n        {\r\n            get { retur" +
+                    "n (_entityType == EntityAttributeType.List || _entityType == EntityAttributeType" +
+                    ".Set); }\r\n        }\r\n\r\n        public string ListType\r\n        {\r\n            ge" +
+                    "t\r\n            {\r\n                switch (_entityType)\r\n                {\r\n     " +
+                    "               case EntityAttributeType.Set:\r\n                        return \"se" +
+                    "t\";\r\n                    case EntityAttributeType.List:\r\n                       " +
+                    " return \"list\";\r\n                    case EntityAttributeType.ListUnique:\r\n     " +
+                    "                   return \"list-unique\";\r\n                    default:\r\n        " +
+                    "                return \"\";\r\n                }\r\n            }\r\n        }\r\n\r\n     " +
+                    "   public bool IsSet\r\n        {\r\n            get { return (_entityType == Entity" +
+                    "AttributeType.Set); }\r\n        }\r\n\r\n        public bool IsList\r\n        {\r\n     " +
                     "       get { return (_entityType == EntityAttributeType.List || _entityType == E" +
-                    "ntityAttributeType.Set); }\r\n        }\r\n\r\n        public string ListType\r\n       " +
-                    " {\r\n            get\r\n            {\r\n                switch (_entityType)\r\n      " +
-                    "          {\r\n                    case EntityAttributeType.Set:\r\n                " +
-                    "        return \"set\";\r\n                    case EntityAttributeType.List:\r\n     " +
-                    "                   return \"list\";\r\n                    case EntityAttributeType." +
-                    "ListUnique:\r\n                        return \"list-unique\";\r\n                    " +
-                    "default:\r\n                        return \"\";\r\n                }\r\n            }\r\n" +
-                    "        }\r\n\r\n        public bool IsSet\r\n        {\r\n            get { return (_en" +
-                    "tityType == EntityAttributeType.Set); }\r\n        }\r\n\r\n        public bool IsList" +
-                    "\r\n        {\r\n            get { return (_entityType == EntityAttributeType.List |" +
-                    "| _entityType == EntityAttributeType.ListUnique); }\r\n        }\r\n\r\n        public" +
-                    " bool IsClass\r\n        {\r\n            get { return (_entityType == EntityAttribu" +
-                    "teType.Class); }\r\n        }\r\n\r\n        public bool IsDerivedOverride\r\n        {\r" +
-                    "\n            get { return (_state == EntityAttributeState.DerivedOverride); }\r\n " +
-                    "       }\r\n\r\n        public bool IsValueType\r\n        {\r\n            get { return" +
-                    " (_entityType > EntityAttributeType.List); }\r\n        }\r\n\r\n\r\n        public bool" +
-                    " IsMemberValueType\r\n        {\r\n            get { return (_memberType > EntityAtt" +
-                    "ributeType.List); }\r\n        }\r\n\r\n        public bool IsMemberClass\r\n        {\r\n" +
-                    "            get { return (_memberType == EntityAttributeType.Class); }\r\n        " +
-                    "}\r\n\r\n        public bool IsOptional\r\n        {\r\n            get { return (_state" +
-                    " == EntityAttributeState.Optional); }\r\n        }\r\n\r\n        public bool IsMandat" +
-                    "ory\r\n        {\r\n            get { return (_state == EntityAttributeState.Mandato" +
-                    "ry); }\r\n        }\r\n    }\r\n}");
+                    "ntityAttributeType.ListUnique); }\r\n        }\r\n\r\n        public bool IsClass\r\n   " +
+                    "     {\r\n            get { return (_entityType == EntityAttributeType.Class); }\r\n" +
+                    "        }\r\n\r\n        public bool IsDerivedOverride\r\n        {\r\n            get {" +
+                    " return (_state == EntityAttributeState.DerivedOverride); }\r\n        }\r\n\r\n      " +
+                    "  public bool IsValueType\r\n        {\r\n            get { return (_entityType > En" +
+                    "tityAttributeType.List); }\r\n        }\r\n\r\n\r\n        public bool IsMemberValueType" +
+                    "\r\n        {\r\n            get { return (_memberType > EntityAttributeType.List); " +
+                    "}\r\n        }\r\n\r\n        public bool IsMemberClass\r\n        {\r\n            get { " +
+                    "return (_memberType == EntityAttributeType.Class); }\r\n        }\r\n\r\n        publi" +
+                    "c bool IsOptional\r\n        {\r\n            get { return (_state == EntityAttribut" +
+                    "eState.Optional); }\r\n        }\r\n\r\n        public bool IsMandatory\r\n        {\r\n  " +
+                    "          get { return (_state == EntityAttributeState.Mandatory); }\r\n        }\r" +
+                    "\n    }\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
