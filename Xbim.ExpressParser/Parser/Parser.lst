@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <Parser.y - 21.9.15 15:26:50>
+//  GPPG error listing for yacc source file <Parser.y - 22.9.15 16:13:59>
 // ==========================================================================
 //  Version:  1.5.0
 //  Machine:  C13300493
-//  DateTime: 21.9.15 15:26:53
+//  DateTime: 22.9.15 16:15:32
 //  UserName: mxfm2
 // ==========================================================================
 
@@ -313,7 +313,7 @@ inverse_rules
 	;
 
 inverse_rule
-	: IDENTIFIER ':' enumerable OF IDENTIFIER FOR IDENTIFIER ';'				{ $$.val = CreateInverseAtribute($1.strVal, $5.strVal, $7.strVal); }
+	: IDENTIFIER ':' enumerable OF IDENTIFIER FOR IDENTIFIER ';'				{ $$.val = CreateInverseAtribute($1.strVal, $5.strVal, $7.strVal, $3.val as AggregationType); }
 	| IDENTIFIER ':' IDENTIFIER FOR IDENTIFIER ';'								{ $$.val = CreateInverseAtribute($1.strVal, $3.strVal, $5.strVal); }
 	;
 

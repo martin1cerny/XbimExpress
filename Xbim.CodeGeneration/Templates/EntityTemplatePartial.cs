@@ -228,6 +228,11 @@ namespace Xbim.CodeGeneration.Templates
             return Type.SchemaModel.Get<InverseAttribute>(i => i.InvertedAttr == attribute).Any();
         }
 
+        protected bool IsEnumeration(InverseAttribute attribute)
+        {
+            return attribute.AggregationType != null;
+        }
+
         protected string ModelInterface { get { return Settings.ModelInterface; } }
 
         protected string AbstractKeyword { get { return IsAbstract ? "abstract" : ""; } }

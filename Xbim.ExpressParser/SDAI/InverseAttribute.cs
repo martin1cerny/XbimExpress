@@ -12,5 +12,6 @@ namespace Xbim.ExpressParser.SDAI
         public InverseAttribute Redeclaring { get; set; }
         public ExplicitAttribute InvertedAttr { get; set; }
         public bool Duplicates { get; set; }
+        public AggregationType AggregationType { get; set; }
     }
 }

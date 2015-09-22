@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 21.9.15 15:26:53
+// DateTime: 22.9.15 16:15:32
 // UserName: mxfm2
-// Input file <Parser.y - 21.9.15 15:26:50>
+// Input file <Parser.y - 22.9.15 16:13:59>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -68,10 +68,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 21.9.15 15:26:50
+  // Verbatim content from Parser.y - 22.9.15 16:13:59
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 21.9.15 15:26:50
+  // End verbatim content from Parser.y - 22.9.15 16:13:59
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -931,7 +931,7 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
       case 107: // inverse_rule -> IDENTIFIER, ':', enumerable, OF, IDENTIFIER, FOR, IDENTIFIER, 
                 //                 ';'
 #line 305 "Parser.y"
-{ CurrentSemanticValue.val = CreateInverseAtribute(ValueStack[ValueStack.Depth-8].strVal, ValueStack[ValueStack.Depth-4].strVal, ValueStack[ValueStack.Depth-2].strVal); }
+{ CurrentSemanticValue.val = CreateInverseAtribute(ValueStack[ValueStack.Depth-8].strVal, ValueStack[ValueStack.Depth-4].strVal, ValueStack[ValueStack.Depth-2].strVal, ValueStack[ValueStack.Depth-6].val as AggregationType); }
         break;
       case 108: // inverse_rule -> IDENTIFIER, ':', IDENTIFIER, FOR, IDENTIFIER, ';'
 #line 306 "Parser.y"

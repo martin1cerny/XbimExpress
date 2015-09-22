@@ -302,7 +302,7 @@ inverse_rules
 	;
 
 inverse_rule
-	: IDENTIFIER ':' enumerable OF IDENTIFIER FOR IDENTIFIER ';'				{ $$.val = CreateInverseAtribute($1.strVal, $5.strVal, $7.strVal); }
+	: IDENTIFIER ':' enumerable OF IDENTIFIER FOR IDENTIFIER ';'				{ $$.val = CreateInverseAtribute($1.strVal, $5.strVal, $7.strVal, $3.val as AggregationType); }
 	| IDENTIFIER ':' IDENTIFIER FOR IDENTIFIER ';'								{ $$.val = CreateInverseAtribute($1.strVal, $3.strVal, $5.strVal); }
 	;
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,8 +44,13 @@ namespace Xbim.CodeGeneration.Templates
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
                 if (parents.Count == 0) parents.Add("IExpressSelectType");
 
-                if(Type.Selections.All(s => s is EntityDefinition))
+                //mark it as an entity if all subtypes are entities
+                if (GetFinalTypes(Type).All(s => s is EntityDefinition))
                     parents.Add(_settings.PersistEntityInterface);
+
+                //mark it as an espress type if all subtypes are defined types
+                if (GetFinalTypes(Type).All(s => s is DefinedType))
+                    parents.Add("IExpressType");
 
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i)) return "";
@@ -51,6 +58,20 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        private static IEnumerable<NamedType> GetFinalTypes(SelectType select)
+        {
+            foreach (var namedType in select.Selections)
+            {
+                var nested = namedType as SelectType;
+                if (nested != null)
+                    foreach (var type in GetFinalTypes(nested))
+                    {
+                        yield return type;
+                    }
+                else
+                    yield return namedType;
+            }
+        }
 
         public IEnumerable<string> Using
         {
@@ -73,7 +94,7 @@ namespace Xbim.CodeGeneration.Templates
                     result.Add(ns);
                 }
 
-                if (result.Count == 0 || Type.Selections.All(s => s is EntityDefinition)) result.Add(_settings.InfrastructureNamespace);
+                result.Add(_settings.InfrastructureNamespace);
 
                 return result;
             }

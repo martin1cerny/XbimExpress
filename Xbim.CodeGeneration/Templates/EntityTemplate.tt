@@ -52,8 +52,9 @@ namespace <#= Namespace #>
 <# } #>
 		}
 
+<# if (ExplicitAttributes.Any()) {#>
 		#region Explicit attribute fields
-<# foreach(var attribute in Type.ExplicitAttributes){ #>
+<# foreach(var attribute in ExplicitAttributes){ #>
 		private <#= GetCSType(attribute) #> <#= GetPrivateFieldName(attribute) #>;
 <# } #>
 		#endregion
@@ -84,30 +85,35 @@ namespace <#= Namespace #>
 	
 <# } #>
 		#endregion
+<# } #>
 
+<# if (InverseAttributes.Any()) {#>
 		#region Inverse attributes
 <# foreach(var attribute in InverseAttributes){  
 	var inverseType = attribute.Domain.Name; #>
 		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
+<# if (IsEnumeration(attribute)) { #>
 		public IEnumerable<<#=inverseType #>> @<#= attribute.Name #> 
+<# } else { #>
+		public <#=inverseType #> @<#= attribute.Name #> 
+<# } #>
 		{ 
 			get 
 			{
 <# if (IsDoubleAggregation(attribute)) {#>
-				return Model.Instances.Where<<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Any( i => i.Contains(this)));
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Any( i => i.Contains(this)));
 <# } else if (IsAggregation(attribute)){#>
-				return Model.Instances.Where<<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this));
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this));
 <# } else {#>
-				return Model.Instances.Where<<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> == this);
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> == this);
 <# } #>
 			} 
 		}
-	
+<# } #>
+		#endregion
 <# } #>
 
-		#endregion
 <# if (IsFirst) { #>
-
 		#region INotifyPropertyChanged implementation
 		 
 		public event PropertyChangedEventHandler PropertyChanged;

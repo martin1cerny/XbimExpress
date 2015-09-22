@@ -258,12 +258,13 @@ namespace Xbim.ExpressParser
             return result;
         }
 
-        private InverseAttribute CreateInverseAtribute(string name, string type, string attribute)
+        private InverseAttribute CreateInverseAtribute(string name, string type, string attribute, AggregationType aggregation = null)
         {
             var result = Model.New<InverseAttribute>(_currentSchema, a =>
             {
                 a.Name = name;
                 a.PersistentName = name;
+                a.AggregationType = aggregation;
             });
             ToDoActions.Add(() =>
             {
