@@ -4,22 +4,20 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
 <# foreach(var u in Using) { #>
 using <#= u #>;
 <# } #>
 
 namespace <#= Namespace #>
 {
-    public interface <#= Name #><T> <#= Inheritance #>
+    public interface <#= Name #><T> <#= Inheritance #>, <#= Name #>
     {
-        bool Initialized { get; }
 		void Initialize();
 		void Uninitialize();
+    }
+
+	public interface <#= Name #>
+    {
+        bool Initialized { get; }
     }
 }

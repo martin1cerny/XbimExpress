@@ -43,11 +43,10 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\n    {\r\n        string ToPart21 { get; }\r\n        Type UnderlyingSystemType { ge" +
-                    "t; }\r\n        object Value { get; }\r\n    }\r\n\r\n\tpublic interface IExpressSelectTy" +
-                    "pe : ");
+            this.Write("\r\n    {\r\n        Type UnderlyingSystemType { get; }\r\n        object Value { get; " +
+                    "}\r\n    }\r\n\r\n\tpublic interface IExpressSelectType : ");
             
-            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ExpressTypeInterfaces.tt"
+            #line 18 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ExpressTypeInterfaces.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
             
             #line default

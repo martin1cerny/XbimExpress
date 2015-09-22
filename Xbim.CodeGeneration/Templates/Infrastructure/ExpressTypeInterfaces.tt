@@ -11,7 +11,6 @@ namespace <#= Namespace #>
 {
 	public interface IExpressType : <#= PersistInterface #>
     {
-        string ToPart21 { get; }
         Type UnderlyingSystemType { get; }
         object Value { get; }
     }

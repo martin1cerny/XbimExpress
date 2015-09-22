@@ -78,7 +78,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" CurrentTransaction { get; }\r\n\t}\r\n}\r\n");
+            this.Write(" CurrentTransaction { get; }\r\n\r\n\t\tSystem.Reflection.Module SchemaModule { get; }\r" +
+                    "\n\t}\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
