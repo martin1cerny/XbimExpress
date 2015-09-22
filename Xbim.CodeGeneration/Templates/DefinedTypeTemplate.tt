@@ -101,12 +101,6 @@ namespace <#= Namespace #>
 		#endregion
 
 		#region IExpressType implementation
-		string IExpressType.ToPart21 { 
-			get 
-			{
-				throw new System.NotImplementedException();
-			}
-		}
         System.Type IExpressType.UnderlyingSystemType { 
 			get 
 			{

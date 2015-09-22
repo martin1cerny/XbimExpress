@@ -25,5 +25,7 @@ namespace <#= Namespace #>
 		/// want to keep it for undo-redo sessions. But even it that case it should be referenced from elsewhere.
         /// </summary>
 		<#= _settings.TransactionInterface #> CurrentTransaction { get; }
+
+		System.Reflection.Module SchemaModule { get; }
 	}
 }

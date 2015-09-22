@@ -28,52 +28,64 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections;\r\nusing System.Collections.Generic;\r\nus" +
-                    "ing System.Collections.Specialized;\r\nusing System.ComponentModel;\r\nusing System." +
-                    "Linq;\r\n");
+            this.Write("\r\n");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
+            #line 7 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
  foreach(var u in Using) { 
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
+            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(u));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
+            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\nnamespace ");
             
-            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
+            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public interface ");
             
-            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("<T> ");
             
-            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Inheritance));
             
             #line default
             #line hidden
-            this.Write("\r\n    {\r\n        bool Initialized { get; }\r\n\t\tvoid Initialize();\r\n\t\tvoid Uninitia" +
-                    "lize();\r\n    }\r\n}\r\n");
+            this.Write(", ");
+            
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n    {\r\n\t\tvoid Initialize();\r\n\t\tvoid Uninitialize();\r\n    }\r\n\r\n\tpublic interface" +
+                    " ");
+            
+            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n    {\r\n        bool Initialized { get; }\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
