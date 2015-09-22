@@ -123,64 +123,9 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             if (!Initialized) Initialized = true;
             base.Add(item);
         }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null && !Initialized)
-                return true;
-
-            var second = obj as ");
-            
-            #line 54 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write("<T>;\r\n            return second != null && ReferenceEquals(this, obj);\r\n        }" +
-                    "\r\n\r\n        public static bool operator ==(");
-            
-            #line 58 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write("<T> a, ");
-            
-            #line 58 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write(@"<T> b)
-        {
-            if (ReferenceEquals(a, b)) return true;
-
-            //if the list is not initialized, pretend to be . Value has to be boxed so that it is not a recursive call.
-            if ((a as object) == null && !b.Initialized)
-                return true;
-            if ((b as object) == null && !a.Initialized)
-                return true;
-
-            return false;
-        }
-
-        public static bool operator !=(");
-            
-            #line 71 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write("<T> a, ");
-            
-            #line 71 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write("<T> b)\r\n        {\r\n            return !(a == b);\r\n        }\r\n\r\n        public ove" +
-                    "rride int GetHashCode()\r\n        {\r\n            return Internal.GetHashCode();\r\n" +
-                    "        }\r\n    }\r\n}\r\n");
+    }
+}
+");
             return this.GenerationEnvironment.ToString();
         }
     }
