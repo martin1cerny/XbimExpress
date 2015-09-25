@@ -21,6 +21,18 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             get { return _settings.EntityCollentionInterface; }
         }
 
+        public string ReadOnlyName
+        {
+            get
+            {
+                var name = Name;
+                if (name.StartsWith("I"))
+                    name = name.Substring(1);
+                name = "IReadOnly" + name;
+                return name;
+            }
+        }
+
         public string Namespace
         {
             get { return _settings.InfrastructureNamespace; }

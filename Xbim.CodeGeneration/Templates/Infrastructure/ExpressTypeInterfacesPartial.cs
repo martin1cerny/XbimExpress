@@ -18,7 +18,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public string Name
         {
-            get { return GetType().Name; }
+            get { return "ExpressInterfaces"; }
         }
 
         public string Namespace

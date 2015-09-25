@@ -232,9 +232,9 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\treturn null;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic IExpressType New(string ty" +
-                    "peName)\r\n\t\t{\r\n\t\tif (typeName == null)\r\n\t\t\t\tthrow new ArgumentNullException();\r\n\r" +
-                    "\n\t\t\tvar name = typeName.ToUpper();\r\n\t\t\tswitch(name)\r\n\t\t\t{\r\n");
+            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\treturn null;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic IExpressValueType New(stri" +
+                    "ng typeName)\r\n\t\t{\r\n\t\tif (typeName == null)\r\n\t\t\t\tthrow new ArgumentNullException(" +
+                    ");\r\n\r\n\t\t\tvar name = typeName.ToUpper();\r\n\t\t\tswitch(name)\r\n\t\t\t{\r\n");
             
             #line 78 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
  foreach(var type in DefinedTypes) {

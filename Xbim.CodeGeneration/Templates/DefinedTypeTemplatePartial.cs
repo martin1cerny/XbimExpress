@@ -70,7 +70,7 @@ namespace Xbim.CodeGeneration.Templates
             get
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
-                parents.Add(IsComplex ? "IExpressComplexType" : "IExpressType");
+                parents.Add(IsComplex ? "IExpressComplexType" : "IExpressValueType");
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i))
                     return "";

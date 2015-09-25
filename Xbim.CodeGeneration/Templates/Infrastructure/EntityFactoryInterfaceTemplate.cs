@@ -140,8 +140,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" model, int typeId, int entityLabel, bool activated);\r\n\r\n\t\tIExpressType New(strin" +
-                    "g typeName);\r\n\r\n\t\tIEnumerable<string> SchemasIds { get; }\r\n\t}\r\n}");
+            this.Write(" model, int typeId, int entityLabel, bool activated);\r\n\r\n\t\tIExpressValueType New(" +
+                    "string typeName);\r\n\r\n\t\tIEnumerable<string> SchemasIds { get; }\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

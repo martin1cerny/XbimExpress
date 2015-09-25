@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace <#= Namespace #>
 {
-	public interface IExpressType : <#= PersistInterface #>
+	public interface IExpressValueType : <#= PersistInterface #>
     {
         Type UnderlyingSystemType { get; }
         object Value { get; }
@@ -27,7 +27,7 @@ namespace <#= Namespace #>
     {
     }
 
-	public interface IExpressComplexType : IExpressType
+	public interface IExpressComplexType : IExpressValueType
     {
         IEnumerable<object> Properties { get; }
         void Add(object o);
