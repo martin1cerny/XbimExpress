@@ -335,8 +335,8 @@ namespace Xbim.CodeGeneration.Templates
             #line default
             #line hidden
             this.Write(".WhereRule()\r\n\t\t{\r\n            throw new System.NotImplementedException();\r\n\t\t}\r\n" +
-                    "\t\t#endregion\r\n\r\n\t\t#region IExpressType implementation\r\n        System.Type IExpr" +
-                    "essType.UnderlyingSystemType { \r\n\t\t\tget \r\n\t\t\t{\r\n\t\t\t\treturn typeof(");
+                    "\t\t#endregion\r\n\r\n\t\t#region IExpressValueType implementation\r\n        System.Type " +
+                    "IExpressValueType.UnderlyingSystemType { \r\n\t\t\tget \r\n\t\t\t{\r\n\t\t\t\treturn typeof(");
             
             #line 107 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));

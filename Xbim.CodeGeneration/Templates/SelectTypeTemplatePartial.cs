@@ -50,7 +50,7 @@ namespace Xbim.CodeGeneration.Templates
 
                 //mark it as an espress type if all subtypes are defined types
                 if (GetFinalTypes(Type).All(s => s is DefinedType))
-                    parents.Add("IExpressType");
+                    parents.Add("IExpressValueType");
 
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i)) return "";

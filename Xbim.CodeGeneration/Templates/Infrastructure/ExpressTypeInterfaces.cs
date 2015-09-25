@@ -36,7 +36,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n\tpublic interface IExpressType : ");
+            this.Write("\r\n{\r\n\tpublic interface IExpressValueType : ");
             
             #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ExpressTypeInterfaces.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
@@ -63,7 +63,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     {
     }
 
-	public interface IExpressComplexType : IExpressType
+	public interface IExpressComplexType : IExpressValueType
     {
         IEnumerable<object> Properties { get; }
         void Add(object o);
