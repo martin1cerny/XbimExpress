@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
 
 namespace Xbim.CodeGeneration.Settings
@@ -129,7 +130,9 @@ namespace Xbim.CodeGeneration.Settings
         /// </summary>
         public DomainStructure Structure { get; set; }
 
-        internal IEnumerable<string> SchemasIds { get; set; } 
+        internal IEnumerable<string> SchemasIds { get; set; }
+
+        public Func<EntityDefinition, bool> IsIndexedEntity { get; set; } 
 
     }
 }

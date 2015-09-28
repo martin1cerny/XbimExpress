@@ -81,6 +81,14 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        protected bool IsIndexed
+        {
+            get
+            {
+                return Settings.IsIndexedEntity == null || Settings.IsIndexedEntity(Type);
+            }
+        }
+
         protected virtual string GetCSType(ExplicitAttribute attribute)
         {
             return TypeHelper.GetCSType(attribute, Settings);

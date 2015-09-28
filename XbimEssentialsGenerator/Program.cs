@@ -25,7 +25,8 @@ namespace XbimEssentialsGenerator
             {
                 Structure = DomainStructure.LoadIfc2X3(),
                 OutputPath = "Xbim.Ifc2x3",
-                InfrastructureOutputPath = "Xbim.Common"
+                InfrastructureOutputPath = "Xbim.Common",
+                IsIndexedEntity = e => _indexedClassesIfc2x3.Contains(e.Name)
             };
             var schema = SchemaModel.LoadIfc2x3();
             SetTypeNumbersForIfc2X3(schema);
@@ -38,6 +39,7 @@ namespace XbimEssentialsGenerator
             Generator.Generate(settings, schema);
             Console.WriteLine(@"IFC4 generated");
 
+            settings.IsIndexedEntity = null;
             settings.Structure = null;
             settings.OutputPath = "Xbim.CobieExpress";
             schema = SchemaModel.Load(Schemas.COBieExpress);
@@ -81,5 +83,7 @@ namespace XbimEssentialsGenerator
                 type.TypeId = ++max;
             }
         }
+
+        private static List<string> _indexedClassesIfc2x3 = new List<string> { "IfcAddress", "IfcOrganizationRelationship", "IfcApproval", "IfcApprovalActorRelationship", "IfcApprovalPropertyRelationship", "IfcApprovalRelationship", "IfcResourceApprovalRelationship", "IfcRoot", "IfcConstraint", "IfcConstraintAggregationRelationship", "IfcConstraintClassificationRelationship", "IfcConstraintRelationship", "IfcPropertyConstraintRelationship", "IfcAppliedValue", "IfcAppliedValueRelationship", "IfcCurrencyRelationship", "IfcReferencesValueDocument", "IfcCalendarDate", "IfcConnectionCurveGeometry", "IfcConnectionPointGeometry", "IfcConnectionSurfaceGeometry", "IfcLocalPlacement", "IfcBooleanResult", "IfcSolidModel", "IfcMappedItem", "IfcMaterialProperties", "IfcMonetaryUnit", "IfcPresentationStyleAssignment", "IfcPresentationStyle", "IfcTextStyleTextModel", "IfcExternalReference", "IfcTextStyleFontModel", "IfcTextStyleForDefinedFont", "IfcBoundaryCondition", "IfcStructuralLoad", "IfcTimeSeries", "IfcPresentationLayerAssignment", "IfcClassification", "IfcClassificationItem", "IfcClassificationItemRelationship", "IfcClassificationNotation", "IfcClassificationNotationFacet", "IfcClassificationReference", "IfcDocumentElectronicFormat", "IfcDocumentInformation", "IfcDocumentInformationRelationship", "IfcDocumentReference", "IfcLibraryInformation", "IfcLibraryReference", "IfcCompositeCurve", "IfcRepresentationMap", "IfcMaterial", "IfcMaterialClassificationRelationship", "IfcMaterialLayer", "IfcMaterialLayerSet", "IfcMaterialLayerSetUsage", "IfcMaterialList", "IfcUnitAssignment", "IfcProperty", "IfcPropertyDependencyRelationship", "IfcRepresentationContext", "IfcProductDefinitionShape", "IfcRepresentation", "IfcShapeAspect", "IfcActorRole", "IfcApplication", "IfcOrganization", "IfcOwnerHistory", "IfcPerson", "IfcPersonAndOrganization", "IfcTable", "IfcTableRow" }; 
     }
 }
