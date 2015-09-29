@@ -57,7 +57,7 @@
       <DependentUpon>EntityInterfaceTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\EntityInterfaceTemplatePartial.cs" />
-    <Compile Include="Templates\EntityTemplate1.cs">
+    <Compile Include="Templates\EntityTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityTemplate.tt</DependentUpon>
@@ -153,7 +153,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExpressTypeInterfaces.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\Infrastructure\TransactionTemplate.cs">
+    <Compile Include="Templates\Infrastructure\TransactionTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TransactionTemplate.tt</DependentUpon>
@@ -178,7 +178,7 @@
     </None>
     <None Include="Templates\EntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityTemplate1.cs</LastGenOutput>
+      <LastGenOutput>EntityTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\EnumerationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -242,7 +242,7 @@
     </None>
     <None Include="Templates\Infrastructure\TransactionTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>TransactionTemplate.cs</LastGenOutput>
+      <LastGenOutput>TransactionTemplate1.cs</LastGenOutput>
     </None>
     <None Include="Templates\SelectTypeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

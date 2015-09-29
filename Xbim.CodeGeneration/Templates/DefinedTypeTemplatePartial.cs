@@ -107,7 +107,6 @@ namespace Xbim.CodeGeneration.Templates
                     result.Add(_settings.Namespace + ".Exceptions");
                 }
 
-
                 foreach (var type in namedOccurances)
                 {
                     var helper = new NamedTypeHelper(type, _settings);
@@ -125,5 +124,43 @@ namespace Xbim.CodeGeneration.Templates
         {
             return EntityTemplate.GetPropertyValueMember(domain as BaseType);
         }
+
+        private SimpleTypeEnum SimpleType
+        {
+            get
+            {
+                var domain = Type.Domain;
+                var simple = domain as SimpleType;
+                while (simple == null)
+                {
+                    var defType = domain as DefinedType;
+                    if (defType != null)
+                        simple = defType.Domain as SimpleType;
+                    else
+                        break;
+                }
+                if (simple == null) throw new Exception("Unexpected type");
+
+                if (simple is BinaryType) return SimpleTypeEnum.BinaryType;
+                if (simple is BooleanType) return SimpleTypeEnum.BooleanType;
+                if (simple is IntegerType) return SimpleTypeEnum.IntegerType;
+                if (simple is LogicalType) return SimpleTypeEnum.LogicalType;
+                if (simple is NumberType) return SimpleTypeEnum.NumberType;
+                if (simple is RealType) return SimpleTypeEnum.RealType;
+                if (simple is StringType) return SimpleTypeEnum.StringType;
+                throw new Exception("Unexpected type");
+            }
+        }
+    }
+
+    public enum SimpleTypeEnum
+    {
+        BinaryType,
+        BooleanType,
+        IntegerType,
+        LogicalType,
+        NumberType,
+        RealType,
+        StringType
     }
 }
