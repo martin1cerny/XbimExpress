@@ -93,6 +93,11 @@ namespace Xbim.CodeGeneration.Templates
         {
             return TypeHelper.GetCSType(attribute, Settings);
         }
+        protected virtual string GetCSTypeNN(ExplicitAttribute attribute)
+        {
+            var result = TypeHelper.GetCSType(attribute, Settings);
+            return result.Trim('?');
+        }
 
         protected string GetAttributeState(Attribute attribute)
         {

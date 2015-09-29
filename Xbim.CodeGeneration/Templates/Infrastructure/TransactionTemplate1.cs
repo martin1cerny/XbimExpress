@@ -50,14 +50,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" entity);\r\n\t\tIEnumerable<");
-            
-            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\TransactionTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntityInterface));
-            
-            #line default
-            #line hidden
-            this.Write("> Modified { get; }\r\n\t}\r\n}");
+            this.Write(" entity, ChangeType changeType);\r\n\t}\r\n\r\n\tpublic enum ChangeType\r\n\t{\r\n\t\tNew,\r\n\t\tDe" +
+                    "leted,\r\n\t\tModified,\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -28,17 +28,37 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using System;\r\nusing Xbim.Common.Geometry;\r\nusing Xbim.Common.Step21;\r\n\r\nnamespac" +
-                    "e ");
+            this.Write("using System;\r\nusing ");
             
-            #line 10 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 7 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.InfrastructureNamespace));
+            
+            #line default
+            #line hidden
+            this.Write(".Geometry;\r\nusing ");
+            
+            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.InfrastructureNamespace));
+            
+            #line default
+            #line hidden
+            this.Write(".Step21;\r\nusing ");
+            
+            #line 9 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.InfrastructureNamespace));
+            
+            #line default
+            #line hidden
+            this.Write(".Metadata;\r\n\r\nnamespace ");
+            
+            #line 11 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n\tpublic interface ");
             
-            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -46,28 +66,28 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write("\r\n\t{\r\n\t\tIStepFileHeader Header { get; }\r\n\r\n\t\tbool IsTransactional { get; }\r\n\r\n\t  " +
                     "  ");
             
-            #line 18 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.EntityCollentionInterface));
             
             #line default
             #line hidden
             this.Write(" Instances { get; }\r\n\r\n\t    int Activate(");
             
-            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
             
             #line default
             #line hidden
             this.Write(" owningEntity, bool write);\r\n\r\n\t\tvoid Delete (");
             
-            #line 22 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 23 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
             
             #line default
             #line hidden
             this.Write(" entity);\r\n\t\t\r\n\t\t");
             
-            #line 24 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.TransactionInterface));
             
             #line default
@@ -81,7 +101,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// </summary>
 		");
             
-            #line 31 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 32 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.TransactionInterface));
             
             #line default
@@ -101,135 +121,179 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// <param name=""body""></param>
         void ForEach<TSource>(System.Collections.Generic.IEnumerable<TSource> source, Action<TSource> body) where TSource : ");
             
-            #line 44 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
             
             #line default
             #line hidden
-            this.Write(";\r\n\t}\r\n\r\n\tpublic interface IModelFactors\r\n    {\r\n        /// <summary>\r\n        /" +
-                    "// Indicates level of detail for IfcProfileDefinitions, if 0 no fillet radii are" +
-                    " applied, no leg slopes area applied, if 1 all details are applied\r\n        /// " +
-                    "</summary>\r\n        int ProfileDefLevelOfDetail { get; set; }\r\n\r\n        /// <su" +
-                    "mmary>\r\n        /// If this number is greater than 0, any faceted meshes will be" +
-                    " simplified if the number of faces exceeds the threshhold\r\n        /// </summary" +
-                    ">\r\n        int SimplifyFaceCountThreshHold { get; set; }\r\n\r\n        /// <summary" +
-                    ">\r\n        /// If the SimplifyFaceCountThreshHold is greater than 0, this is the" +
-                    " minimum length of any edge in a face in millimetres, default is 10mm\r\n        /" +
-                    "// </summary>\r\n        double ShortestEdgeLength { get; set; }\r\n\r\n        /// <s" +
-                    "ummary>\r\n        /// Precision used for Boolean solid geometry operations, defau" +
-                    "lt 0.001mm\r\n        /// </summary>\r\n        double PrecisionBoolean { get; set; " +
-                    "}\r\n\r\n        /// <summary>\r\n        /// The maximum Precision used for Boolean s" +
-                    "olid geometry operations, default 10mm\r\n        /// </summary>\r\n        double P" +
-                    "recisionBooleanMax { get; set; }\r\n\r\n        /// <summary>\r\n        /// The defec" +
-                    "tion on a curve when triangulating the model\r\n        /// </summary>\r\n        do" +
-                    "uble DeflectionTolerance { get; set; }\r\n\r\n        /// <summary>\r\n        /// Con" +
-                    "vert degrees to radians\r\n        /// </summary>\r\n        double AngleToRadiansCo" +
-                    "nversionFactor { get; }\r\n\r\n        /// <summary>\r\n        /// Conversion to metr" +
-                    "es\r\n        /// </summary>\r\n        double LengthToMetresConversionFactor { get;" +
-                    " }\r\n\r\n        /// <summary>\r\n        /// Used to display a vertex this is the di" +
-                    "ameter that will be used to auto-generate a geometric representation of a topolo" +
-                    "gical vertex\r\n        /// </summary>\r\n        double VertexPointDiameter { get; " +
-                    "}\r\n\r\n        /// <summary>\r\n        /// The maximum number of faces to sew and c" +
-                    "heck the result is a valid BREP, face sets with more than this number of faces w" +
-                    "ill be processed as read from the model\r\n        /// </summary>\r\n        int Max" +
-                    "BRepSewFaceCount { get; set; }\r\n\r\n        /// <summary>\r\n        /// The  normal" +
-                    " tolerance under which two given points are still assumed to be identical\r\n     " +
-                    "   /// </summary>\r\n        double Precision { get; set; }\r\n\r\n        /// <summar" +
-                    "y>\r\n        /// Returns the value for one metre in the units of the model\r\n     " +
-                    "   /// </summary>\r\n        /// /// <summary>\r\n        /// The  maximum tolerance" +
-                    " under which two given points are still assumed to be identical\r\n        /// </s" +
-                    "ummary>\r\n        double PrecisionMax { get; set; }\r\n\r\n        /// <summary>\r\n   " +
-                    "     /// The number of decimal places to round a number to in order to truncate " +
-                    "distances, not to be confused with precision, this is mostly for hashing and rep" +
-                    "orting, precision determins if two points are the same. NB this must be less tha" +
-                    "t the precision for booleans\r\n        /// </summary>\r\n        int Rounding { get" +
-                    "; }\r\n\r\n        double OneMetre { get; }\r\n\r\n        /// <summary>\r\n        /// Re" +
-                    "turns the value for one millimetre in the units of the model\r\n        /// </summ" +
-                    "ary>\r\n        double OneMilliMetre { get; }\r\n\r\n        /// <summary>\r\n        //" +
-                    "/ The min angle used when meshing shapes, works with DeflectionTolerance to set " +
-                    "the resolution for linearising edges, default = 0.5\r\n        /// </summary>\r\n   " +
-                    "     double DeflectionAngle { get; set; }\r\n\r\n        double OneFoot { get; }\r\n  " +
-                    "      double OneInch { get; }\r\n        double OneKilometer { get; }\r\n        dou" +
-                    "ble OneMeter { get; }\r\n        double OneMile { get; }\r\n        double OneMilliM" +
-                    "eter { get; }\r\n\r\n        int GetGeometryFloatHash(float number);\r\n        int Ge" +
-                    "tGeometryDoubleHash(double number);\r\n    }\r\n\r\n    public class XbimModelFactors " +
-                    ": IModelFactors\r\n    {\r\n\r\n        /// <summary>\r\n        /// Indicates level of " +
-                    "detail for IfcProfileDefinitions, if 0 no fillet radii are applied, no leg slope" +
-                    "s area applied, if 1 all details are applied\r\n        /// </summary>\r\n        pu" +
-                    "blic int ProfileDefLevelOfDetail { get; set; }\r\n\r\n        /// <summary>\r\n       " +
-                    " /// If this number is greater than 0, any faceted meshes will be simplified if " +
-                    "the number of faces exceeds the threshhold\r\n        /// </summary>\r\n        publ" +
-                    "ic int SimplifyFaceCountThreshHold { get; set; }\r\n\r\n        /// <summary>\r\n     " +
-                    "   /// If the SimplifyFaceCountThreshHold is greater than 0, this is the minimum" +
-                    " length of any edge in a face in millimetres, default is 10mm\r\n        /// </sum" +
-                    "mary>\r\n        public double ShortestEdgeLength { get; set; }\r\n        /// <summ" +
-                    "ary>\r\n        /// Precision used for Boolean solid geometry operations, default " +
-                    "0.001mm\r\n        /// </summary>\r\n        public double PrecisionBoolean { get; s" +
-                    "et; }\r\n        /// <summary>\r\n        /// The maximum Precision used for Boolean" +
-                    " solid geometry operations, default 10mm\r\n        /// </summary>\r\n        public" +
-                    " double PrecisionBooleanMax { get; set; }\r\n        /// <summary>\r\n        /// Th" +
-                    "e defection on a curve when triangulating the model\r\n        /// </summary>\r\n   " +
-                    "     public double DeflectionTolerance { get; set; }    \r\n        /// <summary>\r" +
-                    "\n        /// Convert degrees to radians\r\n        /// </summary>\r\n        public " +
-                    "double AngleToRadiansConversionFactor { get; private set; }\r\n        /// <summar" +
-                    "y>\r\n        /// Conversion to metres\r\n        /// </summary>\r\n        public dou" +
-                    "ble LengthToMetresConversionFactor { get; private set; }\r\n        /// <summary>\r" +
-                    "\n        /// Used to display a vertex this is the diameter that will be used to " +
-                    "auto-generate a geometric representation of a topological vertex\r\n        /// </" +
-                    "summary>\r\n        public double VertexPointDiameter { get; private set; }\r\n     " +
-                    "   /// <summary>\r\n        /// The maximum number of faces to sew and check the r" +
-                    "esult is a valid BREP, face sets with more than this number of faces will be pro" +
-                    "cessed as read from the model\r\n        /// </summary>\r\n        public int MaxBRe" +
-                    "pSewFaceCount { get; set; }\r\n        /// <summary>\r\n        /// The  normal tole" +
-                    "rance under which two given points are still assumed to be identical\r\n        //" +
-                    "/ </summary>\r\n        public double Precision { get; set; }\r\n        /// <summar" +
-                    "y>\r\n        /// Returns the value for one metre in the units of the model\r\n     " +
-                    "   /// </summary>\r\n        /// /// <summary>\r\n        /// The  maximum tolerance" +
-                    " under which two given points are still assumed to be identical\r\n        /// </s" +
-                    "ummary>\r\n        public double PrecisionMax { get; set; }\r\n        /// <summary>" +
-                    "\r\n        /// The number of decimal places to round a number to in order to trun" +
-                    "cate distances, not to be confused with precision, this is mostly for hashing an" +
-                    "d reporting, precision determins if two points are the same. NB this must be les" +
-                    "s that the precision for booleans\r\n        /// </summary>\r\n        public int Ro" +
-                    "unding { get; private set; }\r\n        \r\n        public double OneMetre { get; pr" +
-                    "ivate set; }\r\n        \r\n        /// <summary>\r\n        /// Returns the value for" +
-                    " one millimetre in the units of the model\r\n        /// </summary>\r\n        publi" +
-                    "c double OneMilliMetre { get; private set; }\r\n\r\n        public readonly XbimMatr" +
-                    "ix3D? WorldCoordinateSystem;\r\n        private readonly int _significantOrder;\r\n " +
-                    "       public int GetGeometryFloatHash(float number)\r\n        {\r\n            ret" +
-                    "urn Math.Round(number, _significantOrder).GetHashCode();\r\n        }\r\n\r\n        p" +
-                    "ublic int GetGeometryDoubleHash(double number)\r\n        {\r\n            return Ma" +
-                    "th.Round(number, _significantOrder).GetHashCode();\r\n        }\r\n\r\n        public " +
-                    "XbimModelFactors(double angToRads, double lenToMeter, double? precision = null, " +
-                    "XbimMatrix3D? wcs= null)\r\n        {\r\n            ProfileDefLevelOfDetail = 0;\r\n " +
-                    "           SimplifyFaceCountThreshHold = 1000;\r\n\r\n            WorldCoordinateSys" +
-                    "tem = wcs;\r\n            AngleToRadiansConversionFactor = angToRads;\r\n           " +
-                    " LengthToMetresConversionFactor = lenToMeter;\r\n           \r\n            OneMeter" +
-                    " = OneMetre = 1/lenToMeter;\r\n            OneMilliMeter = OneMilliMetre = OneMete" +
-                    "r / 1000.0;\r\n            OneKilometer = OneMeter * 1000.0;\r\n            OneFoot " +
-                    "= OneMeter / 3.2808;\r\n            OneInch = OneMeter / 39.37;\r\n            OneMi" +
-                    "le = OneMeter * 1609.344;\r\n\r\n\r\n            DeflectionTolerance = OneMilliMetre*5" +
-                    "; //5mm chord deflection\r\n            DeflectionAngle = 0.5; \r\n            Verte" +
-                    "xPointDiameter = OneMilliMetre * 10; //1 cm\r\n            //if (precision.HasValu" +
-                    "e)\r\n            //    Precision = Math.Min(precision.Value,OneMilliMetre / 1000)" +
-                    ";\r\n            //else\r\n            //    Precision = Math.Max(1e-5, OneMilliMetr" +
-                    "e / 1000);\r\n            Precision = precision ?? 1e-5;\r\n            PrecisionMax" +
-                    " = OneMilliMetre / 10;\r\n            MaxBRepSewFaceCount = 0;\r\n            Precis" +
-                    "ionBoolean =  Math.Max(Precision,OneMilliMetre/10); //might need to make it cour" +
-                    "ser than point precision if precision is very fine\r\n            PrecisionBoolean" +
-                    "Max = OneMilliMetre *100;\r\n            Rounding = Math.Abs((int)Math.Log10(Preci" +
-                    "sion*100)); //default round all points to 100 times  precision, this is used in " +
-                    "the hash functions\r\n\r\n            var exp = Math.Floor(Math.Log10(Math.Abs(OneMi" +
-                    "lliMetre / 10d))); //get exponent of first significant digit\r\n            _signi" +
-                    "ficantOrder = exp > 0 ? 0 : (int)Math.Abs(exp);\r\n            ShortestEdgeLength " +
-                    "= 10 * OneMilliMetre;\r\n        }\r\n\r\n        /// <summary>\r\n        /// The min a" +
-                    "ngle used when meshing shapes, works with DeflectionTolerance to set the resolut" +
-                    "ion for linearising edges, default = 0.5\r\n        /// </summary>\r\n        public" +
-                    " double DeflectionAngle { get; set; }\r\n\r\n        public double OneFoot { get; pr" +
-                    "ivate set;  }\r\n\r\n        public double OneInch { get; private set; }\r\n        \r\n" +
-                    "\t\tpublic double OneKilometer { get; private set; }\r\n\r\n        public double OneM" +
-                    "eter { get; private set; }\r\n\r\n        public double OneMile { get; private set; " +
-                    "}\r\n\r\n        public double OneMilliMeter { get; private set; }\r\n    }\r\n}\r\n");
+            this.Write(@";
+
+		/// <summary>
+        /// This event is fired every time new entity is created.
+        /// </summary>
+        event NewEntityHandler EntityNew;
+        
+		/// <summary>
+        /// This event is fired every time any entity is modified. If your model is not
+        /// transactional it might not be called at all as the central point for all
+        /// modifications is a transaction.
+        /// </summary>
+        event ModifiedEntityHandler EntityModified;
+        
+		/// <summary>
+        /// This event is fired every time when entity gets deleted from model.
+        /// </summary>
+        event DeletedEntityHandler EntityDeleted;
+
+	}
+
+	public delegate void NewEntityHandler(");
+            
+            #line 66 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" entity);\r\n    public delegate void ModifiedEntityHandler(");
+            
+            #line 67 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" entity);\r\n    public delegate void DeletedEntityHandler(");
+            
+            #line 68 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" entity);\r\n\r\n    public delegate object PropertyTranformDelegate(ExpressMetaPrope" +
+                    "rty property, object parentObject);\r\n\r\n\r\n\tpublic interface IModelFactors\r\n    {\r" +
+                    "\n        /// <summary>\r\n        /// Indicates level of detail for IfcProfileDefi" +
+                    "nitions, if 0 no fillet radii are applied, no leg slopes area applied, if 1 all " +
+                    "details are applied\r\n        /// </summary>\r\n        int ProfileDefLevelOfDetail" +
+                    " { get; set; }\r\n\r\n        /// <summary>\r\n        /// If this number is greater t" +
+                    "han 0, any faceted meshes will be simplified if the number of faces exceeds the " +
+                    "threshhold\r\n        /// </summary>\r\n        int SimplifyFaceCountThreshHold { ge" +
+                    "t; set; }\r\n\r\n        /// <summary>\r\n        /// If the SimplifyFaceCountThreshHo" +
+                    "ld is greater than 0, this is the minimum length of any edge in a face in millim" +
+                    "etres, default is 10mm\r\n        /// </summary>\r\n        double ShortestEdgeLengt" +
+                    "h { get; set; }\r\n\r\n        /// <summary>\r\n        /// Precision used for Boolean" +
+                    " solid geometry operations, default 0.001mm\r\n        /// </summary>\r\n        dou" +
+                    "ble PrecisionBoolean { get; set; }\r\n\r\n        /// <summary>\r\n        /// The max" +
+                    "imum Precision used for Boolean solid geometry operations, default 10mm\r\n       " +
+                    " /// </summary>\r\n        double PrecisionBooleanMax { get; set; }\r\n\r\n        ///" +
+                    " <summary>\r\n        /// The defection on a curve when triangulating the model\r\n " +
+                    "       /// </summary>\r\n        double DeflectionTolerance { get; set; }\r\n\r\n     " +
+                    "   /// <summary>\r\n        /// Convert degrees to radians\r\n        /// </summary>" +
+                    "\r\n        double AngleToRadiansConversionFactor { get; }\r\n\r\n        /// <summary" +
+                    ">\r\n        /// Conversion to metres\r\n        /// </summary>\r\n        double Leng" +
+                    "thToMetresConversionFactor { get; }\r\n\r\n        /// <summary>\r\n        /// Used t" +
+                    "o display a vertex this is the diameter that will be used to auto-generate a geo" +
+                    "metric representation of a topological vertex\r\n        /// </summary>\r\n        d" +
+                    "ouble VertexPointDiameter { get; }\r\n\r\n        /// <summary>\r\n        /// The max" +
+                    "imum number of faces to sew and check the result is a valid BREP, face sets with" +
+                    " more than this number of faces will be processed as read from the model\r\n      " +
+                    "  /// </summary>\r\n        int MaxBRepSewFaceCount { get; set; }\r\n\r\n        /// <" +
+                    "summary>\r\n        /// The  normal tolerance under which two given points are sti" +
+                    "ll assumed to be identical\r\n        /// </summary>\r\n        double Precision { g" +
+                    "et; set; }\r\n\r\n        /// <summary>\r\n        /// Returns the value for one metre" +
+                    " in the units of the model\r\n        /// </summary>\r\n        /// /// <summary>\r\n " +
+                    "       /// The  maximum tolerance under which two given points are still assumed" +
+                    " to be identical\r\n        /// </summary>\r\n        double PrecisionMax { get; set" +
+                    "; }\r\n\r\n        /// <summary>\r\n        /// The number of decimal places to round " +
+                    "a number to in order to truncate distances, not to be confused with precision, t" +
+                    "his is mostly for hashing and reporting, precision determins if two points are t" +
+                    "he same. NB this must be less that the precision for booleans\r\n        /// </sum" +
+                    "mary>\r\n        int Rounding { get; }\r\n\r\n        double OneMetre { get; }\r\n\r\n    " +
+                    "    /// <summary>\r\n        /// Returns the value for one millimetre in the units" +
+                    " of the model\r\n        /// </summary>\r\n        double OneMilliMetre { get; }\r\n\r\n" +
+                    "        /// <summary>\r\n        /// The min angle used when meshing shapes, works" +
+                    " with DeflectionTolerance to set the resolution for linearising edges, default =" +
+                    " 0.5\r\n        /// </summary>\r\n        double DeflectionAngle { get; set; }\r\n\r\n  " +
+                    "      double OneFoot { get; }\r\n        double OneInch { get; }\r\n        double O" +
+                    "neKilometer { get; }\r\n        double OneMeter { get; }\r\n        double OneMile {" +
+                    " get; }\r\n        double OneMilliMeter { get; }\r\n\r\n        int GetGeometryFloatHa" +
+                    "sh(float number);\r\n        int GetGeometryDoubleHash(double number);\r\n    }\r\n\r\n " +
+                    "   public class XbimModelFactors : IModelFactors\r\n    {\r\n\r\n        /// <summary>" +
+                    "\r\n        /// Indicates level of detail for IfcProfileDefinitions, if 0 no fille" +
+                    "t radii are applied, no leg slopes area applied, if 1 all details are applied\r\n " +
+                    "       /// </summary>\r\n        public int ProfileDefLevelOfDetail { get; set; }\r" +
+                    "\n\r\n        /// <summary>\r\n        /// If this number is greater than 0, any face" +
+                    "ted meshes will be simplified if the number of faces exceeds the threshhold\r\n   " +
+                    "     /// </summary>\r\n        public int SimplifyFaceCountThreshHold { get; set; " +
+                    "}\r\n\r\n        /// <summary>\r\n        /// If the SimplifyFaceCountThreshHold is gr" +
+                    "eater than 0, this is the minimum length of any edge in a face in millimetres, d" +
+                    "efault is 10mm\r\n        /// </summary>\r\n        public double ShortestEdgeLength" +
+                    " { get; set; }\r\n        /// <summary>\r\n        /// Precision used for Boolean so" +
+                    "lid geometry operations, default 0.001mm\r\n        /// </summary>\r\n        public" +
+                    " double PrecisionBoolean { get; set; }\r\n        /// <summary>\r\n        /// The m" +
+                    "aximum Precision used for Boolean solid geometry operations, default 10mm\r\n     " +
+                    "   /// </summary>\r\n        public double PrecisionBooleanMax { get; set; }\r\n    " +
+                    "    /// <summary>\r\n        /// The defection on a curve when triangulating the m" +
+                    "odel\r\n        /// </summary>\r\n        public double DeflectionTolerance { get; s" +
+                    "et; }    \r\n        /// <summary>\r\n        /// Convert degrees to radians\r\n      " +
+                    "  /// </summary>\r\n        public double AngleToRadiansConversionFactor { get; pr" +
+                    "ivate set; }\r\n        /// <summary>\r\n        /// Conversion to metres\r\n        /" +
+                    "// </summary>\r\n        public double LengthToMetresConversionFactor { get; priva" +
+                    "te set; }\r\n        /// <summary>\r\n        /// Used to display a vertex this is t" +
+                    "he diameter that will be used to auto-generate a geometric representation of a t" +
+                    "opological vertex\r\n        /// </summary>\r\n        public double VertexPointDiam" +
+                    "eter { get; private set; }\r\n        /// <summary>\r\n        /// The maximum numbe" +
+                    "r of faces to sew and check the result is a valid BREP, face sets with more than" +
+                    " this number of faces will be processed as read from the model\r\n        /// </su" +
+                    "mmary>\r\n        public int MaxBRepSewFaceCount { get; set; }\r\n        /// <summa" +
+                    "ry>\r\n        /// The  normal tolerance under which two given points are still as" +
+                    "sumed to be identical\r\n        /// </summary>\r\n        public double Precision {" +
+                    " get; set; }\r\n        /// <summary>\r\n        /// Returns the value for one metre" +
+                    " in the units of the model\r\n        /// </summary>\r\n        /// /// <summary>\r\n " +
+                    "       /// The  maximum tolerance under which two given points are still assumed" +
+                    " to be identical\r\n        /// </summary>\r\n        public double PrecisionMax { g" +
+                    "et; set; }\r\n        /// <summary>\r\n        /// The number of decimal places to r" +
+                    "ound a number to in order to truncate distances, not to be confused with precisi" +
+                    "on, this is mostly for hashing and reporting, precision determins if two points " +
+                    "are the same. NB this must be less that the precision for booleans\r\n        /// " +
+                    "</summary>\r\n        public int Rounding { get; private set; }\r\n        \r\n       " +
+                    " public double OneMetre { get; private set; }\r\n        \r\n        /// <summary>\r\n" +
+                    "        /// Returns the value for one millimetre in the units of the model\r\n    " +
+                    "    /// </summary>\r\n        public double OneMilliMetre { get; private set; }\r\n\r" +
+                    "\n        public readonly XbimMatrix3D? WorldCoordinateSystem;\r\n        private r" +
+                    "eadonly int _significantOrder;\r\n        public int GetGeometryFloatHash(float nu" +
+                    "mber)\r\n        {\r\n            return Math.Round(number, _significantOrder).GetHa" +
+                    "shCode();\r\n        }\r\n\r\n        public int GetGeometryDoubleHash(double number)\r" +
+                    "\n        {\r\n            return Math.Round(number, _significantOrder).GetHashCode" +
+                    "();\r\n        }\r\n\r\n        public XbimModelFactors(double angToRads, double lenTo" +
+                    "Meter, double? precision = null, XbimMatrix3D? wcs= null)\r\n        {\r\n          " +
+                    "  ProfileDefLevelOfDetail = 0;\r\n            SimplifyFaceCountThreshHold = 1000;\r" +
+                    "\n\r\n            WorldCoordinateSystem = wcs;\r\n            AngleToRadiansConversio" +
+                    "nFactor = angToRads;\r\n            LengthToMetresConversionFactor = lenToMeter;\r\n" +
+                    "           \r\n            OneMeter = OneMetre = 1/lenToMeter;\r\n            OneMil" +
+                    "liMeter = OneMilliMetre = OneMeter / 1000.0;\r\n            OneKilometer = OneMete" +
+                    "r * 1000.0;\r\n            OneFoot = OneMeter / 3.2808;\r\n            OneInch = One" +
+                    "Meter / 39.37;\r\n            OneMile = OneMeter * 1609.344;\r\n\r\n\r\n            Defl" +
+                    "ectionTolerance = OneMilliMetre*5; //5mm chord deflection\r\n            Deflectio" +
+                    "nAngle = 0.5; \r\n            VertexPointDiameter = OneMilliMetre * 10; //1 cm\r\n  " +
+                    "          //if (precision.HasValue)\r\n            //    Precision = Math.Min(prec" +
+                    "ision.Value,OneMilliMetre / 1000);\r\n            //else\r\n            //    Precis" +
+                    "ion = Math.Max(1e-5, OneMilliMetre / 1000);\r\n            Precision = precision ?" +
+                    "? 1e-5;\r\n            PrecisionMax = OneMilliMetre / 10;\r\n            MaxBRepSewF" +
+                    "aceCount = 0;\r\n            PrecisionBoolean =  Math.Max(Precision,OneMilliMetre/" +
+                    "10); //might need to make it courser than point precision if precision is very f" +
+                    "ine\r\n            PrecisionBooleanMax = OneMilliMetre *100;\r\n            Rounding" +
+                    " = Math.Abs((int)Math.Log10(Precision*100)); //default round all points to 100 t" +
+                    "imes  precision, this is used in the hash functions\r\n\r\n            var exp = Mat" +
+                    "h.Floor(Math.Log10(Math.Abs(OneMilliMetre / 10d))); //get exponent of first sign" +
+                    "ificant digit\r\n            _significantOrder = exp > 0 ? 0 : (int)Math.Abs(exp);" +
+                    "\r\n            ShortestEdgeLength = 10 * OneMilliMetre;\r\n        }\r\n\r\n        ///" +
+                    " <summary>\r\n        /// The min angle used when meshing shapes, works with Defle" +
+                    "ctionTolerance to set the resolution for linearising edges, default = 0.5\r\n     " +
+                    "   /// </summary>\r\n        public double DeflectionAngle { get; set; }\r\n\r\n      " +
+                    "  public double OneFoot { get; private set;  }\r\n\r\n        public double OneInch " +
+                    "{ get; private set; }\r\n        \r\n\t\tpublic double OneKilometer { get; private set" +
+                    "; }\r\n\r\n        public double OneMeter { get; private set; }\r\n\r\n        public do" +
+                    "uble OneMile { get; private set; }\r\n\r\n        public double OneMilliMeter { get;" +
+                    " private set; }\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

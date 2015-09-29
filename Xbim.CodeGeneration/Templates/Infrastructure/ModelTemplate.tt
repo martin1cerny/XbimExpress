@@ -4,8 +4,9 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 using System;
-using Xbim.Common.Geometry;
-using Xbim.Common.Step21;
+using <#= _settings.InfrastructureNamespace  #>.Geometry;
+using <#= _settings.InfrastructureNamespace  #>.Step21;
+using <#= _settings.InfrastructureNamespace  #>.Metadata;
 
 namespace <#= Namespace #>
 {
@@ -42,7 +43,32 @@ namespace <#= Namespace #>
         /// <param name="source"></param>
         /// <param name="body"></param>
         void ForEach<TSource>(System.Collections.Generic.IEnumerable<TSource> source, Action<TSource> body) where TSource : <#= _settings.PersistEntityInterface #>;
+
+		/// <summary>
+        /// This event is fired every time new entity is created.
+        /// </summary>
+        event NewEntityHandler EntityNew;
+        
+		/// <summary>
+        /// This event is fired every time any entity is modified. If your model is not
+        /// transactional it might not be called at all as the central point for all
+        /// modifications is a transaction.
+        /// </summary>
+        event ModifiedEntityHandler EntityModified;
+        
+		/// <summary>
+        /// This event is fired every time when entity gets deleted from model.
+        /// </summary>
+        event DeletedEntityHandler EntityDeleted;
+
 	}
+
+	public delegate void NewEntityHandler(<#= _settings.PersistEntityInterface #> entity);
+    public delegate void ModifiedEntityHandler(<#= _settings.PersistEntityInterface #> entity);
+    public delegate void DeletedEntityHandler(<#= _settings.PersistEntityInterface #> entity);
+
+    public delegate object PropertyTranformDelegate(ExpressMetaProperty property, object parentObject);
+
 
 	public interface IModelFactors
     {

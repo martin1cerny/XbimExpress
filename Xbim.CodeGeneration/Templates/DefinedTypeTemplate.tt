@@ -31,6 +31,38 @@ namespace <#= Namespace #>
             _value = val;
         }
 
+<# if (!IsComplex && SimpleType != SimpleTypeEnum.StringType) { //Complex types can't be initialized from string representation
+#>
+		public <#= Name #>(string val)
+        {
+<# switch(SimpleType){  
+		case SimpleTypeEnum.RealType:
+		case SimpleTypeEnum.NumberType: #>
+			_value = System.Convert.ToDouble(val, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+<#			break; 
+		case SimpleTypeEnum.LogicalType: #>
+			if (string.Compare(val, "true", System.StringComparison.OrdinalIgnoreCase) == 0)
+                _value = true;
+            else if (string.Compare(val, "false", System.StringComparison.OrdinalIgnoreCase) == 0)
+                _value = false;
+            else
+                _value = null;
+<#			break;
+		case SimpleTypeEnum.BinaryType: 
+		case SimpleTypeEnum.IntegerType: #>
+			_value = System.Convert.ToInt64(val);
+<#			break; 
+		case SimpleTypeEnum.BooleanType: #>
+			if (string.Compare(val, "true", System.StringComparison.OrdinalIgnoreCase) == 0)
+                _value = true;
+            else
+                _value = false;
+<#			break; #>
+
+<# } #>
+        }
+<# } #>
+
         public static implicit operator <#= Name #>(<#= UnderlyingType #> value)
         {
             return new <#= Name #>(value);

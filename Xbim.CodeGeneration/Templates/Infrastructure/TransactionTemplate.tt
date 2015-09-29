@@ -13,7 +13,13 @@ namespace <#= Namespace #>
 		string Name { get; }
 		void Commit();
 		void RollBack();
-		void AddReversibleAction(Action doAction, Action undoAction, <#= PersistEntityInterface #> entity);
-		IEnumerable<<#= PersistEntityInterface #>> Modified { get; }
+		void AddReversibleAction(Action doAction, Action undoAction, <#= PersistEntityInterface #> entity, ChangeType changeType);
+	}
+
+	public enum ChangeType
+	{
+		New,
+		Deleted,
+		Modified,
 	}
 }
