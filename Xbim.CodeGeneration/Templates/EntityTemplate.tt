@@ -24,6 +24,12 @@ namespace <#= Namespace #>
 		public int EntityLabel {get; internal set;}
 		
 		public <#= ModelInterface #> Model { get; internal set; }
+
+		/// <summary>
+        /// This property is deprecated and likely to be removed. Use just 'Model' instead.
+        /// </summary>
+		[Obsolete("This property is deprecated and likely to be removed. Use just 'Model' instead.")]
+        public <#= ModelInterface #> ModelOf { get { return Model; } }
 		
 		public bool Activated { get; internal set; }
 
