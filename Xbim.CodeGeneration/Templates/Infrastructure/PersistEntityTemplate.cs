@@ -57,7 +57,15 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             #line default
             #line hidden
             this.Write(" Model { get; }\r\n\t\tbool Activated { get; }\r\n\t\tvoid Activate (bool write);\r\n\t\tvoid" +
-                    " Activate (Action activation);\r\n\t}\r\n}");
+                    " Activate (Action activation);\r\n\r\n\t\t[Obsolete(\"This property is deprecated and l" +
+                    "ikely to be removed. Use just \'Model\' instead.\")]\r\n\t\t");
+            
+            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\PersistEntityTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
+            
+            #line default
+            #line hidden
+            this.Write(" ModelOf { get; }\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
