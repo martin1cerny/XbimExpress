@@ -1090,29 +1090,26 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write(@" other)
-	    {
-	        return this == other;
-	    }
-
-	    public override bool Equals(object obj)
-        {
-            // Check for null
-            if (obj == null) return false;
-
-            // Check for type
-            if (GetType() != obj.GetType()) return false;
-
-            // Cast as @");
+            this.Write(" other)\r\n\t    {\r\n\t        return this == other;\r\n\t    }\r\n\r\n");
             
-            #line 269 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 261 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+ if (IsFirst) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t    public override bool Equals(object obj)\r\n        {\r\n            // Check for" +
+                    " null\r\n            if (obj == null) return false;\r\n\r\n            // Check for ty" +
+                    "pe\r\n            if (GetType() != obj.GetType()) return false;\r\n\r\n            // " +
+                    "Cast as @");
+            
+            #line 270 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("\r\n            var root = (@");
             
-            #line 270 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 271 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -1125,17 +1122,23 @@ namespace Xbim.CodeGeneration.Templates
             //good enough as most entities will be in collections of  only one model, equals distinguishes for model
             return EntityLabel.GetHashCode(); 
         }
-
-        public static bool operator ==(@");
+");
             
             #line 279 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\n        public static bool operator ==(@");
+            
+            #line 281 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" left, @");
             
-            #line 279 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 281 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -1156,14 +1159,14 @@ namespace Xbim.CodeGeneration.Templates
 
         public static bool operator !=(@");
             
-            #line 293 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 295 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" left, @");
             
-            #line 293 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 295 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -1171,14 +1174,14 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(" right)\r\n        {\r\n            return !(left == right);\r\n        }\r\n\r\n\r\n        " +
                     "public bool Equals(@");
             
-            #line 299 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 301 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" x, @");
             
-            #line 299 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 301 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -1186,7 +1189,7 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(" y)\r\n        {\r\n            return x == y;\r\n        }\r\n\r\n        public int GetHa" +
                     "shCode(@");
             
-            #line 304 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
+            #line 306 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default

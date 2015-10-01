@@ -258,6 +258,7 @@ namespace <#= Namespace #>
 	        return this == other;
 	    }
 
+<# if (IsFirst) { #>
 	    public override bool Equals(object obj)
         {
             // Check for null
@@ -275,6 +276,7 @@ namespace <#= Namespace #>
             //good enough as most entities will be in collections of  only one model, equals distinguishes for model
             return EntityLabel.GetHashCode(); 
         }
+<# } #>
 
         public static bool operator ==(@<#= Name #> left, @<#= Name #> right)
         {
