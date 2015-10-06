@@ -160,7 +160,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" ( model ) { Activated = activated, EntityLabel = entityLabel };\r\n");
+            this.Write(" ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : Acti" +
+                    "vationStatus.NotActivated, EntityLabel = entityLabel };\r\n");
             
             #line 47 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
 		if (entity.Name.ToUpper() != entity.PersistanceName.ToUpper()) { 
@@ -181,7 +182,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" ( model ) { Activated = activated, EntityLabel = entityLabel };\r\n");
+            this.Write(" ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : Acti" +
+                    "vationStatus.NotActivated, EntityLabel = entityLabel };\r\n");
             
             #line 49 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
 		} 
@@ -225,7 +227,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" ( model ) { Activated = activated, EntityLabel = entityLabel };\r\n");
+            this.Write(" ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : Acti" +
+                    "vationStatus.NotActivated, EntityLabel = entityLabel };\r\n");
             
             #line 64 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
  } 

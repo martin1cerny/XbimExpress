@@ -71,7 +71,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(" Instances { get; }\r\n\r\n\t    int Activate(");
+            this.Write(" Instances { get; }\r\n\r\n\t    bool Activate(");
             
             #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_settings.PersistEntityInterface));
@@ -108,7 +108,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             #line hidden
             this.Write(@" CurrentTransaction { get; }
 
-		System.Reflection.Module SchemaModule { get; }
+		ExpressMetaData Metadata { get; }
 
 		IModelFactors ModelFactors { get; }
 

@@ -66,7 +66,6 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 	public interface IExpressComplexType : IExpressValueType
     {
         IEnumerable<object> Properties { get; }
-        void Add(object o);
     }
 }");
             return this.GenerationEnvironment.ToString();

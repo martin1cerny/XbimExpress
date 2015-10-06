@@ -95,8 +95,11 @@ namespace Xbim.CodeGeneration.Templates
                 if(namedDomain != null)
                     namedOccurances.Add(namedDomain);
 
-                if(IsComplex)
+                if (IsComplex)
+                {
                     result.Add("System.Collections.Generic");
+                    result.Add("System.Linq");
+                }
                 if (_settings.IsInfrastructureSeparate)
                 {
                     result.Add(_settings.InfrastructureNamespace);

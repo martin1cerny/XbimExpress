@@ -43,9 +43,9 @@ namespace <#= Namespace #>
 			switch(name)
 			{
 <# foreach(var entity in NonAbstractEntities) {#>
-				case "<#= entity.Name.ToUpper() #>": return new <#= entity.Name #> ( model ) { Activated = activated, EntityLabel = entityLabel };
+				case "<#= entity.Name.ToUpper() #>": return new <#= entity.Name #> ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : ActivationStatus.NotActivated, EntityLabel = entityLabel };
 <#		if (entity.Name.ToUpper() != entity.PersistanceName.ToUpper()) { #>
-				case "<#= entity.PersistanceName.ToUpper() #>": return new <#= entity.Name #> ( model ) { Activated = activated, EntityLabel = entityLabel };
+				case "<#= entity.PersistanceName.ToUpper() #>": return new <#= entity.Name #> ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : ActivationStatus.NotActivated, EntityLabel = entityLabel };
 <#		} 
 	} #>
 				default:
@@ -60,7 +60,7 @@ namespace <#= Namespace #>
 			switch(typeId)
 			{
 <# foreach(var entity in NonAbstractEntities) {#>
-				case <#= entity.TypeId #>: return new <#= entity.Name #> ( model ) { Activated = activated, EntityLabel = entityLabel };
+				case <#= entity.TypeId #>: return new <#= entity.Name #> ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : ActivationStatus.NotActivated, EntityLabel = entityLabel };
 <# } #>
 				default:
 					return null;

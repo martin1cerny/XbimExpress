@@ -93,7 +93,7 @@
       <DependentUpon>EntityFactoryInterfaceTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\EntityFactoryInterfaceTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\EntityFactoryTemplate.cs">
+    <Compile Include="Templates\Infrastructure\EntityFactoryTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
@@ -202,7 +202,7 @@
     </None>
     <None Include="Templates\Infrastructure\EntityFactoryTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityFactoryTemplate.cs</LastGenOutput>
+      <LastGenOutput>EntityFactoryTemplate1.cs</LastGenOutput>
     </None>
     <None Include="Templates\Infrastructure\InstantiableEntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

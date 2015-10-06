@@ -18,7 +18,7 @@ namespace <#= Namespace #>
 
 	    <#= _settings.EntityCollentionInterface  #> Instances { get; }
 
-	    int Activate(<#= _settings.PersistEntityInterface #> owningEntity, bool write);
+	    bool Activate(<#= _settings.PersistEntityInterface #> owningEntity, bool write);
 
 		void Delete (<#= _settings.PersistEntityInterface #> entity);
 		
@@ -31,7 +31,7 @@ namespace <#= Namespace #>
         /// </summary>
 		<#= _settings.TransactionInterface #> CurrentTransaction { get; }
 
-		System.Reflection.Module SchemaModule { get; }
+		ExpressMetaData Metadata { get; }
 
 		IModelFactors ModelFactors { get; }
 

@@ -118,44 +118,61 @@ namespace <#= Namespace #>
         {
             if(_model.IsTransactional && _model.CurrentTransaction == null)
                 throw new Exception("Operation out of transaction");
+			
+			//activate owning entity for write in case it is not active yet
+			OwningEntity.Activate(true);
 
             var oldCount = Internal.Count;
-            Internal.Add(item);
+			Action doAction = () => {
+				Internal.Add(item);
+				if (CollectionChanged != null)
+					CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+				NotifyCountChanged(oldCount);
+			};
 
-            if (_model.IsTransactional)
-            {
-                Action undoAction = () => Internal.Remove(item);
-                Action doAction = () => Internal.Add(item);
-                _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
-            }
+			doAction();
 
-            if (CollectionChanged != null)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+            if (!_model.IsTransactional) return;
+            
+            Action undoAction = () => {
+				Internal.Remove(item);
+				if (CollectionChanged != null)
+					CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
+				NotifyCountChanged(oldCount+1);
+			};
 
-            NotifyCountChanged(oldCount);
+            _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
         }
 
 
         public virtual void Clear()
         {
-            if (_model.IsTransactional && _model.CurrentTransaction == null)
+                        if (_model.IsTransactional && _model.CurrentTransaction == null)
                 throw new Exception("Operation out of transaction");
 
+            OwningEntity.Activate(true);
+
             var oldCount = Count;
-            Internal.Clear();
-            
-            if (_model.IsTransactional)
+            var oldItems = Internal.ToArray();
+            Action doAction = () =>
             {
-                var oldItems = Internal.ToArray();
-                Action doAction = () => Internal.Clear();
-                Action undoAction = () => Internal.AddRange(oldItems);
-                _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
-            }
+                Internal.Clear();
+                if (CollectionChanged != null)
+                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                NotifyCountChanged(oldCount);
+            };
+            doAction();
 
-            if (CollectionChanged != null)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            if (!_model.IsTransactional) return;
 
-            NotifyCountChanged(oldCount);
+            Action undoAction = () =>
+            {
+                Internal.AddRange(oldItems);
+                if (CollectionChanged != null)
+                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, oldItems));
+                NotifyCountChanged(0);
+            };
+            _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
         }
 
         public bool Contains(T item)
@@ -179,21 +196,38 @@ namespace <#= Namespace #>
             if (_model.IsTransactional && _model.CurrentTransaction == null)
                 throw new Exception("Operation out of transaction");
 
+            OwningEntity.Activate(true);
+
             var oldCount = Internal.Count;
             var removed = Internal.Remove(item);
+            //don't do anything if nothing happened realy
             if (!removed) return false;
 
-            if (_model.IsTransactional)
-            {
-                Action doAction = () => Internal.Remove(item);
-                Action undoAction = () => Internal.Add(item);
-                _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
-            }
 
+
+            if (!_model.IsTransactional) return true;
+            
+            //raise events
             if (CollectionChanged != null)
                 CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
-
             NotifyCountChanged(oldCount);
+
+            Action doAction = () =>
+            {
+                Internal.Remove(item);
+                if (CollectionChanged != null)
+                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
+                NotifyCountChanged(oldCount);
+            };
+            Action undoAction = () =>
+            {
+                Internal.Add(item);
+                if (CollectionChanged != null)
+                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+                NotifyCountChanged(oldCount-1);
+            };
+            _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
+            
             return true;
         }
 
@@ -292,19 +326,28 @@ namespace <#= Namespace #>
 				if(_model.IsTransactional && _model.CurrentTransaction == null)
 				    throw new Exception("Operation out of transaction");
 
+                OwningEntity.Activate(true);
+
 				var oldValue = Internal[index];
-		        Internal[index] = value;
+                Action doAction = () =>
+                {
+                    Internal[index] = value;
+                    if (CollectionChanged != null)
+                        CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value));
+                };
 
-				if (_model.IsTransactional)
-				{
-				    Action doAction = () => Internal[index] = value;
-				    Action undoAction = () => Internal[index] = oldValue;
-				    _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
-				}
+		        doAction();
 
-				if (CollectionChanged != null)
-				    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value));
+		        if (!_model.IsTransactional) return;
 
+		        Action undoAction = () =>
+		        {
+		            Internal[index] = oldValue;
+                    if (CollectionChanged != null)
+                        CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, oldValue));
+		        };
+		        
+				_model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
 		    }
 		}
 
@@ -319,20 +362,29 @@ namespace <#= Namespace #>
             if (_model.IsTransactional && _model.CurrentTransaction == null)
                 throw new Exception("Operation out of transaction");
 
+            OwningEntity.Activate(true);
+
             var oldCount = Internal.Count;
-            Internal.Insert(index, item);
-
-            if (_model.IsTransactional)
+            Action doAction = () =>
             {
-                Action undoAction = () => Internal.RemoveAt(index);
-                Action doAction = () => Internal.Insert(index, item);
-                _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
-            }
+                Internal.Insert(index, item);
+                if (CollectionChanged != null)
+                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
 
-            if (CollectionChanged != null)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+                NotifyCountChanged(oldCount);
+            };
+            var newCount = Internal.Count;
 
-            NotifyCountChanged(oldCount);
+            if (!_model.IsTransactional) return;
+
+            Action undoAction = () =>
+            {
+                Internal.RemoveAt(index);
+                if (CollectionChanged != null)
+                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
+                NotifyCountChanged(newCount);
+            };
+            _model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
         }
 
         public void RemoveAt(int index)
