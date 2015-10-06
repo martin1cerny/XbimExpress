@@ -58,7 +58,8 @@ namespace Xbim.CodeGeneration.Templates
                 var parents = new List<string>();
                 if (IsFirst)
                 {
-                    parents.Add(Settings.PersistEntityInterface);
+                    if(!Type.Instantiable) 
+                        parents.Add(Settings.PersistEntityInterface);
                     parents.Add("INotifyPropertyChanged");
                 }
                 else
@@ -327,8 +328,8 @@ namespace Xbim.CodeGeneration.Templates
                     result.Add(ns);
                 }
 
-                if (iAttributes.Any() || !IsAbstract)
-                    result.Add("System.Collections.Generic");
+                result.Add("System");
+                result.Add("System.Collections.Generic");
 
                 if(InverseAttributes.Any(IsDoubleAggregation))
                     result.Add("System.Linq");
@@ -337,9 +338,6 @@ namespace Xbim.CodeGeneration.Templates
                 {
                     //for INotifyPropertyChanged
                     result.Add("System.ComponentModel");
-    
-                    //for Action and Exception
-                    result.Add("System");
                 }
 
                 if (Settings.IsInfrastructureSeparate)
