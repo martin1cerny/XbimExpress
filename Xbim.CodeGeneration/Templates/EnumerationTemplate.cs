@@ -42,6 +42,13 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
+            this.Write(" : ");
+            
+            #line 8 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Underlying));
+            
+            #line default
+            #line hidden
             this.Write("\r\n\t{\r\n");
             
             #line 10 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EnumerationTemplate.tt"

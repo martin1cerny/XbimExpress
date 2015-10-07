@@ -17,7 +17,7 @@ namespace <#= Namespace #>
             Initialized = false;
         }
 
-        internal <#= Name #>(IPersistEntity entity, int count) : base(entity, count)
+        internal <#= Name #>(IPersistEntity entity, int capacity) : base(entity, capacity)
         {
             Initialized = false;
         }
