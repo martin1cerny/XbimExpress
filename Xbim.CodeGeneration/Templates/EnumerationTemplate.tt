@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 namespace <#= Namespace #>
 {
-	public enum <#= Name #>
+	public enum <#= Name #> : <#= Underlying #>
 	{
 <# foreach(var element in Type.Elements) { #>
 		@<#= element #> <#= element == Type.Elements.Last() ? "" : "," #>

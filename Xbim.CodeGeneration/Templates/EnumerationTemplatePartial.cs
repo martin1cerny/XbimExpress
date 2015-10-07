@@ -32,6 +32,11 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        public string Underlying
+        {
+            get { return Type.Elements.Count <= 255 ? "byte" : "short"; }
+        }
+
         public string Name { get { return Type.Name; } }
 
         public string Inheritance

@@ -82,7 +82,7 @@ namespace <#= Namespace #>
 		{ 
 			Model = model; 
 <# foreach (var attribute in AggregatedExplicitAttributes){ #>
-			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this );
+			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this, <#= GetUpperBound(attribute) #> );
 <# } #>
 		}
 
@@ -137,7 +137,7 @@ namespace <#= Namespace #>
 <# } else if (IsAggregation(attribute)){#>
 				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this));
 <# } else {#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> == this);
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => (e.<#= attribute.InvertedAttr.Name #> as <#= Name #>) == this);
 <# } #>
 			} 
 		}

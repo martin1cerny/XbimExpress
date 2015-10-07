@@ -100,6 +100,17 @@ namespace Xbim.CodeGeneration.Templates
             return result.Trim('?');
         }
 
+        protected int GetUpperBound(ExplicitAttribute attribute)
+        {
+            var aggr = attribute.Domain as VariableSizeAggregationType;
+            if (aggr != null && aggr.UpperBound.HasValue && aggr.UpperBound.Value > 0)
+                return aggr.UpperBound ?? -1;
+            var arr = attribute.Domain as ArrayType;
+            if (arr != null && arr.UpperIndex > 0)
+                return arr.UpperIndex;
+            return 0;
+        }
+
         protected string GetAttributeState(Attribute attribute)
         {
             const string enu = "EntityAttributeState.";

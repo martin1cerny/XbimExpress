@@ -92,8 +92,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("(IPersistEntity entity, int count) : base(entity, count)\r\n        {\r\n            " +
-                    "Initialized = false;\r\n        }\r\n\r\n        internal ");
+            this.Write("(IPersistEntity entity, int capacity) : base(entity, capacity)\r\n        {\r\n      " +
+                    "      Initialized = false;\r\n        }\r\n\r\n        internal ");
             
             #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
