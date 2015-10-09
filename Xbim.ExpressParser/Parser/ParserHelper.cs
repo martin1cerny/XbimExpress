@@ -240,19 +240,34 @@ namespace Xbim.ExpressParser
             return Model.New<DerivedAttribute>(_currentSchema, a => a.Name = name);
         }
 
-        private DerivedAttribute CreateDerivedAttribute(IEnumerable<string> path)
+        private DerivedAttribute CreateDerivedAttribute(IEnumerable<string> path,
+            IEnumerable<List<string>> accessCandidates, string function = null)
         {
-            var result = Model.New<DerivedAttribute>(_currentSchema, a => a.Name = path.Last());
+            var result = Model.New<DerivedAttribute>(_currentSchema, a =>
+            {
+                a.Name = path.Last();
+                a.AccessFunction = function;
+            });
             ToDoActions.Add(() =>
             {
                 var type = Model.Get<EntityDefinition>(d => d.Name == path.First()).FirstOrDefault() ??
                                             GetNamedAlias<EntityDefinition>(result.ParentEntity.ParentSchema, path.First());
                 if (type == null)
                     throw new InstanceNotFoundException();
-                var attr = type.ExplicitAttributes.FirstOrDefault(a => a.Name == path.Last());
+                var attr = type.ExplicitAttributes.FirstOrDefault(a => a.Name == path.Last()) ??
+                                         (ExplicitOrDerived) type.DerivedAttributes.FirstOrDefault(a => a.Name == path.Last());
                 if (attr == null)
                     throw new InstanceNotFoundException();
+                
                 result.Redeclaring = attr;
+                result.AccessCandidates = accessCandidates;
+
+                var expl = attr as ExplicitAttribute;
+                if(expl != null)
+                    result.Domain =  expl.Domain;
+                var der = attr as DerivedAttribute;
+                if (der != null)
+                    result.Domain = der.Domain;
             });
 
             return result;

@@ -152,6 +152,8 @@ namespace Xbim.ExpressParser.SDAI
         }
         #endregion
 
+        public IEnumerable<DerivedAttribute> DerivedAttributes { get { return Attributes.OfType<DerivedAttribute>(); } } 
+
         public void AddAttribute(Attribute attribute)
         {
             attribute.ParentEntity = this;

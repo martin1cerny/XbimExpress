@@ -90,10 +90,37 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        protected virtual string GetCSType(ExplicitAttribute attribute)
+        protected virtual string GetCSType(ExplicitOrDerived attribute)
         {
-            return TypeHelper.GetCSType(attribute, Settings);
+            while (true)
+            {
+                var expl = attribute as ExplicitAttribute;
+                if (expl != null)
+                    return TypeHelper.GetCSType(expl, Settings);
+                var der = attribute as DerivedAttribute;
+                if (der == null) return "";
+
+                attribute = der.Redeclaring;
+            }
         }
+
+        protected bool IsOverridenAttribute(ExplicitAttribute attribute)
+        {
+            return Type.SchemaModel.Get<DerivedAttribute>(d => d.Redeclaring == attribute).Any();
+        }
+
+        protected string GetDerivedAccess(DerivedAttribute attribute)
+        {
+            if (attribute.AccessCandidates == null || !attribute.AccessCandidates.Any())
+                return "throw new System.NotImplementedException();";
+
+            if (string.IsNullOrWhiteSpace(attribute.AccessFunction))
+                return "return " + string.Join(" ?? ", attribute.AccessCandidates.Select(c => string.Join(".", c))) + ";";
+
+            var singleAccess = string.Join(".", attribute.AccessCandidates.First());
+            return string.Format("return {0}({1});", attribute.AccessFunction, singleAccess);
+        }
+
         protected virtual string GetCSTypeNN(ExplicitAttribute attribute)
         {
             var result = TypeHelper.GetCSType(attribute, Settings);
@@ -109,6 +136,11 @@ namespace Xbim.CodeGeneration.Templates
             if (arr != null && arr.UpperIndex > 0)
                 return arr.UpperIndex;
             return 0;
+        }
+
+        protected IEnumerable<DerivedAttribute> OverridingAttributes
+        {
+            get { return Type.Attributes.OfType<DerivedAttribute>().Where(da => da.Redeclaring != null); }
         }
 
         protected string GetAttributeState(Attribute attribute)
@@ -241,10 +273,9 @@ namespace Xbim.CodeGeneration.Templates
 
         protected int GetAttributeOrder(Attribute attribute)
         {
-            var expl = attribute as ExplicitAttribute;
+            var expl = attribute as ExplicitOrDerived;
             if (expl != null)
                 return GetAttributeIndex(expl) + 1;
-
             return -1;
         }
 
@@ -299,11 +330,18 @@ namespace Xbim.CodeGeneration.Templates
         
         protected List<InverseAttribute> AllInverseAttributes { get; private set; }
 
-        protected int GetAttributeIndex(ExplicitAttribute attribute)
-        { 
-            return AllExplicitAttributes.IndexOf(attribute);
+        protected int GetAttributeIndex(ExplicitOrDerived attribute)
+        {
+            while (true)
+            {
+                var expl = attribute as ExplicitAttribute;
+                if (expl != null)
+                    return AllExplicitAttributes.IndexOf(expl);
+                var derived = attribute as DerivedAttribute;
+                if (derived == null) return -1;
+                attribute = derived.Redeclaring;
+            }
         }
-
 
 
         public virtual IEnumerable<string> Using
@@ -485,6 +523,27 @@ namespace Xbim.CodeGeneration.Templates
             return aggr.ElementType is SimpleType || aggr.ElementType is DefinedType;
         }
 
+        protected bool IsNestedAggregation(ExplicitAttribute attribute)
+        {
+            var aggr = attribute.Domain as AggregationType;
+            if (aggr == null) return false;
+
+            return aggr.ElementType is AggregationType;
+        }
+
+        protected int GetLevelOfNesting(ExplicitAttribute attribute)
+        {
+            var aggr = attribute.Domain as AggregationType;
+            if (aggr == null) throw new Exception("This is not a nested list attribute.");
+            var level = -1;
+            while (aggr != null)
+            {
+                level++;
+                aggr = aggr.ElementType as AggregationType;
+            }
+            return level;
+        }
+
         private bool IsSimpleOrDefinedType(ExplicitAttribute attribute)
         { 
             var domain = attribute.Domain;
@@ -540,10 +599,14 @@ namespace Xbim.CodeGeneration.Templates
         protected string GetAggregationElementType(ExplicitAttribute attribute)
         {
             var aggregationType = attribute.Domain as AggregationType;
-            if (aggregationType != null)
+            while (aggregationType != null)
             {
                 var type = aggregationType.ElementType;
-                return TypeHelper.GetCSType(type, Settings);
+                aggregationType = aggregationType.ElementType as AggregationType;
+                if (aggregationType == null)
+                {
+                    return TypeHelper.GetCSType(type, Settings);
+                }
             }
             throw new Exception("Aggregation type expected");
         }

@@ -10,6 +10,12 @@ namespace Xbim.ExpressParser.SDAI
     {
         public BaseType Domain { get; set; }
         public ExplicitOrDerived Redeclaring { get; set; }
+        /// <summary>
+        /// Candidates for override access
+        /// </summary>
+        public IEnumerable<List<string>> AccessCandidates { get; set; }
+
+        public string AccessFunction { get; set; }
 
     }
 }

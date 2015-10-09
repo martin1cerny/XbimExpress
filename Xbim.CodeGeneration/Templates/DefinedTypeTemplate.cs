@@ -461,9 +461,9 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write(".Parse(int propIndex, IPropertyValue value)\r\n\t\t{\r\n\t\t\tif (propIndex != 0)\r\n\t\t\t\tthr" +
-                    "ow new XbimParserException(string.Format(\"Attribute index {0} is out of range fo" +
-                    "r {1}\", propIndex + 1, GetType().Name.ToUpper()));\r\n");
+            this.Write(".Parse(int propIndex, IPropertyValue value, int[] nestedIndex)\r\n\t\t{\r\n\t\t\tif (propI" +
+                    "ndex != 0)\r\n\t\t\t\tthrow new XbimParserException(string.Format(\"Attribute index {0}" +
+                    " is out of range for {1}\", propIndex + 1, GetType().Name.ToUpper()));\r\n");
             
             #line 150 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	if (IsComplex) { 

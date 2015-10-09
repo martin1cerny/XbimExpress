@@ -57,7 +57,7 @@
       <DependentUpon>EntityInterfaceTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\EntityInterfaceTemplatePartial.cs" />
-    <Compile Include="Templates\EntityTemplate.cs">
+    <Compile Include="Templates\EntityTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityTemplate.tt</DependentUpon>
@@ -178,7 +178,7 @@
     </None>
     <None Include="Templates\EntityTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityTemplate.cs</LastGenOutput>
+      <LastGenOutput>EntityTemplate1.cs</LastGenOutput>
     </None>
     <None Include="Templates\EnumerationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

@@ -92,6 +92,7 @@
 %token FROM
 %token REFERENCE
 %token AS
+%token NVL
 
 %%
 root
@@ -197,9 +198,10 @@ identifier_or_type
 	;
 
 number
-	: INTEGER
-	| REAL
+	: INTEGER			{ $$.val = $1.intVal; $$.tokVal = Tokens.INTEGER; }
+	| REAL				{ $$.val = $1.realVal; $$.tokVal = Tokens.REAL; }
 	;
+
 
 sections																		
 	: section																	{ $$.val = new List<ValueType>{(ValueType)$1}; }
@@ -321,8 +323,11 @@ derive_rule
 	| IDENTIFIER ':' enumerable  OF identifier_or_type ASSIGNMENT error ';'									{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
 	| IDENTIFIER ':' enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'					{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
 	| IDENTIFIER ':' enumerable  OF enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'	{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
-	| accessor ':' identifier_or_type ASSIGNMENT error ';'													{ $$.val = CreateDerivedAttribute($1.val as List<string>); yyerrok(); }
-	| accessor ':' error ';'																				{ $$.val = CreateDerivedAttribute($1.val as List<string>); yyerrok(); }
+	| accessor ':' identifier_or_type ASSIGNMENT accessor ';'												{ $$.val = CreateDerivedAttribute($1.val as List<string>, new [] { $5.val as List<string> } ); yyerrok(); }
+	| accessor ':' identifier_or_type ASSIGNMENT NVL '(' accessorList ')' ';'								{ $$.val = CreateDerivedAttribute($1.val as List<string>, $7.val as List<List<string>>); yyerrok(); }
+	| accessor ':' identifier_or_type ASSIGNMENT IDENTIFIER '(' accessor ')' ';'							{ $$.val = CreateDerivedAttribute($1.val as List<string>, new [] { $7.val as List<string> }, $5.strVal); yyerrok(); }
+	| accessor ':' identifier_or_type ASSIGNMENT error ';'													{ $$.val = CreateDerivedAttribute($1.val as List<string>, null); yyerrok(); }
+	| accessor ':' error ';'																				{ $$.val = CreateDerivedAttribute($1.val as List<string>, null); yyerrok(); }
 	;
 
 optional_integer
@@ -365,10 +370,26 @@ rule
 	: RULE  IDENTIFIER  FOR identifier_list error END_RULE ';'							{CreateGlobalRule($2.strVal, $4.val as List<string>); yyerrok(); }
 	;
 
+accessorList
+	: accessor						{ $$.val = new List<List<string>> {$1.val as List<string>}; }
+	| accessorList ',' accessor		{ var list = $1.val as List<List<string>>; list.Add($3.val as List<string>); $$.val = list;}
+	| accessorList ',' number		{ var list = $1.val as List<List<string>>; list.Add(new List<string>{$3.val.ToString()}); $$.val = list;}
+	;
+
 accessor
-	: IDENTIFIER '.' IDENTIFIER		{ $$.val = new List<string>(){$1.strVal, $3.strVal}; }
-	| accessor '.' IDENTIFIER		{ var list = (List<string>)($1.val); list.Add($3.strVal); $$.val = list; }
-	| SELF BACKSLASH accessor		{ $$.val = $3.val; }
+	: indexOrIdentifier '.' indexOrIdentifier	{ $$.val = new List<string>(){$1.strVal, $3.strVal}; }
+	| accessor '.' indexOrIdentifier			{ var list = (List<string>)($1.val); list.Add($3.strVal); $$.val = list; }
+	| SELF BACKSLASH accessor					{ $$.val = $3.val; }
+	| SELF '.' indexOrIdentifier				{ $$.val = new List<string>(){ $3.strVal }; }
+	;
+
+indexOrIdentifier
+	: IDENTIFIER		{ $$.strVal = $1.strVal; }
+	| index				{ $$.strVal = $1.strVal; }
+	;
+
+index
+	: IDENTIFIER '[' INTEGER ']'			{ $$.strVal = $1.strVal + "[" + $3.intVal + "]"; }
 	;
 
 %%
