@@ -114,7 +114,7 @@
 "REFERENCE"			{ return (int)(Tokens.REFERENCE); }
 "FROM"			{ return (int)(Tokens.FROM); }
 "AS"			{ return (int)(Tokens.AS); }
-
+"NVL"			{ return (int)(Tokens.NVL); }
 
 
 /* ********************     Values        ****************** */

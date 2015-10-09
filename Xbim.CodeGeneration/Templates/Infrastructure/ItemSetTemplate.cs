@@ -30,58 +30,58 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         {
             this.Write("\r\nusing System;\r\nusing System.Collections;\r\nusing System.Collections.Generic;\r\nus" +
                     "ing System.Collections.Specialized;\r\nusing System.ComponentModel;\r\nusing System." +
-                    "Linq;\r\n");
+                    "Linq;\r\nusing System.Reflection;\r\n\r\n");
             
-            #line 13 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
  foreach(var u in Using) { 
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 16 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(u));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\nnamespace ");
             
-            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public class ");
             
-            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("<T> : I");
             
-            #line 19 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("<T>\r\n    {\r\n        private readonly List<T> _set;\r\n\r\n        private ");
             
-            #line 23 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ModelInterface));
             
             #line default
             #line hidden
             this.Write(" Model { get { return OwningEntity.Model; } }\r\n\r\n\t\tpublic ");
             
-            #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntityInterface));
             
             #line default
@@ -89,14 +89,14 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write(" OwningEntity { get; private set; }\r\n\r\n        protected List<T> Internal\r\n      " +
                     "  {\r\n            get { return _set; }\r\n        }\r\n\r\n\r\n        internal ");
             
-            #line 33 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 35 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 33 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 35 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntityInterface));
             
             #line default
@@ -104,14 +104,14 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             this.Write(" entity)\r\n        {\r\n            _set = new List<T>();\r\n\t\t\tOwningEntity = entity;" +
                     "\r\n        }\r\n\r\n\t\tinternal ");
             
-            #line 39 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 41 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 39 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 41 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntityInterface));
             
             #line default
@@ -120,34 +120,47 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                     " capacity\r\n            _set = new List<T>(capacity > 0 ? capacity : 0);\r\n\t\t\tOwni" +
                     "ngEntity = entity;\r\n        }\r\n\r\n        internal ");
             
-            #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 48 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 48 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistEntityInterface));
             
             #line default
             #line hidden
-            this.Write(@" entity, IEnumerable<T> collection)
-        {
-            _set = new List<T>(collection);
-			OwningEntity = entity;
-        }
-
-		//this is to be only used internaly to add object outside of any transaction or event firing
-		//that is typically during parsing operation
-		internal void InternalAdd(T value)
-		{
-			Internal.Add(value);
-		}
-
-        #region I");
+            this.Write(" entity, IEnumerable<T> collection)\r\n        {\r\n            _set = new List<T>(co" +
+                    "llection);\r\n\t\t\tOwningEntity = entity;\r\n        }\r\n\r\n\t\t//this is to be only used " +
+                    "internaly to add object outside of any transaction or event firing\r\n\t\t//that is " +
+                    "typically during parsing operation\r\n\t\tinternal void InternalAdd(T value)\r\n\t\t{\r\n\t" +
+                    "\t\tInternal.Add(value);\r\n\t\t}\r\n\r\n\t\t\r\n        public T InternalGetAt(int index)\r\n  " +
+                    "      {\r\n            if (index < Count)\r\n                return this[index];\r\n\r\n" +
+                    "            if (index > Count)\r\n                throw new Exception(\"It is not p" +
+                    "ossible to get object which is more that just the next after the last one.\");\r\n " +
+                    "           \r\n            if (!typeof (IList).IsAssignableFrom(typeof (T)))\r\n    " +
+                    "            return default(T);\r\n\r\n            var result = (T) Activator.CreateI" +
+                    "nstance(typeof (T), BindingFlags.NonPublic | BindingFlags.Instance, null,\r\n     " +
+                    "           new object[] {OwningEntity}, null);\r\n            InternalAdd(result);" +
+                    "\r\n            return result;\r\n\r\n        }\r\n\r\n        /// <summary>\r\n        /// " +
+                    "This function makes it possible to add nested lists if this is the case.\r\n      " +
+                    "  /// It works like InsertAt is the object doesn\'t exist already. You cannot cre" +
+                    "ate lists with wholes.\r\n        /// </summary>\r\n        /// <param name=\"index\">" +
+                    "Index of the object</param>\r\n        /// <returns>Object at specified index. If " +
+                    "it is a nested list and it doesn\'t exist it gets created.</returns>\r\n        pub" +
+                    "lic T GetAt(int index)\r\n        {\r\n            if (index < Count)\r\n             " +
+                    "   return this[index];\r\n\r\n            if (index > Count)\r\n                throw " +
+                    "new Exception(\"It is not possible to get object which is more that just the next" +
+                    " after the last one.\");\r\n            \r\n            if (!typeof(IList).IsAssignab" +
+                    "leFrom(typeof(T)))\r\n                return default(T);\r\n            \r\n          " +
+                    "  var result = (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | B" +
+                    "indingFlags.Instance, null, \r\n                new object[]{OwningEntity}, null);" +
+                    "\r\n            Insert(index, result);\r\n            return result;\r\n        }\r\n\r\n " +
+                    "       #region I");
             
-            #line 59 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 103 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -207,86 +220,84 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                     "\n        }\r\n\r\n\r\n        public virtual bool Remove(T item)\r\n        {\r\n         " +
                     "   if (Model.IsTransactional && Model.CurrentTransaction == null)\r\n             " +
                     "   throw new Exception(\"Operation out of transaction\");\r\n\r\n            OwningEnt" +
-                    "ity.Activate(true);\r\n\r\n            var oldCount = Internal.Count;\r\n            v" +
-                    "ar removed = Internal.Remove(item);\r\n            //don\'t do anything if nothing " +
-                    "happened realy\r\n            if (!removed) return false;\r\n\t\t\t//raise events\r\n    " +
-                    "        NotifyCollectionChanged(NotifyCollectionChangedAction.Remove, item);\r\n  " +
-                    "          NotifyCountChanged();\r\n\r\n            if (!Model.IsTransactional) retur" +
-                    "n true;\r\n\r\n            Action doAction = () =>\r\n            {\r\n                I" +
-                    "nternal.Remove(item);\r\n                NotifyCollectionChanged(NotifyCollectionC" +
-                    "hangedAction.Remove, item);\r\n                NotifyCountChanged();\r\n            " +
-                    "};\r\n            Action undoAction = () =>\r\n            {\r\n                Intern" +
-                    "al.Add(item);\r\n                NotifyCollectionChanged(NotifyCollectionChangedAc" +
-                    "tion.Add, item);\r\n                NotifyCountChanged();\r\n            };\r\n       " +
-                    "     Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEn" +
-                    "tity, ChangeType.Modified);\r\n            \r\n            return true;\r\n        }\r\n" +
-                    "\r\n        #endregion\r\n\r\n        #region IEnumerable<T> Members\r\n\r\n        public" +
-                    " IEnumerator<T> GetEnumerator()\r\n        {\r\n            return Internal.Count ==" +
-                    " 0 ? Enumerable.Empty<T>().GetEnumerator() : Internal.GetEnumerator();\r\n        " +
-                    "}\r\n\r\n        #endregion\r\n\r\n        #region IEnumerable Members\r\n\r\n        IEnume" +
-                    "rator IEnumerable.GetEnumerator()\r\n        {\r\n            return Internal.Count " +
-                    "== 0 ? Enumerable.Empty<T>().GetEnumerator() : Internal.GetEnumerator();\r\n      " +
-                    "  }\r\n\r\n        #endregion\r\n\r\n        #region ICollection<T> Members\r\n\r\n        v" +
-                    "oid ICollection<T>.Add(T item)\r\n        {\r\n            Add(item);\r\n        }\r\n\r\n" +
-                    "        void ICollection<T>.Clear()\r\n        {\r\n            Clear();\r\n        }\r" +
-                    "\n\r\n        bool ICollection<T>.Contains(T item)\r\n        {\r\n            return I" +
-                    "nternal.Contains(item);\r\n        }\r\n\r\n        void ICollection<T>.CopyTo(T[] arr" +
-                    "ay, int arrayIndex)\r\n        {\r\n            Internal.CopyTo(array, arrayIndex);\r" +
-                    "\n        }\r\n\r\n        int ICollection<T>.Count\r\n        {\r\n            get { ret" +
-                    "urn Count; }\r\n        }\r\n\r\n        bool ICollection<T>.IsReadOnly\r\n        {\r\n  " +
-                    "          get { return ((IList<T>)Internal).IsReadOnly; }\r\n        }\r\n\r\n        " +
-                    "bool ICollection<T>.Remove(T item)\r\n        {\r\n            return Remove(item);\r" +
-                    "\n        }\r\n\r\n        #endregion\r\n\r\n        #region ICollection Members\r\n\r\n     " +
-                    "   void ICollection.CopyTo(Array array, int index)\r\n        {\r\n            CopyT" +
-                    "o((T[])array, index);\r\n        }\r\n\r\n        int ICollection.Count\r\n        {\r\n  " +
-                    "          get { return Internal.Count; }\r\n        }\r\n\r\n        bool ICollection." +
-                    "IsSynchronized\r\n        {\r\n            get { return ((ICollection)Internal).IsSy" +
-                    "nchronized; }\r\n        }\r\n\r\n        object ICollection.SyncRoot\r\n        {\r\n    " +
-                    "        get { return ((ICollection)Internal).SyncRoot; }\r\n        }\r\n\r\n        #" +
-                    "endregion\r\n\r\n\t\t#region IList<T> members\r\n\t\tpublic T this[int index]\r\n\t\t{\r\n\t\t    " +
-                    "get\r\n\t\t    {\r\n\t\t        return Internal[index];\r\n\t\t    }\r\n\t\t    set\r\n\t\t    {\r\n\t\t" +
-                    "\t\tif(Model.IsTransactional && Model.CurrentTransaction == null)\r\n\t\t\t\t    throw n" +
-                    "ew Exception(\"Operation out of transaction\");\r\n\r\n                OwningEntity.Ac" +
-                    "tivate(true);\r\n\r\n\t\t\t\tvar oldValue = Internal[index];\r\n                Action doA" +
-                    "ction = () =>\r\n                {\r\n                    Internal[index] = value;\r\n" +
-                    "                    NotifyCollectionChanged(NotifyCollectionChangedAction.Replac" +
-                    "e, value);\r\n                };\r\n\r\n\t\t        doAction();\r\n\r\n\t\t        if (!Model." +
-                    "IsTransactional) return;\r\n\r\n\t\t        Action undoAction = () =>\r\n\t\t        {\r\n\t\t" +
-                    "            Internal[index] = oldValue;\r\n                    NotifyCollectionCha" +
-                    "nged(NotifyCollectionChangedAction.Replace, oldValue);\r\n\t\t        };\r\n\t\t        " +
-                    "\r\n\t\t\t\tModel.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningE" +
-                    "ntity, ChangeType.Modified);\r\n\t\t    }\r\n\t\t}\r\n\r\n\t\tpublic int IndexOf(T item)\r\n\t\t{\r" +
-                    "\n\t\t\treturn Internal.IndexOf(item);\r\n\t\t}\r\n\r\n\r\n        public void Insert(int inde" +
-                    "x, T item)\r\n        {\r\n            if (Model.IsTransactional && Model.CurrentTra" +
-                    "nsaction == null)\r\n                throw new Exception(\"Operation out of transac" +
-                    "tion\");\r\n\r\n            OwningEntity.Activate(true);\r\n\r\n            var oldCount " +
-                    "= Internal.Count;\r\n            Action doAction = () =>\r\n            {\r\n         " +
-                    "       Internal.Insert(index, item);\r\n                NotifyCollectionChanged(No" +
-                    "tifyCollectionChangedAction.Add, item);\r\n                NotifyCountChanged();\r\n" +
-                    "            };\r\n            var newCount = Internal.Count;\r\n\r\n            if (!M" +
-                    "odel.IsTransactional) return;\r\n\r\n            Action undoAction = () =>\r\n        " +
-                    "    {\r\n                Internal.RemoveAt(index);\r\n                NotifyCollecti" +
-                    "onChanged(NotifyCollectionChangedAction.Remove, item);\r\n                NotifyCo" +
-                    "untChanged();\r\n            };\r\n            Model.CurrentTransaction.AddReversibl" +
-                    "eAction(doAction, undoAction, OwningEntity, ChangeType.Modified);\r\n        }\r\n\r\n" +
-                    "        public void RemoveAt(int index)\r\n        {\r\n            var toRemove = I" +
-                    "nternal[index];\r\n            Remove(toRemove);\r\n        }\r\n        #endregion\r\n\r" +
-                    "\n        #region IList members\r\n        int IList.Add(object value)\r\n        {\r\n" +
-                    "            if (!(value is T)) return -1;\r\n\r\n            var v = (T) value;\r\n   " +
-                    "         Add(v);\r\n            return Internal.Count - 1;\r\n        }\r\n\r\n        b" +
-                    "ool IList.Contains(object value)\r\n        {\r\n            return ((IList)Internal" +
-                    ").Contains(value);\r\n        }\r\n\r\n        int IList.IndexOf(object value)\r\n      " +
-                    "  {\r\n            return ((IList)Internal).IndexOf(value);\r\n        }\r\n\r\n        " +
-                    "void IList.Insert(int index, object value)\r\n        {\r\n            Insert(index," +
-                    " (T)value);\r\n        }\r\n\r\n        bool IList.IsFixedSize\r\n        {\r\n           " +
-                    " get { return false; }\r\n        }\r\n\r\n        bool IList.IsReadOnly\r\n        {\r\n " +
-                    "           get { return Model.IsTransactional && Model.CurrentTransaction != nul" +
-                    "l; }\r\n        }\r\n\r\n        void IList.Remove(object value)\r\n        {\r\n         " +
-                    "   Remove((T)value);\r\n        }\r\n\r\n        object IList.this[int index]\r\n       " +
-                    " {\r\n            get\r\n            {\r\n                return this[index];\r\n       " +
-                    "     }\r\n            set\r\n            {\r\n                this[index] = value == n" +
-                    "ull ? default(T) : (T)value;\r\n            }\r\n        }\r\n        #endregion\r\n    " +
-                    "}\r\n}\r\n");
+                    "ity.Activate(true);\r\n\r\n            var removed = Internal.Remove(item);\r\n       " +
+                    "     //don\'t do anything if nothing happened realy\r\n            if (!removed) re" +
+                    "turn false;\r\n\t\t\t//raise events\r\n            NotifyCollectionChanged(NotifyCollec" +
+                    "tionChangedAction.Remove, item);\r\n            NotifyCountChanged();\r\n\r\n         " +
+                    "   if (!Model.IsTransactional) return true;\r\n\r\n            Action doAction = () " +
+                    "=>\r\n            {\r\n                Internal.Remove(item);\r\n                Notif" +
+                    "yCollectionChanged(NotifyCollectionChangedAction.Remove, item);\r\n               " +
+                    " NotifyCountChanged();\r\n            };\r\n            Action undoAction = () =>\r\n " +
+                    "           {\r\n                Internal.Add(item);\r\n                NotifyCollect" +
+                    "ionChanged(NotifyCollectionChangedAction.Add, item);\r\n                NotifyCoun" +
+                    "tChanged();\r\n            };\r\n            Model.CurrentTransaction.AddReversibleA" +
+                    "ction(doAction, undoAction, OwningEntity, ChangeType.Modified);\r\n            \r\n " +
+                    "           return true;\r\n        }\r\n\r\n        #endregion\r\n\r\n        #region IEnu" +
+                    "merable<T> Members\r\n\r\n        public IEnumerator<T> GetEnumerator()\r\n        {\r\n" +
+                    "            return Internal.Count == 0 ? Enumerable.Empty<T>().GetEnumerator() :" +
+                    " Internal.GetEnumerator();\r\n        }\r\n\r\n        #endregion\r\n\r\n        #region I" +
+                    "Enumerable Members\r\n\r\n        IEnumerator IEnumerable.GetEnumerator()\r\n        {" +
+                    "\r\n            return Internal.Count == 0 ? Enumerable.Empty<T>().GetEnumerator()" +
+                    " : Internal.GetEnumerator();\r\n        }\r\n\r\n        #endregion\r\n\r\n        #region" +
+                    " ICollection<T> Members\r\n\r\n        void ICollection<T>.Add(T item)\r\n        {\r\n " +
+                    "           Add(item);\r\n        }\r\n\r\n        void ICollection<T>.Clear()\r\n       " +
+                    " {\r\n            Clear();\r\n        }\r\n\r\n        bool ICollection<T>.Contains(T it" +
+                    "em)\r\n        {\r\n            return Internal.Contains(item);\r\n        }\r\n\r\n      " +
+                    "  void ICollection<T>.CopyTo(T[] array, int arrayIndex)\r\n        {\r\n            " +
+                    "Internal.CopyTo(array, arrayIndex);\r\n        }\r\n\r\n        int ICollection<T>.Cou" +
+                    "nt\r\n        {\r\n            get { return Count; }\r\n        }\r\n\r\n        bool ICol" +
+                    "lection<T>.IsReadOnly\r\n        {\r\n            get { return ((IList<T>)Internal)." +
+                    "IsReadOnly; }\r\n        }\r\n\r\n        bool ICollection<T>.Remove(T item)\r\n        " +
+                    "{\r\n            return Remove(item);\r\n        }\r\n\r\n        #endregion\r\n\r\n        " +
+                    "#region ICollection Members\r\n\r\n        void ICollection.CopyTo(Array array, int " +
+                    "index)\r\n        {\r\n            CopyTo((T[])array, index);\r\n        }\r\n\r\n        " +
+                    "int ICollection.Count\r\n        {\r\n            get { return Internal.Count; }\r\n  " +
+                    "      }\r\n\r\n        bool ICollection.IsSynchronized\r\n        {\r\n            get {" +
+                    " return ((ICollection)Internal).IsSynchronized; }\r\n        }\r\n\r\n        object I" +
+                    "Collection.SyncRoot\r\n        {\r\n            get { return ((ICollection)Internal)" +
+                    ".SyncRoot; }\r\n        }\r\n\r\n        #endregion\r\n\r\n\t\t#region IList<T> members\r\n\t\tp" +
+                    "ublic T this[int index]\r\n\t\t{\r\n\t\t    get\r\n\t\t    {\r\n\t\t        return Internal[inde" +
+                    "x];\r\n\t\t    }\r\n\t\t    set\r\n\t\t    {\r\n\t\t\t\tif(Model.IsTransactional && Model.CurrentT" +
+                    "ransaction == null)\r\n\t\t\t\t    throw new Exception(\"Operation out of transaction\")" +
+                    ";\r\n\r\n                OwningEntity.Activate(true);\r\n\r\n\t\t\t\tvar oldValue = Internal" +
+                    "[index];\r\n                Action doAction = () =>\r\n                {\r\n          " +
+                    "          Internal[index] = value;\r\n                    NotifyCollectionChanged(" +
+                    "NotifyCollectionChangedAction.Replace, value);\r\n                };\r\n\r\n\t\t        " +
+                    "doAction();\r\n\r\n\t\t        if (!Model.IsTransactional) return;\r\n\r\n\t\t        Action" +
+                    " undoAction = () =>\r\n\t\t        {\r\n\t\t            Internal[index] = oldValue;\r\n   " +
+                    "                 NotifyCollectionChanged(NotifyCollectionChangedAction.Replace, " +
+                    "oldValue);\r\n\t\t        };\r\n\t\t        \r\n\t\t\t\tModel.CurrentTransaction.AddReversible" +
+                    "Action(doAction, undoAction, OwningEntity, ChangeType.Modified);\r\n\t\t    }\r\n\t\t}\r\n" +
+                    "\r\n\t\tpublic int IndexOf(T item)\r\n\t\t{\r\n\t\t\treturn Internal.IndexOf(item);\r\n\t\t}\r\n\r\n\r" +
+                    "\n        public void Insert(int index, T item)\r\n        {\r\n            if (Model" +
+                    ".IsTransactional && Model.CurrentTransaction == null)\r\n                throw new" +
+                    " Exception(\"Operation out of transaction\");\r\n\r\n            OwningEntity.Activate" +
+                    "(true);\r\n\r\n            Action doAction = () =>\r\n            {\r\n                I" +
+                    "nternal.Insert(index, item);\r\n                NotifyCollectionChanged(NotifyColl" +
+                    "ectionChangedAction.Add, item);\r\n                NotifyCountChanged();\r\n        " +
+                    "    };\r\n\r\n            if (!Model.IsTransactional) return;\r\n\r\n            Action " +
+                    "undoAction = () =>\r\n            {\r\n                Internal.RemoveAt(index);\r\n  " +
+                    "              NotifyCollectionChanged(NotifyCollectionChangedAction.Remove, item" +
+                    ");\r\n                NotifyCountChanged();\r\n            };\r\n            Model.Cur" +
+                    "rentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeTy" +
+                    "pe.Modified);\r\n        }\r\n\r\n        public void RemoveAt(int index)\r\n        {\r\n" +
+                    "            var toRemove = Internal[index];\r\n            Remove(toRemove);\r\n    " +
+                    "    }\r\n        #endregion\r\n\r\n        #region IList members\r\n        int IList.Ad" +
+                    "d(object value)\r\n        {\r\n            if (!(value is T)) return -1;\r\n\r\n       " +
+                    "     var v = (T) value;\r\n            Add(v);\r\n            return Internal.Count " +
+                    "- 1;\r\n        }\r\n\r\n        bool IList.Contains(object value)\r\n        {\r\n       " +
+                    "     return ((IList)Internal).Contains(value);\r\n        }\r\n\r\n        int IList.I" +
+                    "ndexOf(object value)\r\n        {\r\n            return ((IList)Internal).IndexOf(va" +
+                    "lue);\r\n        }\r\n\r\n        void IList.Insert(int index, object value)\r\n        " +
+                    "{\r\n            Insert(index, (T)value);\r\n        }\r\n\r\n        bool IList.IsFixed" +
+                    "Size\r\n        {\r\n            get { return false; }\r\n        }\r\n\r\n        bool IL" +
+                    "ist.IsReadOnly\r\n        {\r\n            get { return Model.IsTransactional && Mod" +
+                    "el.CurrentTransaction != null; }\r\n        }\r\n\r\n        void IList.Remove(object " +
+                    "value)\r\n        {\r\n            Remove((T)value);\r\n        }\r\n\r\n        object IL" +
+                    "ist.this[int index]\r\n        {\r\n            get\r\n            {\r\n                " +
+                    "return this[index];\r\n            }\r\n            set\r\n            {\r\n            " +
+                    "    this[index] = value == null ? default(T) : (T)value;\r\n            }\r\n       " +
+                    " }\r\n        #endregion\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
