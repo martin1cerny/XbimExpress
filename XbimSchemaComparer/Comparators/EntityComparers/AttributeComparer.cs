@@ -8,7 +8,7 @@ using XbimSchemaComparer.Comparators.Results;
 
 namespace XbimSchemaComparer.Comparators.EntityComparers
 {
-    public class AttributeOrderComparer: ISchemaComparer<EntityDefinition, EntityAttributeComparisonResult>
+    public class AttributeComparer: ISchemaComparer<EntityDefinition, EntityAttributeComparisonResult>
     {
         private readonly List<EntityAttributeComparisonResult> _results = new List<EntityAttributeComparisonResult>(); 
 

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.ExpressParser.SDAI;
 using XbimSchemaComparer.Comparators.EntityComparers;
 
@@ -18,7 +15,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
             s => s.Entities
             )
         {
-            _comparers.Add(new AttributeOrderComparer());
+            _comparers.Add(new AttributeComparer());
             _comparers.Add(new DomainComparer());
         }
         protected override IEnumerable<ISchemaComparer<EntityDefinition, IComparisonResult<EntityDefinition>>> Comparers
