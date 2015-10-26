@@ -44,14 +44,14 @@ namespace XbimTranslatorGenerator.Templates
             #line hidden
             this.Write(@"
 	{
-		public string OriginalSchema { get; }
-		public string TranslatesEntity { get; }
-		public byte[] TranslatesProperties { get; }
-		public string TranslateEntity();
+		string OriginalSchema { get; }
+		string TranslatesEntity { get; }
+		int[] TranslatesProperties { get; }
+		string TranslateEntity();
 		void Parse(int propIndex, IPropertyValue value, int[] nested, ParseDelegate parse);
 	}
 
-	public void delegate ParseDelegate(int propIndex, IPropertyValue value, int[] nested);
+	public delegate void  ParseDelegate(int propIndex, IPropertyValue value, int[] nested);
 }");
             return this.GenerationEnvironment.ToString();
         }

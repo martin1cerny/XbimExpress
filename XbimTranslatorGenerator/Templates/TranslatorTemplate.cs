@@ -42,39 +42,41 @@ namespace XbimTranslatorGenerator.Templates
             
             #line default
             #line hidden
-            this.Write(" : ITranslator\r\n\t{\r\n\t\tprivate readonly byte[] _translatesProperties = new byte[]{" +
-                    "");
+            this.Write(" : ITranslator\r\n\t{\r\n\t\tprivate readonly int[] _translatesProperties = {");
             
             #line 13 "C:\CODE\XbimGit\XbimExpress\XbimTranslatorGenerator\Templates\TranslatorTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(", ", TranslatesProperties.Select(p => p.ToString()))));
             
             #line default
             #line hidden
-            this.Write("};\r\n\t\t\r\n\t\tpublic string OriginalSchema { get { return ");
+            this.Write("};\r\n\t\t\r\n\t\tpublic string OriginalSchema { get { return \"");
             
             #line 15 "C:\CODE\XbimGit\XbimExpress\XbimTranslatorGenerator\Templates\TranslatorTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(OriginalSchema));
             
             #line default
             #line hidden
-            this.Write(";} }\r\n\t\tpublic string TranslatesEntity { get { return ");
+            this.Write("\";} }\r\n\t\tpublic string TranslatesEntity { get { return \"");
             
             #line 16 "C:\CODE\XbimGit\XbimExpress\XbimTranslatorGenerator\Templates\TranslatorTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TranslatesEntity));
             
             #line default
             #line hidden
-            this.Write(@";} }
-		public byte[] TranslatesProperties { get { return _translatesProperties;} }
-
-		//this function returns entity name in target schema
-		public string TranslateEntity()
-		{
-			
+            this.Write("\";} }\r\n\t\tpublic int[] TranslatesProperties { get { return _translatesProperties;}" +
+                    " }\r\n\r\n\t\t//this function returns entity name in target schema\r\n\t\tpublic string Tr" +
+                    "anslateEntity()\r\n\t\t{\r\n\t\t\treturn \"");
+            
+            #line 22 "C:\CODE\XbimGit\XbimExpress\XbimTranslatorGenerator\Templates\TranslatorTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TranslatesEntity));
+            
+            #line default
+            #line hidden
+            this.Write(@""";
 		}
 
 		//this function translates different data types, different order etc.
-		void Parse(int propIndex, IPropertyValue value, int[] nested, ParseDelegate parse)
+		public void Parse(int propIndex, IPropertyValue value, int[] nested, ParseDelegate parse)
 		{
 			if(!_translatesProperties.Contains(propIndex))
 			{
@@ -82,8 +84,6 @@ namespace XbimTranslatorGenerator.Templates
 				parse(propIndex, value, nested);
 				return;
 			}
-
-
 		}
 	}
 }

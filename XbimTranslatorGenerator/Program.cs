@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Construction;
 using Xbim.ExpressParser;
 using Xbim.ExpressParser.ExpressDefinitions;
 using Xbim.ExpressParser.SDAI;
+using XbimTranslatorGenerator.Differences;
 using XbimTranslatorGenerator.Templates;
 
 namespace XbimTranslatorGenerator
@@ -14,12 +16,38 @@ namespace XbimTranslatorGenerator
         // ReSharper disable once UnusedParameter.Local
         static void Main(string[] args)
         {
+            const string prjPath = "..\\..\\..\\..\\XbimEssentials\\Xbim.SchemaTranslation";
             var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1);
             var ifc4 = GetSchema(Schemas.IFC4);
+            Console.WriteLine(@"Generation of the code for translation from {0} to {1}", ifc2X3.FirstSchema.Name, ifc4.FirstSchema.Name);
 
-            //get all candidates => create diff model
+            var project = GetProject(prjPath);
+            Settings.Namespace = GetNamespace(project);
 
+            var w = new Stopwatch();
+            w.Start();
+
+            //create diff model and only take these which don't have an exact match
+            var entityMatches = EntityDefinitionMatch.GetMatches(ifc2X3, ifc4).Where(em => em.MatchType != EntityMatchType.Identity).ToList();
+
+            //create interface
+            ProcessTemplate(new ITranslatorTemplate(), project);
+            var entityCount = entityMatches.Count;
+
+            Console.WriteLine(@"{0} entities to process.", entityCount);
+            
             //create translators from templates
+            foreach (var entityMatch in entityMatches)
+            {
+                var template = new TranslatorTemplate(entityMatch);
+                //write uniform header for all generated files
+                ProcessTemplate(template, project);
+            }
+
+            Console.WriteLine();
+            w.Stop();
+            Console.WriteLine(@"Processing time: {0} ms", w.ElapsedMilliseconds);
+            project.Save();
         }
 
         private static void ProcessTemplate(ICodeTemplate template, ProjectRootElement project)
