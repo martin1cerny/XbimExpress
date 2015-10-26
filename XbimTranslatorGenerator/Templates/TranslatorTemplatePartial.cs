@@ -14,7 +14,7 @@ namespace XbimTranslatorGenerator.Templates
         }
 
         public string Name { get { return _match.Source.Name + "Translator"; } }
-        public string Namespace { get { return Settings.Namespace; } }
+        public string Namespace { get { return Settings.Namespace + "." + _match.MatchName; } }
 
         private IEnumerable<ExplicitAttributeMatch> MatchesToImplement
         {

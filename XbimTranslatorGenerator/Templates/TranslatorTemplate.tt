@@ -10,20 +10,20 @@ namespace <#= Namespace #>
 {
 	public partial class <#= Name #> : ITranslator
 	{
-		private readonly byte[] _translatesProperties = new byte[]{<#= string.Join(", ", TranslatesProperties.Select(p => p.ToString())) #>};
+		private readonly int[] _translatesProperties = {<#= string.Join(", ", TranslatesProperties.Select(p => p.ToString())) #>};
 		
-		public string OriginalSchema { get { return <#= OriginalSchema #>;} }
-		public string TranslatesEntity { get { return <#= TranslatesEntity #>;} }
-		public byte[] TranslatesProperties { get { return _translatesProperties;} }
+		public string OriginalSchema { get { return "<#= OriginalSchema #>";} }
+		public string TranslatesEntity { get { return "<#= TranslatesEntity #>";} }
+		public int[] TranslatesProperties { get { return _translatesProperties;} }
 
 		//this function returns entity name in target schema
 		public string TranslateEntity()
 		{
-			
+			return "<#= TranslatesEntity #>";
 		}
 
 		//this function translates different data types, different order etc.
-		void Parse(int propIndex, IPropertyValue value, int[] nested, ParseDelegate parse)
+		public void Parse(int propIndex, IPropertyValue value, int[] nested, ParseDelegate parse)
 		{
 			if(!_translatesProperties.Contains(propIndex))
 			{
@@ -31,8 +31,6 @@ namespace <#= Namespace #>
 				parse(propIndex, value, nested);
 				return;
 			}
-
-
 		}
 	}
 }

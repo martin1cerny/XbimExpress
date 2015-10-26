@@ -10,6 +10,13 @@ namespace XbimTranslatorGenerator.Differences
     /// </summary>
     public class EntityDefinitionMatch
     {
+        public static IEnumerable<EntityDefinitionMatch> GetMatches(SchemaModel a, SchemaModel b)
+        {
+            return a.Get<EntityDefinition>(e => e.Instantiable).Select(entityDefinition => new EntityDefinitionMatch(entityDefinition, b));
+        }
+
+        public string MatchName { get; private set; }
+
         /// <summary>
         /// Constructor will try to find matching definition from target schema
         /// </summary>
@@ -20,9 +27,11 @@ namespace XbimTranslatorGenerator.Differences
             if(!source.Instantiable)
                 throw new ArgumentException(@"Source should be instantiable entity definition", "source");
 
+            MatchName = string.Format("{0}To{1}", source.ParentSchema.Name, targetSchema.FirstSchema.Name);
             Source = source;
             //default state unless we find a match
             MatchType = EntityMatchType.NotFound;
+            AttributeMatches = Enumerable.Empty<ExplicitAttributeMatch>();
 
             //try to find identity
             var identity = targetSchema.Get<EntityDefinition>(
@@ -67,6 +76,8 @@ namespace XbimTranslatorGenerator.Differences
             var attrCount = entity.AllExplicitAttributes.Count();
             while (entity.AllExplicitAttributes.Count() == attrCount)
             {
+                if(entity.Supertypes == null)
+                    break;
                 var supertype = entity.Supertypes.FirstOrDefault();
                 if (supertype == null) return null;
                 if (supertype.Instantiable)
