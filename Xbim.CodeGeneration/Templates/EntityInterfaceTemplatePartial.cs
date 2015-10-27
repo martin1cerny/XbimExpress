@@ -19,14 +19,21 @@ namespace Xbim.CodeGeneration.Templates
         // ReSharper disable once InconsistentNaming
         protected string GetInterfaceCSType(ExplicitOrDerived attribute)
         {
-            var result = GetCSType(attribute);
-            result = result.Replace("Optional" + Settings.ItemSetClassName, "IEnumerable");
-            return result.Replace(Settings.ItemSetClassName, "IEnumerable");
+            while (true)
+            {
+                var expl = attribute as ExplicitAttribute;
+                if (expl != null)
+                    return TypeHelper.GetInterfaceCSType(expl, Settings);
+                var der = attribute as DerivedAttribute;
+                if (der == null) return "";
+
+                attribute = der.Redeclaring;
+            }
         }
 
         public string InterfaceNamespace
         {
-            get { return Settings.Namespace; }
+            get { return Settings.Namespace + "." + Settings.SchemaInterfacesNamespace; }
         }
 
         public override string Inheritance
@@ -78,6 +85,7 @@ namespace Xbim.CodeGeneration.Templates
             get
             {
                 var result = base.Using.ToList();
+                result.Add(InterfaceNamespace);
                 result.Add(Namespace);
 
                 return result;
