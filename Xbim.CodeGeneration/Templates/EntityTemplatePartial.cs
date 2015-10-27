@@ -63,10 +63,7 @@ namespace Xbim.CodeGeneration.Templates
                     parents.Add("INotifyPropertyChanged");
                 }
                 else
-                    parents.AddRange(Type.Supertypes.Select(t => 
-                        Settings.GenerateAllAsInterfaces ? 
-                        "I" + t.Name.ToString() : 
-                        t.Name.ToString()));
+                    parents.AddRange(Type.Supertypes.Select(t => t.Name.ToString()));
 
                 //add any interfaces
                 parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
@@ -163,7 +160,7 @@ namespace Xbim.CodeGeneration.Templates
             throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
         }
 
-        private static BaseType GetDomain(Attribute attribute)
+        protected static BaseType GetDomain(Attribute attribute)
         {
             BaseType domain = null;
             var expl = attribute as ExplicitAttribute;
@@ -179,7 +176,7 @@ namespace Xbim.CodeGeneration.Templates
             return domain;
         }
 
-        private string GetAttributeType(BaseType domain)
+        protected string GetAttributeType(BaseType domain)
         {
             const string enu = "EntityAttributeType.";
             var list = domain as ListType;
@@ -403,7 +400,7 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        private string PersistInterface { get { return Settings.PersistInterface; } }
+        protected string PersistInterface { get { return Settings.PersistInterface; } }
 
         protected NamedType GetNamedElementType(AggregationType aggregation)
         {
@@ -433,89 +430,117 @@ namespace Xbim.CodeGeneration.Templates
             return aggr.ElementType is EntityDefinition || aggr.ElementType is SelectType;
         }
 
-        private static bool IsStringType(BaseType type)
+        protected static bool IsStringType(BaseType type)
         {
-            if (type is StringType) return true;
-            var defType = type as DefinedType;
-            if(defType == null) return false;
+            while (true)
+            {
+                if (type is StringType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsStringType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsIntType(BaseType type)
+        protected static bool IsIntType(BaseType type)
         {
-            if (type is IntegerType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is IntegerType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsIntType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsBoolType(BaseType type)
+        protected static bool IsBoolType(BaseType type)
         {
-            if (type is BooleanType || type is LogicalType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is BooleanType || type is LogicalType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsBoolType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsRealType(BaseType type)
+        protected static bool IsRealType(BaseType type)
         {
-            if (type is RealType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is RealType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsRealType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsNumberType(BaseType type)
+        protected static bool IsNumberType(BaseType type)
         {
-            if (type is NumberType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is NumberType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsNumberType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsBinaryType(BaseType type)
+        protected static bool IsBinaryType(BaseType type)
         {
-            if (type is BinaryType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is BinaryType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsBinaryType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
         public static string GetPropertyValueMember(BaseType domain)
         {
-            if (domain is EntityDefinition) return "EntityVal";
+            while (true)
+            {
+                if (domain is EntityDefinition) return "EntityVal";
 
-            var aggr = domain as AggregationType;
-            if (aggr != null) return GetPropertyValueMember(aggr.ElementType);
+                var aggr = domain as AggregationType;
+                if (aggr != null)
+                {
+                    domain = aggr.ElementType;
+                    continue;
+                }
 
-            var def = domain as DefinedType;
-            if (def != null && def.Domain is AggregationType)
-                return GetPropertyValueMember((BaseType) def.Domain);
+                var def = domain as DefinedType;
+                if (def != null && def.Domain is AggregationType)
+                {
+                    domain = (BaseType) def.Domain;
+                    continue;
+                }
 
-            if (IsStringType(domain)) return "StringVal";
-            if (IsIntType(domain)) return "IntegerVal";
-            if (IsBoolType(domain)) return "BooleanVal";
-            if (IsRealType(domain)) return "RealVal";
-            if (IsNumberType(domain)) return "NumberVal";
-            if (IsBinaryType(domain)) return "HexadecimalVal";
+                if (IsStringType(domain)) return "StringVal";
+                if (IsIntType(domain)) return "IntegerVal";
+                if (IsBoolType(domain)) return "BooleanVal";
+                if (IsRealType(domain)) return "RealVal";
+                if (IsNumberType(domain)) return "NumberVal";
+                if (IsBinaryType(domain)) return "HexadecimalVal";
 
-            throw new Exception("Unexpected type");
+                throw new Exception("Unexpected type");
+            }
         }
 
-        private bool IsComplexDefinedType(ExplicitAttribute attribute)
+        protected bool IsComplexDefinedType(ExplicitAttribute attribute)
         {
             var def = attribute.Domain as DefinedType;
             if (def == null) return false;
             return def.Domain is AggregationType;
         }
 
-        private bool IsSimpleOrDefinedTypeAggregation(ExplicitAttribute attribute)
+        protected bool IsSimpleOrDefinedTypeAggregation(ExplicitAttribute attribute)
         {
             var aggr = attribute.Domain as AggregationType;
             if (aggr == null) return false;
@@ -544,7 +569,7 @@ namespace Xbim.CodeGeneration.Templates
             return level;
         }
 
-        private bool IsSimpleOrDefinedType(ExplicitAttribute attribute)
+        protected bool IsSimpleOrDefinedType(ExplicitAttribute attribute)
         { 
             var domain = attribute.Domain;
             return domain is SimpleType || domain is DefinedType;
