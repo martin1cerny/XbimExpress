@@ -18,11 +18,21 @@ namespace <#= InterfaceNamespace #>
 	// ReSharper disable once PartialTypeWithSinglePart
 	public partial interface @I<#= Name #> <#= InterfaceInheritance #>
 	{
-<#	if (ExplicitAttributes.Any()) {#>
-<#		foreach(var attribute in ExplicitAttributes){ #>
+<#	foreach(var attribute in ExplicitAttributes){ #>
 		<#= GetInterfaceCSType(attribute) #> @<#= attribute.Name #> { get; }
-<#		} #>
 <#	} #>
+<#	foreach(var attribute in OverridingAttributes){ #>
+		new <#= GetInterfaceCSType(attribute) #> @<#= attribute.Name #>  { get; }
+<#	} #>
+<# foreach(var attribute in InverseAttributes){  
+	var inverseType = "I" + attribute.Domain.Name; #>
+<# if (IsEnumeration(attribute)) { #>
+		IEnumerable<<#=inverseType #>> @<#= attribute.Name #> {  get; }
+<# } else { #>
+		<#=inverseType #> @<#= attribute.Name #> {  get; }
+<# } #>
+<# } #>
+		
 	}
 }
 
@@ -35,6 +45,23 @@ namespace <#= Namespace #>
 	// ReSharper disable once PartialTypeWithSinglePart
 	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>, IEqualityComparer<@<#= Name #>>, IEquatable<@<#= Name #>>
 	{
+		#region I<#= Name #> explicit implementation
+<# foreach(var attribute in ExplicitAttributes){ #>
+		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #> { get { return @<#= attribute.Name #>; } }	
+<# } #>	
+<#	foreach(var attribute in OverridingAttributes){ #>
+		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #>  { get { return @<#= attribute.Name #>; } }
+<#	} #>	 
+<#	foreach(var attribute in InverseAttributes){  
+		var inverseType = "I" + attribute.Domain.Name; #>
+<#		if (IsEnumeration(attribute)) { #>
+		IEnumerable<<#=inverseType #>> I<#= Name #>.<#= attribute.Name #> {  get { return @<#= attribute.Name #>; } }
+<#		} else { #>
+		<#=inverseType #> I<#= Name #>.<#= attribute.Name #> {  get { return @<#= attribute.Name #>; } }
+<#		}
+	} #>
+		#endregion
+
 <# if (IsFirst) {#>
 		#region Implementation of <#= PersistEntityInterface #>
 
@@ -129,14 +156,11 @@ namespace <#= Namespace #>
 				SetValue( v =>  <#= GetPrivateFieldName(attribute) #> = v, <#= GetPrivateFieldName(attribute) #>, value,  "<#= attribute.Name #>");
 			} 
 <# } #>
-		}
-<# if (attribute.Domain is AggregationType) { #>
-		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #> { get { return @<#= attribute.Name #>; } }			 
-<# } #>
-	
+		}	
 <# } #>
 		#endregion
 <# } #>
+
 <# if (OverridingAttributes.Any()) { #>
 		#region Overriding attributes
 <#		foreach(var attribute in OverridingAttributes){ #>
@@ -152,7 +176,6 @@ namespace <#= Namespace #>
 				throw new System.Exception("It is not possible to set a value of derived property <#= attribute.Name #> in <#= Name #>"); 
 			}
 		}
-
 <#		} #>
 		#endregion
 <# } #>

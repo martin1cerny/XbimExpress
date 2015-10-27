@@ -30,20 +30,18 @@ namespace XbimEssentialsGenerator
             };
             var schema = SchemaModel.LoadIfc2x3();
             SetTypeNumbersForIfc2X3(schema);
-            Generator.Generate(settings, schema);
+            //Generator.Generate(settings, schema);
             Console.WriteLine(@"IFC2x3 generated");
 
             settings.Structure = DomainStructure.LoadIfc4();
             settings.OutputPath = "Xbim.Ifc4";
             schema = SchemaModel.LoadIfc4();
-            Generator.Generate(settings, schema);
-            Console.WriteLine(@"IFC4 generated");
-
-            settings.OutputPath = "Xbim.Ifc4.Interfaces";
+            //Generator.Generate(settings, schema);
+            //Console.WriteLine(@"IFC4 generated");
             settings.GenerateAllAsInterfaces = true;
             Generator.Generate(settings, schema);
             settings.GenerateAllAsInterfaces = false;
-            Console.WriteLine(@"IFC4 interfaces generated");
+            Console.WriteLine(@"IFC4 with interfaces generated");
 
             settings.IsIndexedEntity = null;
             settings.Structure = null;
