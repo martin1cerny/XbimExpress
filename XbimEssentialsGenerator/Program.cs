@@ -39,6 +39,12 @@ namespace XbimEssentialsGenerator
             Generator.Generate(settings, schema);
             Console.WriteLine(@"IFC4 generated");
 
+            settings.OutputPath = "Xbim.Ifc4.Interfaces";
+            settings.GenerateAllAsInterfaces = true;
+            Generator.Generate(settings, schema);
+            settings.GenerateAllAsInterfaces = false;
+            Console.WriteLine(@"IFC4 interfaces generated");
+
             settings.IsIndexedEntity = null;
             settings.Structure = null;
             settings.OutputPath = "Xbim.CobieExpress";
