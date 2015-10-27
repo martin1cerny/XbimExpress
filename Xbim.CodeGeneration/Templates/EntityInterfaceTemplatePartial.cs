@@ -33,14 +33,22 @@ namespace Xbim.CodeGeneration.Templates
         {
             get
             {
-                var i = base.Inheritance;
-                if (string.IsNullOrWhiteSpace(i))
-                    i = ": ";
-                else
+                var items = base.Inheritance.Trim(' ', ':').Split(new []{ ',' } , StringSplitOptions.RemoveEmptyEntries).Select(it => it.Trim()).ToList();
+                
+                //add own interface
+                items.Add("I" + Name);
+
+                //remove selects
+                var selects = Type.IsInSelects.Select(s => s.Name.ToString());
+                foreach (var @select in selects)
                 {
-                    i += ", ";
+                    items.Remove(@select);
                 }
-                return i + "I" + Name;
+
+                //merge to a single string
+                var i = string.Join(", ", items);
+                if (string.IsNullOrWhiteSpace(i)) return "";
+                return ": " + i;
             }
         }
 
