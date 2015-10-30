@@ -9,13 +9,20 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
 {
     public partial class EntityInterfaceImplementation
     {
+        private readonly EntityDefinitionMatch _match;
         private readonly List<EntityDefinitionMatch> _matches;
         public EntityDefinition RemoteType { get; private set; }
 
         public EntityInterfaceImplementation(GeneratorSettings settings, EntityDefinitionMatch match, List<EntityDefinitionMatch> matches) : base(settings, match.Source)
         {
+            _match = match;
             _matches = matches;
             RemoteType = match.Target;
+        }
+
+        protected ExplicitAttributeMatch GetMatch(ExplicitAttribute remoteAttribute)
+        {
+            return _match.AttributeMatches.FirstOrDefault(m => m.TargetAttribute == remoteAttribute);
         }
 
         protected IEnumerable<ExplicitAttribute> ExplicitAttributesToImplement
@@ -87,7 +94,8 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                 var usings = new List<string>
                 {
                     Settings.CrossAccessNamespace, 
-                    "System.Collections.Generic"
+                    "System.Collections.Generic",
+                    "System.Linq"
                 };
 
                 return usings.Distinct();
