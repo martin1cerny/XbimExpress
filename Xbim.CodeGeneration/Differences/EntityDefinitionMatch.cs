@@ -41,6 +41,8 @@ namespace Xbim.CodeGeneration.Differences
                 MatchType = attrMatches.Any(am => am.MatchType != AttributeMatchType.Identity)? 
                     EntityMatchType.Changed : 
                     EntityMatchType.Identity;
+                if(!HasAllExplicitAttributes())
+                    throw new Exception();
                 return;
             }
 
@@ -51,19 +53,17 @@ namespace Xbim.CodeGeneration.Differences
                 Target = superTypeMatch;
                 MatchType = EntityMatchType.Changed;
                 AttributeMatches = ExplicitAttributeMatch.FindMatches(Source, Target).ToList();
-                return;
+                if (!HasAllExplicitAttributes())
+                    throw new Exception();
             }
+        }
 
-            //try to find a match based on the sequence of all explicit attribute names
-            var attrSigniture = string.Join(", ", source.AllExplicitAttributes.Select(a => a.Name));
-            var attrMatch = targetSchema.Get<EntityDefinition>(
-                e => string.Compare(attrSigniture, string.Join(", ", e.AllExplicitAttributes.Select(a => a.Name)), StringComparison.InvariantCultureIgnoreCase) == 0).FirstOrDefault();
-            if (attrMatch != null)
-            {
-                Target = attrMatch;
-                MatchType = EntityMatchType.Changed;
-                AttributeMatches = ExplicitAttributeMatch.FindMatches(Source, Target).ToList();
-            }
+        private bool HasAllExplicitAttributes()
+        {
+            if (Target == null)
+                return true;
+            var attrCount = Target.ExplicitAttributes.Count();
+            return attrCount == AttributeMatches.Count();
         }
 
         private static EntityDefinition GetSupertypeMatch(EntityDefinition entity, SchemaModel targetSchema)

@@ -10,6 +10,8 @@ namespace Xbim.CodeGeneration.Differences
         private readonly EntityDefinition _source;
         private readonly EntityDefinition _target;
 
+        public bool IsTypeCompatible { get; private set; }
+
         private ExplicitAttributeMatch(EntityDefinition source, EntityDefinition target)
         {
             _source = source;
@@ -35,23 +37,13 @@ namespace Xbim.CodeGeneration.Differences
                     allTarget.FirstOrDefault(
                         ta => string.Compare(attribute.Name, ta.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
                 if (nameMatch == null) continue;
-                //check type
-                if(IsParserCompatibleType(attribute.Domain, nameMatch.Domain))
-                {
-                    var result = new ExplicitAttributeMatch(source, target)
-                    {
-                        SourceAttribute = attribute, 
-                        TargetAttribute = nameMatch
-                    };
-                    result.MatchType = result.ChangedOrder ? AttributeMatchType.Changed : AttributeMatchType.Identity;
-                    yield return result;
-                    continue;
-                }
                 yield return new ExplicitAttributeMatch(source, target)
                 {
-                    MatchType = AttributeMatchType.NotFound,
+                    //check type
+                    MatchType = AttributeMatchType.Identity,
                     SourceAttribute = attribute,
-                    Message = "Attribute with the same name exists but has an incompatible type."
+                    TargetAttribute = nameMatch,
+                    IsTypeCompatible = IsCompatibleSystemType(attribute.Domain, nameMatch.Domain)
                 };
             }
 
@@ -60,55 +52,69 @@ namespace Xbim.CodeGeneration.Differences
             {
                 var rc = removedCandidates[0];
                 var ac = addedCandidates[0];
-                if (IsParserCompatibleType(rc.Domain, ac.Domain))
+                if (IsCompatibleSystemType(rc.Domain, ac.Domain))
                 {
                     yield return new ExplicitAttributeMatch(source, target)
                     {
                         MatchType = AttributeMatchType.Changed,
                         SourceAttribute = rc,
-                        TargetAttribute = ac
+                        TargetAttribute = ac,
+                        IsTypeCompatible = true
                     };
                     yield break;
                 }
             }
 
             //these are potentially removed unless we find a match based on other criteria
-            foreach (var attribute in removedCandidates)
+            foreach (var attribute in addedCandidates)
             {
                 //try to find match by type name
-                var candidates = addedCandidates.Where(ac => IsTypeNameMatch(ac.Domain, attribute.Domain)).ToList();
+                var candidates = removedCandidates.Where(ac => IsTypeNameMatch(ac.Domain, attribute.Domain)).ToList();
                 if (candidates.Count == 1)
+                {
                     yield return new ExplicitAttributeMatch(source, target)
                     {
                         MatchType = AttributeMatchType.Changed,
                         SourceAttribute = attribute,
-                        TargetAttribute = candidates[0]
+                        TargetAttribute = candidates[0],
+                        IsTypeCompatible = true
                     };
+                    continue;
+                }
 
                 //try to find match by compatible type
-                candidates = addedCandidates.Where(ac => IsParserCompatibleType(ac.Domain, attribute.Domain)).ToList();
+                candidates = removedCandidates.Where(ac => IsCompatibleSystemType(ac.Domain, attribute.Domain)).ToList();
                 if (candidates.Count == 1)
+                {
                     yield return new ExplicitAttributeMatch(source, target)
                     {
                         MatchType = AttributeMatchType.Changed,
                         SourceAttribute = attribute,
-                        TargetAttribute = candidates[0]
+                        TargetAttribute = candidates[0],
+                        IsTypeCompatible = true
                     };
+                    continue;
+                }
 
                 //try to find a match by minor difference in the name (like added 's' at the end or similar)
-                candidates = addedCandidates.Where(ac => ac.Name.ToString().ToUpperInvariant().LevenshteinDistance(attribute.Name.ToString().ToUpperInvariant()) < 4).ToList();
-                if (candidates.Count == 1 && IsParserCompatibleType(attribute.Domain, candidates[0].Domain))
+                candidates = removedCandidates.Where(ac => ac.Name.ToString().ToUpperInvariant().LevenshteinDistance(attribute.Name.ToString().ToUpperInvariant()) < 4).ToList();
+                if (candidates.Count == 1 && IsCompatibleSystemType(attribute.Domain, candidates[0].Domain))
+                {
                     yield return new ExplicitAttributeMatch(source, target)
                     {
                         MatchType = AttributeMatchType.Changed,
                         SourceAttribute = attribute,
-                        TargetAttribute = candidates[0]
+                        TargetAttribute = candidates[0],
+                        IsTypeCompatible = true
                     };
+                    continue;
+                }
                 
                 yield return new ExplicitAttributeMatch(source, target)
                 {
                     MatchType = AttributeMatchType.NotFound,
                     SourceAttribute = attribute,
+                    IsTypeCompatible = false,
                     Message = "Matching attribute not found."
                 };
             }
@@ -139,7 +145,7 @@ namespace Xbim.CodeGeneration.Differences
             }
         }
 
-        private static bool IsParserCompatibleType(BaseType o, BaseType n)
+        private static bool IsCompatibleSystemType(BaseType o, BaseType n)
         {
             while (true)
             {
@@ -177,17 +183,17 @@ namespace Xbim.CodeGeneration.Differences
         }
 
         public ExplicitAttribute SourceAttribute { get; private set; }
-        public int SourceAttributeOrder {
-            get { return _source.AllExplicitAttributes.ToList().IndexOf(SourceAttribute); }
-        }
+        //public int SourceAttributeOrder {
+        //    get { return _source.AllExplicitAttributes.ToList().IndexOf(SourceAttribute); }
+        //}
         public ExplicitAttribute TargetAttribute { get; private set; }
-        public int TargetAttributeOrder
-        {
-            get { return _target.AllExplicitAttributes.ToList().IndexOf(TargetAttribute); }
-        }
+        //public int TargetAttributeOrder
+        //{
+        //    get { return _target.AllExplicitAttributes.ToList().IndexOf(TargetAttribute); }
+        //}
         public AttributeMatchType MatchType { get; private set; }
 
-        public bool ChangedOrder { get { return SourceAttributeOrder != TargetAttributeOrder; } }
+        //public bool ChangedOrder { get { return SourceAttributeOrder != TargetAttributeOrder; } }
 
         public string Message { get; private set; }
     }

@@ -3,6 +3,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Xbim.ExpressParser.SDAI" #>
 
 <# foreach(var u in Using) { #>
 using <#= u #>;
@@ -18,7 +19,14 @@ namespace <#= OwnNamespace #>
 		{ 
 			get
 			{
+<#		var match = GetMatch(attribute); 
+		if (match == null || !match.IsTypeCompatible) { #>
 				throw new System.NotImplementedException();
+<#		} else if (attribute.Domain is EntityDefinition) { #>
+				return <#= match.SourceAttribute.Name #>;
+<#		} else { #>
+				throw new System.NotImplementedException();
+<#		} #>
 			} 
 		}
 <#	} #>
@@ -26,21 +34,21 @@ namespace <#= OwnNamespace #>
 	var inverseType = "I" + attribute.Domain.Name; #>
 <# if (IsEnumeration(attribute)) { #>
 		IEnumerable<<#=inverseType #>> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
-		{ 
-			get
-			{
-				throw new System.NotImplementedException();
-			} 
-		}
 <# } else { #>
 		<#=inverseType #> <#= Interface #>.<#= attribute.Name #> 
+<# } #>
 		{ 
 			get
 			{
-				throw new System.NotImplementedException();
+<# if (IsDoubleAggregation(attribute)) {#>
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Any( i => i.Contains(this)));
+<# } else if (IsAggregation(attribute)){#>
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this));
+<# } else {#>
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => (e.<#= attribute.InvertedAttr.Name #> as <#= Name #>) == this);
+<# } #>
 			} 
 		}
-<# } #>
 <# } #>
 	}
 }
