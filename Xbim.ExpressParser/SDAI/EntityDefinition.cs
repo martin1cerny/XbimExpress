@@ -104,6 +104,11 @@ namespace Xbim.ExpressParser.SDAI
             get { return SchemaModel.Get<InverseAttribute>(e => e.ParentEntity == this); }
         }
 
+        public IEnumerable<DerivedAttribute> OverridingAttributes
+        {
+            get { return SchemaModel.Get<DerivedAttribute>(e => e.ParentEntity == this && e.Redeclaring != null); }
+        }
+
         /// <summary>
         /// All inverse attributes of this entity including inherited ones.
         /// </summary>

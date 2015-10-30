@@ -1,0 +1,46 @@
+﻿<#@ template language="C#" inherits="EntityInterfaceTemplate"#>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+<# foreach(var u in Using) { #>
+using <#= u #>;
+<# } #>
+
+// ReSharper disable once CheckNamespace
+namespace <#= OwnNamespace #>
+{
+	public partial class @<#= Name #> : <#= Interface #>
+	{
+<#	foreach(var attribute in ExplicitAttributesToImplement){ #>
+		<#= GetInterfaceCSTypeFull(attribute) #> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
+		{ 
+			get
+			{
+				throw new System.NotImplementedException();
+			} 
+		}
+<#	} #>
+<# foreach(var attribute in InverseAttributesToImplement){  
+	var inverseType = "I" + attribute.Domain.Name; #>
+<# if (IsEnumeration(attribute)) { #>
+		IEnumerable<<#=inverseType #>> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
+		{ 
+			get
+			{
+				throw new System.NotImplementedException();
+			} 
+		}
+<# } else { #>
+		<#=inverseType #> <#= Interface #>.<#= attribute.Name #> 
+		{ 
+			get
+			{
+				throw new System.NotImplementedException();
+			} 
+		}
+<# } #>
+<# } #>
+	}
+}

@@ -4,6 +4,7 @@ using System.Linq;
 using Xbim.CodeGeneration.Helpers;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
+using Xbim.IfcDomains;
 using Attribute = Xbim.ExpressParser.SDAI.Attribute;
 
 namespace Xbim.CodeGeneration.Templates
@@ -39,7 +40,7 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        public string Namespace
+        public virtual string Namespace
         {
             get
             {
@@ -49,7 +50,7 @@ namespace Xbim.CodeGeneration.Templates
 
         public bool IsAbstract { get { return !Type.Instantiable; } }
 
-        public string Name { get { return Type.Name; } }
+        public virtual string Name { get { return Type.Name; } }
 
         public virtual string Inheritance
         {
@@ -398,6 +399,36 @@ namespace Xbim.CodeGeneration.Templates
 
                 return result;
             }
+        }
+
+        protected string GetFullNamespace(BaseType type, string mainNamespace, DomainStructure structure)
+        {
+            while (true)
+            {
+                if (structure == null)
+                    return mainNamespace;
+
+                if (type is SimpleType)
+                    return "System";
+                
+                var namedType = type as NamedType;
+                if (namedType != null)
+                {
+                    var domain = structure.GetDomainForType(namedType.Name);
+                    return domain != null ?
+                        string.Format("{0}.{1}", mainNamespace, domain.Name) :
+                        mainNamespace;
+
+                }
+                var aggr = type as AggregationType;
+                if (aggr != null)
+                {
+                    type = aggr.ElementType;
+                    continue;
+                }
+                throw new Exception("Unexpected type");
+            }
+            
         }
 
         protected string PersistInterface { get { return Settings.PersistInterface; } }
