@@ -50,6 +50,13 @@ namespace Xbim.CodeGeneration.Settings
         }
 
         /// <summary>
+        /// Project to be used in 'GenerateCrossAccess(GeneratorSettings settings, SchemaModel schema, SchemaModel remoteSchema)'
+        /// for a remote schema. This has an influence on namespaces and references
+        /// </summary>
+        public string CrossAccessProjectPath { get; set; }
+        internal string CrossAccessNamespace { get; set; }
+
+        /// <summary>
         /// When true read-only interface will be generated for all entities.
         /// This interfaces can be used to query model safely and also to
         /// implement interoperability layer in other schemas
@@ -143,6 +150,12 @@ namespace Xbim.CodeGeneration.Settings
         /// folders.
         /// </summary>
         public DomainStructure Structure { get; set; }
+
+        /// <summary>
+        /// Optional structure used to identify the right namespaces for
+        /// cross access interfaces implementations
+        /// </summary>
+        public DomainStructure CrossAccessStructure { get; set; }
 
         internal IEnumerable<string> SchemasIds { get; set; }
 

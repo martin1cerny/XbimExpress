@@ -21,9 +21,6 @@ namespace <#= InterfaceNamespace #>
 <#	foreach(var attribute in ExplicitAttributes){ #>
 		<#= GetInterfaceCSType(attribute) #> @<#= attribute.Name #> { get; }
 <#	} #>
-<#	foreach(var attribute in OverridingAttributes){ #>
-		new <#= GetInterfaceCSType(attribute) #> @<#= attribute.Name #>  { get; }
-<#	} #>
 <# foreach(var attribute in InverseAttributes){  
 	var inverseType = "I" + attribute.Domain.Name; #>
 <# if (IsEnumeration(attribute)) { #>
@@ -48,10 +45,7 @@ namespace <#= Namespace #>
 		#region I<#= Name #> explicit implementation
 <# foreach(var attribute in ExplicitAttributes){ #>
 		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #> { get { return @<#= attribute.Name #>; } }	
-<# } #>	
-<#	foreach(var attribute in OverridingAttributes){ #>
-		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #>  { get { return @<#= attribute.Name #>; } }
-<#	} #>	 
+<# } #>		 
 <#	foreach(var attribute in InverseAttributes){  
 		var inverseType = "I" + attribute.Domain.Name; #>
 <#		if (IsEnumeration(attribute)) { #>
