@@ -23,7 +23,7 @@ namespace <#= OwnNamespace #>
 		if (match == null || !match.IsTypeCompatible) { #>
 				throw new System.NotImplementedException();
 <#		} else if (attribute.Domain is EntityDefinition) { #>
-				return <#= match.SourceAttribute.Name #>;
+				return <#= match.SourceAttribute.Name #> as <#= GetInterfaceCSTypeFull(attribute) #>;
 <#		} else { #>
 				throw new System.NotImplementedException();
 <#		} #>
