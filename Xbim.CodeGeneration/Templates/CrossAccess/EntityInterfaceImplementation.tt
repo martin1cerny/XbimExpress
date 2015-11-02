@@ -22,8 +22,31 @@ namespace <#= OwnNamespace #>
 <#		var match = GetMatch(attribute); 
 		if (match == null || !match.IsTypeCompatible) { #>
 				throw new System.NotImplementedException();
-<#		} else if (attribute.Domain is EntityDefinition) { #>
+<#		} else if (match.SourceAttribute.Domain is DefinedType) { #>
+<#			if (match.SourceAttribute.OptionalFlag) { #>
+				if (<#= match.SourceAttribute.Name #> == null) return null;
+<#			} #>
+				return new <#= GetInterfaceCSTypeFull(attribute).Trim('?') #>((<#= GetBaseSystemType(match.SourceAttribute.Domain as DefinedType) #>)<#= match.SourceAttribute.Name #>);
+<#		} else if (match.SourceAttribute.Domain is EntityDefinition) { #>
 				return <#= match.SourceAttribute.Name #> as <#= GetInterfaceCSTypeFull(attribute) #>;
+<#		} else if (match.SourceAttribute.Domain is SelectType) { #>
+				if (<#= match.SourceAttribute.Name #> == null) return null;
+<# 			foreach(var st in GetAllSpecific((SelectType)match.SourceAttribute.Domain)) {
+				var ed = st as EntityDefinition;
+				if(ed != null) {#>
+				var <#= st.Name.ToString().ToLower() #> = <#= match.SourceAttribute.Name #> as <#= GetCSTypeFull(st) #>;
+				if (<#= st.Name.ToString().ToLower() #> != null) 
+<#					if (IsInSelect(ed, match.TargetAttribute.Domain as SelectType)) {#>
+					return <#= st.Name.ToString().ToLower() #>;
+<#					} else { #>
+					//TODO: Handle entity which is not part of target select interface
+					throw new System.NotImplementedException();
+<#					} #>
+<#				} else { #>
+				throw new System.NotImplementedException();
+<#				} #>
+<#			} #>
+				return null;
 <#		} else { #>
 				throw new System.NotImplementedException();
 <#		} #>
