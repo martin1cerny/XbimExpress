@@ -46,16 +46,15 @@ namespace Xbim.CodeGeneration.Differences
                 return;
             }
 
-            //try to find corresponding parent type if this doesn't have any explicit attributes
-            var superTypeMatch = GetSupertypeMatch(source, targetSchema);
-            if (superTypeMatch != null)
-            {
-                Target = superTypeMatch;
-                MatchType = EntityMatchType.Changed;
-                AttributeMatches = ExplicitAttributeMatch.FindMatches(Source, Target).ToList();
-                if (!HasAllExplicitAttributes())
-                    throw new Exception();
-            }
+            //var superTypeMatch = GetSupertypeMatch(source, targetSchema);
+            //if (superTypeMatch != null)
+            //{
+            //    Target = superTypeMatch;
+            //    MatchType = EntityMatchType.Changed;
+            //    AttributeMatches = ExplicitAttributeMatch.FindMatches(Source, Target).ToList();
+            //    if (!HasAllExplicitAttributes())
+            //        throw new Exception();
+            //}
         }
 
         private bool HasAllExplicitAttributes()

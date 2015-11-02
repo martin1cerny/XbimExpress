@@ -21,11 +21,13 @@ namespace Xbim.CodeGeneration.Differences
         public static IEnumerable<ExplicitAttributeMatch> FindMatches(EntityDefinition source, EntityDefinition target)
         {
             var allTarget = target.ExplicitAttributes.ToList();
-            var allSource = source.ExplicitAttributes.ToList();
+            var allSource = source.AllExplicitAttributes.ToList();
+            var onlySource = source.ExplicitAttributes.ToList();
+
 
             var identityCandidates = allSource.Where(
                         sa => allTarget.Any(ta => string.Compare(sa.Name, ta.Name, StringComparison.InvariantCultureIgnoreCase) == 0)).ToList();
-            var removedCandidates = allSource.Where(
+            var removedCandidates = onlySource.Where(
                         sa => allTarget.All(ta => string.Compare(sa.Name, ta.Name, StringComparison.InvariantCultureIgnoreCase) != 0)).ToList();
             var addedCandidates = allTarget.Where(
                         sa => allSource.All(ta => string.Compare(sa.Name, ta.Name, StringComparison.InvariantCultureIgnoreCase) != 0)).ToList();
@@ -65,7 +67,7 @@ namespace Xbim.CodeGeneration.Differences
                 }
             }
 
-            //these are potentially removed unless we find a match based on other criteria
+            //these are potentially removed unless we find an unique match based on other criteria
             foreach (var attribute in addedCandidates)
             {
                 //try to find match by type name
@@ -155,7 +157,7 @@ namespace Xbim.CodeGeneration.Differences
                 var nE = n as EntityDefinition;
                 if (oE != null && nE != null)
                 {
-                    return IsEntityMatch(oE, nE) || IsSuperEntityMatch(oE, nE) || IsSubEntityMatch(oE, nE);
+                    return IsEntityMatch(oE, nE) || IsSubEntityMatch(oE, nE);
                 }
 
                 var oSimple = o as SimpleType;
@@ -205,7 +207,8 @@ namespace Xbim.CodeGeneration.Differences
 
         private static bool IsSubEntityMatch(EntityDefinition o, EntityDefinition n)
         {
-            return IsSuperEntityMatch(n, o);
+            var subtypes = n.AllSubTypes;
+            return subtypes.Any(s => IsEntityMatch(s, o));
         }
 
         public ExplicitAttribute SourceAttribute { get; private set; }

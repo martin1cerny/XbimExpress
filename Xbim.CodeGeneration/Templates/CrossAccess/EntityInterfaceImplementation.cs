@@ -107,99 +107,107 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t//TODO: Handle return of ");
+            this.Write("\t\t\t\t//## Handle return of ");
             
             #line 24 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
-            this.Write(" for which no match was found\r\n\t\t\t\tthrow new System.NotImplementedException();\r\n");
+            this.Write(" for which no match was found\r\n\t\t\t\t//TODO: Handle return of ");
             
-            #line 26 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" for which no match was found\r\n\t\t\t\tthrow new System.NotImplementedException();\r\n\t" +
+                    "\t\t\t//##\r\n");
+            
+            #line 28 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 		} else if (attribute.Domain is DefinedType) { 
             
             #line default
             #line hidden
             
-            #line 27 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 29 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			if (match.SourceAttribute.OptionalFlag) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tif (");
             
-            #line 28 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 30 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(" == null) return null;\r\n");
             
-            #line 29 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 31 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			} 
             
             #line default
             #line hidden
             this.Write("\t\t\t\treturn new ");
             
-            #line 30 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 32 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute).Trim('?')));
             
             #line default
             #line hidden
             this.Write("((");
             
-            #line 30 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 32 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetBaseSystemType(match.SourceAttribute.Domain as DefinedType)));
             
             #line default
             #line hidden
             this.Write(")");
             
-            #line 30 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 32 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 31 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 33 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 		} else if (attribute.Domain is EntityDefinition) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\treturn ");
             
-            #line 32 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 34 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(" as ");
             
-            #line 32 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 34 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute)));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 33 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 35 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 		} else if (attribute.Domain is SelectType) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tif (");
             
-            #line 34 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(" == null) return null;\r\n");
             
-            #line 35 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 37 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  			foreach(var st in GetAllSpecific((SelectType)match.SourceAttribute.Domain)) {
 				var ed = st as EntityDefinition;
 				if(ed != null) {
@@ -208,83 +216,104 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             #line hidden
             this.Write("\t\t\t\tvar ");
             
-            #line 38 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 40 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(st.Name.ToString().ToLower()));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 38 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 40 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(" as ");
             
-            #line 38 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 40 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(st)));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\t\tif (");
             
-            #line 39 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 41 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(st.Name.ToString().ToLower()));
             
             #line default
             #line hidden
             this.Write(" != null) \r\n");
             
-            #line 40 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 42 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					if (IsInSelect(ed, match.TargetAttribute.Domain as SelectType)) {
             
             #line default
             #line hidden
             this.Write("\t\t\t\t\treturn ");
             
-            #line 41 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 43 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(st.Name.ToString().ToLower()));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 42 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 44 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					} else { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t\t//TODO: Handle entity ");
+            this.Write("\t\t\t\t\t//## Handle entity ");
             
-            #line 43 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(st.Name.ToString().ToLower()));
+            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(st.Name));
             
             #line default
             #line hidden
             this.Write(" which is not a part of the target select interface ");
             
-            #line 43 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute)));
             
             #line default
             #line hidden
             this.Write(" in property ");
             
-            #line 43 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
-            this.Write("\r\n\t\t\t\t\tthrow new System.NotImplementedException();\r\n");
+            this.Write("\r\n\t\t\t\t\t//TODO: Handle entity ");
             
-            #line 45 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(st.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" which is not a part of the target select interface ");
+            
+            #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute)));
+            
+            #line default
+            #line hidden
+            this.Write(" in property ");
+            
+            #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t\t\t\tthrow new System.NotImplementedException();\r\n\t\t\t\t\t//##\r\n");
+            
+            #line 49 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					} 
             
             #line default
             #line hidden
             
-            #line 46 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 50 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 				} else if(st is DefinedType){ 
 					var dt = st as DefinedType;
 					var targetDt = GetMappedDefinedType(dt);
@@ -293,90 +322,111 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             #line hidden
             this.Write("\t\t\t\tif (");
             
-            #line 49 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 53 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(" is ");
             
-            #line 49 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 53 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(dt)));
             
             #line default
             #line hidden
             this.Write(") \r\n");
             
-            #line 50 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 54 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					if (targetDt != null && IsInSelect(targetDt, match.TargetAttribute.Domain as SelectType)) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t\treturn new ");
             
-            #line 51 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 55 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(targetDt)));
             
             #line default
             #line hidden
             this.Write("((");
             
-            #line 51 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 55 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetBaseSystemType(dt)));
             
             #line default
             #line hidden
             this.Write(")(");
             
-            #line 51 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 55 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(dt)));
             
             #line default
             #line hidden
             this.Write(")");
             
-            #line 51 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 55 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 52 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 56 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					} else { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t\t//TODO: Handle defined type ");
+            this.Write("\t\t\t\t\t//## Handle defined type ");
             
-            #line 53 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 57 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(st.Name));
             
             #line default
             #line hidden
             this.Write(" which is not a part of the target select interface ");
             
-            #line 53 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 57 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute)));
             
             #line default
             #line hidden
             this.Write(" in property ");
             
-            #line 53 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 57 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
-            this.Write("\r\n\t\t\t\t\tthrow new System.NotImplementedException();\r\n");
+            this.Write("\r\n\t\t\t\t\t//TODO: Handle defined type ");
             
-            #line 55 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 58 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(st.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" which is not a part of the target select interface ");
+            
+            #line 58 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute)));
+            
+            #line default
+            #line hidden
+            this.Write(" in property ");
+            
+            #line 58 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t\t\t\tthrow new System.NotImplementedException();\r\n\t\t\t\t\t//##\r\n");
+            
+            #line 61 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					}
             
             #line default
             #line hidden
             
-            #line 56 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 62 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 				} else { 
 					throw new Exception("Unexpected type (enum?)");
 				} 
@@ -384,48 +434,48 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             #line default
             #line hidden
             
-            #line 59 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 65 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			} 
             
             #line default
             #line hidden
             this.Write("\t\t\t\treturn null;\r\n");
             
-            #line 61 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 67 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 		} else if (attribute.Domain is SimpleType) { 
             
             #line default
             #line hidden
             
-            #line 62 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 68 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			if (match.SourceAttribute.OptionalFlag) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tif (");
             
-            #line 63 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 69 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(" == null) return null;\r\n");
             
-            #line 64 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 70 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			} 
             
             #line default
             #line hidden
             this.Write("\t\t\t\treturn ");
             
-            #line 65 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 71 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 66 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 72 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 		} else if (attribute.Domain is EnumerationType) { 
 			var enu = match.SourceAttribute.Domain as EnumerationType;
 			var tEnum = GetMappedEnumerationType(enu);
@@ -433,30 +483,51 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t//TODO: Handle enumeration ");
+            this.Write("\t\t\t\t//## Handle enumeration ");
             
-            #line 70 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 76 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(enu.Name));
             
             #line default
             #line hidden
-            this.Write(" translation\r\n\t\t\t\tthrow new System.NotImplementedException();\r\n");
+            this.Write(" translation in property ");
             
-            #line 72 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 76 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t\t\t//TODO: Handle enumeration ");
+            
+            #line 77 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(enu.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" translation in property ");
+            
+            #line 77 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t\t\tthrow new System.NotImplementedException();\r\n\t\t\t\t//##\r\n");
+            
+            #line 80 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			} else {
             
             #line default
             #line hidden
             this.Write("\t\t\t\tswitch (");
             
-            #line 73 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 81 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t\t\t{\r\n");
             
-            #line 75 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 83 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 				foreach(var e in enu.Elements) {
 					var translated = GetEnumEquivalent(e, tEnum);
             
@@ -464,77 +535,98 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             #line hidden
             this.Write("\t\t\t\t\tcase ");
             
-            #line 77 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 85 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(enu)));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 77 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 85 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(e));
             
             #line default
             #line hidden
             this.Write(":\r\n");
             
-            #line 78 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 86 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					if (string.IsNullOrWhiteSpace(translated)){
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t\t\t//TODO: Handle translation of ");
+            this.Write("\t\t\t\t\t\t//## Handle translation of ");
             
-            #line 79 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 87 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(e));
             
             #line default
             #line hidden
             this.Write(" member from ");
             
-            #line 79 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 87 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(enu.Name));
             
             #line default
             #line hidden
             this.Write(" in property ");
             
-            #line 79 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 87 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
-            this.Write("\r\n\t\t\t\t\t\tthrow new System.NotImplementedException();\r\n\t\t\t\t\t");
+            this.Write("\r\n\t\t\t\t\t\t//TODO: Handle translation of ");
             
-            #line 81 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 88 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(e));
+            
+            #line default
+            #line hidden
+            this.Write(" member from ");
+            
+            #line 88 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(enu.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" in property ");
+            
+            #line 88 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t\t\t\t\tthrow new System.NotImplementedException();\r\n\t\t\t\t\t\t//##\r\n\t\t\t\t\t");
+            
+            #line 91 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t\t\treturn ");
             
-            #line 82 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 92 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(tEnum)));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 82 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 92 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(e));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 83 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 93 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					} 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t\t\r\n");
             
-            #line 84 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 94 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 				} 
             
             #line default
@@ -542,7 +634,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             this.Write("\t\t\t\t\t\r\n\t\t\t\t\tdefault:\r\n\t\t\t\t\t\tthrow new System.ArgumentOutOfRangeException();\r\n\t\t\t\t" +
                     "}\r\n");
             
-            #line 88 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 98 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			}
         } else if(attribute.Domain is AggregationType) {
 			var targetType =  (attribute.Domain as AggregationType).ElementType; 
@@ -552,62 +644,62 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             #line hidden
             this.Write("\t\t\tforeach (var member in ");
             
-            #line 92 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 102 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(match.SourceAttribute.Name));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t\t{\r\n");
             
-            #line 94 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 104 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			if (targetType is DefinedType) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tyield return new ");
             
-            #line 95 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 105 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(targetType as NamedType)));
             
             #line default
             #line hidden
             this.Write("((");
             
-            #line 95 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 105 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetBaseSystemType(sourceType as DefinedType)));
             
             #line default
             #line hidden
             this.Write(")member);\r\n");
             
-            #line 96 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 106 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			} else if (targetType is SimpleType) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tyield return member;\r\n");
             
-            #line 98 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 108 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			} else if (targetType is EntityDefinition) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\tyield return member as ");
             
-            #line 99 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 109 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(targetType as NamedType)));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 100 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 110 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			} else if (targetType is SelectType) { 
             
             #line default
             #line hidden
             
-            #line 101 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 111 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  				foreach(var st in GetAllSpecific((SelectType)sourceType)) {
 					var ed = st as EntityDefinition;
 					if(ed != null) {
@@ -616,125 +708,47 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             #line hidden
             this.Write("\t\t\t\tvar ");
             
-            #line 104 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 114 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(st.Name.ToString().ToLower()));
             
             #line default
             #line hidden
             this.Write(" = member as ");
             
-            #line 104 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 114 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(st)));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\t\tif (");
             
-            #line 105 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 115 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(st.Name.ToString().ToLower()));
             
             #line default
             #line hidden
             this.Write(" != null) \r\n");
             
-            #line 106 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 116 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 						if (IsInSelect(ed, targetType as SelectType)) {
             
             #line default
             #line hidden
             this.Write("\t\t\t\t\tyield return ");
             
-            #line 107 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 117 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(st.Name.ToString().ToLower()));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 108 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-						} else { 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\t\t//TODO: Handle entity ");
-            
-            #line 109 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(st.Name.ToString().ToLower()));
-            
-            #line default
-            #line hidden
-            this.Write(" which is not a part of the target select interface ");
-            
-            #line 109 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(targetType as NamedType)));
-            
-            #line default
-            #line hidden
-            this.Write(" in property ");
-            
-            #line 109 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\t\t\t\tthrow new System.NotImplementedException();\r\n");
-            
-            #line 111 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-						} 
-            
-            #line default
-            #line hidden
-            
-            #line 112 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-					} else if (st is DefinedType) { 
-						var dt = st as DefinedType;
-						var targetDt = GetMappedDefinedType(dt);
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\tif (member is ");
-            
-            #line 115 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(dt)));
-            
-            #line default
-            #line hidden
-            this.Write(") \r\n");
-            
-            #line 116 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType)) { 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\t\tyield return new ");
-            
-            #line 117 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(targetDt)));
-            
-            #line default
-            #line hidden
-            this.Write("((");
-            
-            #line 117 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetBaseSystemType(dt)));
-            
-            #line default
-            #line hidden
-            this.Write(")(");
-            
-            #line 117 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(dt)));
-            
-            #line default
-            #line hidden
-            this.Write(")member);\r\n");
-            
             #line 118 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 						} else { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t\t//TODO: Handle defined type ");
+            this.Write("\t\t\t\t\t//## Handle entity ");
             
             #line 119 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(st.Name));
@@ -744,7 +758,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             this.Write(" which is not a part of the target select interface ");
             
             #line 119 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(targetType as NamedType)));
             
             #line default
             #line hidden
@@ -755,15 +769,135 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             
             #line default
             #line hidden
-            this.Write("\r\n\t\t\t\t\tthrow new System.NotImplementedException();\r\n");
+            this.Write("\r\n\t\t\t\t\t//TODO: Handle entity ");
             
-            #line 121 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 120 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(st.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" which is not a part of the target select interface ");
+            
+            #line 120 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(targetType as NamedType)));
+            
+            #line default
+            #line hidden
+            this.Write(" in property ");
+            
+            #line 120 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t\t\t\tthrow new System.NotImplementedException();\r\n\t\t\t\t\t//##\r\n");
+            
+            #line 123 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+						} 
+            
+            #line default
+            #line hidden
+            
+            #line 124 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+					} else if (st is DefinedType) { 
+						var dt = st as DefinedType;
+						var targetDt = GetMappedDefinedType(dt);
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tif (member is ");
+            
+            #line 127 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(dt)));
+            
+            #line default
+            #line hidden
+            this.Write(") \r\n");
+            
+            #line 128 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType)) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t\tyield return new ");
+            
+            #line 129 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(targetDt)));
+            
+            #line default
+            #line hidden
+            this.Write("((");
+            
+            #line 129 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetBaseSystemType(dt)));
+            
+            #line default
+            #line hidden
+            this.Write(")(");
+            
+            #line 129 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetCSTypeFull(dt)));
+            
+            #line default
+            #line hidden
+            this.Write(")member);\r\n");
+            
+            #line 130 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+						} else { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t\t//## Handle defined type ");
+            
+            #line 131 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(st.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" which is not a part of the target select interface ");
+            
+            #line 131 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute)));
+            
+            #line default
+            #line hidden
+            this.Write(" in property ");
+            
+            #line 131 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t\t\t\t//TODO: Handle defined type ");
+            
+            #line 132 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(st.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" which is not a part of the target select interface ");
+            
+            #line 132 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetInterfaceCSTypeFull(attribute)));
+            
+            #line default
+            #line hidden
+            this.Write(" in property ");
+            
+            #line 132 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t\t\t\tthrow new System.NotImplementedException();\r\n\t\t\t\t\t//##\r\n");
+            
+            #line 135 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 						}
             
             #line default
             #line hidden
             
-            #line 122 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 136 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 					} else if (st is EnumerationType) { 
 						Console.WriteLine("Enumeration found as a select member. This is legal in EXPRESS schema but not supported in our implementation");
 					} else { 
@@ -773,20 +907,20 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             #line default
             #line hidden
             
-            #line 127 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 141 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 				} 
             
             #line default
             #line hidden
             
-            #line 128 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 142 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 			} 
             
             #line default
             #line hidden
             this.Write("\t\t\t}\r\n");
             
-            #line 130 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 144 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 		} else { 
 			throw new Exception("Unexpected attribute type");
 		} 
@@ -795,195 +929,195 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             #line hidden
             this.Write("\t\t\t} \r\n\t\t}\r\n");
             
-            #line 135 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 149 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
 	} 
             
             #line default
             #line hidden
             
-            #line 136 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 150 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  foreach(var attribute in InverseAttributesToImplement){  
 	var inverseType = "I" + attribute.Domain.Name; 
             
             #line default
             #line hidden
             
-            #line 138 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 152 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  if (IsEnumeration(attribute)) { 
             
             #line default
             #line hidden
             this.Write("\t\tIEnumerable<");
             
-            #line 139 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 153 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 139 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 153 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture("I" + attribute.ParentEntity.Name));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 139 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 153 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
             this.Write(" \r\n");
             
-            #line 140 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 154 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("\t\t");
             
-            #line 141 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 155 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 141 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 155 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Interface));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 141 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 155 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
             
             #line default
             #line hidden
             this.Write(" \r\n");
             
-            #line 142 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 156 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t{ \r\n\t\t\tget\r\n\t\t\t{\r\n");
             
-            #line 146 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 160 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  if (IsDoubleAggregation(attribute)) {
             
             #line default
             #line hidden
             this.Write("\t\t\t\treturn Model.Instances.");
             
-            #line 147 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 161 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(IsEnumeration(attribute) ? "Where" : "FirstOrDefault"));
             
             #line default
             #line hidden
             this.Write("<");
             
-            #line 147 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 161 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
             
             #line default
             #line hidden
             this.Write(">(e => e.");
             
-            #line 147 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 161 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
             
             #line default
             #line hidden
             this.Write(" != null &&  e.");
             
-            #line 147 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 161 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
             
             #line default
             #line hidden
             this.Write(".Any( i => i.Contains(this)));\r\n");
             
-            #line 148 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 162 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } else if (IsAggregation(attribute)){
             
             #line default
             #line hidden
             this.Write("\t\t\t\treturn Model.Instances.");
             
-            #line 149 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 163 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(IsEnumeration(attribute) ? "Where" : "FirstOrDefault"));
             
             #line default
             #line hidden
             this.Write("<");
             
-            #line 149 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 163 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
             
             #line default
             #line hidden
             this.Write(">(e => e.");
             
-            #line 149 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 163 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
             
             #line default
             #line hidden
             this.Write(" != null &&  e.");
             
-            #line 149 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 163 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
             
             #line default
             #line hidden
             this.Write(".Contains(this));\r\n");
             
-            #line 150 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 164 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } else {
             
             #line default
             #line hidden
             this.Write("\t\t\t\treturn Model.Instances.");
             
-            #line 151 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 165 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(IsEnumeration(attribute) ? "Where" : "FirstOrDefault"));
             
             #line default
             #line hidden
             this.Write("<");
             
-            #line 151 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 165 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(inverseType));
             
             #line default
             #line hidden
             this.Write(">(e => (e.");
             
-            #line 151 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 165 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
             
             #line default
             #line hidden
             this.Write(" as ");
             
-            #line 151 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 165 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(") == this);\r\n");
             
-            #line 152 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 166 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t\t} \r\n\t\t}\r\n");
             
-            #line 155 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            #line 169 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } 
             
             #line default
