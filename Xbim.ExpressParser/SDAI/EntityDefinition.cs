@@ -58,6 +58,29 @@ namespace Xbim.ExpressParser.SDAI
 
         #region Extended inverse attributes
 
+        public IEnumerable<EntityDefinition> SubTypes
+        {
+            get
+            {
+                return SchemaModel.Get<EntityDefinition>(e => e.Supertypes != null && e.Supertypes.Contains(this));
+            }
+        }
+
+        public IEnumerable<EntityDefinition> AllSubTypes
+        {
+            get
+            {
+                foreach (var subType in SubTypes)
+                {
+                    yield return subType;
+                    foreach (var type in subType.AllSubTypes)
+                    {
+                        yield return type;
+                    }
+                }
+            }
+        }
+
         public IEnumerable<Attribute> AllAttributes
         {
             get
