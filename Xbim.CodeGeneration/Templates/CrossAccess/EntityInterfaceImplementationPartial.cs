@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xbim.CodeGeneration.Differences;
 using Xbim.CodeGeneration.Helpers;
@@ -23,6 +24,42 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
         protected ExplicitAttributeMatch GetMatch(ExplicitAttribute remoteAttribute)
         {
             return _match.AttributeMatches.FirstOrDefault(m => m.TargetAttribute == remoteAttribute);
+        }
+
+        protected string GetBaseSystemType(DefinedType type)
+        {
+            return TypeHelper.GetCSType(type.Domain, Settings);
+        }
+
+        protected bool IsInSelect(NamedType type, SelectType select)
+        {
+            var allSpecific = GetAllSpecific(select).ToList();
+            if (allSpecific.Any(s => string.Compare(s.Name, type.Name, StringComparison.InvariantCultureIgnoreCase) == 0))
+                return true;
+
+            var entity = type as EntityDefinition;
+            if (entity == null) return false;
+            
+            var supertypes = entity.AllSupertypes.ToList();
+            var matches = _matches.Where(m => supertypes.Any(s => s == m.Source) || entity == m.Source).ToList();
+            return allSpecific.Any(s => matches.Any(m => s == m.Target));
+        }
+
+        protected IEnumerable<NamedType> GetAllSpecific(SelectType select)
+        {
+            foreach (var type in select.Selections)
+            {
+                var nested = type as SelectType;
+                if (nested == null)
+                {
+                    yield return type;
+                    continue;
+                }
+                foreach (var namedType in GetAllSpecific(nested))
+                {
+                    yield return namedType;
+                }
+            }
         }
 
         protected IEnumerable<ExplicitAttribute> ExplicitAttributesToImplement
@@ -83,6 +120,16 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
         {
             var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");
             return TypeHelper.GetInterfaceCSType(attribute, Settings, GetFullNamespace(attribute.Domain, baseNamespace, Settings.CrossAccessStructure));
+        }
+
+        protected string GetCSTypeFull(ExplicitAttribute attribute)
+        {
+            return TypeHelper.GetCSType(attribute.Domain, Settings, false, false, GetFullNamespace(attribute.Domain, Settings.Namespace, Settings.Structure));
+        }
+
+        protected string GetCSTypeFull(NamedType type)
+        {
+            return TypeHelper.GetCSType(type, Settings, false, false, GetFullNamespace(type, Settings.Namespace, Settings.Structure));
         }
 
         protected string Interface { get { return "I" + RemoteType.Name; } }
