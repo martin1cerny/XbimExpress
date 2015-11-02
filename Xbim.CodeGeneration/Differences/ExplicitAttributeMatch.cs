@@ -151,9 +151,12 @@ namespace Xbim.CodeGeneration.Differences
             {
                 if (o.GetType() != n.GetType()) return false;
 
-                //if it is both entity definition lets suppose it will be compatible in parser
-                if (o is EntityDefinition && n is EntityDefinition)
-                    return true;
+                var oE = o as EntityDefinition;
+                var nE = n as EntityDefinition;
+                if (oE != null && nE != null)
+                {
+                    return IsEntityMatch(oE, nE) || IsSuperEntityMatch(oE, nE) || IsSubEntityMatch(oE, nE);
+                }
 
                 var oSimple = o as SimpleType;
                 var nSimple = n as SimpleType;
@@ -180,6 +183,29 @@ namespace Xbim.CodeGeneration.Differences
                 o = oAggregate.ElementType;
                 n = nAggregate.ElementType;
             }
+        }
+
+        private static bool IsEntityMatch(NamedType o, NamedType n)
+        {
+            return string.Compare(o.Name, n.Name, StringComparison.InvariantCultureIgnoreCase) == 0;
+        }
+
+        private static bool IsSuperEntityMatch(EntityDefinition o, EntityDefinition n)
+        {
+            if (o.Supertypes == null || !o.Supertypes.Any()) return false;
+            var supertype = o.Supertypes.First();
+            while (supertype != null)
+            {
+                if (IsEntityMatch(supertype, n)) return true;
+                if (supertype.Supertypes == null || !supertype.Supertypes.Any()) return false;
+                supertype = supertype.Supertypes.First();
+            }
+            return false;
+        }
+
+        private static bool IsSubEntityMatch(EntityDefinition o, EntityDefinition n)
+        {
+            return IsSuperEntityMatch(n, o);
         }
 
         public ExplicitAttribute SourceAttribute { get; private set; }
