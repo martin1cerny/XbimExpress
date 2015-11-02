@@ -31,6 +31,47 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             return TypeHelper.GetCSType(type.Domain, Settings);
         }
 
+        protected string GetBaseSystemType(SimpleType type)
+        {
+            return TypeHelper.GetCSType(new DefinedType{ Domain = type}, Settings);
+        }
+
+        protected EnumerationType GetMappedEnumerationType(EnumerationType source)
+        {
+            var tModel = _match.Target.SchemaModel;
+
+            var nameMatch =
+                tModel.Get<EnumerationType>(
+                    t => string.Compare(source.Name, t.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    .FirstOrDefault();
+            return nameMatch;
+        }
+
+
+        protected string GetEnumEquivalent(string value, EnumerationType target)
+        {
+            var normValue = NormalizeString(value);
+
+            var identity =
+                target.Elements.FirstOrDefault(
+                    e => string.Compare(normValue, NormalizeString(e), StringComparison.InvariantCultureIgnoreCase) == 0);
+            if (identity != default(ExpressId))
+                return identity;
+
+            //var ndef =
+            //    target.Elements.FirstOrDefault(
+            //        e => string.Compare("NOTDEFINED", NormalizeString(e), StringComparison.InvariantCultureIgnoreCase) == 0);
+            //if (ndef != default(ExpressId))
+            //    return ndef;
+
+            return null;
+        }
+
+        private string NormalizeString(string input)
+        {
+            return input.Replace("_", "").ToUpperInvariant();
+        }
+
         protected bool IsInSelect(NamedType type, SelectType select)
         {
             var allSpecific = GetAllSpecific(select).ToList();
@@ -43,6 +84,17 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             var supertypes = entity.AllSupertypes.ToList();
             var matches = _matches.Where(m => supertypes.Any(s => s == m.Source) || entity == m.Source).ToList();
             return allSpecific.Any(s => matches.Any(m => s == m.Target));
+        }
+
+        protected DefinedType GetMappedDefinedType(DefinedType source)
+        {
+            var tModel = _match.Target.SchemaModel;
+
+            var nameMatch =
+                tModel.Get<DefinedType>(
+                    t => string.Compare(source.Name, t.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    .FirstOrDefault();
+            return nameMatch;
         }
 
         protected IEnumerable<NamedType> GetAllSpecific(SelectType select)
@@ -120,6 +172,12 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
         {
             var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");
             return TypeHelper.GetInterfaceCSType(attribute, Settings, GetFullNamespace(attribute.Domain, baseNamespace, Settings.CrossAccessStructure));
+        }
+
+        protected string GetInterfaceCSTypeFull(NamedType type)
+        {
+            var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");
+            return TypeHelper.GetCSType(type, Settings, false, true, GetFullNamespace(type, baseNamespace, Settings.CrossAccessStructure));
         }
 
         protected string GetCSTypeFull(ExplicitAttribute attribute)
