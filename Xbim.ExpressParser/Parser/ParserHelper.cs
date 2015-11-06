@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -235,9 +236,46 @@ namespace Xbim.ExpressParser
             });
         }
 
-        private DerivedAttribute CreateDerivedAttribute(string name)
+        private DerivedAttribute CreateDerivedAttribute(string name, AggregationType[] aggregations, ValueType? typeInfo)
         {
-            return Model.New<DerivedAttribute>(_currentSchema, a => a.Name = name);
+            var result = Model.New<DerivedAttribute>(_currentSchema, a => a.Name = name);
+            if(typeInfo == null) 
+                throw new NotSupportedException();
+
+            switch (typeInfo.Value.tokVal)
+            {
+                case Tokens.TYPE:
+                    if (aggregations.Any())
+                        aggregations.Last().ElementType = typeInfo.Value.val as BaseType;
+                    else
+                        result.Domain = typeInfo.Value.val as BaseType;
+                    break;
+                case Tokens.IDENTIFIER:
+                    ToDoActions.Add(() =>
+                    {
+                        var type = Model.Get<NamedType>(t => t.Name == typeInfo.Value.strVal).FirstOrDefault();
+                        if (type == null)
+                            throw new InstanceNotFoundException();
+
+                        if (aggregations.Any())
+                            aggregations.Last().ElementType = type;
+                        else
+                            result.Domain = type;
+                    });
+                    break;
+                default:
+                    throw new Exception("Unexpected value");
+            }
+            
+
+            //nest aggregations
+            for (var i = 0; i < aggregations.Length - 1; i++)
+                aggregations[i].ElementType = aggregations[i + 1];
+
+            if (aggregations.Any())
+                result.Domain = aggregations.First();
+
+            return result;
         }
 
         private DerivedAttribute CreateDerivedAttribute(IEnumerable<string> path,

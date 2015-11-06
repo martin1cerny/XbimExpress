@@ -4,6 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 using System;
+using <#= Namespace #>.Metadata;
 
 namespace <#= Namespace #>
 {
@@ -14,6 +15,7 @@ namespace <#= Namespace #>
 		ActivationStatus ActivationStatus { get; }
 		void Activate (bool write);
 		void Activate (Action activation);
+		ExpressType ExpressType { get; }
 
 		[Obsolete("This property is deprecated and likely to be removed. Use just 'Model' instead.")]
 		<#= ModelInterface #> ModelOf { get; }

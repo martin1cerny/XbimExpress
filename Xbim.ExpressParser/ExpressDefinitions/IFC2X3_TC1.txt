@@ -5733,6 +5733,8 @@ ENTITY IfcPoint
 	,IfcPointOnCurve
 	,IfcPointOnSurface))
  SUBTYPE OF (IfcGeometricRepresentationItem);
+ DERIVE
+	Dim : IfcDimensionCount := IfcPointDimension(self);
 END_ENTITY;
 
 ENTITY IfcPointOnCurve
@@ -7589,6 +7591,8 @@ ENTITY IfcSurface
 	,IfcElementarySurface
 	,IfcSweptSurface))
  SUBTYPE OF (IfcGeometricRepresentationItem);
+ DERIVE
+	Dim : IfcDimensionCount := IfcSurfaceDimension(self);
 END_ENTITY;
 
 ENTITY IfcSurfaceCurveSweptAreaSolid
