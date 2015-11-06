@@ -67,6 +67,31 @@ namespace Xbim.CodeGeneration.Differences
                 }
             }
 
+            //try name containment match
+            var toRemove = new List<ExplicitAttribute>();
+            foreach (var attribute in addedCandidates)
+            {
+                string aName = attribute.Name;
+                var candidates = removedCandidates.Where(ac => ((string)ac.Name).Contains(aName) || aName.Contains(ac.Name)).ToList();
+                if (candidates.Count == 1 && IsCompatibleSystemType(attribute.Domain, candidates[0].Domain))
+                {
+                    toRemove.Add(attribute);
+                    yield return new ExplicitAttributeMatch(source, target)
+                    {
+                        MatchType = AttributeMatchType.Changed,
+                        SourceAttribute = attribute,
+                        TargetAttribute = candidates[0],
+                        IsTypeCompatible = true
+                    };
+                }
+            }
+            foreach (var attribute in toRemove)
+            {
+                //remove identified attributes
+                addedCandidates.Remove(attribute);
+            }
+
+
             //these are potentially removed unless we find an unique match based on other criteria
             foreach (var attribute in addedCandidates)
             {
@@ -147,10 +172,37 @@ namespace Xbim.CodeGeneration.Differences
             }
         }
 
+        private static IEnumerable<NamedType> GetAllSpecific(SelectType select)
+        {
+            foreach (var type in select.Selections)
+            {
+                var nested = type as SelectType;
+                if (nested == null)
+                {
+                    yield return type;
+                    continue;
+                }
+                foreach (var namedType in GetAllSpecific(nested))
+                {
+                    yield return namedType;
+                }
+            }
+        }
+
         private static bool IsCompatibleSystemType(BaseType o, BaseType n)
         {
             while (true)
             {
+                var targetSelect = n as SelectType;
+                var sourceNamed = o as NamedType;
+                if (targetSelect != null && sourceNamed != null)
+                {
+                    var specific = GetAllSpecific(targetSelect);
+                    if (specific.Any(
+                            s => string.Compare(s.Name, sourceNamed.Name, StringComparison.InvariantCultureIgnoreCase) == 0))
+                        return true;
+                }
+
                 if (o.GetType() != n.GetType()) return false;
 
                 var oE = o as EntityDefinition;

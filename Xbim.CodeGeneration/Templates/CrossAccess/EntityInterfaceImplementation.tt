@@ -27,11 +27,26 @@ namespace <#= OwnNamespace #>
 				//##
 <#		} else if (attribute.Domain is DefinedType) { #>
 <#			if (match.SourceAttribute.OptionalFlag) { #>
-				if (<#= match.SourceAttribute.Name #> == null) return null;
+				if (!<#= match.SourceAttribute.Name #>.HasValue) return null;
+				return new <#= GetInterfaceCSTypeFull(attribute).Trim('?') #>(<#= match.SourceAttribute.Name #>.Value);
+<#			} else { #>
+				return new <#= GetInterfaceCSTypeFull(attribute).Trim('?') #>(<#= match.SourceAttribute.Name #>);
 <#			} #>
-				return new <#= GetInterfaceCSTypeFull(attribute).Trim('?') #>((<#= GetBaseSystemType(match.SourceAttribute.Domain as DefinedType) #>)<#= match.SourceAttribute.Name #>);
 <#		} else if (attribute.Domain is EntityDefinition) { #>
-				return <#= match.SourceAttribute.Name #> as <#= GetInterfaceCSTypeFull(attribute) #>;
+				return <#= match.SourceAttribute.Name #><# if(!IsDirectTypeMatch(match)) {#> as <#= GetInterfaceCSTypeFull(attribute) #><# } #>;
+<#		} else if (attribute.Domain is SelectType && !(match.SourceAttribute.Domain is SelectType)) { #>
+<#			if (match.SourceAttribute.Domain is EntityDefinition) { #>
+				return <#= match.SourceAttribute.Name #>;
+<#			} else if(match.SourceAttribute.Domain is DefinedType) {
+				var dt = match.SourceAttribute.Domain as DefinedType;
+				var targetDt = GetMappedDefinedType(dt); #>
+<#				if(match.SourceAttribute.OptionalFlag) { #> 
+				if(!<#= match.SourceAttribute.Name #>.HasValue) return null;
+				return new <#= GetInterfaceCSTypeFull(targetDt) #>(<#= match.SourceAttribute.Name #>.Value);
+<#				} else { #>
+				return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
+<#				} #>
+<#			} #>
 <#		} else if (attribute.Domain is SelectType) { #>
 				if (<#= match.SourceAttribute.Name #> == null) return null;
 <# 			foreach(var st in GetAllSpecific((SelectType)match.SourceAttribute.Domain)) {
@@ -107,6 +122,14 @@ namespace <#= OwnNamespace #>
 				yield return member;
 <#			} else if (targetType is EntityDefinition) { #>
 				yield return member as <#= GetInterfaceCSTypeFull(targetType as NamedType) #>;
+<#			} else if (targetType is SelectType && !(sourceType is SelectType)) { #>
+<#				if (sourceType is EntityDefinition) { #>
+				yield return member;
+<#				} else if(sourceType is DefinedType) {
+					var dt = sourceType as DefinedType;
+					var targetDt = GetMappedDefinedType(dt); #>
+				yield return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)member);
+<#				} #>
 <#			} else if (targetType is SelectType) { #>
 <# 				foreach(var st in GetAllSpecific((SelectType)sourceType)) {
 					var ed = st as EntityDefinition;
@@ -167,5 +190,8 @@ namespace <#= OwnNamespace #>
 			} 
 		}
 <# } #>
+
+	//## Custom code
+	//##
 	}
 }

@@ -96,15 +96,56 @@ namespace Xbim.CodeGeneration.Templates
                 if (expl != null)
                     return TypeHelper.GetCSType(expl, Settings);
                 var der = attribute as DerivedAttribute;
-                if (der == null) return "";
-
-                attribute = der.Redeclaring;
+                if (der != null && der.Redeclaring == null)
+                {
+                    var result = TypeHelper.GetCSType(der.Domain, Settings, true);
+                    result = TweekDerivedType(der, result);
+                    return result;
+                }
+                if(der != null)
+                    attribute = der.Redeclaring;
             }
+        }
+
+        protected virtual string TweekDerivedType(DerivedAttribute attribute, string type)
+        {
+            var domain = attribute.Domain;
+            var aggr = domain as AggregationType;
+            if (aggr != null)
+            {
+                //drill down
+                while (aggr != null)
+                {
+                    domain = aggr.ElementType;
+                    aggr = domain as AggregationType;
+                }
+            }
+            if (!(domain is EntityDefinition))
+                return type;
+
+            type = type.Replace("IfcDirection", "Common.Geometry.XbimVector3D");
+            type = type.Replace("IfcVector", "Common.Geometry.XbimVector3D");
+            type = type.Replace("IfcCartesianPoint", "Common.Geometry.XbimPoint3D");
+            type = type.Replace("IfcLine", "GeometryResource.XbimLine");
+            type = type.Replace("IfcDimensionalExponents", "MeasureResource.XbimDimensionalExponents");
+
+            return type;
         }
 
         protected bool IsOverridenAttribute(ExplicitAttribute attribute)
         {
             return Type.SchemaModel.Get<DerivedAttribute>(d => d.Redeclaring == attribute).Any();
+        }
+
+        protected string GetDerivedKeyword(DerivedAttribute attribute)
+        {
+            var overrides = Type.AllSupertypes.Any(s => s.DerivedAttributes.Any(d => d.Name == attribute.Name));
+            if (overrides) return "override ";
+
+            var virt = Type.AllSubTypes.Any(s => s.DerivedAttributes.Any(d => d.Name == attribute.Name));
+            if (virt) return "virtual ";
+
+            return "";
         }
 
         protected string GetDerivedAccess(DerivedAttribute attribute)
@@ -139,6 +180,11 @@ namespace Xbim.CodeGeneration.Templates
         protected IEnumerable<DerivedAttribute> OverridingAttributes
         {
             get { return Type.Attributes.OfType<DerivedAttribute>().Where(da => da.Redeclaring != null); }
+        }
+
+        protected IEnumerable<DerivedAttribute> DerivedAttributes
+        {
+            get { return Type.Attributes.OfType<DerivedAttribute>().Where(da => da.Redeclaring == null); }
         }
 
         protected string GetAttributeState(Attribute attribute)
@@ -378,13 +424,17 @@ namespace Xbim.CodeGeneration.Templates
                 result.Add("System");
                 result.Add("System.Collections.Generic");
 
-                if(InverseAttributes.Any(IsDoubleAggregation))
-                    result.Add("System.Linq");
+                result.Add("System.Linq");
 
                 if (IsFirst)
                 {
                     //for INotifyPropertyChanged
                     result.Add("System.ComponentModel");
+                    if(Settings.IsInfrastructureSeparate)
+                        result.Add(Settings.InfrastructureNamespace + ".Metadata");
+                    else
+                        result.Add(Settings.Namespace + ".Metadata");
+
                 }
 
                 if (Settings.IsInfrastructureSeparate)
@@ -666,6 +716,7 @@ namespace Xbim.CodeGeneration.Templates
             }
             throw new Exception("Aggregation type expected");
         }
+
 
         public List<WhereRule> WhereRules { get; set; }
     }

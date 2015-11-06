@@ -41,7 +41,7 @@ namespace XbimEssentialsGenerator
                 IsIndexedEntity = e => _indexedClassesIfc2x3.Contains(e.Name),
                 GenerateAllAsInterfaces = true
             };
-            //Generator.GenerateSchema(settings, ifc2X3);
+            Generator.GenerateSchema(settings, ifc2X3);
             Console.WriteLine(@"IFC2x3 with interfaces generated");
 
             //generate cross schema access

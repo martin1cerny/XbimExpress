@@ -111,6 +111,8 @@ namespace <#= Namespace #>
 			activation();
 			ActivationStatus = ActivationStatus.ActivatedRead;
 		}
+
+		ExpressType <#= PersistEntityInterface #>.ExpressType { get { return Model.Metadata.ExpressType(this);  } }
 		#endregion
 
 <# } #>
@@ -170,6 +172,25 @@ namespace <#= Namespace #>
 				throw new System.Exception("It is not possible to set a value of derived property <#= attribute.Name #> in <#= Name #>"); 
 			}
 		}
+<#		} #>
+		#endregion
+<# } #>
+
+<# if (DerivedAttributes.Any()) { #>
+		#region Derived attributes
+<#		foreach(var attribute in DerivedAttributes){ #>
+		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
+		public <#= GetDerivedKeyword(attribute) #><#= GetCSType(attribute) #> @<#= attribute.Name #> 
+		{
+			get 
+			{
+				//## Getter for <#= attribute.Name #>
+				//TODO: Implement getter for derived attribute <#= attribute.Name #>
+				throw new NotImplementedException();
+				//##
+			}
+		}
+
 <#		} #>
 		#endregion
 <# } #>
@@ -406,5 +427,10 @@ namespace <#= Namespace #>
             return obj == null ? -1 : obj.GetHashCode();
         }
         #endregion
+
+		#region Custom code (will survive code regeneration)
+		//## Custom code
+		//##
+		#endregion
 	}
 }
