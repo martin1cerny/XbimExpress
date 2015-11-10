@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.CodeGeneration;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.ExpressDefinitions;
@@ -38,10 +36,11 @@ namespace XbimEssentialsGenerator
                 Structure = ifc2X3Domains,
                 OutputPath = "Xbim.Ifc2x3",
                 InfrastructureOutputPath = "Xbim.Common",
-                IsIndexedEntity = e => _indexedClassesIfc2x3.Contains(e.Name),
-                GenerateAllAsInterfaces = true
+                IsIndexedEntity = e => IndexedClassesIfc2X3.Contains(e.Name),
+                GenerateAllAsInterfaces = true,
+                IgnoreDerivedAttributes = GetIgnoreDerivedAttributes()
             };
-            Generator.GenerateSchema(settings, ifc2X3);
+            //Generator.GenerateSchema(settings, ifc2X3);
             Console.WriteLine(@"IFC2x3 with interfaces generated");
 
             //generate cross schema access
@@ -70,6 +69,28 @@ namespace XbimEssentialsGenerator
 
         }
 
+        private static List<AttributeInfo> GetIgnoreDerivedAttributes()
+        {
+            return new List<AttributeInfo>
+            {
+                new AttributeInfo
+                {
+                    Name = "Dim",
+                    EntityName = "IfcGeometricSetSelect"
+                },
+                new AttributeInfo
+                {
+                    Name = "P",
+                    EntityName = "IfcAxis2Placement"
+                },
+                new AttributeInfo
+                {
+                    Name = "Dim",
+                    EntityName = "IfcBooleanOperand"
+                }
+            };
+        }
+
         private static void SetTypeNumbersForIfc2X3(SchemaModel model)
         {
             var max = -1;
@@ -78,7 +99,9 @@ namespace XbimEssentialsGenerator
             var values = Enum.GetValues(typeof (IfcEntityNameEnum)).Cast<short>();
             foreach (var value in values)
             {
-                var name = Enum.GetName(typeof (IfcEntityNameEnum), value).ToUpperInvariant();
+                var s = Enum.GetName(typeof (IfcEntityNameEnum), value);
+                if (s == null) continue;
+                var name = s.ToUpperInvariant();
                 var type = types.FirstOrDefault(t => t.PersistanceName == name);
                 if (type == null)
                 {
@@ -98,6 +121,6 @@ namespace XbimEssentialsGenerator
             }
         }
 
-        private static List<string> _indexedClassesIfc2x3 = new List<string> { "IfcAddress", "IfcOrganizationRelationship", "IfcApproval", "IfcApprovalActorRelationship", "IfcApprovalPropertyRelationship", "IfcApprovalRelationship", "IfcResourceApprovalRelationship", "IfcRoot", "IfcConstraint", "IfcConstraintAggregationRelationship", "IfcConstraintClassificationRelationship", "IfcConstraintRelationship", "IfcPropertyConstraintRelationship", "IfcAppliedValue", "IfcAppliedValueRelationship", "IfcCurrencyRelationship", "IfcReferencesValueDocument", "IfcCalendarDate", "IfcConnectionCurveGeometry", "IfcConnectionPointGeometry", "IfcConnectionSurfaceGeometry", "IfcLocalPlacement", "IfcBooleanResult", "IfcSolidModel", "IfcMappedItem", "IfcMaterialProperties", "IfcMonetaryUnit", "IfcPresentationStyleAssignment", "IfcPresentationStyle", "IfcTextStyleTextModel", "IfcExternalReference", "IfcTextStyleFontModel", "IfcTextStyleForDefinedFont", "IfcBoundaryCondition", "IfcStructuralLoad", "IfcTimeSeries", "IfcPresentationLayerAssignment", "IfcClassification", "IfcClassificationItem", "IfcClassificationItemRelationship", "IfcClassificationNotation", "IfcClassificationNotationFacet", "IfcClassificationReference", "IfcDocumentElectronicFormat", "IfcDocumentInformation", "IfcDocumentInformationRelationship", "IfcDocumentReference", "IfcLibraryInformation", "IfcLibraryReference", "IfcCompositeCurve", "IfcRepresentationMap", "IfcMaterial", "IfcMaterialClassificationRelationship", "IfcMaterialLayer", "IfcMaterialLayerSet", "IfcMaterialLayerSetUsage", "IfcMaterialList", "IfcUnitAssignment", "IfcProperty", "IfcPropertyDependencyRelationship", "IfcRepresentationContext", "IfcProductDefinitionShape", "IfcRepresentation", "IfcShapeAspect", "IfcActorRole", "IfcApplication", "IfcOrganization", "IfcOwnerHistory", "IfcPerson", "IfcPersonAndOrganization", "IfcTable", "IfcTableRow" }; 
+        private static readonly List<string> IndexedClassesIfc2X3 = new List<string> { "IfcAddress", "IfcOrganizationRelationship", "IfcApproval", "IfcApprovalActorRelationship", "IfcApprovalPropertyRelationship", "IfcApprovalRelationship", "IfcResourceApprovalRelationship", "IfcRoot", "IfcConstraint", "IfcConstraintAggregationRelationship", "IfcConstraintClassificationRelationship", "IfcConstraintRelationship", "IfcPropertyConstraintRelationship", "IfcAppliedValue", "IfcAppliedValueRelationship", "IfcCurrencyRelationship", "IfcReferencesValueDocument", "IfcCalendarDate", "IfcConnectionCurveGeometry", "IfcConnectionPointGeometry", "IfcConnectionSurfaceGeometry", "IfcLocalPlacement", "IfcBooleanResult", "IfcSolidModel", "IfcMappedItem", "IfcMaterialProperties", "IfcMonetaryUnit", "IfcPresentationStyleAssignment", "IfcPresentationStyle", "IfcTextStyleTextModel", "IfcExternalReference", "IfcTextStyleFontModel", "IfcTextStyleForDefinedFont", "IfcBoundaryCondition", "IfcStructuralLoad", "IfcTimeSeries", "IfcPresentationLayerAssignment", "IfcClassification", "IfcClassificationItem", "IfcClassificationItemRelationship", "IfcClassificationNotation", "IfcClassificationNotationFacet", "IfcClassificationReference", "IfcDocumentElectronicFormat", "IfcDocumentInformation", "IfcDocumentInformationRelationship", "IfcDocumentReference", "IfcLibraryInformation", "IfcLibraryReference", "IfcCompositeCurve", "IfcRepresentationMap", "IfcMaterial", "IfcMaterialClassificationRelationship", "IfcMaterialLayer", "IfcMaterialLayerSet", "IfcMaterialLayerSetUsage", "IfcMaterialList", "IfcUnitAssignment", "IfcProperty", "IfcPropertyDependencyRelationship", "IfcRepresentationContext", "IfcProductDefinitionShape", "IfcRepresentation", "IfcShapeAspect", "IfcActorRole", "IfcApplication", "IfcOrganization", "IfcOwnerHistory", "IfcPerson", "IfcPersonAndOrganization", "IfcTable", "IfcTableRow" }; 
     }
 }
