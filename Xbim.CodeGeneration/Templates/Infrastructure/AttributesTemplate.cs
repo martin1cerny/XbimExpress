@@ -108,16 +108,18 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                     "ntityAttributeType.ListUnique); }\r\n        }\r\n\r\n        public bool IsClass\r\n   " +
                     "     {\r\n            get { return (_entityType == EntityAttributeType.Class); }\r\n" +
                     "        }\r\n\r\n        public bool IsDerivedOverride\r\n        {\r\n            get {" +
-                    " return (_state == EntityAttributeState.DerivedOverride); }\r\n        }\r\n\r\n      " +
-                    "  public bool IsValueType\r\n        {\r\n            get { return (_entityType > En" +
-                    "tityAttributeType.List); }\r\n        }\r\n\r\n\r\n        public bool IsMemberValueType" +
-                    "\r\n        {\r\n            get { return (_memberType > EntityAttributeType.List); " +
-                    "}\r\n        }\r\n\r\n        public bool IsMemberClass\r\n        {\r\n            get { " +
-                    "return (_memberType == EntityAttributeType.Class); }\r\n        }\r\n\r\n        publi" +
-                    "c bool IsOptional\r\n        {\r\n            get { return (_state == EntityAttribut" +
-                    "eState.Optional); }\r\n        }\r\n\r\n        public bool IsMandatory\r\n        {\r\n  " +
-                    "          get { return (_state == EntityAttributeState.Mandatory); }\r\n        }\r" +
-                    "\n    }\r\n}");
+                    " return (_state == EntityAttributeState.DerivedOverride); }\r\n        }\r\n\r\n\t\tpubl" +
+                    "ic bool IsDerived\r\n        {\r\n            get { return (_state == EntityAttribut" +
+                    "eState.DerivedOverride || _state == EntityAttributeState.Derived); }\r\n        }\r" +
+                    "\n\r\n        public bool IsValueType\r\n        {\r\n            get { return (_entity" +
+                    "Type > EntityAttributeType.List); }\r\n        }\r\n\r\n\r\n        public bool IsMember" +
+                    "ValueType\r\n        {\r\n            get { return (_memberType > EntityAttributeTyp" +
+                    "e.List); }\r\n        }\r\n\r\n        public bool IsMemberClass\r\n        {\r\n         " +
+                    "   get { return (_memberType == EntityAttributeType.Class); }\r\n        }\r\n\r\n    " +
+                    "    public bool IsOptional\r\n        {\r\n            get { return (_state == Entit" +
+                    "yAttributeState.Optional); }\r\n        }\r\n\r\n        public bool IsMandatory\r\n    " +
+                    "    {\r\n            get { return (_state == EntityAttributeState.Mandatory); }\r\n " +
+                    "       }\r\n    }\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

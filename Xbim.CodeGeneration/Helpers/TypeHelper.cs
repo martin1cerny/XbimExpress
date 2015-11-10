@@ -75,6 +75,10 @@ namespace Xbim.CodeGeneration.Helpers
             if (entity != null && entityAsInterface)
                 return "I" + entity.Name;
 
+            var select = type as SelectType;
+            if (select != null && entityAsInterface)
+                return "I" + select.Name;
+
             var named = type as NamedType;
             if (named != null) return string.IsNullOrWhiteSpace(fullNamespace) ? 
                 named.Name.ToString() :
