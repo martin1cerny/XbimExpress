@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.0
 // Machine:  C13300493
-// DateTime: 9.10.15 14:09:14
+// DateTime: 6.11.15 13:59:12
 // UserName: mxfm2
-// Input file <Parser.y - 9.10.15 14:09:10>
+// Input file <Parser.y - 6.11.15 13:58:43>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -69,10 +69,10 @@ internal class ScanObj {
 
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 9.10.15 14:09:10
+  // Verbatim content from Parser.y - 6.11.15 13:58:43
 #line 2 "Parser.y"
 	
-  // End verbatim content from Parser.y - 9.10.15 14:09:10
+  // End verbatim content from Parser.y - 6.11.15 13:58:43
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliasses;
@@ -993,26 +993,26 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 112: // derive_rule -> IDENTIFIER, ':', identifier_or_type, ASSIGNMENT, error, ';'
 #line 321 "Parser.y"
-{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-6].strVal); yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-6].strVal, new AggregationType[]{}, ValueStack[ValueStack.Depth-4]); yyerrok(); }
         break;
       case 113: // derive_rule -> IDENTIFIER, ':', error, ';'
 #line 322 "Parser.y"
-{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-4].strVal); yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-4].strVal, new AggregationType[]{}, null); yyerrok(); }
         break;
       case 114: // derive_rule -> IDENTIFIER, ':', enumerable, OF, identifier_or_type, ASSIGNMENT, 
                 //                error, ';'
 #line 323 "Parser.y"
-{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-8].strVal); yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-8].strVal, new AggregationType[]{ValueStack[ValueStack.Depth-6].val as AggregationType}, ValueStack[ValueStack.Depth-4]); yyerrok(); }
         break;
       case 115: // derive_rule -> IDENTIFIER, ':', enumerable, OF, enumerable, OF, 
                 //                identifier_or_type, ASSIGNMENT, error, ';'
 #line 324 "Parser.y"
-{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-10].strVal); yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-10].strVal, new AggregationType[]{ValueStack[ValueStack.Depth-8].val as AggregationType, ValueStack[ValueStack.Depth-6].val as AggregationType}, ValueStack[ValueStack.Depth-4]); yyerrok(); }
         break;
       case 116: // derive_rule -> IDENTIFIER, ':', enumerable, OF, enumerable, OF, enumerable, OF, 
                 //                identifier_or_type, ASSIGNMENT, error, ';'
 #line 325 "Parser.y"
-{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-12].strVal); yyerrok(); }
+{ CurrentSemanticValue.val = CreateDerivedAttribute(ValueStack[ValueStack.Depth-12].strVal, new AggregationType[]{ValueStack[ValueStack.Depth-10].val as AggregationType, ValueStack[ValueStack.Depth-8].val as AggregationType, ValueStack[ValueStack.Depth-6].val as AggregationType}, ValueStack[ValueStack.Depth-4]); yyerrok(); }
         break;
       case 117: // derive_rule -> accessor, ':', identifier_or_type, ASSIGNMENT, accessor, ';'
 #line 326 "Parser.y"

@@ -37,8 +37,8 @@ namespace Xbim.CodeGeneration.Settings
             EntityFactoryInterface = "IEntityFactory";
             InstantiableEntityInterface = "IInstantiableEntity";
             GenerateAllAsInterfaces = false;
+            SchemaInterfacesNamespace = "Interfaces";
         }
-
 
 
         internal bool IsInfrastructureSeparate {
@@ -48,8 +48,36 @@ namespace Xbim.CodeGeneration.Settings
             }
         }
 
+        /// <summary>
+        /// List of derived attributes to be left out. Derived attributes are kind of a mess in IFC express 
+        /// schema. They are sometimes assumed to exist on a higher level or on the level of select types which is
+        /// impossible in Express. So manual changes might need to be done. This is then to preserve redefinition
+        /// of such attributes.
+        /// </summary>
+        public List<AttributeInfo> IgnoreDerivedAttributes { get; set; }
+
+        /// <summary>
+        /// Project to be used in 'GenerateCrossAccess(GeneratorSettings settings, SchemaModel schema, SchemaModel remoteSchema)'
+        /// for a remote schema. This has an influence on namespaces and references
+        /// </summary>
+        public string CrossAccessProjectPath { get; set; }
+        internal string CrossAccessNamespace { get; set; }
+
+        /// <summary>
+        /// When true read-only interface will be generated for all entities.
+        /// This interfaces can be used to query model safely and also to
+        /// implement interoperability layer in other schemas
+        /// </summary>
         public bool GenerateAllAsInterfaces { get; set; }
 
+        /// <summary>
+        /// If GenerateAllAsInterfaces is true this namespace will contain all entity interfaces
+        /// </summary>
+        public string SchemaInterfacesNamespace { get; set; }
+
+        /// <summary>
+        /// Interface used to label entities which can be instantiated (are non-abstract)
+        /// </summary>
         public string InstantiableEntityInterface { get; set; }
 
         /// <summary>
@@ -130,9 +158,22 @@ namespace Xbim.CodeGeneration.Settings
         /// </summary>
         public DomainStructure Structure { get; set; }
 
+        /// <summary>
+        /// Optional structure used to identify the right namespaces for
+        /// cross access interfaces implementations
+        /// </summary>
+        public DomainStructure CrossAccessStructure { get; set; }
+
         internal IEnumerable<string> SchemasIds { get; set; }
 
         public Func<EntityDefinition, bool> IsIndexedEntity { get; set; } 
 
+    }
+
+    public class AttributeInfo
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string EntityName { get; set; }
     }
 }

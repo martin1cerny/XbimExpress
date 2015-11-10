@@ -21,7 +21,7 @@ namespace Xbim.CodeGeneration.Tests
             };
             var schema = SchemaModel.LoadIfc2x3();
 
-            Generator.Generate(settings, schema);
+            Generator.GenerateSchema(settings, schema);
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@ namespace Xbim.CodeGeneration.Tests
             };
             var schema = SchemaModel.LoadIfc2x3();
 
-            Generator.Generate(settings, schema);
+            Generator.GenerateSchema(settings, schema);
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace Xbim.CodeGeneration.Tests
             };
             var schema = SchemaModel.LoadIfc4();
 
-            Generator.Generate(settings, schema);
+            Generator.GenerateSchema(settings, schema);
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace Xbim.CodeGeneration.Tests
                 entity.Name = "Cobie" + entity.Name;
             }
 
-            Generator.Generate(settings, schema);
+            Generator.GenerateSchema(settings, schema);
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace Xbim.CodeGeneration.Tests
 
             //change names to be more like C#
             ProcessNames(schema, "Cis");
-            Generator.Generate(settings, schema);
+            Generator.GenerateSchema(settings, schema);
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@ namespace Xbim.CodeGeneration.Tests
 
             //change names to be more like C#
             ProcessNames(schema, "Stp");
-            Generator.Generate(settings, schema);
+            Generator.GenerateSchema(settings, schema);
         }
 
         private static void ProcessNames(SchemaModel model, string prefix)

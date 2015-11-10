@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Build.Construction;
+using Xbim.CodeGeneration.Differences;
 using Xbim.CodeGeneration.Settings;
 using Xbim.CodeGeneration.Templates;
+using Xbim.CodeGeneration.Templates.CrossAccess;
 using Xbim.CodeGeneration.Templates.Infrastructure;
 using Xbim.ExpressParser.SDAI;
 
@@ -12,7 +15,35 @@ namespace Xbim.CodeGeneration
 {
     public class Generator
     {
-        public static bool Generate(GeneratorSettings settings, SchemaModel schema)
+
+        public static bool GenerateCrossAccess(GeneratorSettings settings, SchemaModel schema, SchemaModel remoteSchema)
+        {
+            var modelPrjPath = GetDirectory(settings.OutputPath);
+            var modelProject = GetProject(modelPrjPath);
+            var targetPrjPath = GetDirectory(settings.CrossAccessProjectPath);
+            var targetProject = GetProject(targetPrjPath);
+
+            //add reference if not added already
+            ReferenceProject(targetProject, modelProject);
+            //set the right target namespace for usings
+            settings.Namespace = GetNamespace(modelProject);
+            settings.CrossAccessNamespace = GetNamespace(targetProject) + "." + settings.SchemaInterfacesNamespace;
+
+            var entityMatches = EntityDefinitionMatch.GetMatches(schema, remoteSchema).ToList();
+            
+            foreach (var match in entityMatches)
+            {
+                //todo: we HAVE to handle cases where no match was found
+                if (match.Target == null) continue;
+                var tmpl = new EntityInterfaceImplementation(settings, match, entityMatches);
+                ProcessTemplate(tmpl, modelProject);
+            }
+
+            modelProject.Save();
+            return true;
+        }
+
+        public static bool GenerateSchema(GeneratorSettings settings, SchemaModel schema)
         {
             //get output paths
             var modelPrjPath = GetDirectory(settings.OutputPath);
@@ -147,6 +178,21 @@ namespace Xbim.CodeGeneration
             template.WriteLine("// ------------------------------------------------------------------------------");
         }
 
+        private static readonly Regex CustomCodeRegex = new Regex("(//##).*?(//##)", RegexOptions.Singleline);
+
+        private static Dictionary<string, string> GetSections(string content)
+        {
+            var result = new Dictionary<string,string>();
+            var sections = CustomCodeRegex.Matches(content);
+            foreach (Match section in sections)
+            {
+                var fli = section.Value.IndexOf('\n');
+                var name = section.Value.Substring(0, fli).TrimStart('/', '#').Trim();
+                result.Add(name, section.Value);
+            }
+            return result;
+        }
+
         private static void ProcessTemplate(ICodeTemplate template, ProjectRootElement project)
         {
             var rootNamespace = GetNamespace(project);
@@ -162,10 +208,28 @@ namespace Xbim.CodeGeneration
 
             var filePath = Path.Combine(fullPath, fileName);
 
+            WriteHeader(template);
+            var code = template.TransformText();
+            //it is possible to keep in custom code if there are predefined slots for it
+            if (code.Contains("//##") && File.Exists(filePath))
+            {
+                var oldFile = File.ReadAllText(filePath);
+                var oldSections = GetSections(oldFile);
+                var newSections = GetSections(code);
+
+                foreach (var section in newSections)
+                {
+                    var name = section.Key;
+                    string value;
+                    if (oldSections.TryGetValue(name, out value))
+                        code = code.Replace(section.Value, value);
+                }
+            }
+
+            
+
             using (var file = File.CreateText(filePath))
             {
-                WriteHeader(template);
-                var code = template.TransformText();
                 file.Write(code);
                 file.Close();
             }

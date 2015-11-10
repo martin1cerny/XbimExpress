@@ -16,44 +16,77 @@ namespace Xbim.CodeGeneration.Templates
             
         }
 
+        // ReSharper disable once InconsistentNaming
+        protected string GetInterfaceCSType(ExplicitOrDerived attribute)
+        {
+            while (true)
+            {
+                var expl = attribute as ExplicitAttribute;
+                if (expl != null)
+                    return TypeHelper.GetInterfaceCSType(expl, Settings);
+                var der = attribute as DerivedAttribute;
+                if (der == null) return "";
+
+                attribute = der.Redeclaring;
+            }
+        }
+
+        public string InterfaceNamespace
+        {
+            get { return Settings.Namespace + "." + Settings.SchemaInterfacesNamespace; }
+        }
+
+        public override string Inheritance
+        {
+            get
+            {
+                var items = base.Inheritance.Trim(' ', ':').Split(new []{ ',' } , StringSplitOptions.RemoveEmptyEntries).Select(it => it.Trim()).ToList();
+                
+                //add own interface
+                items.Add("I" + Name);
+
+                //remove selects
+                var selects = Type.IsInSelects.Select(s => s.Name.ToString());
+                foreach (var @select in selects)
+                {
+                    items.Remove(@select);
+                }
+
+                //merge to a single string
+                var i = string.Join(", ", items);
+                if (string.IsNullOrWhiteSpace(i)) return "";
+                return ": " + i;
+            }
+        }
+
+        protected string InterfaceInheritance
+        {
+            get
+            {
+                var parents = new List<string>();
+                if (IsFirst)
+                    parents.Add(Settings.PersistEntityInterface);
+                else
+                    parents.AddRange(Type.Supertypes.Select(t => "I" + t.Name.ToString()));
+
+                //add any select interfaces
+                parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
+
+                //merge to a single string
+                var i = string.Join(", ", parents);
+                if (string.IsNullOrWhiteSpace(i)) return "";
+                return ": " + i;
+            } 
+        }
+
         public override IEnumerable<string> Using
         {
             //need to add namespaces for all inheritance and attributes
             get
             {
-                var result = new List<string> {"System.Collections.Generic", "System.ComponentModel", "System"};
-                if (InverseAttributes.Any(IsDoubleAggregation))
-                    result.Add("System.Linq");
-
-                var namedOccurances = new List<NamedType>();
-                var expl = IsAbstract ? ExplicitAttributes : AllExplicitAttributes;
-
-                var selects = Type.IsInSelects.ToList();
-                var supertypes = Type.Supertypes ?? new HashSet<EntityDefinition>();
-                var eAttributes = expl.Where(a => a.Domain is NamedType).Select(a => a.Domain as NamedType).ToList();
-                var eaAttributes =
-                    expl.Where(a => a.Domain is AggregationType)
-                        .Select(a => GetNamedElementType(a.Domain as AggregationType))
-                        .Where(t => t != null).ToList();
-                var iAttributes = InverseAttributes.Select(a => a.Domain).ToList();
-
-                namedOccurances.AddRange(selects);
-                namedOccurances.AddRange(supertypes);
-                namedOccurances.AddRange(eAttributes);
-                namedOccurances.AddRange(eaAttributes);
-                namedOccurances.AddRange(iAttributes);
-
-                foreach (var type in namedOccurances)
-                {
-                    var helper = new NamedTypeHelper(type, Settings);
-                    var ns = helper.FullNamespace;
-                    if (ns == Namespace) continue;
-                    if (result.Contains(ns)) continue;
-                    result.Add(ns);
-                }
-
-                if (Settings.IsInfrastructureSeparate)
-                    result.Add(Settings.InfrastructureNamespace);
+                var result = base.Using.ToList();
+                result.Add(InterfaceNamespace);
+                result.Add(Namespace);
 
                 return result;
             }

@@ -1,0 +1,215 @@
+﻿<#@ template language="C#" inherits="EntityInterfaceTemplate"#>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Xbim.ExpressParser.SDAI" #>
+
+<# foreach(var u in Using) { #>
+using <#= u #>;
+<# } #>
+
+// ReSharper disable once CheckNamespace
+namespace <#= OwnNamespace #>
+{
+	public partial class @<#= Name #> : <#= Interface #>
+	{
+<#	foreach(var attribute in ExplicitAttributesToImplement){ #>
+		<#= GetInterfaceCSTypeFull(attribute) #> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
+		{ 
+			get
+			{
+<#		var match = GetMatch(attribute); 
+		if (match == null || !match.IsTypeCompatible) { #>
+				//## Handle return of <#= attribute.Name #> for which no match was found
+				//TODO: Handle return of <#= attribute.Name #> for which no match was found
+				throw new System.NotImplementedException();
+				//##
+<#		} else if (attribute.Domain is DefinedType) { #>
+<#			if (match.SourceAttribute.OptionalFlag) { #>
+				if (!<#= match.SourceAttribute.Name #>.HasValue) return null;
+				return new <#= GetInterfaceCSTypeFull(attribute).Trim('?') #>(<#= match.SourceAttribute.Name #>.Value);
+<#			} else { #>
+				return new <#= GetInterfaceCSTypeFull(attribute).Trim('?') #>(<#= match.SourceAttribute.Name #>);
+<#			} #>
+<#		} else if (attribute.Domain is EntityDefinition) { #>
+				return <#= match.SourceAttribute.Name #><# if(!IsDirectTypeMatch(match)) {#> as <#= GetInterfaceCSTypeFull(attribute) #><# } #>;
+<#		} else if (attribute.Domain is SelectType && !(match.SourceAttribute.Domain is SelectType)) { #>
+<#			if (match.SourceAttribute.Domain is EntityDefinition) { #>
+				return <#= match.SourceAttribute.Name #>;
+<#			} else if(match.SourceAttribute.Domain is DefinedType) {
+				var dt = match.SourceAttribute.Domain as DefinedType;
+				var targetDt = GetMappedDefinedType(dt); #>
+<#				if(match.SourceAttribute.OptionalFlag) { #> 
+				if(!<#= match.SourceAttribute.Name #>.HasValue) return null;
+				return new <#= GetInterfaceCSTypeFull(targetDt) #>(<#= match.SourceAttribute.Name #>.Value);
+<#				} else { #>
+				return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
+<#				} #>
+<#			} #>
+<#		} else if (attribute.Domain is SelectType) { #>
+				if (<#= match.SourceAttribute.Name #> == null) return null;
+<# 			foreach(var st in GetAllSpecific((SelectType)match.SourceAttribute.Domain)) {
+				var ed = st as EntityDefinition;
+				if(ed != null) {#>
+				var <#= st.Name.ToString().ToLower() #> = <#= match.SourceAttribute.Name #> as <#= GetCSTypeFull(st) #>;
+				if (<#= st.Name.ToString().ToLower() #> != null) 
+<#					if (IsInSelect(ed, match.TargetAttribute.Domain as SelectType)) {#>
+					return <#= st.Name.ToString().ToLower() #>;
+<#					} else { #>
+					//## Handle entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
+					//TODO: Handle entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
+					throw new System.NotImplementedException();
+					//##
+<#					} #>
+<#				} else if(st is DefinedType){ 
+					var dt = st as DefinedType;
+					var targetDt = GetMappedDefinedType(dt);#>
+				if (<#= match.SourceAttribute.Name #> is <#= GetCSTypeFull(dt) #>) 
+<#					if (targetDt != null && IsInSelect(targetDt, match.TargetAttribute.Domain as SelectType)) { #>
+					return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
+<#					} else { #>
+					//## Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
+					//TODO: Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
+					throw new System.NotImplementedException();
+					//##
+<#					}#>
+<#				} else { 
+					throw new Exception("Unexpected type (enum?)");
+				} #>
+<#			} #>
+				return null;
+<#		} else if (attribute.Domain is SimpleType) { #>
+<#			if (match.SourceAttribute.OptionalFlag) { #>
+				if (<#= match.SourceAttribute.Name #> == null) return null;
+<#			} #>
+				return <#= match.SourceAttribute.Name #>;
+<#		} else if (attribute.Domain is EnumerationType) { 
+			var enu = match.SourceAttribute.Domain as EnumerationType;
+			var tEnum = GetMappedEnumerationType(enu);
+			if (tEnum == null) {#>
+				//## Handle enumeration <#= enu.Name #> translation in property <#= attribute.Name #>
+				//TODO: Handle enumeration <#= enu.Name #> translation in property <#= attribute.Name #>
+				throw new System.NotImplementedException();
+				//##
+<#			} else {#>
+				switch (<#= match.SourceAttribute.Name #>)
+				{
+<#				foreach(var e in enu.Elements) {
+					var translated = GetEnumEquivalent(e, tEnum);#>
+					case <#= GetCSTypeFull(enu) #>.<#= e #>:
+<#					if (string.IsNullOrWhiteSpace(translated)){#>
+						//## Handle translation of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
+						//TODO: Handle translation of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
+						throw new System.NotImplementedException();
+						//##
+					<# } else { #>
+						return <#= GetInterfaceCSTypeFull(tEnum) #>.<#= e #>;
+<#					} #>					
+<#				} #>					
+					default:
+						throw new System.ArgumentOutOfRangeException();
+				}
+<#			}
+        } else if(attribute.Domain is AggregationType) {
+			var targetType =  (attribute.Domain as AggregationType).ElementType; 
+			var sourceType = (match.SourceAttribute.Domain as AggregationType).ElementType; #>
+				foreach (var member in <#= match.SourceAttribute.Name #>)
+				{
+<#			if (targetType is DefinedType) { #>
+					yield return new <#= GetInterfaceCSTypeFull(targetType as NamedType) #>((<#= GetBaseSystemType(sourceType as DefinedType) #>)member);
+<#			} else if (targetType is SimpleType) { #>
+					yield return member;
+<#			} else if (targetType is EntityDefinition) { #>
+					yield return member as <#= GetInterfaceCSTypeFull(targetType as NamedType) #>;
+<#			} else if (targetType is SelectType && !(sourceType is SelectType)) { #>
+<#				if (sourceType is EntityDefinition) { #>
+					yield return member;
+<#				} else if(sourceType is DefinedType) {
+					var dt = sourceType as DefinedType;
+					var targetDt = GetMappedDefinedType(dt); #>
+					yield return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)member);
+<#				} #>
+<#			} else if (targetType is SelectType) { #>
+<# 				foreach(var st in GetAllSpecific((SelectType)sourceType)) {
+					var ed = st as EntityDefinition;
+					if(ed != null) {#>
+					var <#= st.Name.ToString().ToLower() #> = member as <#= GetCSTypeFull(st) #>;
+					if (<#= st.Name.ToString().ToLower() #> != null) 
+<#						if (IsInSelect(ed, targetType as SelectType)) {#>
+						yield return <#= st.Name.ToString().ToLower() #>;
+<#						} else { #>
+						//## Handle entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(targetType as NamedType) #> in property <#= attribute.Name #>
+						//TODO: Handle entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(targetType as NamedType) #> in property <#= attribute.Name #>
+						throw new System.NotImplementedException();
+						//##
+<#						} #>
+<#					} else if (st is DefinedType) { 
+						var dt = st as DefinedType;
+						var targetDt = GetMappedDefinedType(dt);#>
+					if (member is <#= GetCSTypeFull(dt) #>) 
+<#						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType)) { #>
+						yield return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)member);
+<#						} else { #>
+						//## Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
+						//TODO: Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
+						throw new System.NotImplementedException();
+						//##
+<#						}#>
+<#					} else if (st is EnumerationType) { 
+						Console.WriteLine("Enumeration found as a select member. This is legal in EXPRESS schema but not supported in our implementation");
+					} else { 
+						throw new Exception("Unexpected type (enum?)");
+					} #>
+<#				} #>
+<#			} #>
+				}
+<#		} else { 
+			throw new Exception("Unexpected attribute type");
+		} #>
+			} 
+		}
+<#	} #>
+<# foreach(var attribute in InverseAttributesToImplement){  
+	var inverseType = "I" + attribute.Domain.Name; #>
+<# if (IsEnumeration(attribute)) { #>
+		IEnumerable<<#=inverseType #>> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
+<# } else { #>
+		<#=inverseType #> <#= Interface #>.<#= attribute.Name #> 
+<# } #>
+		{ 
+			get
+			{
+<# if (IsDoubleAggregation(attribute)) {#>
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Any( i => i.Contains(this)));
+<# } else if (IsAggregation(attribute)){#>
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this));
+<# } else {#>
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => (e.<#= attribute.InvertedAttr.Name #> as <#= Name #>) == this);
+<# } #>
+			} 
+		}
+<# } #>
+<#		foreach(var attribute in DerivedAttributesToImplement){ #>
+		<#= GetInterfaceCSTypeFull(attribute) #> <#= GetDerivedAttributePlacement(attribute) #>.<#= attribute.Name #> 
+		{
+			get 
+			{
+<#			if (IsDirectDerived(attribute)) { #>
+				return <#= attribute.Name #>;
+<#			} else if (attribute.Domain is DefinedType) { #>
+				return new <#= GetInterfaceCSTypeFull(attribute) #>(<#= attribute.Name #>);
+<#			} else { #>
+				//## Getter for <#= attribute.Name #> in an interface
+				//TODO: Implement getter for derived attribute <#= attribute.Name #> in an interface
+				throw new System.NotImplementedException();
+				//##
+<#			} #>
+			}
+		}
+
+<#		} #>
+	//## Custom code
+	//##
+	}
+}

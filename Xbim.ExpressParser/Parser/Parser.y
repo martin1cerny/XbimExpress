@@ -318,11 +318,11 @@ derive_rules
 	;
 
 derive_rule
-	: IDENTIFIER ':' identifier_or_type ASSIGNMENT error ';'												{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
-	| IDENTIFIER ':' error ';'																				{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
-	| IDENTIFIER ':' enumerable  OF identifier_or_type ASSIGNMENT error ';'									{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
-	| IDENTIFIER ':' enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'					{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
-	| IDENTIFIER ':' enumerable  OF enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'	{ $$.val = CreateDerivedAttribute($1.strVal); yyerrok(); }
+	: IDENTIFIER ':' identifier_or_type ASSIGNMENT error ';'												{ $$.val = CreateDerivedAttribute($1.strVal, new AggregationType[]{}, $3); yyerrok(); }
+	| IDENTIFIER ':' error ';'																				{ $$.val = CreateDerivedAttribute($1.strVal, new AggregationType[]{}, null); yyerrok(); }
+	| IDENTIFIER ':' enumerable  OF identifier_or_type ASSIGNMENT error ';'									{ $$.val = CreateDerivedAttribute($1.strVal, new AggregationType[]{$3.val as AggregationType}, $5); yyerrok(); }
+	| IDENTIFIER ':' enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'					{ $$.val = CreateDerivedAttribute($1.strVal, new AggregationType[]{$3.val as AggregationType, $5.val as AggregationType}, $7); yyerrok(); }
+	| IDENTIFIER ':' enumerable  OF enumerable  OF enumerable  OF identifier_or_type ASSIGNMENT error ';'	{ $$.val = CreateDerivedAttribute($1.strVal, new AggregationType[]{$3.val as AggregationType, $5.val as AggregationType, $7.val as AggregationType}, $9); yyerrok(); }
 	| accessor ':' identifier_or_type ASSIGNMENT accessor ';'												{ $$.val = CreateDerivedAttribute($1.val as List<string>, new [] { $5.val as List<string> } ); yyerrok(); }
 	| accessor ':' identifier_or_type ASSIGNMENT NVL '(' accessorList ')' ';'								{ $$.val = CreateDerivedAttribute($1.val as List<string>, $7.val as List<List<string>>); yyerrok(); }
 	| accessor ':' identifier_or_type ASSIGNMENT IDENTIFIER '(' accessor ')' ';'							{ $$.val = CreateDerivedAttribute($1.val as List<string>, new [] { $7.val as List<string> }, $5.strVal); yyerrok(); }

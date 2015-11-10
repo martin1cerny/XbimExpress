@@ -58,6 +58,41 @@ namespace Xbim.ExpressParser.SDAI
 
         #region Extended inverse attributes
 
+        public IEnumerable<EntityDefinition> SubTypes
+        {
+            get
+            {
+                return SchemaModel.Get<EntityDefinition>(e => e.Supertypes != null && e.Supertypes.Contains(this));
+            }
+        }
+
+        public IEnumerable<EntityDefinition> AllSubTypes
+        {
+            get
+            {
+                foreach (var subType in SubTypes)
+                {
+                    yield return subType;
+                    foreach (var type in subType.AllSubTypes)
+                    {
+                        yield return type;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<SelectType> IsInAllSelects
+        {
+            get
+            {
+                var result = new List<SelectType>();
+                result.AddRange(IsInSelects);
+                foreach (var supertype in AllSupertypes)
+                    result.AddRange(supertype.IsInSelects);
+                return result.Distinct();
+            }
+        }
+
         public IEnumerable<Attribute> AllAttributes
         {
             get
@@ -102,6 +137,11 @@ namespace Xbim.ExpressParser.SDAI
         public IEnumerable<InverseAttribute> InverseAttributes
         {
             get { return SchemaModel.Get<InverseAttribute>(e => e.ParentEntity == this); }
+        }
+
+        public IEnumerable<DerivedAttribute> OverridingAttributes
+        {
+            get { return SchemaModel.Get<DerivedAttribute>(e => e.ParentEntity == this && e.Redeclaring != null); }
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using System.Linq;
 using Xbim.CodeGeneration.Helpers;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
+using Xbim.IfcDomains;
 using Attribute = Xbim.ExpressParser.SDAI.Attribute;
 
 namespace Xbim.CodeGeneration.Templates
@@ -39,7 +40,7 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        public string Namespace
+        public virtual string Namespace
         {
             get
             {
@@ -49,7 +50,7 @@ namespace Xbim.CodeGeneration.Templates
 
         public bool IsAbstract { get { return !Type.Instantiable; } }
 
-        public string Name { get { return Type.Name; } }
+        public virtual string Name { get { return Type.Name; } }
 
         public virtual string Inheritance
         {
@@ -63,10 +64,7 @@ namespace Xbim.CodeGeneration.Templates
                     parents.Add("INotifyPropertyChanged");
                 }
                 else
-                    parents.AddRange(Type.Supertypes.Select(t => 
-                        Settings.GenerateAllAsInterfaces ? 
-                        "I" + t.Name.ToString() : 
-                        t.Name.ToString()));
+                    parents.AddRange(Type.Supertypes.Select(t => t.Name.ToString()));
 
                 //add any interfaces
                 parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
@@ -98,10 +96,52 @@ namespace Xbim.CodeGeneration.Templates
                 if (expl != null)
                     return TypeHelper.GetCSType(expl, Settings);
                 var der = attribute as DerivedAttribute;
-                if (der == null) return "";
-
-                attribute = der.Redeclaring;
+                if (der != null && der.Redeclaring == null)
+                {
+                    var result = TypeHelper.GetCSType(der.Domain, Settings, true);
+                    result = TweekDerivedType(der, result);
+                    return result;
+                }
+                if(der != null)
+                    attribute = der.Redeclaring;
             }
+        }
+
+        protected readonly Dictionary<string, string> SpecialDerivesDictionary = new Dictionary<string, string>
+        {
+            {"IIfcDirection", "Common.Geometry.XbimVector3D"},
+            {"IfcDirection", "Common.Geometry.XbimVector3D"},
+            {"IIfcVector", "Common.Geometry.XbimVector3D"},
+            {"IfcVector", "Common.Geometry.XbimVector3D"},
+            {"IIfcCartesianPoint", "Common.Geometry.XbimPoint3D"},
+            {"IfcCartesianPoint", "Common.Geometry.XbimPoint3D"},
+            {"IIfcLine", "Common.Geometry.XbimLine"},
+            {"IfcLine", "Common.Geometry.XbimLine"},
+            {"IIfcDimensionalExponents", "Common.Geometry.XbimDimensionalExponents"},
+            {"IfcDimensionalExponents", "Common.Geometry.XbimDimensionalExponents"},
+        }; 
+
+        protected virtual string TweekDerivedType(DerivedAttribute attribute, string type)
+        {
+            var domain = attribute.Domain;
+            var aggr = domain as AggregationType;
+            if (aggr != null)
+            {
+                //drill down
+                while (aggr != null)
+                {
+                    domain = aggr.ElementType;
+                    aggr = domain as AggregationType;
+                }
+            }
+            if (!(domain is EntityDefinition))
+                return type;
+
+            foreach (var kvp in SpecialDerivesDictionary)
+            {
+                type = type.Replace(kvp.Key, kvp.Value);
+            }
+            return type;
         }
 
         protected bool IsOverridenAttribute(ExplicitAttribute attribute)
@@ -109,10 +149,42 @@ namespace Xbim.CodeGeneration.Templates
             return Type.SchemaModel.Get<DerivedAttribute>(d => d.Redeclaring == attribute).Any();
         }
 
+        protected string GetDerivedKeyword(DerivedAttribute attribute)
+        {
+            var overrides = Type.AllSupertypes.Any(s => s.DerivedAttributes.Any(d => d.Name == attribute.Name));
+            if (overrides) return "override ";
+
+            var virt = Type.AllSubTypes.Any(s => s.DerivedAttributes.Any(d => d.Name == attribute.Name));
+            if (virt) return "virtual ";
+
+            return "";
+        }
+
+        protected bool IsIgnored(DerivedAttribute attribute)
+        {
+            var type = attribute.ParentEntity;
+            if (Settings.IgnoreDerivedAttributes == null || !Settings.IgnoreDerivedAttributes.Any())
+                return false;
+
+            if (type.IsInAllSelects.Any(s => Settings.IgnoreDerivedAttributes.Any(i => 
+                string.Compare(i.EntityName, s.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+                string.Compare(i.Name, attribute.Name, StringComparison.InvariantCultureIgnoreCase) == 0)))
+                return true;
+
+            return type.AllSupertypes.Any(s => Settings.IgnoreDerivedAttributes.Any(i =>
+                string.Compare(i.EntityName, s.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+                string.Compare(i.Name, attribute.Name, StringComparison.InvariantCultureIgnoreCase) == 0));
+        }
+
+        protected bool IsOverwritting(DerivedAttribute attribute)
+        {
+            return attribute.ParentEntity.AllSupertypes.Any(s => s.DerivedAttributes.Any(d => d.Name == attribute.Name));
+        }
+
         protected string GetDerivedAccess(DerivedAttribute attribute)
         {
             if (attribute.AccessCandidates == null || !attribute.AccessCandidates.Any())
-                return "throw new System.NotImplementedException();";
+                return null;
 
             if (string.IsNullOrWhiteSpace(attribute.AccessFunction))
                 return "return " + string.Join(" ?? ", attribute.AccessCandidates.Select(c => string.Join(".", c))) + ";";
@@ -143,6 +215,11 @@ namespace Xbim.CodeGeneration.Templates
             get { return Type.Attributes.OfType<DerivedAttribute>().Where(da => da.Redeclaring != null); }
         }
 
+        protected IEnumerable<DerivedAttribute> DerivedAttributes
+        {
+            get { return Type.Attributes.OfType<DerivedAttribute>().Where(da => da.Redeclaring == null); }
+        }
+
         protected string GetAttributeState(Attribute attribute)
         {
             const string enu = "EntityAttributeState.";
@@ -163,7 +240,7 @@ namespace Xbim.CodeGeneration.Templates
             throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
         }
 
-        private static BaseType GetDomain(Attribute attribute)
+        protected static BaseType GetDomain(Attribute attribute)
         {
             BaseType domain = null;
             var expl = attribute as ExplicitAttribute;
@@ -179,7 +256,7 @@ namespace Xbim.CodeGeneration.Templates
             return domain;
         }
 
-        private string GetAttributeType(BaseType domain)
+        protected string GetAttributeType(BaseType domain)
         {
             const string enu = "EntityAttributeType.";
             var list = domain as ListType;
@@ -380,13 +457,17 @@ namespace Xbim.CodeGeneration.Templates
                 result.Add("System");
                 result.Add("System.Collections.Generic");
 
-                if(InverseAttributes.Any(IsDoubleAggregation))
-                    result.Add("System.Linq");
+                result.Add("System.Linq");
 
                 if (IsFirst)
                 {
                     //for INotifyPropertyChanged
                     result.Add("System.ComponentModel");
+                    if(Settings.IsInfrastructureSeparate)
+                        result.Add(Settings.InfrastructureNamespace + ".Metadata");
+                    else
+                        result.Add(Settings.Namespace + ".Metadata");
+
                 }
 
                 if (Settings.IsInfrastructureSeparate)
@@ -403,7 +484,37 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        private string PersistInterface { get { return Settings.PersistInterface; } }
+        protected string GetFullNamespace(BaseType type, string mainNamespace, DomainStructure structure)
+        {
+            while (true)
+            {
+                if (structure == null)
+                    return mainNamespace;
+
+                if (type is SimpleType)
+                    return "System";
+                
+                var namedType = type as NamedType;
+                if (namedType != null)
+                {
+                    var domain = structure.GetDomainForType(namedType.Name);
+                    return domain != null ?
+                        string.Format("{0}.{1}", mainNamespace, domain.Name) :
+                        mainNamespace;
+
+                }
+                var aggr = type as AggregationType;
+                if (aggr != null)
+                {
+                    type = aggr.ElementType;
+                    continue;
+                }
+                throw new Exception("Unexpected type");
+            }
+            
+        }
+
+        protected string PersistInterface { get { return Settings.PersistInterface; } }
 
         protected NamedType GetNamedElementType(AggregationType aggregation)
         {
@@ -433,89 +544,117 @@ namespace Xbim.CodeGeneration.Templates
             return aggr.ElementType is EntityDefinition || aggr.ElementType is SelectType;
         }
 
-        private static bool IsStringType(BaseType type)
+        protected static bool IsStringType(BaseType type)
         {
-            if (type is StringType) return true;
-            var defType = type as DefinedType;
-            if(defType == null) return false;
+            while (true)
+            {
+                if (type is StringType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsStringType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsIntType(BaseType type)
+        protected static bool IsIntType(BaseType type)
         {
-            if (type is IntegerType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is IntegerType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsIntType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsBoolType(BaseType type)
+        protected static bool IsBoolType(BaseType type)
         {
-            if (type is BooleanType || type is LogicalType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is BooleanType || type is LogicalType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsBoolType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsRealType(BaseType type)
+        protected static bool IsRealType(BaseType type)
         {
-            if (type is RealType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is RealType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsRealType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsNumberType(BaseType type)
+        protected static bool IsNumberType(BaseType type)
         {
-            if (type is NumberType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is NumberType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsNumberType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
-        private static bool IsBinaryType(BaseType type)
+        protected static bool IsBinaryType(BaseType type)
         {
-            if (type is BinaryType) return true;
-            var defType = type as DefinedType;
-            if (defType == null) return false;
+            while (true)
+            {
+                if (type is BinaryType) return true;
+                var defType = type as DefinedType;
+                if (defType == null) return false;
 
-            return IsBinaryType(defType.Domain as BaseType);
+                type = defType.Domain as BaseType;
+            }
         }
 
         public static string GetPropertyValueMember(BaseType domain)
         {
-            if (domain is EntityDefinition) return "EntityVal";
+            while (true)
+            {
+                if (domain is EntityDefinition) return "EntityVal";
 
-            var aggr = domain as AggregationType;
-            if (aggr != null) return GetPropertyValueMember(aggr.ElementType);
+                var aggr = domain as AggregationType;
+                if (aggr != null)
+                {
+                    domain = aggr.ElementType;
+                    continue;
+                }
 
-            var def = domain as DefinedType;
-            if (def != null && def.Domain is AggregationType)
-                return GetPropertyValueMember((BaseType) def.Domain);
+                var def = domain as DefinedType;
+                if (def != null && def.Domain is AggregationType)
+                {
+                    domain = (BaseType) def.Domain;
+                    continue;
+                }
 
-            if (IsStringType(domain)) return "StringVal";
-            if (IsIntType(domain)) return "IntegerVal";
-            if (IsBoolType(domain)) return "BooleanVal";
-            if (IsRealType(domain)) return "RealVal";
-            if (IsNumberType(domain)) return "NumberVal";
-            if (IsBinaryType(domain)) return "HexadecimalVal";
+                if (IsStringType(domain)) return "StringVal";
+                if (IsIntType(domain)) return "IntegerVal";
+                if (IsBoolType(domain)) return "BooleanVal";
+                if (IsRealType(domain)) return "RealVal";
+                if (IsNumberType(domain)) return "NumberVal";
+                if (IsBinaryType(domain)) return "HexadecimalVal";
 
-            throw new Exception("Unexpected type");
+                throw new Exception("Unexpected type");
+            }
         }
 
-        private bool IsComplexDefinedType(ExplicitAttribute attribute)
+        protected bool IsComplexDefinedType(ExplicitAttribute attribute)
         {
             var def = attribute.Domain as DefinedType;
             if (def == null) return false;
             return def.Domain is AggregationType;
         }
 
-        private bool IsSimpleOrDefinedTypeAggregation(ExplicitAttribute attribute)
+        protected bool IsSimpleOrDefinedTypeAggregation(ExplicitAttribute attribute)
         {
             var aggr = attribute.Domain as AggregationType;
             if (aggr == null) return false;
@@ -544,7 +683,7 @@ namespace Xbim.CodeGeneration.Templates
             return level;
         }
 
-        private bool IsSimpleOrDefinedType(ExplicitAttribute attribute)
+        protected bool IsSimpleOrDefinedType(ExplicitAttribute attribute)
         { 
             var domain = attribute.Domain;
             return domain is SimpleType || domain is DefinedType;
@@ -610,6 +749,7 @@ namespace Xbim.CodeGeneration.Templates
             }
             throw new Exception("Aggregation type expected");
         }
+
 
         public List<WhereRule> WhereRules { get; set; }
     }

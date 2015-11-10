@@ -2140,7 +2140,8 @@ TYPE IfcSectionTypeEnum = ENUMERATION OF
 END_TYPE;
 
 TYPE IfcSensorTypeEnum = ENUMERATION OF
-	(CONDUCTANCESENSOR
+	(CO2SENSOR
+	,CONDUCTANCESENSOR
 	,CONTACTSENSOR
 	,FIRESENSOR
 	,FLOWSENSOR
@@ -7345,6 +7346,8 @@ ENTITY IfcPoint
 	,IfcPointOnCurve
 	,IfcPointOnSurface))
  SUBTYPE OF (IfcGeometricRepresentationItem);
+ DERIVE
+	Dim : IfcDimensionCount := IfcPointDimension(self);
 END_ENTITY;
 
 ENTITY IfcPointOnCurve
