@@ -21,15 +21,17 @@ namespace <#= InterfaceNamespace #>
 <#	foreach(var attribute in ExplicitAttributes){ #>
 		<#= GetInterfaceCSType(attribute) #> @<#= attribute.Name #> { get; }
 <#	} #>
-<# foreach(var attribute in InverseAttributes){  
-	var inverseType = "I" + attribute.Domain.Name; #>
-<# if (IsEnumeration(attribute)) { #>
+<#	foreach(var attribute in InverseAttributes){  
+		var inverseType = "I" + attribute.Domain.Name; #>
+<#		if (IsEnumeration(attribute)) { #>
 		IEnumerable<<#=inverseType #>> @<#= attribute.Name #> {  get; }
-<# } else { #>
+<#		} else { #>
 		<#=inverseType #> @<#= attribute.Name #> {  get; }
-<# } #>
-<# } #>
-		
+<#		} #>
+<#	} #>
+<#	foreach(var attribute in DerivedAttributes.Where(a => !IsOverwritting(a) && !IsIgnored(a))){ #>
+		<#= GetCSType(attribute) #> @<#= attribute.Name #>  { get ; }
+<#		} #>	
 	}
 }
 
@@ -159,13 +161,20 @@ namespace <#= Namespace #>
 
 <# if (OverridingAttributes.Any()) { #>
 		#region Overriding attributes
-<#		foreach(var attribute in OverridingAttributes){ #>
+<#		foreach(var attribute in OverridingAttributes){ 
+			var accessor = GetDerivedAccess(attribute); #>
 		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
 		public override <#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{
 			get 
 			{
-				<#= GetDerivedAccess(attribute) #>
+<#			if (accessor != null) { #>
+				<#= accessor #>
+<#			} else { #>
+				//## Overriding derived attribute <#= attribute.Name #> getter
+				//TODO: Implement overriding derived attribute <#= attribute.Name #> getter
+				//##
+<#			}  #>
 			}
 			set 
 			{ 

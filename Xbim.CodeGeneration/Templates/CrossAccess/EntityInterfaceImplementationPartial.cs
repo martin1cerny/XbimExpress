@@ -155,6 +155,30 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             }
         }
 
+        protected IEnumerable<DerivedAttribute> DerivedAttributesToImplement
+        {
+            get
+            {
+                foreach (var attribute in RemoteType.DerivedAttributes.Where(a => a.Redeclaring == null && !IsOverwritting(a)))
+                {
+                    yield return attribute;
+                }
+                //if supertype is not implemented in the inheritance chain it must be implemented down in hierarchy
+                if (RemoteType.Supertypes != null && RemoteType.Supertypes.Any())
+                    foreach (var supertype in RemoteType.AllSupertypes)
+                    {
+                        if (_matches.Where(m => m.Target == supertype).Any(m => Type.AllSupertypes.Any(s => s == m.Source)))
+                            continue;
+                        foreach (var attribute in supertype.DerivedAttributes.Where(a => a.Redeclaring == null && !IsOverwritting(a)))
+                        {
+                            yield return attribute;
+                        }
+                        _implementsSupertype = true;
+                    }
+            }
+        }
+
+
         protected IEnumerable<InverseAttribute> InverseAttributesToImplement
         {
             get
@@ -189,6 +213,47 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             get { return string.Format("{0}.{1}.{2}", Settings.Namespace, Settings.SchemaInterfacesNamespace, RemoteType.ParentSchema.Name); }
         }
 
+        protected string GetDerivedAttributePlacement(DerivedAttribute attribute)
+        {
+            var type = attribute.ParentEntity;
+            if (Settings.IgnoreDerivedAttributes == null || !Settings.IgnoreDerivedAttributes.Any())
+                return string.Format("I{0}", attribute.ParentEntity.Name);
+
+            var select = type.IsInAllSelects.FirstOrDefault(s => Settings.IgnoreDerivedAttributes.Any(i =>
+                string.Compare(i.EntityName, s.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+                string.Compare(i.Name, attribute.Name, StringComparison.InvariantCultureIgnoreCase) == 0));
+            if (select != null)
+            {
+                var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");
+                var ns = GetFullNamespace(select, baseNamespace, Settings.CrossAccessStructure);
+                ns = TrimNamespace(ns);
+                return string.Format("{0}.{1}", ns, select.Name);
+            }
+
+            var entity = type.AllSupertypes.FirstOrDefault(s => Settings.IgnoreDerivedAttributes.Any(i =>
+                string.Compare(i.EntityName, s.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+                string.Compare(i.Name, attribute.Name, StringComparison.InvariantCultureIgnoreCase) == 0));
+            if(entity != null)
+                return string.Format("I{0}", entity.Name);
+
+            return string.Format("I{0}", attribute.ParentEntity.Name);
+        }
+
+        protected bool IsDirectDerived(DerivedAttribute attribute)
+        {
+            var domain = attribute.Domain;
+            var aggr = domain as AggregationType;
+            while (aggr != null)
+            {
+                domain = aggr.ElementType;
+                aggr = domain as AggregationType;
+            }
+            if (domain is SimpleType) return true;
+            var named = domain as EntityDefinition;
+            if (named == null) return false;
+            return SpecialDerivesDictionary.Keys.Any(s => string.Compare(s, named.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
+        }
+
         private string TrimNamespace(string fullName)
         {
             var own = OwnNamespace.Split('.');
@@ -209,6 +274,14 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
         {
             var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");
             var fullName = TypeHelper.GetInterfaceCSType(attribute, Settings, GetFullNamespace(attribute.Domain, baseNamespace, Settings.CrossAccessStructure));
+            return TrimNamespace(fullName);
+        }
+
+        protected string GetInterfaceCSTypeFull(DerivedAttribute attribute)
+        {
+            var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");
+            var fullName = TypeHelper.GetCSType(attribute.Domain, Settings,true, true, GetFullNamespace(attribute.Domain, baseNamespace, Settings.CrossAccessStructure));
+            fullName = TweekDerivedType(attribute, fullName);
             return TrimNamespace(fullName);
         }
 

@@ -107,6 +107,20 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        protected readonly Dictionary<string, string> SpecialDerivesDictionary = new Dictionary<string, string>
+        {
+            {"IIfcDirection", "Common.Geometry.XbimVector3D"},
+            {"IfcDirection", "Common.Geometry.XbimVector3D"},
+            {"IIfcVector", "Common.Geometry.XbimVector3D"},
+            {"IfcVector", "Common.Geometry.XbimVector3D"},
+            {"IIfcCartesianPoint", "Common.Geometry.XbimPoint3D"},
+            {"IfcCartesianPoint", "Common.Geometry.XbimPoint3D"},
+            {"IIfcLine", "Common.Geometry.XbimLine"},
+            {"IfcLine", "Common.Geometry.XbimLine"},
+            {"IIfcDimensionalExponents", "Common.Geometry.XbimDimensionalExponents"},
+            {"IfcDimensionalExponents", "Common.Geometry.XbimDimensionalExponents"},
+        }; 
+
         protected virtual string TweekDerivedType(DerivedAttribute attribute, string type)
         {
             var domain = attribute.Domain;
@@ -123,12 +137,10 @@ namespace Xbim.CodeGeneration.Templates
             if (!(domain is EntityDefinition))
                 return type;
 
-            type = type.Replace("IfcDirection", "Common.Geometry.XbimVector3D");
-            type = type.Replace("IfcVector", "Common.Geometry.XbimVector3D");
-            type = type.Replace("IfcCartesianPoint", "Common.Geometry.XbimPoint3D");
-            type = type.Replace("IfcLine", "GeometryResource.XbimLine");
-            type = type.Replace("IfcDimensionalExponents", "MeasureResource.XbimDimensionalExponents");
-
+            foreach (var kvp in SpecialDerivesDictionary)
+            {
+                type = type.Replace(kvp.Key, kvp.Value);
+            }
             return type;
         }
 
@@ -148,10 +160,31 @@ namespace Xbim.CodeGeneration.Templates
             return "";
         }
 
+        protected bool IsIgnored(DerivedAttribute attribute)
+        {
+            var type = attribute.ParentEntity;
+            if (Settings.IgnoreDerivedAttributes == null || !Settings.IgnoreDerivedAttributes.Any())
+                return false;
+
+            if (type.IsInAllSelects.Any(s => Settings.IgnoreDerivedAttributes.Any(i => 
+                string.Compare(i.EntityName, s.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+                string.Compare(i.Name, attribute.Name, StringComparison.InvariantCultureIgnoreCase) == 0)))
+                return true;
+
+            return type.AllSupertypes.Any(s => Settings.IgnoreDerivedAttributes.Any(i =>
+                string.Compare(i.EntityName, s.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+                string.Compare(i.Name, attribute.Name, StringComparison.InvariantCultureIgnoreCase) == 0));
+        }
+
+        protected bool IsOverwritting(DerivedAttribute attribute)
+        {
+            return attribute.ParentEntity.AllSupertypes.Any(s => s.DerivedAttributes.Any(d => d.Name == attribute.Name));
+        }
+
         protected string GetDerivedAccess(DerivedAttribute attribute)
         {
             if (attribute.AccessCandidates == null || !attribute.AccessCandidates.Any())
-                return "throw new System.NotImplementedException();";
+                return null;
 
             if (string.IsNullOrWhiteSpace(attribute.AccessFunction))
                 return "return " + string.Join(" ?? ", attribute.AccessCandidates.Select(c => string.Join(".", c))) + ";";

@@ -41,13 +41,20 @@ namespace Xbim.CodeGeneration.Settings
         }
 
 
-
         internal bool IsInfrastructureSeparate {
             get
             {
                 return !string.IsNullOrWhiteSpace(InfrastructureOutputPath) && InfrastructureOutputPath != OutputPath;
             }
         }
+
+        /// <summary>
+        /// List of derived attributes to be left out. Derived attributes are kind of a mess in IFC express 
+        /// schema. They are sometimes assumed to exist on a higher level or on the level of select types which is
+        /// impossible in Express. So manual changes might need to be done. This is then to preserve redefinition
+        /// of such attributes.
+        /// </summary>
+        public List<AttributeInfo> IgnoreDerivedAttributes { get; set; }
 
         /// <summary>
         /// Project to be used in 'GenerateCrossAccess(GeneratorSettings settings, SchemaModel schema, SchemaModel remoteSchema)'
@@ -161,5 +168,12 @@ namespace Xbim.CodeGeneration.Settings
 
         public Func<EntityDefinition, bool> IsIndexedEntity { get; set; } 
 
+    }
+
+    public class AttributeInfo
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string EntityName { get; set; }
     }
 }

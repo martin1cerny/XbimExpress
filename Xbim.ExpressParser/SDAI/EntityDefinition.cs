@@ -81,6 +81,18 @@ namespace Xbim.ExpressParser.SDAI
             }
         }
 
+        public IEnumerable<SelectType> IsInAllSelects
+        {
+            get
+            {
+                var result = new List<SelectType>();
+                result.AddRange(IsInSelects);
+                foreach (var supertype in AllSupertypes)
+                    result.AddRange(supertype.IsInSelects);
+                return result.Distinct();
+            }
+        }
+
         public IEnumerable<Attribute> AllAttributes
         {
             get
