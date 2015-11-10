@@ -35,6 +35,11 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        public string InterfaceNamespace
+        {
+            get { return _settings.Namespace + "." + _settings.SchemaInterfacesNamespace; }
+        }
+
         public string Name { get { return Type.Name; } }
 
         public string Inheritance
@@ -52,6 +57,17 @@ namespace Xbim.CodeGeneration.Templates
                 if (GetFinalTypes(Type).All(s => s is DefinedType))
                     parents.Add("IExpressValueType");
 
+                var i = string.Join(", ", parents);
+                if (string.IsNullOrWhiteSpace(i)) return "";
+                return ": " + i;
+            }
+        }
+
+        private string InterfaceInheritance
+        {
+            get
+            {
+                var parents = Type.IsInSelects.Select(s => "I" + s.Name).ToList();
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i)) return "";
                 return ": " + i;
@@ -95,6 +111,7 @@ namespace Xbim.CodeGeneration.Templates
                 }
 
                 result.Add(_settings.InfrastructureNamespace);
+                result.Add(InterfaceNamespace);
 
                 return result;
             }

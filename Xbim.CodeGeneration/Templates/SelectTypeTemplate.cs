@@ -71,7 +71,37 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t\t\r\n\t}\r\n}");
+            this.Write(", I");
+            
+            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t{\r\n\t\t#region Custom code for a select\r\n\t\t//## Custom code for a select\r\n\t\t//##" +
+                    "\r\n\t\t#endregion\r\n\t}\r\n}\r\n\r\nnamespace ");
+            
+            #line 24 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(InterfaceNamespace));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n{\r\n\tpublic partial interface I");
+            
+            #line 26 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
+            
+            #line 26 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\SelectTypeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(InterfaceInheritance));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t{\r\n\t\t#region Custom code for a select interface\r\n\t\t//## Custom code for a sele" +
+                    "ct interface\r\n\t\t//##\r\n\t\t#endregion\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

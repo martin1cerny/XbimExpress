@@ -40,7 +40,7 @@ namespace XbimEssentialsGenerator
                 GenerateAllAsInterfaces = true,
                 IgnoreDerivedAttributes = GetIgnoreDerivedAttributes()
             };
-            //Generator.GenerateSchema(settings, ifc2X3);
+            Generator.GenerateSchema(settings, ifc2X3);
             Console.WriteLine(@"IFC2x3 with interfaces generated");
 
             //generate cross schema access
@@ -51,7 +51,7 @@ namespace XbimEssentialsGenerator
 
             settings.Structure = ifc4Domains;
             settings.OutputPath = "Xbim.Ifc4";
-            //Generator.GenerateSchema(settings, ifc4);
+            Generator.GenerateSchema(settings, ifc4);
             Console.WriteLine(@"IFC4 with interfaces generated");
 
 
