@@ -461,6 +461,13 @@ namespace Xbim.ExpressParser
             result.Domain = aggregationType;
             aggregationType.UniqueElements = unique;
 
+            var list = aggregationType as ListType;
+            if (list != null)
+                list.UniqueFlag = unique;
+            var array = aggregationType as ArrayType;
+            if (array != null)
+                array.UniqueFlag = unique;
+
             if (data.tokVal == Tokens.TYPE)
             {
                 aggregationType.ElementType = data.val as BaseType;
