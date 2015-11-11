@@ -36,11 +36,36 @@ namespace <#= Namespace #>
             get { return _value; }
         }
 
-        public override string ToString()
+<# if (!IsComplex ) { //Complex types can't be initialized from string representation
+#>
+		public override string ToString()
         {
-            return Value != null ? Value.ToString() : typeof(<#= UnderlyingType #>).Name;
+<# switch(SimpleType){  
+		case SimpleTypeEnum.RealType:
+		case SimpleTypeEnum.NumberType: #>
+            return _value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+<#			break; 
+		case SimpleTypeEnum.LogicalType: #>
+			if (_value == true)
+                return "true";
+            else if (_value == false)
+                return "false";
+            else
+                return "unknown";
+<#			break;
+		case SimpleTypeEnum.BinaryType: 
+		case SimpleTypeEnum.IntegerType: #>
+			return _value.ToString();
+<#			break; 
+		case SimpleTypeEnum.BooleanType: #>
+			return _value ? "true" : "false";
+<#			break;
+		case SimpleTypeEnum.StringType: #>
+			return _value ?? "";
+<#			break; #>
+<# } #>
         }
-
+<# } #>
         public <#= Name #>(<#= UnderlyingType #> val)
         {
 <# if (IsComplex){ #>
