@@ -48,6 +48,19 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        private string UnderlyingArrayTypeNamespace
+        {
+            get
+            {
+                var aggrType = Type.Domain as AggregationType;
+                if (aggrType == null) return null;
+                var namedType = aggrType.ElementType as NamedType;
+                if (namedType == null) return null;
+                var helper = new NamedTypeHelper(namedType, _settings);
+                return helper.FullNamespace;
+            }
+        }
+
         public string Name { get { return Type.Name; } }
 
         private bool IsComplex
@@ -99,6 +112,11 @@ namespace Xbim.CodeGeneration.Templates
                 {
                     result.Add("System.Collections.Generic");
                     result.Add("System.Linq");
+
+                    //get base type
+                    var aggrNs = UnderlyingArrayTypeNamespace;
+                    if(aggrNs != null)
+                        result.Add(aggrNs);
                 }
                 if (_settings.IsInfrastructureSeparate)
                 {

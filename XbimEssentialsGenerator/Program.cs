@@ -22,9 +22,9 @@ namespace XbimEssentialsGenerator
             //prepare all schemas
             var ifc2X3 = SchemaModel.LoadIfc2x3();
             var ifc2X3Domains = DomainStructure.LoadIfc2X3();
-            var ifc4Domains = DomainStructure.LoadIfc4();
+            var ifc4Domains = DomainStructure.LoadIfc4Add1();
             SetTypeNumbersForIfc2X3(ifc2X3);
-            var ifc4 = SchemaModel.LoadIfc4();
+            var ifc4 = SchemaModel.LoadIfc4Add1();
             var cobie = SchemaModel.Load(Schemas.COBieExpress);
             //Change names to prevent name clashes
             foreach (var entity in cobie.Get<EntityDefinition>())
@@ -59,7 +59,7 @@ namespace XbimEssentialsGenerator
             settings.Structure = null;
             settings.OutputPath = "Xbim.CobieExpress";
             settings.GenerateAllAsInterfaces = false;
-            //Generator.GenerateSchema(settings, cobie);
+            Generator.GenerateSchema(settings, cobie);
             Console.WriteLine(@"COBieExpress generated");
 
             watch.Stop();

@@ -19,10 +19,11 @@ for incidental consequential damages in connection with the furnishing, performa
 of the material. The information contained in this document is subject to change without notice.
 
 Issue date:
-Wednesday, March 18, 2015
+Tuesday, June 23, 2015
 
 *)
-SCHEMA IFC4_ADD1;
+
+SCHEMA IFC4;
 
 TYPE IfcStrippedOptional = BOOLEAN;
 END_TYPE;
@@ -7393,6 +7394,8 @@ ENTITY IfcPoint
     ,IfcPointOnCurve
     ,IfcPointOnSurface))
  SUBTYPE OF (IfcGeometricRepresentationItem);
+ DERIVE
+	Dim : IfcDimensionCount := IfcPointDimension(self);
 END_ENTITY;
 
 ENTITY IfcPointOnCurve
