@@ -428,7 +428,7 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var result = new List<string>();
                 var namedOccurances = new List<NamedType>();
-                var expl =  IsAbstract ? ExplicitAttributes : AllExplicitAttributes;
+                var expl =  ExplicitAttributes;
 
                 var selects = Type.IsInSelects.ToList();
                 var supertypes = Type.Supertypes ?? new HashSet<EntityDefinition>();
@@ -438,12 +438,14 @@ namespace Xbim.CodeGeneration.Templates
                         .Select(a => GetNamedElementType(a.Domain as AggregationType))
                         .Where(t => t != null).ToList();
                 var iAttributes = InverseAttributes.Select(a => a.Domain).ToList();
+                var dAttributes = Type.DerivedAttributes.Where(d => d.Domain is NamedType).Select(d => d.Domain as NamedType);
 
                 namedOccurances.AddRange(selects);
                 namedOccurances.AddRange(supertypes);
                 namedOccurances.AddRange(eAttributes);
                 namedOccurances.AddRange(eaAttributes);
                 namedOccurances.AddRange(iAttributes);
+                namedOccurances.AddRange(dAttributes);
 
                 foreach (var type in namedOccurances)
                 {
