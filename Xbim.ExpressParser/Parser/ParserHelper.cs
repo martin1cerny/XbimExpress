@@ -120,7 +120,7 @@ namespace Xbim.ExpressParser
         private void InitNamedType(NamedType nt, string name)
         {
             nt.Name = name;
-            nt.PersistanceName = name.ToUpperInvariant();
+            nt.PersistanceName = name;
             nt.TypeId = _lastId++;
         }
 

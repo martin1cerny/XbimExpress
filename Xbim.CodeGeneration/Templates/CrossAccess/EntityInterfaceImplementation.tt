@@ -148,7 +148,7 @@ namespace <#= OwnNamespace #>
 						var dt = st as DefinedType;
 						var targetDt = GetMappedDefinedType(dt);#>
 					if (member is <#= GetCSTypeFull(dt) #>) 
-<#						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType)) { #>
+<#						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType) && !(targetDt.Domain is EnumerationType)) { #>
 						yield return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)member);
 <#						} else { #>
 						//## Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
