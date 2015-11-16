@@ -33,7 +33,6 @@ namespace Xbim.CodeGeneration
             
             foreach (var match in entityMatches)
             {
-                //todo: we HAVE to handle cases where no match was found
                 if (match.Target == null) continue;
                 var tmpl = new EntityInterfaceImplementation(settings, match, entityMatches);
                 ProcessTemplate(tmpl, modelProject);
@@ -85,22 +84,11 @@ namespace Xbim.CodeGeneration
                 ProcessTemplate(tmpl, modelProject);
 
 
-            var infrastructureTemplates = new List<ICodeTemplate>
-            {
-                new PersistEntityTemplate(settings),
-                new ModelTemplate(settings),
-                new EntityCollectionTemplate(settings),
-                new TransactionTemplate(settings),
-                new EntityFactoryInterfaceTemplate(settings),
-                new InstantiableEntityTemplate(settings),
-                new AttributesTemplate(settings),
-                new ItemSetInterfaceTemplate(settings),
-                new OptionalItemSetInterfaceTemplate(settings),
-                new PersistTemplate(settings),
-                new ExpressTypeInterfaces(settings)
-            };
-            foreach (var template in infrastructureTemplates)
-                ProcessTemplate(template, infraProject);
+            //var infrastructureTemplates = new List<ICodeTemplate>
+            //{
+            //};
+            //foreach (var template in infrastructureTemplates)
+            //    ProcessTemplate(template, infraProject);
 
 
             //make sure model project references infrastructural project

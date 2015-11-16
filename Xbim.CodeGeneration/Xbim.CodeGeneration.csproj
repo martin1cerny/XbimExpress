@@ -78,96 +78,30 @@
       <DependentUpon>EnumerationTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\EnumerationTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\AttributesTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AttributesTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\AttributesTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\CSProjectTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSProjectTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\CSProjectTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\EntityCollectionTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EntityCollectionTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\EntityCollectionTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\EntityFactoryInterfaceTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EntityFactoryInterfaceTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\EntityFactoryInterfaceTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\EntityFactoryTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\EntityFactoryTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\ExpressTypeInterfacesPartial.cs" />
-    <Compile Include="Templates\Infrastructure\InstantiableEntityTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InstantiableEntityTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\InstantiableEntityTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\ItemSetTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemSetTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\Infrastructure\OptionalItemSetInterfaceTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\OptionalItemSetInterfaceTemplate.cs">
-      <DependentUpon>OptionalItemSetInterfaceTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\ItemSetInterfaceTemplate.cs">
-      <DependentUpon>ItemSetInterfaceTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\ItemSetInterfaceTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\ItemSetTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\ModelTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\ModelTemplatePartial.cs" />
     <Compile Include="Templates\Infrastructure\OptionalItemSetTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>OptionalItemSetTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\OptionalItemSetTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\PersistTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\PersistTemplate.cs">
-      <DependentUpon>PersistTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\PersistEntityTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PersistEntityTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\PersistEntityTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\ExpressTypeInterfaces.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ExpressTypeInterfaces.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\TransactionTemplate1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TransactionTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Infrastructure\TransactionTemplatePartial.cs" />
     <Compile Include="Templates\SelectTypeTemplatePartial.cs" />
     <Compile Include="Templates\DefinedTypeTemplatePartial.cs" />
     <Compile Include="Templates\SelectTypeTemplate.cs">
@@ -197,65 +131,21 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EnumerationTemplate.cs</LastGenOutput>
     </None>
-    <None Include="Templates\Infrastructure\AttributesTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>AttributesTemplate.cs</LastGenOutput>
-    </None>
     <None Include="Templates\Infrastructure\CSProjectTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>CSProjectTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Infrastructure\EntityCollectionTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityCollectionTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Infrastructure\EntityFactoryInterfaceTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityFactoryInterfaceTemplate.cs</LastGenOutput>
     </None>
     <None Include="Templates\Infrastructure\EntityFactoryTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EntityFactoryTemplate1.cs</LastGenOutput>
     </None>
-    <None Include="Templates\Infrastructure\InstantiableEntityTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>InstantiableEntityTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Infrastructure\OptionalItemSetInterfaceTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>OptionalItemSetInterfaceTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Infrastructure\ItemSetInterfaceTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ItemSetInterfaceTemplate.cs</LastGenOutput>
-    </None>
     <None Include="Templates\Infrastructure\ItemSetTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ItemSetTemplate.cs</LastGenOutput>
     </None>
-    <None Include="Templates\Infrastructure\ModelTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ModelTemplate.cs</LastGenOutput>
-    </None>
     <None Include="Templates\Infrastructure\OptionalItemSetTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>OptionalItemSetTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Infrastructure\PersistTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>PersistTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Infrastructure\PersistEntityTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>PersistEntityTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Infrastructure\ExpressTypeInterfaces.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ExpressTypeInterfaces.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Infrastructure\TransactionTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>TransactionTemplate1.cs</LastGenOutput>
     </None>
     <None Include="Templates\SelectTypeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

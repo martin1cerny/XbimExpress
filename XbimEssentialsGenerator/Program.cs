@@ -30,6 +30,9 @@ namespace XbimEssentialsGenerator
             foreach (var entity in cobie.Get<EntityDefinition>())
                 entity.Name = "Cobie" + entity.Name;
 
+            //enhancements
+            EnhanceNullStyleInIfc(ifc2X3, ifc2X3Domains);
+            EnhanceNullStyleInIfc(ifc4, ifc4Domains);
 
             var settings = new GeneratorSettings
             {
@@ -91,6 +94,32 @@ namespace XbimEssentialsGenerator
             };
         }
 
+        private static void EnhanceNullStyleInIfc(SchemaModel model, DomainStructure structure)
+        {
+            var nullStyle = model.Get<EnumerationType>(n => n.Name == "IfcNullStyle").FirstOrDefault();
+            if (nullStyle == null) return;
+            nullStyle.Name = "IfcNullStyleEnum";
+            nullStyle.PersistanceName = "IfcNullStyleEnum";
+
+            var defType = model.New<DefinedType>(nullStyle.ParentSchema, d =>
+            {
+                d.Name = "IfcNullStyle";
+                d.PersistanceName = "IfcNullStyle";
+                d.Domain = nullStyle;
+            });
+
+            var selects = model.Get<SelectType>(s => s.Selections.Contains(nullStyle));
+            foreach (var @select in selects)
+            {
+                select.Selections.Remove(nullStyle);
+                select.Selections.Add(defType);
+            }
+            
+            //adjust namespace
+            var domain = structure.GetDomainForType("IfcNullStyle");
+            domain.Types.Add("IfcNullStyleEnum");
+        }
+
         private static void SetTypeNumbersForIfc2X3(SchemaModel model)
         {
             var max = -1;
@@ -102,7 +131,7 @@ namespace XbimEssentialsGenerator
                 var s = Enum.GetName(typeof (IfcEntityNameEnum), value);
                 if (s == null) continue;
                 var name = s.ToUpperInvariant();
-                var type = types.FirstOrDefault(t => t.PersistanceName == name);
+                var type = types.FirstOrDefault(t => string.Compare(t.PersistanceName, name, StringComparison.InvariantCultureIgnoreCase) == 0);
                 if (type == null)
                 {
                     Console.WriteLine(@"Type not found: " + name);

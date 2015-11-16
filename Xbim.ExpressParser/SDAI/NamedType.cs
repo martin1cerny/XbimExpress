@@ -13,7 +13,7 @@ namespace Xbim.ExpressParser.SDAI
         /// but original persistance name from schema needs to be retained for serialization/deserialization. 
         /// This is an extension to SDAI schema.
         /// </summary>
-        public string PersistanceName { get; internal set; }
+        public string PersistanceName { get; set; }
 
         /// <summary>
         /// Id of the type is its order in EXPRESS schema file by default but it can be changed by user.

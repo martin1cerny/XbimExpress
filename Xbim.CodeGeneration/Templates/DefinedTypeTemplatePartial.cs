@@ -160,6 +160,10 @@ namespace Xbim.CodeGeneration.Templates
                     else
                         break;
                 }
+                
+                //special case when defined type contains enumeration
+                if(domain is EnumerationType) return SimpleTypeEnum.EnumerationType;
+
                 if (simple == null) throw new Exception("Unexpected type");
 
                 if (simple is BinaryType) return SimpleTypeEnum.BinaryType;
@@ -182,6 +186,7 @@ namespace Xbim.CodeGeneration.Templates
         LogicalType,
         NumberType,
         RealType,
-        StringType
+        StringType,
+        EnumerationType
     }
 }

@@ -43,7 +43,7 @@ namespace <#= Namespace #>
 <# switch(SimpleType){  
 		case SimpleTypeEnum.RealType:
 		case SimpleTypeEnum.NumberType: #>
-            return _value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            return _value.ToString("R");
 <#			break; 
 		case SimpleTypeEnum.LogicalType: #>
 			if (_value == true)
@@ -62,7 +62,10 @@ namespace <#= Namespace #>
 <#			break;
 		case SimpleTypeEnum.StringType: #>
 			return _value ?? "";
-<#			break; #>
+<#			break; 
+		case SimpleTypeEnum.EnumerationType: #>
+			return _value.ToString();
+<#			break;#>
 <# } #>
         }
 <# } #>
@@ -102,6 +105,11 @@ namespace <#= Namespace #>
                 _value = true;
             else
                 _value = false;
+<#			break;
+		case SimpleTypeEnum.EnumerationType: #>
+			var value = val.Trim('.');
+			if (!System.Enum.TryParse(value, true, out _value))
+                throw new System.ArgumentException();
 <#			break; #>
 
 <# } #>
@@ -181,7 +189,9 @@ namespace <#= Namespace #>
             _value.Add(value.<#= GetPropertyValueMember(Type.Domain) #>);
 <#		} #>
 <#	} 
-	else { #>
+	else if(SimpleType == SimpleTypeEnum.EnumerationType) { #>
+            System.Enum.TryParse(value.<#= GetPropertyValueMember(Type.Domain) #>, true, out _value);
+<#	} else { #>
             _value = value.<#= GetPropertyValueMember(Type.Domain) #>;
 <#	}#>            
 		}

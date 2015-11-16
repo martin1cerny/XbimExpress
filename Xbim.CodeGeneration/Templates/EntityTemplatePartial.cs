@@ -645,6 +645,8 @@ namespace Xbim.CodeGeneration.Templates
                 if (IsNumberType(domain)) return "NumberVal";
                 if (IsBinaryType(domain)) return "HexadecimalVal";
 
+                if (domain is EnumerationType) return "EnumVal";
+
                 throw new Exception("Unexpected type");
             }
         }

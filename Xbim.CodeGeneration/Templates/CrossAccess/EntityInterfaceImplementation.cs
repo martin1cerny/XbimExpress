@@ -992,7 +992,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             this.Write(") \r\n");
             
             #line 151 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
-						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType)) { 
+						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType) && !(targetDt.Domain is EnumerationType)) { 
             
             #line default
             #line hidden
