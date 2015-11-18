@@ -321,6 +321,10 @@ namespace Xbim.CodeGeneration.Templates
             if (domain == null)
                 throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
 
+            var inverse = attribute as InverseAttribute;
+            if (inverse != null)
+                domain = inverse.AggregationType;
+
             var aggr = domain as VariableSizeAggregationType;
             if (aggr != null)
                 return aggr.LowerBound;
@@ -337,6 +341,10 @@ namespace Xbim.CodeGeneration.Templates
             var domain = GetDomain(attribute);
             if (domain == null)
                 throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
+
+            var inverse = attribute as InverseAttribute;
+            if (inverse != null)
+                domain = inverse.AggregationType;
 
             var aggr = domain as VariableSizeAggregationType;
             if (aggr != null) 
