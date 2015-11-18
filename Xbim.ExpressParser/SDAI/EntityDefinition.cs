@@ -40,7 +40,7 @@ namespace Xbim.ExpressParser.SDAI
 
         public IEnumerable<Attribute> Attributes
         {
-            get { return SchemaModel.Get<Attribute>(e => e.ParentEntity == this); }
+            get { return SchemaModel.Get<Attribute>(e => e.ParentEntity == this).OrderBy(a => a.Line); }
         }
 
         /// <summary>

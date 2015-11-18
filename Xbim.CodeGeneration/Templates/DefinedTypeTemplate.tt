@@ -11,6 +11,7 @@ using <#= u #>;
 namespace <#= Namespace #>
 {
 	[ExpressType("<#= Type.PersistanceName #>", <#= Type.TypeId #>)]
+	[DefinedType(typeof(<#= UnderlyingType #>))]
     // ReSharper disable once PartialTypeWithSinglePart
 	public partial struct <#= Name #> <#= Inheritance #>, System.IEquatable<<#= UnderlyingType #>>
 	{ 

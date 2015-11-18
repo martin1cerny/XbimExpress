@@ -12,6 +12,5 @@ namespace Xbim.ExpressParser.SDAI
         public ExplicitAttribute Redeclaring { get; set; }
         public bool OptionalFlag { get; set; }
 
-        internal int Line { get; set; }
     }
 }

@@ -12,38 +12,34 @@ namespace <#= Namespace #>
 {
     public class <#= Name #><T>: <#= ItemSet #><T>, IOptional<#= ItemSet #><T>
     {
+        private bool _initialized;
+
         internal <#= Name #>(IPersistEntity entity) : base(entity)
         {
-            Initialized = false;
         }
 
         internal <#= Name #>(IPersistEntity entity, int capacity) : base(entity, capacity)
         {
-            Initialized = false;
         }
 
         internal <#= Name #>(IPersistEntity entity, IEnumerable<T> collection) : base(entity, collection)
         {
-            Initialized = false;
         }
 
-        public bool Initialized { get; private set; }
+        public bool Initialized 
+		{ 
+            get { return _initialized || Count > 0; }
+		}
 
         public void Initialize()
         {
-            Initialized = true;
+            _initialized = true;
         }
 
         public void Uninitialize()
         {
             Clear();
-            Initialized = false;
-        }
-
-        public override void Add(T item)
-        {
-            if (!Initialized) Initialized = true;
-            base.Add(item);
+            _initialized = false;
         }
     }
 }
