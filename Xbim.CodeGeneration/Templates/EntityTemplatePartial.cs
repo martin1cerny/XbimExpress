@@ -28,6 +28,7 @@ namespace Xbim.CodeGeneration.Templates
             AllExplicitAttributes = MakeUniqueNameList(Type.AllExplicitAttributes).ToList();
             InverseAttributes = Type.InverseAttributes.ToList();
             AllInverseAttributes = MakeUniqueNameList(Type.AllInverseAttributes).ToList();
+            AllAttributes = Type.AllAttributes.Where(a => !(a is DerivedAttribute)).ToList();
         }
 
         private IEnumerable<T> MakeUniqueNameList<T>(IEnumerable<T> rawAttributes) where T: Attribute
@@ -356,6 +357,13 @@ namespace Xbim.CodeGeneration.Templates
             return -1;
         }
 
+        protected int GetAttributeGlobalOrder(Attribute attribute)
+        {
+
+            if (attribute is DerivedAttribute) return 0;
+            return AllAttributes.IndexOf(attribute) + 1;
+        }
+
         protected bool IsPartOfInverse(ExplicitAttribute attribute)
         {
             return Type.SchemaModel.Get<InverseAttribute>(i => i.InvertedAttr == attribute).Any();
@@ -404,8 +412,10 @@ namespace Xbim.CodeGeneration.Templates
         protected List<ExplicitAttribute> AllExplicitAttributes { get; private set; }
 
         protected List<InverseAttribute> InverseAttributes { get; private set; }
-        
+
         protected List<InverseAttribute> AllInverseAttributes { get; private set; }
+
+        protected List<Attribute> AllAttributes { get; private set; }
 
         protected int GetAttributeIndex(ExplicitOrDerived attribute)
         {

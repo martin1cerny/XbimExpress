@@ -275,29 +275,29 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                     "(true);\r\n\r\n            Action doAction = () =>\r\n            {\r\n                I" +
                     "nternal.Insert(index, item);\r\n                NotifyCollectionChanged(NotifyColl" +
                     "ectionChangedAction.Add, item);\r\n                NotifyCountChanged();\r\n        " +
-                    "    };\r\n\r\n            if (!Model.IsTransactional) return;\r\n\r\n            Action " +
-                    "undoAction = () =>\r\n            {\r\n                Internal.RemoveAt(index);\r\n  " +
-                    "              NotifyCollectionChanged(NotifyCollectionChangedAction.Remove, item" +
-                    ");\r\n                NotifyCountChanged();\r\n            };\r\n            Model.Cur" +
-                    "rentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeTy" +
-                    "pe.Modified);\r\n        }\r\n\r\n        public void RemoveAt(int index)\r\n        {\r\n" +
-                    "            var toRemove = Internal[index];\r\n            Remove(toRemove);\r\n    " +
-                    "    }\r\n        #endregion\r\n\r\n        #region IList members\r\n        int IList.Ad" +
-                    "d(object value)\r\n        {\r\n            if (!(value is T)) return -1;\r\n\r\n       " +
-                    "     var v = (T) value;\r\n            Add(v);\r\n            return Internal.Count " +
-                    "- 1;\r\n        }\r\n\r\n        bool IList.Contains(object value)\r\n        {\r\n       " +
-                    "     return ((IList)Internal).Contains(value);\r\n        }\r\n\r\n        int IList.I" +
-                    "ndexOf(object value)\r\n        {\r\n            return ((IList)Internal).IndexOf(va" +
-                    "lue);\r\n        }\r\n\r\n        void IList.Insert(int index, object value)\r\n        " +
-                    "{\r\n            Insert(index, (T)value);\r\n        }\r\n\r\n        bool IList.IsFixed" +
-                    "Size\r\n        {\r\n            get { return false; }\r\n        }\r\n\r\n        bool IL" +
-                    "ist.IsReadOnly\r\n        {\r\n            get { return Model.IsTransactional && Mod" +
-                    "el.CurrentTransaction != null; }\r\n        }\r\n\r\n        void IList.Remove(object " +
-                    "value)\r\n        {\r\n            Remove((T)value);\r\n        }\r\n\r\n        object IL" +
-                    "ist.this[int index]\r\n        {\r\n            get\r\n            {\r\n                " +
-                    "return this[index];\r\n            }\r\n            set\r\n            {\r\n            " +
-                    "    this[index] = value == null ? default(T) : (T)value;\r\n            }\r\n       " +
-                    " }\r\n        #endregion\r\n    }\r\n}\r\n");
+                    "    };\r\n\t\t\tdoAction();\r\n\r\n            if (!Model.IsTransactional) return;\r\n\r\n   " +
+                    "         Action undoAction = () =>\r\n            {\r\n                Internal.Remo" +
+                    "veAt(index);\r\n                NotifyCollectionChanged(NotifyCollectionChangedAct" +
+                    "ion.Remove, item);\r\n                NotifyCountChanged();\r\n            };\r\n     " +
+                    "       Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, Owning" +
+                    "Entity, ChangeType.Modified);\r\n        }\r\n\r\n        public void RemoveAt(int ind" +
+                    "ex)\r\n        {\r\n            var toRemove = Internal[index];\r\n            Remove(" +
+                    "toRemove);\r\n        }\r\n        #endregion\r\n\r\n        #region IList members\r\n    " +
+                    "    int IList.Add(object value)\r\n        {\r\n            if (!(value is T)) retur" +
+                    "n -1;\r\n\r\n            var v = (T) value;\r\n            Add(v);\r\n            return" +
+                    " Internal.Count - 1;\r\n        }\r\n\r\n        bool IList.Contains(object value)\r\n  " +
+                    "      {\r\n            return ((IList)Internal).Contains(value);\r\n        }\r\n\r\n   " +
+                    "     int IList.IndexOf(object value)\r\n        {\r\n            return ((IList)Inte" +
+                    "rnal).IndexOf(value);\r\n        }\r\n\r\n        void IList.Insert(int index, object " +
+                    "value)\r\n        {\r\n            Insert(index, (T)value);\r\n        }\r\n\r\n        bo" +
+                    "ol IList.IsFixedSize\r\n        {\r\n            get { return false; }\r\n        }\r\n\r" +
+                    "\n        bool IList.IsReadOnly\r\n        {\r\n            get { return Model.IsTran" +
+                    "sactional && Model.CurrentTransaction != null; }\r\n        }\r\n\r\n        void ILis" +
+                    "t.Remove(object value)\r\n        {\r\n            Remove((T)value);\r\n        }\r\n\r\n " +
+                    "       object IList.this[int index]\r\n        {\r\n            get\r\n            {\r\n" +
+                    "                return this[index];\r\n            }\r\n            set\r\n           " +
+                    " {\r\n                this[index] = value == null ? default(T) : (T)value;\r\n      " +
+                    "      }\r\n        }\r\n        #endregion\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

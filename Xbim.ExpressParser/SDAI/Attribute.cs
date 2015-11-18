@@ -10,6 +10,9 @@ namespace Xbim.ExpressParser.SDAI
     {
         public ExpressId PersistentName { get; internal set; }
 
+        //this is a helper to resolve order of attributes within the entity
+        internal int Line { get; set; }
+
         public ExpressId Name
         {
             get; 

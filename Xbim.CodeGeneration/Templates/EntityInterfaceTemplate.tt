@@ -139,7 +139,7 @@ namespace <#= Namespace #>
 <# if (IsPartOfInverse(attribute)) { #>
 		[IndexedProperty]
 <# } #>
-		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
+		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>, <#= GetAttributeGlobalOrder(attribute) #>)]
 		public <#= IsOverridenAttribute(attribute) ? "virtual " : ""#><#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{ 
 			get 
@@ -163,7 +163,7 @@ namespace <#= Namespace #>
 		#region Overriding attributes
 <#		foreach(var attribute in OverridingAttributes){ 
 			var accessor = GetDerivedAccess(attribute); #>
-		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
+		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>, <#= GetAttributeGlobalOrder(attribute) #>)]
 		public override <#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{
 			get 
@@ -188,7 +188,7 @@ namespace <#= Namespace #>
 <# if (DerivedAttributes.Any()) { #>
 		#region Derived attributes
 <#		foreach(var attribute in DerivedAttributes){ #>
-		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
+		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>, <#= GetAttributeGlobalOrder(attribute) #>)]
 		public <#= GetDerivedKeyword(attribute) #><#= GetCSType(attribute) #> @<#= attribute.Name #> 
 		{
 			get 
@@ -208,7 +208,7 @@ namespace <#= Namespace #>
 		#region Inverse attributes
 <# foreach(var attribute in InverseAttributes){  
 	var inverseType = attribute.Domain.Name; #>
-		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>)]
+		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>, <#= GetAttributeGlobalOrder(attribute) #>)]
 <# if (IsEnumeration(attribute)) { #>
 		public IEnumerable<<#=inverseType #>> @<#= attribute.Name #> 
 <# } else { #>

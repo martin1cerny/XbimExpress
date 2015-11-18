@@ -411,6 +411,7 @@ namespace <#= Namespace #>
                 NotifyCollectionChanged(NotifyCollectionChangedAction.Add, item);
                 NotifyCountChanged();
             };
+			doAction();
 
             if (!Model.IsTransactional) return;
 

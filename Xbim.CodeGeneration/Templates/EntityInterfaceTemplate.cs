@@ -671,6 +671,13 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
+            this.Write(", ");
+            
+            #line 142 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeGlobalOrder(attribute)));
+            
+            #line default
+            #line hidden
             this.Write(")]\r\n\t\tpublic ");
             
             #line 143 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
@@ -819,6 +826,13 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
+            this.Write(", ");
+            
+            #line 166 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeGlobalOrder(attribute)));
+            
+            #line default
+            #line hidden
             this.Write(")]\r\n\t\tpublic override ");
             
             #line 167 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
@@ -960,6 +974,13 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
+            this.Write(", ");
+            
+            #line 191 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeGlobalOrder(attribute)));
+            
+            #line default
+            #line hidden
             this.Write(")]\r\n\t\tpublic ");
             
             #line 192 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
@@ -1062,6 +1083,13 @@ namespace Xbim.CodeGeneration.Templates
             
             #line 211 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeMaxCardinality(attribute)));
+            
+            #line default
+            #line hidden
+            this.Write(", ");
+            
+            #line 211 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetAttributeGlobalOrder(attribute)));
             
             #line default
             #line hidden

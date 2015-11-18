@@ -238,7 +238,11 @@ namespace Xbim.ExpressParser
 
         private DerivedAttribute CreateDerivedAttribute(string name, AggregationType[] aggregations, ValueType? typeInfo)
         {
-            var result = Model.New<DerivedAttribute>(_currentSchema, a => a.Name = name);
+            var result = Model.New<DerivedAttribute>(_currentSchema, a =>
+            {
+                a.Name = name;
+                a.Line = Scanner.yylloc.StartLine;
+            });
             if(typeInfo == null) 
                 throw new NotSupportedException();
 
@@ -285,6 +289,7 @@ namespace Xbim.ExpressParser
             {
                 a.Name = path.Last();
                 a.AccessFunction = function;
+                a.Line = Scanner.yylloc.StartLine;
             });
             ToDoActions.Add(() =>
             {
@@ -318,6 +323,7 @@ namespace Xbim.ExpressParser
                 a.Name = name;
                 a.PersistentName = name;
                 a.AggregationType = aggregation;
+                a.Line = Scanner.yylloc.StartLine;
             });
             ToDoActions.Add(() =>
             {

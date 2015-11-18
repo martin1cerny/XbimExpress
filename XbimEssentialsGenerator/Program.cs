@@ -61,7 +61,6 @@ namespace XbimEssentialsGenerator
             settings.IsIndexedEntity = null;
             settings.Structure = null;
             settings.OutputPath = "Xbim.CobieExpress";
-            settings.GenerateAllAsInterfaces = false;
             Generator.GenerateSchema(settings, cobie);
             Console.WriteLine(@"COBieExpress generated");
 

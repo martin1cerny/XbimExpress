@@ -77,23 +77,23 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("<T>\r\n    {\r\n        internal ");
+            this.Write("<T>\r\n    {\r\n        private bool _initialized;\r\n\r\n        internal ");
             
-            #line 15 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            #line 17 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write("(IPersistEntity entity) : base(entity)\r\n        {\r\n            Initialized = fals" +
-                    "e;\r\n        }\r\n\r\n        internal ");
+            this.Write("(IPersistEntity entity) : base(entity)\r\n        {\r\n        }\r\n\r\n        internal " +
+                    "");
             
-            #line 20 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
+            #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(IPersistEntity entity, int capacity) : base(entity, capacity)\r\n        {\r\n      " +
-                    "      Initialized = false;\r\n        }\r\n\r\n        internal ");
+                    "  }\r\n\r\n        internal ");
             
             #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
@@ -102,26 +102,22 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             #line hidden
             this.Write(@"(IPersistEntity entity, IEnumerable<T> collection) : base(entity, collection)
         {
-            Initialized = false;
         }
 
-        public bool Initialized { get; private set; }
+        public bool Initialized 
+		{ 
+            get { return _initialized || Count > 0; }
+		}
 
         public void Initialize()
         {
-            Initialized = true;
+            _initialized = true;
         }
 
         public void Uninitialize()
         {
             Clear();
-            Initialized = false;
-        }
-
-        public override void Add(T item)
-        {
-            if (!Initialized) Initialized = true;
-            base.Add(item);
+            _initialized = false;
         }
     }
 }
