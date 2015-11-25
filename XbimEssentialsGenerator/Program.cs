@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Xbim.CodeGeneration;
 using Xbim.CodeGeneration.Settings;
@@ -16,8 +17,9 @@ namespace XbimEssentialsGenerator
         {
             var watch = new Stopwatch();
             watch.Start();
-            //set working directory if specified.
-            if (args.Length > 0) Environment.CurrentDirectory = args[0];
+
+            //set working directory
+            Environment.CurrentDirectory = "c:\\CODE\\XbimGit\\XbimEssentials";
 
             //prepare all schemas
             var ifc2X3 = SchemaModel.LoadIfc2x3();
@@ -26,6 +28,7 @@ namespace XbimEssentialsGenerator
             SetTypeNumbersForIfc2X3(ifc2X3);
             var ifc4 = SchemaModel.LoadIfc4Add1();
             var cobie = SchemaModel.Load(Schemas.COBieExpress);
+
             //Change names to prevent name clashes
             foreach (var entity in cobie.Get<EntityDefinition>())
                 entity.Name = "Cobie" + entity.Name;
@@ -33,6 +36,9 @@ namespace XbimEssentialsGenerator
             //enhancements
             EnhanceNullStyleInIfc(ifc2X3, ifc2X3Domains);
             EnhanceNullStyleInIfc(ifc4, ifc4Domains);
+
+            //Move enums into Interfaces namespace in IFC4
+            MoveEnumsToInterfaces(ifc4Domains, ifc4, Environment.CurrentDirectory, "Xbim.Ifc4");
 
             var settings = new GeneratorSettings
             {
@@ -91,6 +97,40 @@ namespace XbimEssentialsGenerator
                     EntityName = "IfcBooleanOperand"
                 }
             };
+        }
+
+        private static void MoveEnumsToInterfaces(DomainStructure domains, SchemaModel model, string dir, string prj)
+        {
+            const string iName = "Interfaces";
+            var enums = model.Get<EnumerationType>();
+            var iDomain = domains.Domains.FirstOrDefault(d => d.Name == iName);
+            if (iDomain == null)
+            {
+                iDomain = new Domain{Name = iName, Types = new List<string>()};
+                domains.Domains.Add(iDomain);
+            }
+            var project = Generator.GetProject(Path.Combine(dir, prj));
+            foreach (var enumeration in enums)
+            {
+                var enumName = enumeration.PersistanceName;
+                var domain = domains.GetDomainForType(enumName);
+                if (domain != null)
+                {
+                    //remove from where it is in the documentation
+                    domain.Types.Remove(enumName);
+                    
+                    //remove old files if generated before
+                    var path = Path.Combine(dir, prj, domain.Name, enumName + ".cs");
+                    if(File.Exists(path))
+                        File.Delete(path);
+
+                    //remove from the project
+                    var compilPath = Path.Combine(domain.Name, enumName + ".cs");
+                    Generator.RemoveCompilationItem(compilPath, project);
+                }
+                //add to interfaces namespace
+                iDomain.Types.Add(enumName);
+            }
         }
 
         private static void EnhanceNullStyleInIfc(SchemaModel model, DomainStructure structure)

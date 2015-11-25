@@ -86,7 +86,7 @@ namespace <#= Namespace #>
 			}
 		}
 
-		private static List<string> _schemasIds = new List<string> { <#= string.Join(", ", SchemasIds.Select(i => "\"" + i + "\"")) #> };
+		private static readonly List<string> _schemasIds = new List<string> { <#= string.Join(", ", SchemasIds.Select(i => "\"" + i + "\"")) #> };
 		public IEnumerable<string> SchemasIds { get { return _schemasIds; } }
 
 	}
