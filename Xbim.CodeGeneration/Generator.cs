@@ -132,7 +132,7 @@ namespace Xbim.CodeGeneration
             });
         }
 
-        private static ProjectRootElement GetProject(string directoryPath)
+        public static ProjectRootElement GetProject(string directoryPath)
         {
             if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
             var suggestedName = new DirectoryInfo(directoryPath).Name;
@@ -268,7 +268,7 @@ namespace Xbim.CodeGeneration
             return projElement;
         }
 
-        private static void AddCompilationItem(string item, ProjectRootElement project)
+        public static void AddCompilationItem(string item, ProjectRootElement project)
         {
             const string itemType = "Compile";
             var includes = project.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == itemType)) ??
@@ -282,6 +282,22 @@ namespace Xbim.CodeGeneration
             })) return;
 
             includes.AddItem(itemType, item);
+        }
+
+        public static void RemoveCompilationItem(string item, ProjectRootElement project)
+        {
+            const string itemType = "Compile";
+            var includes = project.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == itemType)) ??
+                           project.AddItemGroup();
+
+            //check if it is not there already
+            var existing = includes.Children.FirstOrDefault(c =>
+            {
+                var itemElement = c as ProjectItemElement;
+                return itemElement != null && itemElement.Include == item;
+            });
+            if (existing == null) return;
+            includes.RemoveChild(existing);
         }
     }
 }

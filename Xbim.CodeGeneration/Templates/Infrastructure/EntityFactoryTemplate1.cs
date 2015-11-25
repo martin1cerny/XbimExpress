@@ -287,8 +287,8 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\treturn null;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tprivate static List<string> _sche" +
-                    "masIds = new List<string> { ");
+            this.Write("\t\t\t\tdefault:\r\n\t\t\t\t\treturn null;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tprivate static readonly List<stri" +
+                    "ng> _schemasIds = new List<string> { ");
             
             #line 89 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(", ", SchemasIds.Select(i => "\"" + i + "\""))));
