@@ -208,6 +208,7 @@ namespace <#= Namespace #>
 		#region Inverse attributes
 <# foreach(var attribute in InverseAttributes){  
 	var inverseType = attribute.Domain.Name; #>
+		[InverseProperty("<#= attribute.InvertedAttr.Name #>")]
 		[EntityAttribute(<#= GetAttributeOrder(attribute) #>, <#= GetAttributeState(attribute) #>, <#= GetAttributeType(attribute) #>, <#= GetAttributeMemberType(attribute) #>, <#= GetAttributeMinCardinality(attribute) #>, <#= GetAttributeMaxCardinality(attribute) #>, <#= GetAttributeGlobalOrder(attribute) #>)]
 <# if (IsEnumeration(attribute)) { #>
 		public IEnumerable<<#=inverseType #>> @<#= attribute.Name #> 
@@ -218,11 +219,11 @@ namespace <#= Namespace #>
 			get 
 			{
 <# if (IsDoubleAggregation(attribute)) {#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Any( i => i.Contains(this)));
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Any( i => i.Contains(this)), "<#= attribute.InvertedAttr.Name #>", this);
 <# } else if (IsAggregation(attribute)){#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this));
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this), "<#= attribute.InvertedAttr.Name #>", this);
 <# } else {#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => (e.<#= attribute.InvertedAttr.Name #> as <#= Name #>) == this);
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => (e.<#= attribute.InvertedAttr.Name #> as <#= Name #>) == this, "<#= attribute.InvertedAttr.Name #>", this);
 <# } #>
 			} 
 		}
