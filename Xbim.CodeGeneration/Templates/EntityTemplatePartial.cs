@@ -325,6 +325,15 @@ namespace Xbim.CodeGeneration.Templates
             if (inverse != null)
                 domain = inverse.AggregationType;
 
+            //drill down to the last aggregation
+            var enumType = domain as AggregationType;
+            if (enumType == null) return -1;
+            while (enumType.ElementType is AggregationType)
+            {
+                domain = enumType.ElementType;
+                enumType = (AggregationType) domain;
+            }
+
             var aggr = domain as VariableSizeAggregationType;
             if (aggr != null)
                 return aggr.LowerBound;
@@ -345,6 +354,15 @@ namespace Xbim.CodeGeneration.Templates
             var inverse = attribute as InverseAttribute;
             if (inverse != null)
                 domain = inverse.AggregationType;
+
+            //drill down to the last aggregation
+            var enumType = domain as AggregationType;
+            if (enumType == null) return -1;
+            while (enumType.ElementType is AggregationType)
+            {
+                domain = enumType.ElementType;
+                enumType = (AggregationType)domain;
+            }
 
             var aggr = domain as VariableSizeAggregationType;
             if (aggr != null) 
