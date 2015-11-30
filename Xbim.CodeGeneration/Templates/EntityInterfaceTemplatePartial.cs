@@ -88,7 +88,7 @@ namespace Xbim.CodeGeneration.Templates
                 result.Add(InterfaceNamespace);
                 result.Add(Namespace);
 
-                return result;
+                return result.Distinct();
             }
         }
     }
