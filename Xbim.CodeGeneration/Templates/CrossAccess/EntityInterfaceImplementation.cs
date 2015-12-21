@@ -1215,7 +1215,14 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             
             #line default
             #line hidden
-            this.Write(".Any( i => i.Contains(this)));\r\n");
+            this.Write(".Any( i => i.Contains(this)), \"");
+            
+            #line 184 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\", this);\r\n");
             
             #line 185 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } else if (IsAggregation(attribute)){
@@ -1250,7 +1257,14 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             
             #line default
             #line hidden
-            this.Write(".Contains(this));\r\n");
+            this.Write(".Contains(this), \"");
+            
+            #line 186 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\", this);\r\n");
             
             #line 187 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } else {
@@ -1285,7 +1299,14 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             
             #line default
             #line hidden
-            this.Write(") == this);\r\n");
+            this.Write(") == this, \"");
+            
+            #line 188 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.InvertedAttr.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\", this);\r\n");
             
             #line 189 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossAccess\EntityInterfaceImplementation.tt"
  } 
