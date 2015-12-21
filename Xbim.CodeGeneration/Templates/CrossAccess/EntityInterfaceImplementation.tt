@@ -181,11 +181,11 @@ namespace <#= OwnNamespace #>
 			get
 			{
 <# if (IsDoubleAggregation(attribute)) {#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Any( i => i.Contains(this)));
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Any( i => i.Contains(this)), "<#= attribute.InvertedAttr.Name #>", this);
 <# } else if (IsAggregation(attribute)){#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this));
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this), "<#= attribute.InvertedAttr.Name #>", this);
 <# } else {#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => (e.<#= attribute.InvertedAttr.Name #> as <#= Name #>) == this);
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => (e.<#= attribute.InvertedAttr.Name #> as <#= Name #>) == this, "<#= attribute.InvertedAttr.Name #>", this);
 <# } #>
 			} 
 		}
