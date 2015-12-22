@@ -32,6 +32,8 @@ namespace XbimEssentialsGenerator
             //Change names to prevent name clashes
             foreach (var entity in cobie.Get<EntityDefinition>())
                 entity.Name = "Cobie" + entity.Name;
+            //foreach (var dt in cobie.Get<DefinedType>())
+            //    dt.Name = dt.Name + "Value";
 
             //enhancements
             EnhanceNullStyleInIfc(ifc2X3, ifc2X3Domains);
@@ -49,18 +51,18 @@ namespace XbimEssentialsGenerator
                 GenerateAllAsInterfaces = true,
                 IgnoreDerivedAttributes = GetIgnoreDerivedAttributes()
             };
-            Generator.GenerateSchema(settings, ifc2X3);
+            //Generator.GenerateSchema(settings, ifc2X3);
             Console.WriteLine(@"IFC2x3 with interfaces generated");
 
             //generate cross schema access
             settings.CrossAccessProjectPath = "Xbim.Ifc4";
             settings.CrossAccessStructure = ifc4Domains;
-            Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
+            //Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
             Console.WriteLine(@"IFC4 interface acces generated for IFC2x3");
 
             settings.Structure = ifc4Domains;
             settings.OutputPath = "Xbim.Ifc4";
-            Generator.GenerateSchema(settings, ifc4);
+            //Generator.GenerateSchema(settings, ifc4);
             Console.WriteLine(@"IFC4 with interfaces generated");
 
 
