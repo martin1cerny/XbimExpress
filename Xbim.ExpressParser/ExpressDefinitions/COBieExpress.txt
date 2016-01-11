@@ -60,6 +60,10 @@ ENTITY ExternalSystem
 	Name: STRING;
 END_ENTITY;
 
+ENTITY ExternalObject
+	Name: STRING;
+END_ENTITY;
+
 ENTITY CreatedInfo
 	CreatedBy: Contact;
 	CreatedOn: DateTimeValue;
@@ -70,8 +74,9 @@ ENTITY ReferencedObject
   (Asset, Contact, Assembly, Connection, Spare, Resource, Job, Impact, Document, Attribute, Coordinate, Issue));
 	Created: CreatedInfo;
 	ExternalId: OPTIONAL STRING;
+	AltExternalId: OPTIONAL STRING;
 	ExternalSystem: OPTIONAL ExternalSystem;
-	ExternalObject: OPTIONAL STRING;
+	ExternalObject: OPTIONAL ExternalObject;
 END_ENTITY;
 
 ENTITY Contact
@@ -97,7 +102,7 @@ ENTITY Asset
   SUBTYPE OF (ReferencedObject);
 	Name: STRING;
 	Description: OPTIONAL STRING;
-	Category: LIST [1:?] OF Category;
+	Categories: LIST [1:?] OF Category;
     Impacts: OPTIONAL LIST [0:?] OF Impact;
     Documents: OPTIONAL LIST [0:?] OF Document;
     Attributes: OPTIONAL LIST [0:?] OF Attribute;
@@ -120,13 +125,15 @@ ENTITY Facility
 	Phase: OPTIONAL Phase;
   INVERSE
     Floors: SET [1:?] OF Floor FOR Facility;
+    Systems: SET [0:?] OF System FOR Facility;
 END_ENTITY;
 
 ENTITY Project
 	Name: STRING;
 	Description: OPTIONAL STRING;
-	ExternalObject: OPTIONAL STRING;
+	ExternalObject: OPTIONAL ExternalObject;
 	ExternalId: OPTIONAL STRING;
+	AltExternalId: OPTIONAL STRING;
   INVERSE
     Phases: SET [0:?] OF Phase FOR Project;
     Facilities: SET [0:?] OF Facility FOR Project;
@@ -135,8 +142,9 @@ END_ENTITY;
 ENTITY Site
 	Name: STRING;
 	Description: OPTIONAL STRING;
-	ExternalObject: OPTIONAL STRING;
+	ExternalObject: OPTIONAL ExternalObject;
 	ExternalId: OPTIONAL STRING;
+	AltExternalId: OPTIONAL STRING;
   INVERSE
     Facilities: SET [0:?] OF Facility FOR Site;
 END_ENTITY;
@@ -158,7 +166,7 @@ ENTITY Space
 	NetArea: OPTIONAL REAL;
 	Floor: Floor;
   INVERSE
-    Components: SET [0:?] OF Component FOR Space;
+    Components: SET [0:?] OF Component FOR Spaces;
 	InZones: SET [0:?] OF Zone FOR Spaces;
 END_ENTITY; 
 
@@ -170,9 +178,9 @@ END_ENTITY;
 ENTITY @Type
  SUBTYPE OF (Asset);
 	AssetType: AssetType;
-	Manufacturer: Contact;
+	Manufacturer: OPTIONAL Contact;
 	ModelNumber: STRING;
-	Warranty: Warranty;
+	Warranty: OPTIONAL Warranty;
 	ReplacementCost: OPTIONAL REAL;
 	ExpectedLife: OPTIONAL REAL;
 	DurationUnit: OPTIONAL DurationUnit;
@@ -209,14 +217,14 @@ END_ENTITY;
 
 ENTITY Component
  SUBTYPE OF (Asset);
-	SerialNumber: STRING;
-	InstallationDate: DateTimeValue;
-	WarrantyStartDate: DateTimeValue;
+	SerialNumber: OPTIONAL STRING;
+	InstallationDate: OPTIONAL DateTimeValue;
+	WarrantyStartDate: OPTIONAL DateTimeValue;
 	TagNumber: OPTIONAL STRING;
 	BarCode: OPTIONAL STRING;
 	AssetIdentifier: OPTIONAL STRING;
 	@Type: @Type;
-	Space: Space;
+	Spaces: LIST [1:2] OF Space;
 	AssemblyOf: OPTIONAL LIST [1:?] OF Component;
   INVERSE
     InSystems: SET [0:?] OF System FOR Components;
@@ -228,6 +236,7 @@ END_ENTITY;
 ENTITY System
  SUBTYPE OF (Asset);
 	Components: LIST [1:?] OF Component;
+	Facility: Facility;
 END_ENTITY;
 
 ENTITY Connection
@@ -302,16 +311,20 @@ ENTITY Document
 	Stage: StageType;
 	URL: STRING;
 	@Reference: OPTIONAL STRING;
+	Directory: STRING;
+	File: STRING;
 END_ENTITY;
 
 ENTITY Attribute
+  SUBTYPE OF (ReferencedObject);
     Name: STRING;
-	SetName : OPTIONAL STRING;
 	Description: OPTIONAL STRING;
 	Stage: StageType;
 	Value: AttributeValue;
 	Unit: OPTIONAL STRING;
 	AllowedValues: OPTIONAL LIST [0:?] OF STRING;
+  DERIVE
+    PropertySet: ExternalObject := SELF\ReferencedObject.ExternalObject;
 END_ENTITY;
 
 ENTITY Issue
@@ -331,7 +344,7 @@ END_ENTITY;
 (*
   Pick values represent either classification or extendable enumeration of values.
   Different kinds of enumerations are represented by distinct types so it is possible
-  so find all existing candidates if needed just by their type.
+  to find all existing candidates if needed just by their type.
 *)
 
 ENTITY PickValue
@@ -341,7 +354,15 @@ END_ENTITY;
 
 ENTITY Category
   SUBTYPE OF (PickValue);
-	Key: STRING;
+	Description: OPTIONAL STRING;
+	Classification: OPTIONAL Classification;
+END_ENTITY;
+
+ENTITY Classification
+	Name: STRING;
+	Description: OPTIONAL STRING;
+  INVERSE
+    Categories: SET [0:?] OF Category FOR Classification;
 END_ENTITY;
 
 ENTITY Role

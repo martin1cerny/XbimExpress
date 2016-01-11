@@ -90,7 +90,7 @@
       <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\Infrastructure\EntityFactoryTemplatePartial.cs" />
-    <Compile Include="Templates\Infrastructure\ItemSetTemplate.cs">
+    <Compile Include="Templates\Infrastructure\ItemSetTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemSetTemplate.tt</DependentUpon>
@@ -141,7 +141,7 @@
     </None>
     <None Include="Templates\Infrastructure\ItemSetTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ItemSetTemplate.cs</LastGenOutput>
+      <LastGenOutput>ItemSetTemplate1.cs</LastGenOutput>
     </None>
     <None Include="Templates\Infrastructure\OptionalItemSetTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
