@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.CodeGeneration.Helpers;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
-using Xbim.IfcDomains;
 
 namespace Xbim.CodeGeneration.Templates
 {
@@ -46,17 +40,8 @@ namespace Xbim.CodeGeneration.Templates
         {
             get
             {
-                var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
-                if (parents.Count == 0) parents.Add("IExpressSelectType");
-
-                //mark it as an entity if all subtypes are entities
-                if (GetFinalTypes(Type).All(s => s is EntityDefinition))
-                    parents.Add(_settings.PersistEntityInterface);
-
-                //mark it as an espress type if all subtypes are defined types
-                if (GetFinalTypes(Type).All(s => s is DefinedType))
-                    parents.Add("IExpressValueType");
-
+                var parents = Type.IsInSelects.Select(s => s.Name).ToList();
+                parents.Add("I" + Name);
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i)) return "";
                 return ": " + i;
@@ -68,6 +53,17 @@ namespace Xbim.CodeGeneration.Templates
             get
             {
                 var parents = Type.IsInSelects.Select(s => "I" + s.Name).ToList();
+                if (parents.Count == 0) parents.Add("IExpressSelectType");
+
+                //mark it as an entity if all subtypes are entities
+                if (GetFinalTypes(Type).All(s => s is EntityDefinition))
+                    parents.Add(_settings.PersistEntityInterface);
+
+
+                //mark it as an espress value type if all subtypes are defined types
+                if (GetFinalTypes(Type).All(s => s is DefinedType))
+                    parents.Add("IExpressValueType");
+
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i)) return "";
                 return ": " + i;
