@@ -83,8 +83,8 @@ ENTITY Contact
   SUBTYPE OF (ReferencedObject);
 	Email: STRING;
 	Category: Role;
-	Company: STRING;
-	Phone: STRING;
+	Company: OPTIONAL STRING;
+	Phone: OPTIONAL STRING;
 	Department: OPTIONAL STRING;
 	OrganizationCode: OPTIONAL STRING;
 	GivenName: OPTIONAL STRING;
@@ -98,17 +98,17 @@ ENTITY Contact
 END_ENTITY;
 
 ENTITY Asset
-  ABSTRACT SUPERTYPE OF (ONEOF (Facility, Floor, Space, Zone, @Type, Component, System))
+  ABSTRACT SUPERTYPE OF (ONEOF (Facility, Floor, Space, Zone, TypeOrComponent, System))
   SUBTYPE OF (ReferencedObject);
 	Name: STRING;
 	Description: OPTIONAL STRING;
-	Categories: LIST [1:?] OF Category;
+	Categories: OPTIONAL LIST [1:?] OF Category;
     Impacts: OPTIONAL LIST [0:?] OF Impact;
     Documents: OPTIONAL LIST [0:?] OF Document;
     Attributes: OPTIONAL LIST [0:?] OF Attribute;
   INVERSE
-    CausingIssues: SET [0:?] OF Issue FOR Causing;
-    AffectedBy: SET [0:?] OF Issue FOR Affected;
+    CausingIssues: SET OF Issue FOR Causing;
+    AffectedBy: SET OF Issue FOR Affected;
   UNIQUE
 	UR1: Name;
 END_ENTITY;
@@ -125,7 +125,7 @@ ENTITY Facility
 	Phase: OPTIONAL Phase;
   INVERSE
     Floors: SET [1:?] OF Floor FOR Facility;
-    Systems: SET [0:?] OF System FOR Facility;
+    Systems: SET OF System FOR Facility;
 END_ENTITY;
 
 ENTITY Project
@@ -135,8 +135,8 @@ ENTITY Project
 	ExternalId: OPTIONAL STRING;
 	AltExternalId: OPTIONAL STRING;
   INVERSE
-    Phases: SET [0:?] OF Phase FOR Project;
-    Facilities: SET [0:?] OF Facility FOR Project;
+    Phases: SET OF Phase FOR Project;
+    Facilities: SET OF Facility FOR Project;
 END_ENTITY;
 
 ENTITY Site
@@ -146,7 +146,7 @@ ENTITY Site
 	ExternalId: OPTIONAL STRING;
 	AltExternalId: OPTIONAL STRING;
   INVERSE
-    Facilities: SET [0:?] OF Facility FOR Site;
+    Facilities: SET OF Facility FOR Site;
 END_ENTITY;
 
 ENTITY Floor
@@ -155,7 +155,7 @@ ENTITY Floor
 	Height: OPTIONAL REAL;
 	Facility: Facility;
   INVERSE
-    Spaces: SET [0:?] OF Space FOR Floor;
+    Spaces: SET OF Space FOR Floor;
 END_ENTITY;
 
 ENTITY Space
@@ -166,27 +166,40 @@ ENTITY Space
 	NetArea: OPTIONAL REAL;
 	Floor: Floor;
   INVERSE
-    Components: SET [0:?] OF Component FOR Spaces;
-	InZones: SET [0:?] OF Zone FOR Spaces;
+    Components: SET OF Component FOR Spaces;
+	InZones: SET OF Zone FOR Spaces;
 END_ENTITY; 
 
 ENTITY Zone
  SUBTYPE OF (Asset);
-	Spaces: LIST [0:?] OF Space;
+	Spaces: OPTIONAL LIST [1:?] OF Space;
 END_ENTITY; 
+
+ENTITY TypeOrComponent
+  ABSTRACT SUPERTYPE OF (ONEOF (@Type, Component))
+  SUBTYPE OF (Asset);
+	AssemblyOf: OPTIONAL LIST [1:?] OF TypeOrComponent;
+	Representations: OPTIONAL LIST [1:?] OF Coordinate;
+  INVERSE
+    Connecting: SET OF Connection FOR RealizingComponent;
+	ConnectedBefore: SET OF Connection FOR ComponentA;
+    ConnectedAfter: SET OF Connection FOR ComponentB;
+  UNIQUE
+	UR1: Name;
+END_ENTITY;
 
 ENTITY @Type
  SUBTYPE OF (Asset);
-	AssetType: AssetType;
+	AssetType: OPTIONAL AssetType;
 	Manufacturer: OPTIONAL Contact;
-	ModelNumber: STRING;
+	ModelNumber: OPTIONAL STRING;
 	Warranty: OPTIONAL Warranty;
 	ReplacementCost: OPTIONAL REAL;
 	ExpectedLife: OPTIONAL REAL;
 	DurationUnit: OPTIONAL DurationUnit;
-	NominalLength: REAL;
-	NominalWidth: REAL;
-	NominalHeight: REAL;
+	NominalLength: OPTIONAL REAL;
+	NominalWidth: OPTIONAL REAL;
+	NominalHeight: OPTIONAL REAL;
 	ModelReference: OPTIONAL STRING;
 	Shape: OPTIONAL STRING;
 	Size: OPTIONAL STRING;
@@ -199,20 +212,19 @@ ENTITY @Type
 	AccessibilityPerformance: OPTIONAL STRING;
 	CodePerformance: OPTIONAL STRING;
 	SustainabilityPerformance: OPTIONAL STRING;
-	AssemblyOf: OPTIONAL LIST [1:?] OF @Type;
-    Jobs: OPTIONAL LIST [0:?] OF Job;
   INVERSE
-    Components: SET [0:?] OF Component FOR @Type;
-    Spares: SET [0:?] OF Spare FOR @Type;
+    Components: SET OF Component FOR @Type;
+    Spares: SET OF Spare FOR @Type;
+    Jobs: SET OF Job FOR @Type;
 END_ENTITY;
 
 ENTITY Warranty
 	Description: OPTIONAL STRING;
-	GuarantorParts: Contact;
-	DurationParts: REAL;
-	GuarantorLabor: Contact;
-	DurationLabor: REAL;
-	DurationUnit: DurationUnit;
+	GuarantorParts: OPTIONAL Contact;
+	DurationParts: OPTIONAL REAL;
+	GuarantorLabor: OPTIONAL Contact;
+	DurationLabor: OPTIONAL REAL;
+	DurationUnit: OPTIONAL DurationUnit;
 END_ENTITY;
 
 ENTITY Component
@@ -227,15 +239,12 @@ ENTITY Component
 	Spaces: LIST [1:2] OF Space;
 	AssemblyOf: OPTIONAL LIST [1:?] OF Component;
   INVERSE
-    InSystems: SET [0:?] OF System FOR Components;
-    ConnectedBefore: SET [0:?] OF Connection FOR ComponentA;
-    ConnectedAfter: SET [0:?] OF Connection FOR ComponentB;
-    Connecting: SET [0:?] OF Connection FOR RealizingComponent;
+    InSystems: SET OF System FOR Components;
 END_ENTITY;
 
 ENTITY System
  SUBTYPE OF (Asset);
-	Components: LIST [1:?] OF Component;
+	Components: OPTIONAL LIST [1:?] OF Component;
 	Facility: Facility;
 END_ENTITY;
 
@@ -244,9 +253,9 @@ ENTITY Connection
     Name: STRING;
 	Description: OPTIONAL STRING;
 	ConnectionType: ConnectionType;
-	ComponentA: Component;
-	ComponentB: Component;
-	RealizingComponent: OPTIONAL Component;
+	ComponentA: TypeOrComponent;
+	ComponentB: TypeOrComponent;
+	RealizingComponent: OPTIONAL TypeOrComponent;
 	PortNameA: OPTIONAL STRING;
 	PortNameB: OPTIONAL STRING;
 END_ENTITY;
@@ -266,60 +275,59 @@ ENTITY Resource
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	ResourceType: ResourceType;
+	ResourceType: OPTIONAL ResourceType;
 END_ENTITY;
 
 ENTITY Job
   SUBTYPE OF (ReferencedObject);
-	TaskNumber: STRING;
+	TaskNumber: OPTIONAL STRING;
     Name: STRING;
-	Description: STRING;
-	JobType: JobType;
-	JobStatusType: JobStatusType;
-	Duration: REAL;
-	DurationUnit: DurationUnit;
-	Start: REAL;
-	StartUnit: DurationUnit;
-	Frequency: REAL;
-	FrequencyUnit: DurationUnit;
-	Priors: Job;
+	Description: OPTIONAL STRING;
+	JobType: OPTIONAL JobType;
+	JobStatusType: OPTIONAL JobStatusType;
+	Duration: OPTIONAL REAL;
+	DurationUnit: OPTIONAL DurationUnit;
+	Start: OPTIONAL REAL;
+	StartUnit: OPTIONAL DurationUnit;
+	Frequency: OPTIONAL REAL;
+	FrequencyUnit: OPTIONAL DurationUnit;
+	Priors: OPTIONAL Job;
 	Resources: OPTIONAL LIST [0:?] OF Resource;
-  INVERSE
-    ForTypes: SET [1:?] OF @Type FOR Jobs;
+    @Type: @Type;
 END_ENTITY;
 
 ENTITY Impact
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	ImpactType: ImpactType;
-	ImpactStage: ImpactStage;
-	Value: REAL;
-	ImpactUnit: ImpactUnit;
-	LeadInTime: REAL;
-	Duration: REAL;
-	LeadOutTime: REAL;
-	DurationUnit: DurationUnit;
+	ImpactType: OPTIONAL ImpactType;
+	ImpactStage: OPTIONAL ImpactStage;
+	Value: OPTIONAL REAL;
+	ImpactUnit: OPTIONAL ImpactUnit;
+	LeadInTime: OPTIONAL REAL;
+	Duration: OPTIONAL REAL;
+	LeadOutTime: OPTIONAL REAL;
+	DurationUnit: OPTIONAL DurationUnit;
 END_ENTITY;
 
 ENTITY Document
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	DocumentType: DocumentType;
-	ApprovalType: ApprovalType;
-	Stage: StageType;
+	DocumentType: OPTIONAL DocumentType;
+	ApprovalType: OPTIONAL ApprovalType;
+	Stage: OPTIONAL StageType;
 	URL: STRING;
 	@Reference: OPTIONAL STRING;
-	Directory: STRING;
-	File: STRING;
+	Directory: OPTIONAL STRING;
+	File: OPTIONAL STRING;
 END_ENTITY;
 
 ENTITY Attribute
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	Stage: StageType;
+	Stage: OPTIONAL StageType;
 	Value: AttributeValue;
 	Unit: OPTIONAL STRING;
 	AllowedValues: OPTIONAL LIST [0:?] OF STRING;
@@ -330,16 +338,38 @@ END_ENTITY;
 ENTITY Issue
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
-	Description: STRING;
-	IssueType: IssueType;
-	Risk: IssueRisk;
-	Chance: IssueChance;
-	Impact: IssueImpact;
-	Owner: Contact;
-	Mitigation: STRING;
-	Causing: Asset;
-	Affected: Asset;
+	Description: OPTIONAL STRING;
+	IssueType: OPTIONAL IssueType;
+	Risk: OPTIONAL IssueRisk;
+	Chance: OPTIONAL IssueChance;
+	Impact: OPTIONAL IssueImpact;
+	Owner: OPTIONAL Contact;
+	Mitigation: OPTIONAL STRING;
+	Causing: OPTIONAL Asset;
+	Affected: OPTIONAL Asset;
 END_ENTITY;
+
+ENTITY Coordinate
+  SUBTYPE OF (ReferencedObject);
+    Name: STRING;
+	CoordinateType: OPTIONAL CoordinateTypeEnum;
+	X: REAL;
+	Y: REAL;
+	Z: REAL;
+	RotationX: OPTIONAL REAL;
+	RotationY: OPTIONAL REAL;
+	RotationZ: OPTIONAL REAL;
+END_ENTITY;
+
+TYPE CoordinateTypeEnum = ENUMERATION OF
+	(
+	point,
+	line_end_one,
+	line_end_two,
+	box_lowerleft,
+	box_upperright
+	);
+END_TYPE;
 
 (*
   Pick values represent either classification or extendable enumeration of values.
@@ -362,7 +392,7 @@ ENTITY Classification
 	Name: STRING;
 	Description: OPTIONAL STRING;
   INVERSE
-    Categories: SET [0:?] OF Category FOR Classification;
+    Categories: SET OF Category FOR Classification;
 END_ENTITY;
 
 ENTITY Role
