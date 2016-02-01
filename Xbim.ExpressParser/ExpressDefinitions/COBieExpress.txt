@@ -51,29 +51,16 @@ END_TYPE;
 TYPE DateTimeValue = STRING;
 END_TYPE;
 
-ENTITY PickList
-	Name: STRING;
-	ForType: OPTIONAL STRING;
-  INVERSE
-	Values: SET [0:?] OF PickValue FOR PickList;
-END_ENTITY;
-
-ENTITY PickValue
-	Value: STRING;
-	PickList: PickList;
-END_ENTITY;
-
-ENTITY PickKeyValue
-  SUBTYPE OF (PickValue);
-	Key: STRING;
-END_ENTITY;
-
 ENTITY Phase
 	Name: STRING;
 	Project: Project;
 END_ENTITY;
 
 ENTITY ExternalSystem
+	Name: STRING;
+END_ENTITY;
+
+ENTITY ExternalObject
 	Name: STRING;
 END_ENTITY;
 
@@ -85,18 +72,19 @@ END_ENTITY;
 ENTITY ReferencedObject
   ABSTRACT SUPERTYPE OF (ONEOF
   (Asset, Contact, Assembly, Connection, Spare, Resource, Job, Impact, Document, Attribute, Coordinate, Issue));
-	ExternalId: OPTIONAL STRING;
 	Created: CreatedInfo;
+	ExternalId: OPTIONAL STRING;
+	AltExternalId: OPTIONAL STRING;
 	ExternalSystem: OPTIONAL ExternalSystem;
-	ExternalObject: OPTIONAL STRING;
+	ExternalObject: OPTIONAL ExternalObject;
 END_ENTITY;
 
 ENTITY Contact
   SUBTYPE OF (ReferencedObject);
 	Email: STRING;
-	Category: PickValue;
-	Company: STRING;
-	Phone: STRING;
+	Category: Role;
+	Company: OPTIONAL STRING;
+	Phone: OPTIONAL STRING;
 	Department: OPTIONAL STRING;
 	OrganizationCode: OPTIONAL STRING;
 	GivenName: OPTIONAL STRING;
@@ -110,52 +98,56 @@ ENTITY Contact
 END_ENTITY;
 
 ENTITY Asset
-  ABSTRACT SUPERTYPE OF (ONEOF (Facility, Floor, Space, Zone, @Type, Component, System))
+  ABSTRACT SUPERTYPE OF (ONEOF (Facility, Floor, Space, Zone, TypeOrComponent, System))
   SUBTYPE OF (ReferencedObject);
 	Name: STRING;
 	Description: OPTIONAL STRING;
-	Category: LIST [1:?] OF PickKeyValue;
-    Impacts: LIST [0:?] OF Impact;
-    Documents: LIST [0:?] OF Document;
-    Attributes: LIST [0:?] OF Attribute;
+	Categories: OPTIONAL LIST [1:?] OF Category;
+    Impacts: OPTIONAL LIST [0:?] OF Impact;
+    Documents: OPTIONAL LIST [0:?] OF Document;
+    Attributes: OPTIONAL LIST [0:?] OF Attribute;
+	Representations: OPTIONAL LIST [1:?] OF Coordinate;
   INVERSE
-    CausingIssues: SET [0:?] OF Issue FOR Causing;
-    AffectedBy: SET [0:?] OF Issue FOR Affected;
+    CausingIssues: SET OF Issue FOR Causing;
+    AffectedBy: SET OF Issue FOR Affected;
   UNIQUE
 	UR1: Name;
 END_ENTITY;
 
 ENTITY Facility
  SUBTYPE OF (Asset);
-	LinearUnits: PickValue;
-	AreaUnits: PickValue;
-	VolumeUnits: PickValue;
-	CurrencyUnit: PickValue;
+	LinearUnits: LinearUnit;
+	AreaUnits: AreaUnit;
+	VolumeUnits: VolumeUnit;
+	CurrencyUnit: CurrencyUnit;
 	AreaMeasurement: STRING;
 	Project: Project;
 	Site: Site;
 	Phase: OPTIONAL Phase;
   INVERSE
     Floors: SET [1:?] OF Floor FOR Facility;
+    Systems: SET OF System FOR Facility;
 END_ENTITY;
 
 ENTITY Project
 	Name: STRING;
 	Description: OPTIONAL STRING;
-	ExternalObject: OPTIONAL STRING;
+	ExternalObject: OPTIONAL ExternalObject;
 	ExternalId: OPTIONAL STRING;
+	AltExternalId: OPTIONAL STRING;
   INVERSE
-    Phases: SET [0:?] OF Phase FOR Project;
-    Facilities: SET [0:?] OF Facility FOR Project;
+    Phases: SET OF Phase FOR Project;
+    Facilities: SET OF Facility FOR Project;
 END_ENTITY;
 
 ENTITY Site
 	Name: STRING;
 	Description: OPTIONAL STRING;
-	ExternalObject: OPTIONAL STRING;
+	ExternalObject: OPTIONAL ExternalObject;
 	ExternalId: OPTIONAL STRING;
+	AltExternalId: OPTIONAL STRING;
   INVERSE
-    Facilities: SET [0:?] OF Facility FOR Site;
+    Facilities: SET OF Facility FOR Site;
 END_ENTITY;
 
 ENTITY Floor
@@ -164,7 +156,7 @@ ENTITY Floor
 	Height: OPTIONAL REAL;
 	Facility: Facility;
   INVERSE
-    Spaces: SET [0:?] OF Space FOR Floor;
+    Spaces: SET OF Space FOR Floor;
 END_ENTITY;
 
 ENTITY Space
@@ -175,27 +167,39 @@ ENTITY Space
 	NetArea: OPTIONAL REAL;
 	Floor: Floor;
   INVERSE
-    Components: SET [0:?] OF Component FOR Space;
-	Zones: SET [0:?] OF Zone FOR Spaces;
+    Components: SET OF Component FOR Spaces;
+	InZones: SET OF Zone FOR Spaces;
 END_ENTITY; 
 
 ENTITY Zone
  SUBTYPE OF (Asset);
-	Spaces: LIST [0:?] OF Space;
+	Spaces: OPTIONAL LIST [1:?] OF Space;
 END_ENTITY; 
+
+ENTITY TypeOrComponent
+  ABSTRACT SUPERTYPE OF (ONEOF (@Type, Component))
+  SUBTYPE OF (Asset);
+	AssemblyOf: OPTIONAL LIST [1:?] OF TypeOrComponent;
+  INVERSE
+    Connecting: SET OF Connection FOR RealizingComponent;
+	ConnectedBefore: SET OF Connection FOR ComponentA;
+    ConnectedAfter: SET OF Connection FOR ComponentB;
+  UNIQUE
+	UR1: Name;
+END_ENTITY;
 
 ENTITY @Type
  SUBTYPE OF (Asset);
-	AssetType: PickValue;
-	Manufacturer: Contact;
-	ModelNumber: STRING;
-	Warranty: Warranty;
+	AssetType: OPTIONAL AssetType;
+	Manufacturer: OPTIONAL Contact;
+	ModelNumber: OPTIONAL STRING;
+	Warranty: OPTIONAL Warranty;
 	ReplacementCost: OPTIONAL REAL;
 	ExpectedLife: OPTIONAL REAL;
-	DurationUnit: OPTIONAL PickValue;
-	NominalLength: REAL;
-	NominalWidth: REAL;
-	NominalHeight: REAL;
+	DurationUnit: OPTIONAL DurationUnit;
+	NominalLength: OPTIONAL REAL;
+	NominalWidth: OPTIONAL REAL;
+	NominalHeight: OPTIONAL REAL;
 	ModelReference: OPTIONAL STRING;
 	Shape: OPTIONAL STRING;
 	Size: OPTIONAL STRING;
@@ -208,53 +212,50 @@ ENTITY @Type
 	AccessibilityPerformance: OPTIONAL STRING;
 	CodePerformance: OPTIONAL STRING;
 	SustainabilityPerformance: OPTIONAL STRING;
-	AssemblyOf: LIST [1:?] OF @Type;
-    Jobs: LIST [0:?] OF Job;
   INVERSE
-    Components: SET [0:?] OF Component FOR @Type;
-    Spares: SET [0:?] OF Spare FOR @Type;
+    Components: SET OF Component FOR @Type;
+    Spares: SET OF Spare FOR @Type;
+    Jobs: SET OF Job FOR @Type;
 END_ENTITY;
 
 ENTITY Warranty
 	Description: OPTIONAL STRING;
-	GuarantorParts: Contact;
-	DurationParts: REAL;
-	GuarantorLabor: Contact;
-	DurationLabor: REAL;
-	DurationUnit: PickValue;
+	GuarantorParts: OPTIONAL Contact;
+	DurationParts: OPTIONAL REAL;
+	GuarantorLabor: OPTIONAL Contact;
+	DurationLabor: OPTIONAL REAL;
+	DurationUnit: OPTIONAL DurationUnit;
 END_ENTITY;
 
 ENTITY Component
  SUBTYPE OF (Asset);
-	SerialNumber: STRING;
-	InstallationDate: DateTimeValue;
-	WarrantyStartDate: DateTimeValue;
+	SerialNumber: OPTIONAL STRING;
+	InstallationDate: OPTIONAL DateTimeValue;
+	WarrantyStartDate: OPTIONAL DateTimeValue;
 	TagNumber: OPTIONAL STRING;
 	BarCode: OPTIONAL STRING;
 	AssetIdentifier: OPTIONAL STRING;
 	@Type: @Type;
-	Space: Space;
-	AssemblyOf: LIST [1:?] OF Component;
+	Spaces: LIST [1:2] OF Space;
+	AssemblyOf: OPTIONAL LIST [1:?] OF Component;
   INVERSE
-    Systems: SET [0:?] OF System FOR Components;
-    ConnectedBefore: SET [0:?] OF Connection FOR ComponentA;
-    ConnectedAfter: SET [0:?] OF Connection FOR ComponentB;
-    Connecting: SET [0:?] OF Connection FOR RealizingComponent;
+    InSystems: SET OF System FOR Components;
 END_ENTITY;
 
 ENTITY System
  SUBTYPE OF (Asset);
-	Components: LIST [1:?] OF Component;
+	Components: OPTIONAL LIST [1:?] OF Component;
+	Facility: Facility;
 END_ENTITY;
 
 ENTITY Connection
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	ConnectionType: PickValue;
-	ComponentA: Component;
-	ComponentB: Component;
-	RealizingComponent: OPTIONAL Component;
+	ConnectionType: ConnectionType;
+	ComponentA: TypeOrComponent;
+	ComponentB: TypeOrComponent;
+	RealizingComponent: OPTIONAL TypeOrComponent;
 	PortNameA: OPTIONAL STRING;
 	PortNameB: OPTIONAL STRING;
 END_ENTITY;
@@ -263,9 +264,9 @@ ENTITY Spare
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	SpareType: PickValue;
+	SpareType: SpareType;
 	@Type: @Type;
-	Suppliers: LIST [0:?] OF Contact;
+	Suppliers: OPTIONAL LIST [0:?] OF Contact;
 	SetNumber: OPTIONAL STRING;
 	PartNumber: OPTIONAL STRING;
 END_ENTITY;
@@ -274,75 +275,212 @@ ENTITY Resource
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	ResourceType: PickValue;
+	ResourceType: OPTIONAL ResourceType;
 END_ENTITY;
 
 ENTITY Job
   SUBTYPE OF (ReferencedObject);
-	TaskNumber: STRING;
+	TaskNumber: OPTIONAL STRING;
     Name: STRING;
-	Description: STRING;
-	JobType: PickValue;
-	JobStatusType: PickValue;
-	Duration: REAL;
-	DurationUnit: PickValue;
-	Start: REAL;
-	StartUnit: PickValue;
-	Frequency: REAL;
-	FrequencyUnit: PickValue;
-	Priors: Job;
-	Resources: LIST [0:?] OF Resource;
-  INVERSE
-    ForTypes: SET [1:?] OF @Type FOR Jobs;
+	Description: OPTIONAL STRING;
+	JobType: OPTIONAL JobType;
+	JobStatusType: OPTIONAL JobStatusType;
+	Duration: OPTIONAL REAL;
+	DurationUnit: OPTIONAL DurationUnit;
+	Start: OPTIONAL REAL;
+	StartUnit: OPTIONAL DurationUnit;
+	Frequency: OPTIONAL REAL;
+	FrequencyUnit: OPTIONAL DurationUnit;
+	Priors: OPTIONAL Job;
+	Resources: OPTIONAL LIST [0:?] OF Resource;
+    @Type: @Type;
 END_ENTITY;
 
 ENTITY Impact
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	ImpactType: PickValue;
-	ImpactStage: PickValue;
-	Value: REAL;
-	ImpactUnit: PickValue;
-	LeadInTime: REAL;
-	Duration: REAL;
-	LeadOutTime: REAL;
-	TimeUnit: PickValue;
+	ImpactType: OPTIONAL ImpactType;
+	ImpactStage: OPTIONAL ImpactStage;
+	Value: OPTIONAL REAL;
+	ImpactUnit: OPTIONAL ImpactUnit;
+	LeadInTime: OPTIONAL REAL;
+	Duration: OPTIONAL REAL;
+	LeadOutTime: OPTIONAL REAL;
+	DurationUnit: OPTIONAL DurationUnit;
 END_ENTITY;
 
 ENTITY Document
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
 	Description: OPTIONAL STRING;
-	DocumentType: PickValue;
-	ApprovalBy: PickValue;
-	Stage: PickValue;
+	DocumentType: OPTIONAL DocumentType;
+	ApprovalType: OPTIONAL ApprovalType;
+	Stage: OPTIONAL StageType;
 	URL: STRING;
 	@Reference: OPTIONAL STRING;
+	Directory: OPTIONAL STRING;
+	File: OPTIONAL STRING;
 END_ENTITY;
 
 ENTITY Attribute
+  SUBTYPE OF (ReferencedObject);
     Name: STRING;
-	SetName : OPTIONAL STRING;
 	Description: OPTIONAL STRING;
-	Stage: PickValue;
+	Stage: OPTIONAL StageType;
 	Value: AttributeValue;
 	Unit: OPTIONAL STRING;
 	AllowedValues: OPTIONAL LIST [0:?] OF STRING;
+  DERIVE
+    PropertySet: ExternalObject := SELF\ReferencedObject.ExternalObject;
 END_ENTITY;
 
 ENTITY Issue
   SUBTYPE OF (ReferencedObject);
     Name: STRING;
-	Description: STRING;
-	IssueType: PickValue;
-	Risk: PickValue;
-	Chance: PickValue;
-	Impact: PickValue;
-	Owner: Contact;
-	Mitigation: STRING;
-	Causing: Asset;
-	Affected: Asset;
+	Description: OPTIONAL STRING;
+	IssueType: OPTIONAL IssueType;
+	Risk: OPTIONAL IssueRisk;
+	Chance: OPTIONAL IssueChance;
+	Impact: OPTIONAL IssueImpact;
+	Owner: OPTIONAL Contact;
+	Mitigation: OPTIONAL STRING;
+	Causing: OPTIONAL Asset;
+	Affected: OPTIONAL Asset;
+END_ENTITY;
+
+ENTITY Coordinate
+  SUBTYPE OF (ReferencedObject);
+    Name: STRING;
+	CoordinateType: OPTIONAL CoordinateTypeEnum;
+	X: REAL;
+	Y: REAL;
+	Z: REAL;
+	RotationX: OPTIONAL REAL;
+	RotationY: OPTIONAL REAL;
+	RotationZ: OPTIONAL REAL;
+END_ENTITY;
+
+TYPE CoordinateTypeEnum = ENUMERATION OF
+	(
+	point,
+	line_end_one,
+	line_end_two,
+	box_lowerleft,
+	box_upperright
+	);
+END_TYPE;
+
+(*
+  Pick values represent either classification or extendable enumeration of values.
+  Different kinds of enumerations are represented by distinct types so it is possible
+  to find all existing candidates if needed just by their type.
+*)
+
+ENTITY PickValue
+	ABSTRACT SUPERTYPE;
+	Value: STRING;
+END_ENTITY;
+
+ENTITY Category
+  SUBTYPE OF (PickValue);
+	Description: OPTIONAL STRING;
+	Classification: OPTIONAL Classification;
+END_ENTITY;
+
+ENTITY Classification
+	Name: STRING;
+	Description: OPTIONAL STRING;
+  INVERSE
+    Categories: SET OF Category FOR Classification;
+END_ENTITY;
+
+ENTITY Role
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY LinearUnit
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY AreaUnit
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY VolumeUnit
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY CurrencyUnit
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY DurationUnit
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY AssetType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY ConnectionType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY SpareType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY ResourceType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY JobType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY JobStatusType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY ImpactType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY ImpactStage
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY ImpactUnit
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY DocumentType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY StageType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY ApprovalType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY IssueType
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY IssueChance
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY IssueRisk
+  SUBTYPE OF (PickValue);
+END_ENTITY;
+
+ENTITY IssueImpact
+  SUBTYPE OF (PickValue);
 END_ENTITY;
 
 END_SCHEMA;
