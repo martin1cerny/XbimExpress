@@ -106,6 +106,7 @@ ENTITY Asset
     Impacts: OPTIONAL LIST [0:?] OF Impact;
     Documents: OPTIONAL LIST [0:?] OF Document;
     Attributes: OPTIONAL LIST [0:?] OF Attribute;
+	Representations: OPTIONAL LIST [1:?] OF Coordinate;
   INVERSE
     CausingIssues: SET OF Issue FOR Causing;
     AffectedBy: SET OF Issue FOR Affected;
@@ -179,7 +180,6 @@ ENTITY TypeOrComponent
   ABSTRACT SUPERTYPE OF (ONEOF (@Type, Component))
   SUBTYPE OF (Asset);
 	AssemblyOf: OPTIONAL LIST [1:?] OF TypeOrComponent;
-	Representations: OPTIONAL LIST [1:?] OF Coordinate;
   INVERSE
     Connecting: SET OF Connection FOR RealizingComponent;
 	ConnectedBefore: SET OF Connection FOR ComponentA;
