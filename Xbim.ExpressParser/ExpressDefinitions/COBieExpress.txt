@@ -9,7 +9,7 @@ This work is part of xBIM Toolkit (https://github.com/xBimTeam/)
 
 Contents:
 Object model for COBie 2.4 in form of EXPRESS definitions based on COBie Responsibility Matrix. It reflects 
-all relations in between different data objects and makes it possible to handle COBie data as an graph structure
+all relations in between different data objects and makes it possible to handle COBie data as a graph structure
 rather than tabular spreadsheet data with weak name based references. COBie 2.4 definition is based on Facility Handower
 Model View Definition of IFC4 which is defined as an EXPRESS as well. However, definition in this file is far more simple
 and therefore easier to work with once data is extracted/converted from IFC4 data. It should also be possible to transpose
@@ -189,7 +189,7 @@ ENTITY TypeOrComponent
 END_ENTITY;
 
 ENTITY @Type
- SUBTYPE OF (Asset);
+ SUBTYPE OF (TypeOrComponent);
 	AssetType: OPTIONAL AssetType;
 	Manufacturer: OPTIONAL Contact;
 	ModelNumber: OPTIONAL STRING;
@@ -228,7 +228,7 @@ ENTITY Warranty
 END_ENTITY;
 
 ENTITY Component
- SUBTYPE OF (Asset);
+ SUBTYPE OF (TypeOrComponent);
 	SerialNumber: OPTIONAL STRING;
 	InstallationDate: OPTIONAL DateTimeValue;
 	WarrantyStartDate: OPTIONAL DateTimeValue;
@@ -237,7 +237,6 @@ ENTITY Component
 	AssetIdentifier: OPTIONAL STRING;
 	@Type: @Type;
 	Spaces: LIST [1:2] OF Space;
-	AssemblyOf: OPTIONAL LIST [1:?] OF Component;
   INVERSE
     InSystems: SET OF System FOR Components;
 END_ENTITY;
