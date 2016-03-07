@@ -11,9 +11,9 @@ using Xbim.IfcDomains;
 
 namespace XbimEssentialsGenerator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             var watch = new Stopwatch();
             watch.Start();
@@ -24,20 +24,21 @@ namespace XbimEssentialsGenerator
             //prepare all schemas
             var ifc2X3 = SchemaModel.LoadIfc2x3();
             var ifc2X3Domains = DomainStructure.LoadIfc2X3();
-            var ifc4Domains = DomainStructure.LoadIfc4Add1();
-            SetTypeNumbersForIfc2X3(ifc2X3);
+            EnhanceNullStyleInIfc(ifc2X3, ifc2X3Domains);
+            var max = SetTypeNumbers(ifc2X3);
+
             var ifc4 = SchemaModel.LoadIfc4Add1();
+            var ifc4Domains = DomainStructure.LoadIfc4Add1();
+            EnhanceNullStyleInIfc(ifc4, ifc4Domains);
+            SetTypeNumbers(ifc4, ifc2X3, max);
+
             var cobie = SchemaModel.Load(Schemas.COBieExpress);
+            SetTypeNumbers(cobie);
 
             //Change names to prevent name clashes
             foreach (var entity in cobie.Get<EntityDefinition>())
                 entity.Name = "Cobie" + entity.Name;
-            //foreach (var dt in cobie.Get<DefinedType>())
-            //    dt.Name = dt.Name + "Value";
 
-            //enhancements
-            EnhanceNullStyleInIfc(ifc2X3, ifc2X3Domains);
-            EnhanceNullStyleInIfc(ifc4, ifc4Domains);
 
             //Move enums into Interfaces namespace in IFC4
             MoveEnumsToInterfaces(ifc4Domains, ifc4, Environment.CurrentDirectory, "Xbim.Ifc4");
@@ -47,26 +48,24 @@ namespace XbimEssentialsGenerator
                 Structure = ifc2X3Domains,
                 OutputPath = "Xbim.Ifc2x3",
                 InfrastructureOutputPath = "Xbim.Common",
-                IsIndexedEntity = e => IndexedClassesIfc2X3.Contains(e.Name),
                 GenerateAllAsInterfaces = true,
                 IgnoreDerivedAttributes = GetIgnoreDerivedAttributes()
             };
-            //Generator.GenerateSchema(settings, ifc2X3);
+            Generator.GenerateSchema(settings, ifc2X3);
             Console.WriteLine(@"IFC2x3 with interfaces generated");
 
             //generate cross schema access
             settings.CrossAccessProjectPath = "Xbim.Ifc4";
             settings.CrossAccessStructure = ifc4Domains;
-            //Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
+            Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
             Console.WriteLine(@"IFC4 interface acces generated for IFC2x3");
 
             settings.Structure = ifc4Domains;
             settings.OutputPath = "Xbim.Ifc4";
-            //Generator.GenerateSchema(settings, ifc4);
+            Generator.GenerateSchema(settings, ifc4);
             Console.WriteLine(@"IFC4 with interfaces generated");
 
 
-            settings.IsIndexedEntity = null;
             settings.Structure = null;
             settings.OutputPath = "Xbim.CobieExpress";
             Generator.GenerateSchema(settings, cobie);
@@ -161,9 +160,56 @@ namespace XbimEssentialsGenerator
             domain.Types.Add("IfcNullStyleEnum");
         }
 
-        private static void SetTypeNumbersForIfc2X3(SchemaModel model)
+        private static int SetTypeNumbers(SchemaModel model, SchemaModel dependency = null, int max = 0)
         {
-            var max = -1;
+            var types = model.Get<NamedType>().ToList();
+            const string extension = "_TYPE_IDS.csv";
+
+
+            var ids = new Dictionary<string, int>();
+            var file = model.FirstSchema.Name + extension;
+            var depFile = dependency != null ? dependency.FirstSchema.Name + extension : null;
+
+            var source = depFile ?? file;
+            if (File.Exists(source))
+            {
+                var data = File.ReadAllText(source);
+                var kvps = data.Trim().Split('\n');
+                foreach (var vals in kvps.Select(kvp => kvp.Split(',')))
+                {
+                    ids.Add(vals[0], int.Parse(vals[1]));
+                }
+            }
+
+            //reset latest values
+            foreach (var type in types.ToList())
+            {
+                int id;
+                if (!ids.TryGetValue(type.PersistanceName, out id)) continue;
+                type.TypeId = id;
+                max = Math.Max(max, id);
+                types.Remove(type);
+            }
+
+            //set new values to the new types
+            foreach (var type in types)
+                type.TypeId = ++max;
+
+            using (var o = File.CreateText(file))
+            {
+                //save for the next processing
+                foreach (var type in model.Get<NamedType>())
+                {
+                    o.Write("{0},{1}\n", type.PersistanceName, type.TypeId);
+                }
+                o.Close();
+            }
+
+            return max;
+        }
+
+        private static int SetTypeNumbersForIfc2X3(SchemaModel model, int max = -1)
+        {
             var types = model.Get<NamedType>().ToList();
 
             var values = Enum.GetValues(typeof (IfcEntityNameEnum)).Cast<short>();
@@ -175,7 +221,7 @@ namespace XbimEssentialsGenerator
                 var type = types.FirstOrDefault(t => string.Compare(t.PersistanceName, name, StringComparison.InvariantCultureIgnoreCase) == 0);
                 if (type == null)
                 {
-                    Console.WriteLine(@"Type not found: " + name);
+                    Console.WriteLine(@"Type {0} not found in {1}", name, model.FirstSchema.Name);
                     continue;
                 }
 
@@ -189,8 +235,8 @@ namespace XbimEssentialsGenerator
             {
                 type.TypeId = ++max;
             }
-        }
 
-        private static readonly List<string> IndexedClassesIfc2X3 = new List<string> { "IfcAddress", "IfcOrganizationRelationship", "IfcApproval", "IfcApprovalActorRelationship", "IfcApprovalPropertyRelationship", "IfcApprovalRelationship", "IfcResourceApprovalRelationship", "IfcRoot", "IfcConstraint", "IfcConstraintAggregationRelationship", "IfcConstraintClassificationRelationship", "IfcConstraintRelationship", "IfcPropertyConstraintRelationship", "IfcAppliedValue", "IfcAppliedValueRelationship", "IfcCurrencyRelationship", "IfcReferencesValueDocument", "IfcCalendarDate", "IfcConnectionCurveGeometry", "IfcConnectionPointGeometry", "IfcConnectionSurfaceGeometry", "IfcLocalPlacement", "IfcBooleanResult", "IfcSolidModel", "IfcMappedItem", "IfcMaterialProperties", "IfcMonetaryUnit", "IfcPresentationStyleAssignment", "IfcPresentationStyle", "IfcTextStyleTextModel", "IfcExternalReference", "IfcTextStyleFontModel", "IfcTextStyleForDefinedFont", "IfcBoundaryCondition", "IfcStructuralLoad", "IfcTimeSeries", "IfcPresentationLayerAssignment", "IfcClassification", "IfcClassificationItem", "IfcClassificationItemRelationship", "IfcClassificationNotation", "IfcClassificationNotationFacet", "IfcClassificationReference", "IfcDocumentElectronicFormat", "IfcDocumentInformation", "IfcDocumentInformationRelationship", "IfcDocumentReference", "IfcLibraryInformation", "IfcLibraryReference", "IfcCompositeCurve", "IfcRepresentationMap", "IfcMaterial", "IfcMaterialClassificationRelationship", "IfcMaterialLayer", "IfcMaterialLayerSet", "IfcMaterialLayerSetUsage", "IfcMaterialList", "IfcUnitAssignment", "IfcProperty", "IfcPropertyDependencyRelationship", "IfcRepresentationContext", "IfcProductDefinitionShape", "IfcRepresentation", "IfcShapeAspect", "IfcActorRole", "IfcApplication", "IfcOrganization", "IfcOwnerHistory", "IfcPerson", "IfcPersonAndOrganization", "IfcTable", "IfcTableRow" }; 
+            return max;
+        }
     }
 }
