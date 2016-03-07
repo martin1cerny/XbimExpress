@@ -9,6 +9,8 @@
 <# foreach(var u in Using) { #>
 using <#= u #>;
 <# } #>
+//## Custom using statements
+//##
 
 namespace <#= InterfaceNamespace #>
 {
@@ -37,9 +39,6 @@ namespace <#= InterfaceNamespace #>
 
 namespace <#= Namespace #>
 {
-<# if(IsIndexed) { #>
-	[IndexedClass]
-<# } #>
 	[ExpressType("<#= Type.PersistanceName #>", <#= Type.TypeId #>)]
 	// ReSharper disable once PartialTypeWithSinglePart
 	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>, IEqualityComparer<@<#= Name #>>, IEquatable<@<#= Name #>>
