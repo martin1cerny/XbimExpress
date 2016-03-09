@@ -30,7 +30,8 @@ namespace XbimEssentialsGenerator
             var ifc4 = SchemaModel.LoadIfc4Add1();
             var ifc4Domains = DomainStructure.LoadIfc4Add1();
             EnhanceNullStyleInIfc(ifc4, ifc4Domains);
-            SetTypeNumbers(ifc4, ifc2X3, max);
+            //SetTypeNumbers(ifc4, ifc2X3, max);
+            SetTypeNumbers(ifc4);
 
             var cobie = SchemaModel.Load(Schemas.COBieExpress);
             SetTypeNumbers(cobie);

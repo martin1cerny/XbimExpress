@@ -1,0 +1,16 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+namespace <#= Namespace #>
+{
+	public class <#= Name #>
+	{
+<# foreach(var rule in Rules.WhereRules)
+{ #>
+		public readonly ErrorMessage <#= rule.Name #> = new ErrorMessage("<#= rule.Name #>", @"<#= rule.Description.Replace("\"", "'") #>");
+<#} #>		
+	}
+}

@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimTranslatorGenerator", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimDerivedAttributesPort", "XbimDerivedAttributesPort\XbimDerivedAttributesPort.csproj", "{3E0309E3-B7F2-4263-B894-581530A83385}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimExtractWhereRuleDescriptions", "XbimExtractWhereRuleDescriptions\XbimExtractWhereRuleDescriptions.csproj", "{8E81948C-F41C-4DDA-A77D-B7DED1960924}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimValidationGenerator", "XbimValidationGenerator\XbimValidationGenerator.csproj", "{9FEF2422-5F56-48D1-865A-FF36D6D28052}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +71,14 @@ Global
 		{3E0309E3-B7F2-4263-B894-581530A83385}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E0309E3-B7F2-4263-B894-581530A83385}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E0309E3-B7F2-4263-B894-581530A83385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E81948C-F41C-4DDA-A77D-B7DED1960924}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E81948C-F41C-4DDA-A77D-B7DED1960924}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E81948C-F41C-4DDA-A77D-B7DED1960924}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E81948C-F41C-4DDA-A77D-B7DED1960924}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FEF2422-5F56-48D1-865A-FF36D6D28052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FEF2422-5F56-48D1-865A-FF36D6D28052}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FEF2422-5F56-48D1-865A-FF36D6D28052}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FEF2422-5F56-48D1-865A-FF36D6D28052}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,5 +90,7 @@ Global
 		{793BD244-1003-4CEA-833E-22569C8641B4} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 		{98AB342E-1F4D-4D6F-BF52-5B3A62C7DCE2} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 		{3E0309E3-B7F2-4263-B894-581530A83385} = {F7E394B0-3188-44C2-8317-6C14EF009307}
+		{8E81948C-F41C-4DDA-A77D-B7DED1960924} = {F7E394B0-3188-44C2-8317-6C14EF009307}
+		{9FEF2422-5F56-48D1-865A-FF36D6D28052} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 	EndGlobalSection
 EndGlobal
