@@ -1,0 +1,2323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SchemaRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Schema="IFC2X3">
+  <TypeRulesSet>
+    <TypeRules Type="IfcActorRole">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>When attribute Role has enumeration value USERDEFINED then attribute UserDefinedRole shall also have a value.</Description>
+          <Definition> (Role &lt;&gt; IfcRoleEnum.USERDEFINED) OR
+            ((Role = IfcRoleEnum.USERDEFINED) AND
+              EXISTS(SELF.UserDefinedRole))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAddress">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Either attribute value Purpose is not given, or when attribute Purpose has enumeration value USERDEFINED then attribute UserDefinedPurpose shall also have a value.</Description>
+          <Definition> (NOT(EXISTS(Purpose))) OR
+            ((Purpose &lt;&gt; IfcAddressTypeEnum.USERDEFINED) OR
+            ((Purpose = IfcAddressTypeEnum.USERDEFINED) AND
+              EXISTS(SELF.UserDefinedPurpose)))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPerson">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Requires that either the family name or the given name is used. It is not acceptable to have a person without a family or given name.</Description>
+          <Definition> EXISTS(FamilyName) OR 
+            EXISTS(GivenName)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPostalAddress">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Requires that at least one attribute of internal location, address lines, town, region or country is asserted. It is not acceptable to have a postal address without at least one of these values.</Description>
+          <Definition> EXISTS (InternalLocation) OR 
+            EXISTS (AddressLines) OR
+            EXISTS (PostalBox) OR
+            EXISTS (PostalCode) OR
+            EXISTS (Town) OR 
+            EXISTS (Region) OR  
+            EXISTS (Country)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTelecomAddress">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Requires that at least one attribute of facsimile numbers, telephone numbers, electronic mail addresses, pager number or world wide web home page URL is asserted. It is not acceptable to have a telecommunications address without at least one of these values.</Description>
+          <Definition> EXISTS (TelephoneNumbers) OR
+            EXISTS (PagerNumber) OR
+            EXISTS (FacsimileNumbers) OR 
+            EXISTS (ElectronicMailAddresses) OR 
+            EXISTS (WWWHomePageURL)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcConstraint">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>The attribute UserDefinedGrade must be asserted when the value of the IfcConstraintGradeEnum is set to USERDEFINED.</Description>
+          <Definition> (ConstraintGrade &lt;&gt; IfcConstraintEnum.USERDEFINED) OR
+             ((ConstraintGrade = IfcConstraintEnum.USERDEFINED) AND EXISTS(SELF\IfcConstraint.UserDefinedGrade))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcConstraintAggregationRelationship">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>The instance to which the relation RelatingConstraint points shall not be the same as the RelatedConstraint.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* RelatedConstraints | 
+               temp :=: RelatingConstraint
+               )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcConstraintRelationship">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>The instance to which the relation RelatingConstraint points shall not be the same as the RelatedConstraint.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* RelatedConstraints | temp :=: RelatingConstraint )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcObjective">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The attribute UserDefinedQualifier must be asserted when the value of the IfcObjectiveEnum is set to USERDEFINED.</Description>
+          <Definition> (ObjectiveQualifier &lt;&gt; IfcObjectiveEnum.USERDEFINED) OR
+             ((ObjectiveQualifier = IfcObjectiveEnum.USERDEFINED) AND EXISTS(SELF\IfcObjective.UserDefinedQualifier))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcConstructionMaterialResource">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>There should only be a single relationship, assigning products to the material resource.</Description>
+          <Definition> SIZEOF(SELF\IfcResource.ResourceOf) &lt;=1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>If a reference to a resource is given, then through the IfcRelAssignsToResource relationship with the RelatedObjectType PRODUCT.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcResource.ResourceOf[1])) OR
+            (SELF\IfcResource.ResourceOf[1].RelatedObjectsType = IfcObjectTypeEnum.PRODUCT)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcConstructionProductResource">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>There should only be a single relationship, assigning products to the product resource.</Description>
+          <Definition> SIZEOF(SELF\IfcResource.ResourceOf) &lt;=1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>If a reference to a resource is given, then through the IfcRelAssignsToResource relationship with the RelatedObjectType PRODUCT.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcResource.ResourceOf[1])) OR
+            (SELF\IfcResource.ResourceOf[1].RelatedObjectsType = IfcObjectTypeEnum.PRODUCT)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTimeSeriesSchedule">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>The type of IfcTimeSeriesSchedule shall be given by inherited attribute ObjectType, if the enumeration value in TimeSeriesScheduleType is set to USERDEFINED.</Description>
+          <Definition> NOT(TimeSeriesScheduleType=IfcTimeSeriesScheduleTypeEnum.USERDEFINED) OR EXISTS(SELF\IfcObject.ObjectType)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcEnvironmentalImpactValue">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The attribute UserDefinedCategory must be asserted when the value of the IfcEnvironmentalImpactCategoryEnum is set to USERDEFINED.</Description>
+          <Definition> (Category &lt;&gt; IfcEnvironmentalImpactCategoryEnum.USERDEFINED) OR
+            ((Category = IfcEnvironmentalImpactCategoryEnum.USERDEFINED) AND EXISTS(SELF\IfcEnvironmentalImpactValue.UserDefinedCategory))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCalendarDate">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>Checks that calendar date has a valid value with regard to the number of days in a month including special cases of leap years.</Description>
+          <Definition> IfcValidCalendarDate (SELF)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDaylightSavingHour">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Daylight saving number is always positive and can take the maximum value of 2 (hours) ahead of local time.  Depending on the locality and the time of year, the value may be 0, 1 or 2.</Description>
+          <Definition> { 0 &lt;= SELF &lt;= 2 }</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcHourInDay">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The value of the integer shall be between 0 and 23.</Description>
+          <Definition> { 0 &lt;= SELF &lt; 24 }</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcLocalTime">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The seconds shall only exist if the minutes exists.</Description>
+          <Definition> IfcValidTime (SELF)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcMinuteInHour">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The value of the integer shall be between 0 and 59.</Description>
+          <Definition> {0 &lt;= SELF &lt;= 59 }</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcMonthInYearNumber">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The value of integer shall be between 1 and 12.</Description>
+          <Definition> { 1&lt;= SELF &lt;= 12 }</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcSecondInMinute">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The value of the real number shall be between 0 to 59.</Description>
+          <Definition> { 0. &lt;= SELF &lt; 60. }</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcElectricDistributionPoint">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The attribute UserDefinedFunction must be asserted when the value of the IfcElectricDistributionPointFunctionEnum is set to USERDEFINED.</Description>
+          <Definition> (DistributionPointFunction &lt;&gt; IfcElectricDistributionPointFunctionEnum.USERDEFINED) OR
+             ((DistributionPointFunction = IfcElectricDistributionPointFunctionEnum.USERDEFINED) AND EXISTS(SELF\IfcElectricDistributionPoint.UserDefinedFunction))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDocumentElectronicFormat">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>In order to specify a valid electronic document format either the file extension or the MIME type has to be given.</Description>
+          <Definition> EXISTS(FileExtension) OR EXISTS(MimeContentType)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDocumentReference">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>A name should only be given, if no document information (including the document name) is attached</Description>
+          <Definition> EXISTS(Name) XOR EXISTS(ReferenceToDocument[1])</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcExternalReference">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>One of the attributes of IfcExternalReference should have a value assigned.</Description>
+          <Definition> EXISTS(ItemReference) OR EXISTS(Location) OR EXISTS(Name)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcConditionCriterion">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The Name attribute has to be provided for the condition criterion.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcMove">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>There has to be a reference to the IfcRelAssignsToProcess relationship referencing the objects to be moved.</Description>
+          <Definition> SIZEOF(SELF\IfcProcess.OperatesOn) &gt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>At least on furnishing or equipment object should be assigned to the move.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* OperatesOn |
+              SIZEOF(QUERY(temp2 &lt;* temp.RelatedObjects |
+                ('IFC2X3.IFCACTOR' IN TYPEOF (temp2)) OR
+                ('IFC2X3.IFCEQUIPMENTELEMENT' IN TYPEOF (temp2)) OR
+                ('IFC2X3.IFCFURNISHINGELEMENT' IN TYPEOF (temp2)) )) &gt;=1
+              )) &gt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The Name attribute has to be provided for the move.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcGridAxis">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The dimensionality of the grid axis is 2.</Description>
+          <Definition> AxisCurve.Dim = 2</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The IfcGridAxis needs to be used by exactly one of the three attributes of IfcGrid:  
+• UAxes 
+• VAxes 
+• WAxes  i.e. it can only refer to a single instance of IfcGrid in one of the three list of axes.</Description>
+          <Definition> (SIZEOF(PartOfU) = 1) XOR (SIZEOF(PartOfV) = 1) XOR (SIZEOF(PartOfW) = 1)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcLocalPlacement">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>Ensures that a 3D local placement can only be relative (if exists) to a 3D parent local placement (and not to a 2D parent local placement).</Description>
+          <Definition> IfcCorrectLocalPlacement(RelativePlacement, PlacementRelTo)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcBooleanClippingResult">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The first operand of the Boolean clipping operation shall be either an IfcSweptAreaSolid or (in case of more than one clipping) an IfcBooleanResult.</Description>
+          <Definition> ('IFC2X3.IFCSWEPTAREASOLID' IN TYPEOF(FirstOperand)) OR ('IFC2X3.IFCBOOLEANCLIPPINGRESULT' IN TYPEOF(FirstOperand))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The second operand of the Boolean clipping operation shall be an IfcHalfSpaceSolid.</Description>
+          <Definition> ('IFC2X3.IFCHALFSPACESOLID' IN TYPEOF(SecondOperand))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The Boolean operator for clipping is always "Difference".</Description>
+          <Definition> Operator = DIFFERENCE</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcBooleanResult">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The dimensionality of the first operand shall be the same as the dimensionality of the second operand.</Description>
+          <Definition> FirstOperand.Dim = SecondOperand.Dim</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcBoxedHalfSpace">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The BaseSurface defining the half space shall not be a bounded surface.</Description>
+          <Definition> NOT ('IFC2X3.IFCCURVEBOUNDEDPLANE' IN TYPEOF(SELF\IfcHalfSpaceSolid.BaseSurface))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcExtrudedAreaSolid">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The ExtrudedDirection shall not be perpendicular to the local z-axis.</Description>
+          <Definition> IfcDotProduct(IfcRepresentationItem() || IfcGeometricRepresentationItem() || IfcDirection([0.0,0.0,1.0]), SELF.ExtrudedDirection) &lt;&gt; 0.0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcGeometricCurveSet">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>No surface shall be included in this geometric set.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcGeometricSet.Elements |
+            'IFC2X3.IFCSURFACE' IN TYPEOF(Temp))) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcGeometricSet">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>All elements within a geometric set shall have the same dimensionality.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* Elements |
+               Temp.Dim &lt;&gt; Elements[1].Dim))
+             = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPolygonalBoundedHalfSpace">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>The bounding polyline should have the dimensionality of 2.</Description>
+          <Definition> PolygonalBoundary.Dim = 2</Definition>
+        </WhereRule>
+        <WhereRule Name="WR42">
+          <Description>Only bounded curves of type IfcCompositeCurve, or IfcPolyline are valid boundaries.</Description>
+          <Definition> SIZEOF(TYPEOF(PolygonalBoundary) * [
+               'IFC2X3.IFCPOLYLINE', 
+               'IFC2X3.IFCCOMPOSITECURVE']
+             ) = 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcSectionedSpine">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The set of cross sections and the set of cross section positions shall be of the same size.</Description>
+          <Definition> SIZEOF(CrossSections) = SIZEOF(CrossSectionPositions)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The profile type (either AREA or CURVE) shall be consistent within the list of the profiles defining the cross sections.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* CrossSections | CrossSections[1].ProfileType &lt;&gt; temp.ProfileType)) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The curve entity which is the underlying spine curve shall have the dimensionality of 3.</Description>
+          <Definition> SpineCurve.Dim = 3</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcSweptAreaSolid">
+      <WhereRules>
+        <WhereRule Name="WR22">
+          <Description>The profile definition for the swept area solid shall be of type AREA.</Description>
+          <Definition> SweptArea.ProfileType = IfcProfileTypeEnum.Area</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcSweptDiskSolid">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The directrix shall be a curve in three dimensional space.</Description>
+          <Definition> Directrix.Dim = 3</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>If inner_radius exists then radius shall be greater than inner_radius.</Description>
+          <Definition> (NOT EXISTS(InnerRadius)) OR (Radius &gt; InnerRadius)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="Ifc2DCompositeCurve">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The composite curve shall be closed.</Description>
+          <Definition> SELF\IfcCompositeCurve.ClosedCurve</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The dimensionality of the composite curve shall be 2</Description>
+          <Definition> SELF\IfcCurve.Dim = 2</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAxis1Placement">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The Axis when given should only reference a three-dimensional IfcDirection.</Description>
+          <Definition> (NOT (EXISTS (Axis))) OR (Axis.Dim = 3)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The Cartesian point defining the Location shall have the dimensionality of 3.</Description>
+          <Definition> SELF\IfcPlacement.Location.Dim = 3</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAxis2Placement3D">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The dimensionality of the placement location shall be 3.</Description>
+          <Definition> SELF\IfcPlacement.Location.Dim = 3</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The Axis when given should only reference a three-dimensional IfcDirection.</Description>
+          <Definition> (NOT (EXISTS (Axis))) OR (Axis.Dim = 3)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The RefDirection when given should only reference a three-dimensional IfcDirection.</Description>
+          <Definition> (NOT (EXISTS (RefDirection))) OR (RefDirection.Dim = 3)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR4">
+          <Description>The Axis and RefDirection shall not be parallel or anti-parallel.</Description>
+          <Definition> (NOT (EXISTS (Axis))) OR (NOT (EXISTS (RefDirection))) OR (IfcCrossProduct(Axis,RefDirection).Magnitude &gt; 0.0)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR5">
+          <Description>Either both (Axis and RefDirection) are not given and therefore defaulted, or both shall be given. This is a further constraint in IFC Release 1.5.</Description>
+          <Definition> NOT ((EXISTS (Axis)) XOR (EXISTS (RefDirection)))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcBSplineCurve">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>All control points shall have the same dimensionality.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* ControlPointsList |
+               Temp.Dim &lt;&gt; ControlPointsList[1].Dim))
+             = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCartesianPoint">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Only two or three dimensional points shall be used for the purpose of defining geometry in this IFC Resource.</Description>
+          <Definition> HIINDEX(Coordinates) &gt;= 2</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCartesianTransformationOperator">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The derived scaling Scl shall be greater than zero.</Description>
+          <Definition> Scl &gt; 0.0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCartesianTransformationOperator2D">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The coordinate space dimensionality of this entity shall be 2.</Description>
+          <Definition> SELF\IfcCartesianTransformationOperator.Dim = 2</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The inherited Axis1 should have (if given) the dimensionality of 2.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcCartesianTransformationOperator.Axis1)) OR 
+            (SELF\IfcCartesianTransformationOperator.Axis1.Dim = 2)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The inherited Axis2 should have (if given) the dimensionality of 2.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcCartesianTransformationOperator.Axis2)) OR 
+            (SELF\IfcCartesianTransformationOperator.Axis2.Dim = 2)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCartesianTransformationOperator2DnonUniform">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The derived scaling Scl2 shall be greater than zero.</Description>
+          <Definition> Scl2 &gt; 0.0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCartesianTransformationOperator3D">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The coordinate space dimensionality of this entity shall be 3.</Description>
+          <Definition> SELF\IfcCartesianTransformationOperator.Dim = 3</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The inherited Axis1 should have (if given) the dimensionality of 3.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcCartesianTransformationOperator.Axis1)) OR 
+            (SELF\IfcCartesianTransformationOperator.Axis1.Dim = 3)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The inherited Axis2 should have (if given) the dimensionality of 3.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcCartesianTransformationOperator.Axis2)) OR 
+            (SELF\IfcCartesianTransformationOperator.Axis2.Dim = 3)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR4">
+          <Description>The Axis3 should have (if given) the dimensionality of 3.</Description>
+          <Definition> NOT(EXISTS(Axis3)) OR (Axis3.Dim = 3)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCartesianTransformationOperator3DnonUniform">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The derived scaling Scl2 shall be greater than zero.</Description>
+          <Definition> Scl2 &gt; 0.0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The derived scaling Scl3 shall be greater than zero.</Description>
+          <Definition> Scl3 &gt; 0.0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCompositeCurve">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>No transition code should be Discontinuous, except for the last code of an open curve.</Description>
+          <Definition> ((NOT ClosedCurve) AND (SIZEOF(QUERY(Temp &lt;* Segments | Temp.Transition = Discontinuous)) = 1)) OR ((ClosedCurve) AND (SIZEOF(QUERY(Temp &lt;* Segments | Temp.Transition = Discontinuous)) = 0))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR42">
+          <Description>Ensures, that all segments used in the curve have the same dimensionality.</Description>
+          <Definition> SIZEOF( QUERY( Temp &lt;* Segments | Temp.Dim &lt;&gt; Segments[1].Dim)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCompositeCurveSegment">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The parent curve shall be a bounded curve.</Description>
+          <Definition> ('IFC2X3.IFCBOUNDEDCURVE' IN TYPEOF(ParentCurve))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDimensionCount">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The dimension count should be an integer between 1 and 3 NOTE: This is a further constraint by IFC, the upper limit does not exist in STEP.</Description>
+          <Definition> { 0 &lt; SELF &lt;= 3 }</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcLine">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The dimensionality of the location (IfcCartesianPoint) shall be the same as of the direction (IfcVector).</Description>
+          <Definition> Dir.Dim = Pnt.Dim</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcOffsetCurve2D">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The underlying curve shall be defined in two-dimensional space.</Description>
+          <Definition> BasisCurve.Dim = 2</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcOffsetCurve3D">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The underlying curve shall be defined in three-dimensional space.</Description>
+          <Definition> BasisCurve.Dim = 3</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPolyline">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>The space dimensionality of all Points shall be the same.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* Points | Temp.Dim &lt;&gt; Points[1].Dim)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRectangularTrimmedSurface">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>U1 and U2 shall have different values.</Description>
+          <Definition> U1 &lt;&gt; U2</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>V1 and V2 shall have different values.</Description>
+          <Definition> V1 &lt;&gt; V2</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>With exception of those surfaces closed in the U parameter, direction Usense shall be compatible with the ordered parameter values for U.</Description>
+          <Definition> (('IFC2X3.IFCELEMENTARYSURFACE' IN TYPEOF(BasisSurface)) AND
+                     (NOT ('IFC2X3.IFCPLANE' IN TYPEOF(BasisSurface)))) OR
+                     ('IFC2X3.IFCSURFACEOFREVOLUTION' IN TYPEOF(BasisSurface)) OR
+                     (Usense = (U2 &gt; U1))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR4">
+          <Description>Vsense shall be compatible with the ordered parameter values for V.</Description>
+          <Definition> Vsense = (V2 &gt; V1)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTrimmedCurve">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>Either a single value is specified for Trim1, or the two trimming values are of different type (point and parameter)</Description>
+          <Definition> (HIINDEX(Trim1) = 1) OR (TYPEOF(Trim1[1]) &lt;&gt; TYPEOF(Trim1[2]))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR42">
+          <Description>Either a single value is specified for Trim2, or the two trimming values are of different type (point and parameter)</Description>
+          <Definition> (HIINDEX(Trim2) = 1) OR (TYPEOF(Trim2[1]) &lt;&gt; TYPEOF(Trim2[2]))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR43">
+          <Description>Only line and conic curves should be trimmed, not other bounded curves. NOTE: This is an additional constraint of IFC.</Description>
+          <Definition> NOT('IFC2X3.IFCBOUNDEDCURVE' IN TYPEOF(BasisCurve))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcVector">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The magnitude shall be positive or zero.</Description>
+          <Definition> Magnitude &gt;= 0.0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcObject">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Only maximum of one relationship to an underlying type (by an IfcRelDefinesByType relationship) should be given for an object instance.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* IsDefinedBy | 'IFC2X3.IFCRELDEFINESBYTYPE' IN TYPEOF(temp))) &lt;= 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcProduct">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>If an Representation is given, then also a LocalPlacement has to be given.</Description>
+          <Definition> (EXISTS(Representation) AND EXISTS(ObjectPlacement))
+                        OR (EXISTS(Representation) AND 
+                           (NOT('IFC2X3.IFCPRODUCTDEFINITIONSHAPE' IN TYPEOF(Representation))))
+                        OR (NOT(EXISTS(Representation)))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcProject">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The Name attribute has to be provided for the project. It is the short name for the project.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR32">
+          <Description>There shall be no instance of IfcGeometricRepresentationSubContext directly included in the set of RepresentationContexts.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* RepresentationContexts |
+              'IFC2X3.IFCGEOMETRICREPRESENTATIONSUBCONTEXT' IN TYPEOF(Temp)
+             )) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR33">
+          <Description>The IfcProject represents the root of the any decomposition tree. It shall therefore not be used to decompose any other object definition.</Description>
+          <Definition> SIZEOF(SELF\IfcObjectDefinition.Decomposes) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPropertySet">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The Name attribute has to be provided. The attribute is used to specify the type of the property set definition. The property set structure for particular property sets may be given within the property set definition part of the IFC specification.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR32">
+          <Description>Every property within the property set shall have a unique name attribute value.</Description>
+          <Definition> IfcUniquePropertyName(HasProperties)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcProxy">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The Name attribute has to be provided for a proxy.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssigns">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Rule checks whether the types of the assigned related objects comply with the contraint given by the RelatedObjectsType. The rule is important for constraint checks at subtypes of IfcRelAssigns or at subtypes of IfcObject, which refers to assignment relationships through the inverse HasAssignments relation.</Description>
+          <Definition> IfcCorrectObjectAssignment(RelatedObjectsType, RelatedObjects)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssignsToActor">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The instance to with the relation points shall not be contained in the List of RelatedObjects.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcRelAssigns.RelatedObjects | RelatingActor :=: Temp)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssignsToControl">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The instance to with the relation points shall not be contained in the List of RelatedObjects.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcRelAssigns.RelatedObjects | RelatingControl :=: Temp)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssignsToGroup">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The instance to with the relation points shall not be contained in the List of RelatedObjects.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcRelAssigns.RelatedObjects | RelatingGroup :=: Temp)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssignsToProcess">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The instance to with the relation points shall not be contained in the List of RelatedObjects.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcRelAssigns.RelatedObjects | RelatingProcess :=: Temp)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssignsToProduct">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The instance to which the relation points (RelatingProduct) shall not be contained in the list of RelatedObjects.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcRelAssigns.RelatedObjects | RelatingProduct :=: Temp)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssignsToResource">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The instance to with the relation points shall not be contained in the List of RelatedObjects.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcRelAssigns.RelatedObjects | RelatingResource :=: Temp)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssociates">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The IfcRelAssociates relationship is restricted to associate information object, such as classification, document, library information, material, etc., to semantic object (occurrence objects based on IfcObject, and type objects, based on IfcTypeObject).</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* RelatedObjects |
+              NOT(('IFC2X3.IFCOBJECTDEFINITION' IN TYPEOF(temp)) 
+               OR ('IFC2X3.IFCPROPERTYDEFINITION' IN TYPEOF(temp)))
+              )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelDecomposes">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The instance to which the relation RelatingObject points shall not be contained in the List of RelatedObjects.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* RelatedObjects | RelatingObject :=: Temp)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelNests">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The type of the RelatingObject shall always be the same as the type of each RelatedObject, i.e. the RelatingObject and all RelatedObject's are of the same type.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcRelDecomposes.RelatedObjects | 
+              NOT(TYPEOF(SELF\IfcRelDecomposes.RelatingObject) = TYPEOF(Temp)))) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelOverridesProperties">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The overriding is only applicable as an occurrence property set - i.e. it can only be assigned to a single occurrence of IfcObject.</Description>
+          <Definition> SIZEOF(SELF\IfcRelDefines.RelatedObjects) = 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelSequence">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The RelatingProcess shall not point to the same instance as the RelatedProcess.</Description>
+          <Definition> RelatingProcess :&lt;&gt;: RelatedProcess</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTypeObject">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>A Name attribute has to be provided. The name can be declared within the IFC specification as part of the property set agreements.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTypeProduct">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>The product style, if assigned to an object, shall only be assigned to object of type IfcProduct or IfcProxy.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcTypeObject.ObjectTypeOf[1])) OR
+             (SIZEOF(QUERY(temp &lt;* SELF\IfcTypeObject.ObjectTypeOf[1].RelatedObjects |
+               NOT('IFC2X3.IFCPRODUCT' IN TYPEOF(temp)))
+             ) = 0)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcMechanicalMaterialProperties">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>Young modulus of a material may not be negative.</Description>
+          <Definition> NOT(EXISTS(YoungModulus)) OR (YoungModulus &gt;= 0.0)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>Shear modulus of a material may not be negative.</Description>
+          <Definition> NOT(EXISTS(ShearModulus)) OR (ShearModulus &gt;= 0.0)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcMechanicalSteelMaterialProperties">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>Yield stress, if given, shall be non-negative.</Description>
+          <Definition> NOT(EXISTS(YieldStress)) OR (YieldStress &gt;= 0.)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR32">
+          <Description>Ultimate stress, if given, shall be non-negative.</Description>
+          <Definition> NOT(EXISTS(UltimateStress)) OR (UltimateStress &gt;= 0.)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR33">
+          <Description>Hardening module, if given, shall be non-negative.</Description>
+          <Definition> NOT(EXISTS(HardeningModule)) OR (HardeningModule &gt;= 0.)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR34">
+          <Description>Proportional stress, if given, shall be non-negative.</Description>
+          <Definition> NOT(EXISTS(ProportionalStress)) OR (ProportionalStress &gt;= 0.)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCompoundPlaneAngleMeasure">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The first measure (degrees) shall be between -360 and 360 degree.</Description>
+          <Definition> { -360 &lt;= SELF[1] &lt; 360 }</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The second measure (minutes) shall be between -60 and 60.</Description>
+          <Definition> { -60 &lt;= SELF[2] &lt; 60 }</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The third measure (seconds) shall be between -60 and 60.</Description>
+          <Definition> { -60 &lt;= SELF[3] &lt; 60 }</Definition>
+        </WhereRule>
+        <WhereRule Name="WR4">
+          <Description>The measure components shall have the same sign (positive or negative).</Description>
+          <Definition> ((SELF[1] &gt;= 0) AND (SELF[2] &gt;= 0) AND (SELF[3] &gt;= 0)) OR ((SELF[1] &lt;= 0) AND (SELF[2] &lt;= 0) AND (SELF[3] &lt;= 0))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDerivedUnit">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Units as such shall not be re-defined as derived units.</Description>
+          <Definition> (SIZEOF (Elements) &gt; 1) OR ((SIZEOF (Elements) = 1) AND (Elements[1].Exponent &lt;&gt; 1 ))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>When attribute UnitType has enumeration value USERDEFINED then attribute UserDefinedType shall also have a value.</Description>
+          <Definition> (UnitType &lt;&gt; IfcDerivedUnitEnum.USERDEFINED) OR
+            ((UnitType = IfcDerivedUnitEnum.USERDEFINED) AND 
+             (EXISTS(SELF.UserDefinedType)))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcNamedUnit">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Correct dimensions of the unit are established through the function IfcCorrectDimensions.</Description>
+          <Definition> IfcCorrectDimensions (SELF.UnitType, SELF.Dimensions)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcNormalisedRatioMeasure">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Normalized ratio shall be a non-negative value less than or equal to 1.0</Description>
+          <Definition> {0.0 &lt;= SELF &lt;= 1.0}</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPHMeasure">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The pH value shall be in the range from 0 to 14.</Description>
+          <Definition> {0.0 &lt;= SELF &lt;= 14.0}</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPositiveLengthMeasure">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>A positive measure shall be greater than zero.</Description>
+          <Definition> SELF &gt; 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPositivePlaneAngleMeasure">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>A positive measure shall be greater than zero.</Description>
+          <Definition> SELF &gt; 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPositiveRatioMeasure">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>A positive measure shall be greater than zero.</Description>
+          <Definition> SELF &gt; 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcUnitAssignment">
+      <WhereRules>
+        <WhereRule Name="WR01">
+          <Description>Checks that the set of globally assigned units has each unit type (either of type IfcNamedUnit,IfcDerivedUnit, or IfcMonetaryUnit) defined only once.</Description>
+          <Definition> IfcCorrectUnitAssignment(Units)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcBlobTexture">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>Currently the formats of bmp, jpg, gif and pgn, shall be supported.</Description>
+          <Definition> SELF.RasterFormat IN ['BMP', 'JPG', 'GIF', 'PNG']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCurveStyle">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>The curve width, if provided, shall be given by an IfcPositiveLengthMeasure representing the curve width in the default measure unit, or by an IfcDescriptiveMeasure with the value 'by layer' representing the curve width by the default curve width at the associated layer.</Description>
+          <Definition> (NOT(EXISTS(CurveWidth))) OR
+             ('IFC2X3.IFCPOSITIVELENGTHMEASURE' IN TYPEOF(CurveWidth)) OR 
+              (('IFC2X3.IFCDESCRIPTIVEMEASURE' IN TYPEOF(CurveWidth)) AND
+              (CurveWidth = 'by layer'))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCurveStyleFontPattern">
+      <WhereRules>
+        <WhereRule Name="WR01">
+          <Description>The value of a visible pattern length shall be equal or greater then zero.</Description>
+          <Definition> VisibleSegmentLength &gt;= 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDraughtingPreDefinedCurveFont">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The name of the draughting_pre_defined_curve_font shall be 'continuous�, �chain�, �chain', double dash�, �dashed�, or �dotted�.</Description>
+          <Definition> SELF\IfcPredefinedItem.Name IN
+                    ['continuous',
+                     'chain',
+                     'chain double dash',
+                     'dashed',
+                     'dotted',
+                     'by layer']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcFillAreaStyle">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>There shall be a maximum of one colour assignment to the fill area style.</Description>
+          <Definition> SIZEOF(QUERY(Style &lt;* SELF.FillStyles |
+               'IFC2X3.IFCCOLOUR' IN
+                TYPEOF(Style)
+               )) &lt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR12">
+          <Description>There shall be a maximum of one externally defined hatch style assignment to the fill area style.</Description>
+          <Definition> SIZEOF(QUERY(Style &lt;* SELF.FillStyles |
+               'IFC2X3.IFCEXTERNALLYDEFINEDHATCHSTYLE' IN
+                TYPEOF(Style)
+               )) &lt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR13">
+          <Description>Either the fill area style contains a definition from an externally defined hatch style, or from (one or many) fill area style hatchings or from (one or many) fill area style tiles, but not a combination of those three types.</Description>
+          <Definition> IfcCorrectFillAreaStyle(SELF.FillStyles)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcFillAreaStyleHatching">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The subtype IfcTwoDirectionRepeatFactor should not be used to define the start of the next hatch line.</Description>
+          <Definition> NOT(
+              'IFC2X3.IFCTWODIRECTIONREPEATFACTOR' 
+              IN TYPEOF(StartOfNextHatchLine)
+             )</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>The IfcCartesianPoint, if given as value to PatternStart shall have the dimensionality of 2.</Description>
+          <Definition> NOT(EXISTS(PatternStart)) 
+             OR (PatternStart.Dim = 2)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR23">
+          <Description>The IfcCartesianPoint, if given as value to PointOfReferenceHatchLine shall have the dimensionality of 2.</Description>
+          <Definition> NOT(EXISTS(PointOfReferenceHatchLine)) 
+             OR (PointOfReferenceHatchLine.Dim = 2)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPixelTexture">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The minimum number of pixel in width (S coordinate) direction shall be 1.</Description>
+          <Definition> Width &gt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>The minimum number of pixel in height (T coordinate) direction shall be 1.</Description>
+          <Definition> Height &gt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR23">
+          <Description>The number of color components shall be either 1, 2, 3, or 4.</Description>
+          <Definition> {1 &lt;= ColourComponents &lt;= 4}</Definition>
+        </WhereRule>
+        <WhereRule Name="WR24">
+          <Description>The list of pixel shall have exactly width*height members.</Description>
+          <Definition> SIZEOF(Pixel) = (Width * Height)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcSpecularRoughness">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Specular roughness shall be given as a non-negative value less than or equal to 1.0</Description>
+          <Definition> {0.0 &lt;= SELF &lt;= 1.0}</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStyledItem">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>Restricts the number of styles to 1 (the datatype SET remains for compatibility reasons with ISO 10303-46).</Description>
+          <Definition> SIZEOF(Styles) = 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR12">
+          <Description>A styled item cannot be styled by another styled item.</Description>
+          <Definition> NOT('IFC2X3.IFCSTYLEDITEM' IN TYPEOF(Item))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcSurfaceStyle">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>Each select item of IfcSurfaceStyleSelect within the Styles shall only be used maximum once.</Description>
+          <Definition> SIZEOF(QUERY(Style &lt;* SELF.Styles |
+               'IFC2X3.IFCSURFACESTYLESHADING' IN
+                TYPEOF(Style)
+               )) &lt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR12">
+          <Description>The IfcSurfaceStyleLighting shall only be used zero or one time within the set of Styles.</Description>
+          <Definition> SIZEOF(QUERY(Style &lt;* SELF.Styles |
+               'IFC2X3.IFCSURFACESTYLELIGHTING' IN
+                TYPEOF(Style)
+               )) &lt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR13">
+          <Description>The IfcSurfaceStyleRefraction shall only be used zero or one time within the set of Styles.</Description>
+          <Definition> SIZEOF(QUERY(Style &lt;* SELF.Styles |
+               'IFC2X3.IFCSURFACESTYLEREFRACTION' IN
+                TYPEOF(Style)
+               )) &lt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR14">
+          <Description>The IfcSurfaceStyleWithTextures shall only be used zero or one time within the set of Styles.</Description>
+          <Definition> SIZEOF(QUERY(Style &lt;* SELF.Styles |
+               'IFC2X3.IFCSURFACESTYLEWITHTEXTURES' IN
+                TYPEOF(Style)
+               )) &lt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR15">
+          <Description>The IfcExternallyDefinedSurfaceStyle shall only be used zero or one time within the set of Styles.</Description>
+          <Definition> SIZEOF(QUERY(Style &lt;* SELF.Styles |
+               'IFC2X3.IFCEXTERNALLYDEFINEDSURFACESTYLE' IN
+                TYPEOF(Style)
+               )) &lt;= 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTextAlignment">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Allowable values for text alignment.</Description>
+          <Definition> SELF IN ['left', 'right', 'center', 'justify']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTextDecoration">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Allowable values for text decoration.</Description>
+          <Definition> SELF IN ['none', 'underline', 'overline', 'line-through', 'blink']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTextTransformation">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Allowable values for text transform.</Description>
+          <Definition> SELF IN ['capitalize', 'uppercase', 'lowercase', 'none']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAnnotationCurveOccurrence">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The Item that is styled by an IfcAnnotationCurveOccurrence relation shall be (if provided) a subtype of IfcCurve. 
+
+NOTE  If no Item is provided, the IfcAnnotationCurveOccurrence is used to provide a curve style to a material dependent presentation.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcStyledItem.Item)) OR
+             ('IFC2X3.IFCCURVE' IN TYPEOF (SELF\IfcStyledItem.Item))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAnnotationFillAreaOccurrence">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The Item that is styled by an IfcAnnotationFillAreaOccurrence relation shall be (if provided) an IfcAnnotationFillArea. 
+
+NOTE  If no Item is provided, the IfcAnnotationFillAreaOccurrence is used to provide a fill area style to a material dependent presentation.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcStyledItem.Item)) OR
+             ('IFC2X3.IFCANNOTATIONFILLAREA' IN TYPEOF (SELF\IfcStyledItem.Item))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAnnotationSurface">
+      <WhereRules>
+        <WhereRule Name="WR01">
+          <Description>Only surfaces, surface models, solids and 3D primitives and CSG results are applicable as Items.</Description>
+          <Definition> SIZEOF([
+               'IFC2X3.IFCSURFACE',
+               'IFC2X3.IFCSHELLBASEDSURFACEMODEL',
+               'IFC2X3.IFCFACEBASEDSURFACEMODEL',
+               'IFC2X3.IFCSOLIDMODEL',
+               'IFC2X3.IFCBOOLEANRESULT',
+               'IFC2X3.IFCCSGPRIMITIVE3D'] 
+              * TYPEOF(Item)
+               ) &gt;= 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAnnotationSurfaceOccurrence">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The Item that is styled by an IfcAnnotationSurfaceOccurrence relation shall be (if provided) a subtype of IfcSurface, IfcSolidModel, IfcShellBasedSurfaceModel, IfcFaceBasedSurfaceModel. 
+
+NOTE  If no Item is provided, the IfcAnnotationSurfaceOccurrence is used to provide a surface style to a material dependent presentation.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcStyledItem.Item)) OR 
+             (SIZEOF(
+              ['IFC2X3.IFCSURFACE',
+               'IFC2X3.IFCFACEBASEDSURFACEMODEL',
+               'IFC2X3.IFCSHELLBASEDSURFACEMODEL',
+               'IFC2X3.IFCSOLIDMODEL'] *
+              TYPEOF(SELF\IfcStyledItem.Item)) &gt; 0)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAnnotationSymbolOccurrence">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The Item that is styled by an IfcAnnotationSymbolOccurrence relation shall be (if provided) an IfcDefinedSymbol. 
+
+NOTE  If no Item is provided, the IfcAnnotationSymbolOccurrence is used to provide a symbol style to a material dependent presentation.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcStyledItem.Item)) OR
+             ('IFC2X3.IFCDEFINEDSYMBOL' IN TYPEOF (SELF\IfcStyledItem.Item))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAnnotationTextOccurrence">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The Item that is styled by an IfcAnnotationTextOccurrence relation shall be (if provided) an IfcTextLiteral. 
+
+NOTE  If no Item is provided, the IfcAnnotationTextOccurrence is used to provide a text style to a material dependent presentation.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcStyledItem.Item)) OR
+             ('IFC2X3.IFCTEXTLITERAL' IN TYPEOF (SELF\IfcStyledItem.Item))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTextLiteralWithExtent">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The subtype of IfcPlanarExtent, IfcPlanarBox, should not be used to represent an Extent for the text literal.</Description>
+          <Definition> NOT('IFC2X3.IFCPLANARBOX' IN TYPEOF(Extent))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTextureMap">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>The texture map shall only be defined for an IfcAnnotatedSurface, referening a vertex based surface or solid model.</Description>
+          <Definition> SIZEOF([
+               'IFC2X3.IFCSHELLBASEDSURFACEMODEL',
+               'IFC2X3.IFCFACEBASEDSURFACEMODEL',
+               'IFC2X3.IFCFACETEDBREP',
+               'IFC2X3.IFCFACETEDBREPWITHVOIDS'] 
+              * TYPEOF(SELF\IfcTextureCoordinate.AnnotatedSurface[1].Item)
+               ) &gt;= 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDimensionCalloutRelationship">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>The name of the relationship shall either be "primary" or "secondary".</Description>
+          <Definition> SELF\IfcDraughtingCalloutRelationship.Name IN ['primary','secondary']</Definition>
+        </WhereRule>
+        <WhereRule Name="WR12">
+          <Description>The relating draughting callout shall be a dimension (linear, diameter, radius, or angular).</Description>
+          <Definition> SIZEOF(TYPEOF(SELF\IfcDraughtingCalloutRelationship.RelatingDraughtingCallout) * [
+                  'IFC2X3.IFCANGULARDIMENSION',
+                  'IFC2X3.IFCDIAMETERDIMENSION',
+                  'IFC2X3.IFCLINEARDIMENSION',
+                  'IFC2X3.IFCRADIUSDIMENSION']) = 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR13">
+          <Description>The related draughting callout shall not be a dimension (linear, diameter, radius, or angular)</Description>
+          <Definition> NOT ('IFC2X3.IFCDIMENSIONCURVEDIRECTEDCALLOUT'
+               IN TYPEOF (SELF\IfcDraughtingCalloutRelationship.RelatedDraughtingCallout))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDimensionCurve">
+      <WhereRules>
+        <WhereRule Name="WR51">
+          <Description>A dimension curve shall be used by at least one referencing dimension curve directed callout, i.e. it should not be used outside of the context of a dimension element group.</Description>
+          <Definition> SIZEOF(USEDIN(SELF,'IFC2X3.IFCDRAUGHTINGCALLOUT.CONTENTS')) 
+                   &gt;= 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR52">
+          <Description>The dimension curve should not be annotated with more than one terminator having the role "Origin", nor with more than one terminator having the role "Target".</Description>
+          <Definition> (SIZEOF(QUERY (Dct1 &lt;* USEDIN(SELF,'IFC2X3.' + 
+                            'IFCTERMINATORSYMBOL.ANNOTATEDCURVE') | (Dct1.Role = IfcDimensionExtentUsage.ORIGIN))) &lt;= 1) 
+             AND 
+             (SIZEOF(QUERY (Dct2 &lt;* USEDIN(SELF,'IFC2X3.' + 
+                            'IFCTERMINATORSYMBOL.ANNOTATEDCURVE') | (Dct2.Role = IfcDimensionExtentUsage.TARGET))) &lt;= 1)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR53">
+          <Description>All terminators assigned to a dimension curve shall be dimension curve terminators.</Description>
+          <Definition> SIZEOF(QUERY (Dct &lt;* AnnotatedBySymbols | 
+               NOT('IFC2X3.IFCDIMENSIONCURVETERMINATOR' IN TYPEOF(Dct)))) 
+               = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDimensionCurveDirectedCallout">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>There shall be exactly one dimension curve in the set of draughting callout elements.</Description>
+          <Definition> SIZEOF(QUERY (Dc &lt;* SELF\IfcDraughtingCallout.Contents | (
+                   'IFC2X3.IFCDIMENSIONCURVE' IN TYPEOF(Dc)))) 
+                  = 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR42">
+          <Description>There shall be only zero, one, or two projection curves within the content of the callout.</Description>
+          <Definition> SIZEOF (QUERY (Dc &lt;* SELF.contents |
+                    ('IFC2X3.IFCPROJECTIONCURVE' IN
+                      TYPEOF (Dc)))) &lt;= 2</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDimensionCurveTerminator">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>A dimension curve terminator shall only be assigned to a dimension curve.</Description>
+          <Definition> 'IFC2X3.IFCDIMENSIONCURVE' IN TYPEOF
+             (SELF\IfcTerminatorSymbol.AnnotatedCurve)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPreDefinedPointMarkerSymbol">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The inherited name for pre defined items shall only have the value of one of the following words.</Description>
+          <Definition> SELF\IfcPreDefinedItem.Name IN ['asterisk','circle','dot','plus','square','triangle','x']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPreDefinedTerminatorSymbol">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The inherited name for pre defined items shall only have the value of one of the following words.</Description>
+          <Definition> SELF\IfcPreDefinedItem.Name IN ['blanked arrow','blanked box',
+                 'blanked dot','dimension origin','filled arrow','filled box',
+                 'filled dot','integral symbol','open arrow','slash','unfilled arrow']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStructuredDimensionCallout">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>Each annotation text occurrence within the set of contents referenced by the structured dimension callout shall have a name of either of the following: �dimension value�, �tolerance value�, �unit text�, �prefix text�, or �suffix text�.</Description>
+          <Definition> SIZEOF(QUERY ( Ato &lt;* QUERY ( Con &lt;* SELF.contents | (
+                   'IFC2X3.IFCANNOTATIONTEXTOCCURRENCE' IN 
+                    TYPEOF(Con)) ) | (NOT (Ato.Name IN ['dimension value',
+                   'tolerance value','unit text','prefix text','suffix text']))))
+                  = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDraughtingPreDefinedColour">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The inherited name for pre defined items shall only have the value of one of the following words.</Description>
+          <Definition> SELF\IfcPreDefinedItem.Name IN ['black','red','green','blue','yellow',
+                  'magenta','cyan','white','by layer']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDraughtingPreDefinedTextFont">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The inherited name for pre defined items shall only have the value of one of the following words.</Description>
+          <Definition> SELF\IfcPreDefinedItem.Name IN ['ISO 3098-1 font A','ISO 3098-1 font B']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcFontStyle">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Allowable values for font style.</Description>
+          <Definition> SELF IN ['normal','italic','oblique']</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTextStyleFontModel">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The size should be given by a positive length measure,</Description>
+          <Definition> ('IFC2X3.IFCLENGTHMEASURE' IN TYPEOF(SELF.FontSize)) AND
+             (SELF.FontSize &gt; 0.)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcProcedure">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Restrict the relationship 'Nests' inherited from IfcObject to IfcRelNests.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcObjectDefinition.Decomposes | NOT('IFC2X3.IFCRELNESTS' IN TYPEOF(temp)))) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>Restrict the relationship 'IsNestedBy' inherited from IfcObject to IfcRelNests.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcObjectDefinition.IsDecomposedBy | NOT('IFC2X3.IFCRELNESTS' IN TYPEOF(temp)))) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The Name attribute should be inserted to describe the task name.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR4">
+          <Description>The attribute UserDefinedProcedureType must be asserted when the value of the IfcProcedureTypeEnum is set to USERDEFINED.</Description>
+          <Definition> (ProcedureType &lt;&gt; IfcProcedureTypeEnum.USERDEFINED) OR
+            ((ProcedureType = IfcProcedureTypeEnum.USERDEFINED) AND EXISTS(SELF\IfcProcedure.UserDefinedProcedureType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssignsTasks">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>There shall only be one single object in the set of relates objects, since the IfcRelAssignsTask establishes an one-to-one relationship.</Description>
+          <Definition> HIINDEX(SELF\IfcRelAssigns.RelatedObjects) = 1</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The related object should be on type IfcTask.</Description>
+          <Definition> 'IFC2X3.IFCTASK' IN TYPEOF(SELF\IfcRelAssigns.RelatedObjects[1])</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The relating control should be on type IfcWorkControl.</Description>
+          <Definition> 'IFC2X3.IFCWORKCONTROL' IN TYPEOF(SELF\IfcRelAssignsToControl.RelatingControl)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTask">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Restrict the relationship 'Nests' inherited from IfcObject to IfcRelNestsProcesses.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcObjectDefinition.Decomposes | NOT('IFC2X3.IFCRELNESTS' IN TYPEOF(temp)))) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>Restrict the relationship 'IsNestedBy' inherited from IfcObject to IfcRelNestsProcesses.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcObjectDefinition.IsDecomposedBy | NOT('IFC2X3.IFCRELNESTS' IN TYPEOF(temp)))) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The Name attribute should be inserted to describe the task name.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcWorkControl">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The attribute UserDefinedControlType must be asserted when the value of the IfcWorkControlTypeEnum is set to USERDEFINED.</Description>
+          <Definition> (WorkControlType &lt;&gt; IfcWorkControlTypeEnum.USERDEFINED) OR
+            ((WorkControlType = IfcWorkControlTypeEnum.USERDEFINED) AND EXISTS(SELF\IfcWorkControl.UserDefinedControlType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcBuildingElementProxy">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>A Name attribute should be asserted for a building element proxy.</Description>
+          <Definition> EXISTS(SELF\IfcRoot.Name)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCovering">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>Either the PredefinedType attribute is unset (e.g. because an IfcCoveringType is associated), or the inherited attribute ObjectType shall be given, if the PredefinedType is set to USERDEFINED.</Description>
+          <Definition> NOT(EXISTS(PredefinedType)) OR 
+              (PredefinedType &lt;&gt; IfcCoveringTypeEnum.USERDEFINED) OR 
+              ((PredefinedType = IfcCoveringTypeEnum.USERDEFINED) AND EXISTS (SELF\IfcObject.ObjectType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcElementAssembly">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The attribute ObjectType shall be given, if the predefined type is set to USERDEFINED.</Description>
+          <Definition> (PredefinedType &lt;&gt; IfcElementAssemblyTypeEnum.USERDEFINED) OR ((PredefinedType = IfcElementAssemblyTypeEnum.USERDEFINED) AND EXISTS(SELF\IfcObject.ObjectType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcGrid">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>The placement for the grid has to be given.</Description>
+          <Definition> EXISTS(SELF\IfcProduct.ObjectPlacement)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelAssociatesMaterial">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The material information must not be associated to a substraction feature (such as an opening) or to a virtual element.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcRelAssociates.RelatedObjects | 
+             ('IFC2X3.IFCFEATUREELEMENTSUBTRACTION' IN TYPEOF(temp))
+               OR ('IFC2X3.IFCVIRTUALELEMENT' IN TYPEOF(temp))
+             )) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>The material information, using IfcMaterialSelect should be associated to a product occurrence or an product type.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcRelAssociates.RelatedObjects | 
+             (NOT('IFC2X3.IFCPRODUCT' IN TYPEOF(temp)) 
+              AND NOT('IFC2X3.IFCTYPEPRODUCT' IN TYPEOF(temp)))
+             )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelConnectsElements">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The instance of the relating element shall not be the same instance as the related element.</Description>
+          <Definition> RelatingElement :&lt;&gt;: RelatedElement</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelContainedInSpatialStructure">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The relationship object shall not be used to include other spatial structure elements into a spatial structure element. The hierarchy of the spatial structure is defined using IfcRelAggregates.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* RelatedElements | 'IFC2X3.IFCSPATIALSTRUCTUREELEMENT' IN TYPEOF(temp))) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelReferencedInSpatialStructure">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The relationship object shall not be used to include other spatial structure elements into a spatial structure element. The hierarchy of the spatial structure is defined using IfcRelAggregates.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* RelatedElements | 'IFC2X3.IFCSPATIALSTRUCTUREELEMENT' IN TYPEOF(temp))) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelSpaceBoundary">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>If the space boundary is physical, it shall be provided by an element. If the space boundary is virtual, it shall either have a virtual element providing the space boundary, or none.</Description>
+          <Definition> ((PhysicalOrVirtualBoundary = IfcPhysicalOrVirtualEnum.Physical) AND 
+              (EXISTS(RelatedBuildingElement) AND NOT('IFC2X3.IFCVIRTUALELEMENT' IN TYPEOF(RelatedBuildingElement)))) 
+            OR 
+            ((PhysicalOrVirtualBoundary = IfcPhysicalOrVirtualEnum.Virtual) AND 
+              (NOT(EXISTS(RelatedBuildingElement)) OR ('IFC2X3.IFCVIRTUALELEMENT' IN TYPEOF(RelatedBuildingElement)))) 
+            OR 
+             (PhysicalOrVirtualBoundary = IfcPhysicalOrVirtualEnum.NotDefined)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcSpatialStructureElement">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>All spatial structure elements shall be associated (using the IfcRelAggregates relationship) with another spatial structure element, or with IfcProject.</Description>
+          <Definition> (HIINDEX(SELF\IfcObjectDefinition.Decomposes) = 1) 
+             AND
+             ('IFC2X3.IFCRELAGGREGATES' IN TYPEOF(SELF\IfcObjectDefinition.Decomposes[1])) 
+             AND
+             (('IFC2X3.IFCPROJECT' IN TYPEOF (SELF\IfcObjectDefinition.Decomposes[1].RelatingObject)) OR
+              ('IFC2X3.IFCSPATIALSTRUCTUREELEMENT' IN TYPEOF (SELF\IfcObjectDefinition.Decomposes[1].RelatingObject))
+             )</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcZone">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>A Zone is grouped by the objectified relationship IfcRelAssignsToGroup. Only objects of type IfcSpace or IfcZone are allowed as RelatedObjects.</Description>
+          <Definition> SIZEOF (QUERY (temp &lt;* SELF\IfcGroup.IsGroupedBy.RelatedObjects |  NOT(('IFC2X3.IFCZONE' IN TYPEOF(temp)) OR ('IFC2X3.IFCSPACE' IN TYPEOF(temp))) )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcGeneralProfileProperties">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The value of the cross section area shall (if given) be greater than zero.</Description>
+          <Definition> NOT(EXISTS(CrossSectionArea)) OR (CrossSectionArea &gt; 0.)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStructuralProfileProperties">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The shear deformation area y shall have a value, if given, being greater than zero.</Description>
+          <Definition> NOT(EXISTS(ShearDeformationAreaY)) OR (ShearDeformationAreaY &gt;= 0.)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>The shear deformation area z shall have a value, if given, being greater than zero.</Description>
+          <Definition> NOT(EXISTS(ShearDeformationAreaZ)) OR (ShearDeformationAreaZ &gt;= 0.)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcArbitraryClosedProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The curve used for the outer curve definition shall have the dimensionality of 2.</Description>
+          <Definition> OuterCurve.Dim = 2</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The outer curve shall not be of type IfcLine as IfcLine is not a closed curve.</Description>
+          <Definition> NOT('IFC2X3.IFCLINE' IN TYPEOF(OuterCurve))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The outer curve shall not be of type IfcOffsetCurve2D as it should not be defined as an offset of another curve.</Description>
+          <Definition> NOT('IFC2X3.IFCOFFSETCURVE2D' IN TYPEOF(OuterCurve))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcArbitraryOpenProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>The profile type is a .CURVE., an open profile can only be used to define a swept surface. 
+
+Note6nbsp; This does not apply to the subtype IfcCentreLineProfileDef.</Description>
+          <Definition> ('IFC2X3.IFCCENTERLINEPROFILEDEF' IN TYPEOF(SELF)) OR 
+              (SELF\IfcProfileDef.ProfileType = IfcProfileTypeEnum.CURVE)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR12">
+          <Description>The dimensionality of the curve shall be 2.</Description>
+          <Definition> Curve.Dim = 2</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcArbitraryProfileDefWithVoids">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The type of the profile shall be AREA, as it can only be involved in the definition of a swept area.</Description>
+          <Definition> SELF\IfcProfileDef.ProfileType = AREA</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>All inner curves shall have the dimensionality of 2.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* InnerCurves | temp.Dim &lt;&gt; 2)) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>None of the inner curves shall by of type IfcLine, as an IfcLine can not be a closed curve.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* InnerCurves | 'IFC2X3.IFCLINE' IN TYPEOF(temp))) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCircleHollowProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The wall thickness shall be smaller then the radius.</Description>
+          <Definition> WallThickness &lt; SELF\IfcCircleProfileDef.Radius</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCompositeProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Either all profiles are areas or all profiles are curves.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* Profiles | temp.ProfileType &lt;&gt; Profiles[1].ProfileType)) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>A composite profile should not include another composite profile, i.e. no recursive definitions should be allowed.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* Profiles | 'IFC2X3.IFCCOMPOSITEPROFILEDEF' IN TYPEOF(temp))) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcCShapeProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The girth shall be smaller than half of the depth.</Description>
+          <Definition> Girth &lt; (Depth / 2.)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>If the value for InternalFilletRadius is given, it shall be smaller than half of the Depth and half of the Width.</Description>
+          <Definition> NOT(EXISTS(InternalFilletRadius)) OR
+            ((InternalFilletRadius &lt;= Width/2.) AND (InternalFilletRadius &lt;= Depth/2.))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The WallThickness shall be smaller than half of the Width and half of the Depth.</Description>
+          <Definition> (WallThickness &lt; Width/2.) AND (WallThickness &lt; Depth/2.)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDerivedProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The profile type of the derived profile shall be the same as the type of the parent profile, i.e. both shall be either AREA or CURVE.</Description>
+          <Definition> SELF\IfcProfileDef.ProfileType = ParentProfile.ProfileType</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcIShapeProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The thickness of the flange shall be less than half of the overall depth.</Description>
+          <Definition> FlangeThickness &lt; (OverallDepth / 2.)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The web thickness shall be less then the overall width.</Description>
+          <Definition> WebThickness &lt; OverallWidth</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>The FilletRadius, if given, should be within the range of allowed values.</Description>
+          <Definition> NOT(EXISTS(FilletRadius)) OR
+            ((FilletRadius &lt;= (OverallWidth - WebThickness)/2.) AND 
+             (FilletRadius &lt;= (OverallDepth - (2. * FlangeThickness))/2.))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcLShapeProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The thickness of the flange has to be smaller than the depth of the profile.</Description>
+          <Definition> Thickness &lt; Depth</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>The thickness of the flange has to be smaller than the width of the profile (if given).</Description>
+          <Definition> NOT(EXISTS(Width)) OR (Thickness &lt; Width)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRectangleHollowProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The wall thickness shall be smaller than the X and Y dimension of the rectangle.</Description>
+          <Definition> (WallThickness &lt; (SELF\IfcRectangleProfileDef.XDim/2.)) AND 
+             (WallThickness &lt; (SELF\IfcRectangleProfileDef.YDim/2.))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR32">
+          <Description>The outer fillet radius (if given) shall be smaller than or equal to the X and Y dimension of the rectangle.</Description>
+          <Definition> NOT(EXISTS(OuterFilletRadius)) OR 
+             ((OuterFilletRadius &lt;= (SELF\IfcRectangleProfileDef.XDim/2.)) AND 
+              (OuterFilletRadius &lt;= (SELF\IfcRectangleProfileDef.YDim/2.)))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR33">
+          <Description>The inner fillet radius (if given) shall be smaller than or equal to the X and Y dimension of the rectangle minus the wall thickness.</Description>
+          <Definition> NOT(EXISTS(InnerFilletRadius)) OR 
+             ((InnerFilletRadius &lt;= (SELF\IfcRectangleProfileDef.XDim/2. - WallThickness)) AND 
+              (InnerFilletRadius &lt;= (SELF\IfcRectangleProfileDef.YDim/2. - WallThickness)))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRoundedRectangleProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The value of the attribute RoundingRadius shall be lower or equal than either of both, half the value of the Xdim and the YDim attribute.</Description>
+          <Definition> ((RoundingRadius &lt;= (SELF\IfcRectangleProfileDef.XDim/2.)) AND 
+              (RoundingRadius &lt;= (SELF\IfcRectangleProfileDef.YDim/2.)))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTShapeProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The flange thickness shall be smaller than the depth.</Description>
+          <Definition> FlangeThickness &lt; Depth</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The web thickness shall be smaller than the flange width.</Description>
+          <Definition> WebThickness &lt; FlangeWidth</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcUShapeProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The flange thickness shall be smaller than half of the depth.</Description>
+          <Definition> FlangeThickness &lt; (Depth / 2.)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>The web thickness shall be smaller than the flange width.</Description>
+          <Definition> WebThickness &lt; FlangeWidth</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcZShapeProfileDef">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The flange thickness shall be smaller than half of the depth.</Description>
+          <Definition> FlangeThickness &lt; (Depth / 2.)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcComplexProperty">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The IfcComplexProperty should not reference itself within the list of HasProperties.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* HasProperties | SELF :=: temp)) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>Each property within the complex property shall have a unique name attribute.</Description>
+          <Definition> IfcUniquePropertyName(HasProperties)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPropertyBoundedValue">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The measure type of the upper bound value shall be the same as the measure type of the lower bound value, if both (upper and lower bound) are given.</Description>
+          <Definition> NOT(EXISTS(UpperBoundValue)) OR NOT(EXISTS(LowerBoundValue)) OR
+             (TYPEOF(UpperBoundValue) = TYPEOF(LowerBoundValue))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>Either the upper bound, or the lower bound, or both bounds shall be given.</Description>
+          <Definition> EXISTS(UpperBoundValue) OR EXISTS(LowerBoundValue)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPropertyDependencyRelationship">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The DependingProperty shall not point to the same instance as the DependantProperty</Description>
+          <Definition> DependingProperty :&lt;&gt;: DependantProperty</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPropertyEnumeratedValue">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Each enumeration value shall be a member of the list of EnumerationValues at the referenced IfcPropertyEnumeration (if given).</Description>
+          <Definition> NOT(EXISTS(EnumerationReference)) OR 
+               (SIZEOF(QUERY(temp &lt;* EnumerationValues |
+                temp IN EnumerationReference.EnumerationValues))
+                = SIZEOF(EnumerationValues))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPropertyEnumeration">
+      <WhereRules>
+        <WhereRule Name="WR01">
+          <Description>All values within the list of EnumerationValues shall be of the same measure type.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF.EnumerationValues | 
+               NOT(TYPEOF(SELF.EnumerationValues[1]) = TYPEOF(temp))
+               )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPropertyListValue">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>All values within the list of values shall be of the same measure type.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF.ListValues | 
+               NOT(TYPEOF(SELF.ListValues[1]) = TYPEOF(temp))
+               )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPropertyTableValue">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The number of members in the list of defining values shall be the same as the number of members in the list of defined values.</Description>
+          <Definition> SIZEOF(DefiningValues) = SIZEOF(DefinedValues)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>All values within the list of defining values shall have the same measure type.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF.DefiningValues | TYPEOF(temp) &lt;&gt; TYPEOF(SELF.DefiningValues[1])))=0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>All values within the list of defined values shall have the same measure type.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF.DefinedValues | TYPEOF(temp) &lt;&gt; TYPEOF(SELF.DefinedValues[1])))=0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPhysicalComplexQuantity">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The IfcPhysicalComplexQuantity should not reference itself within the list of HasQuantities.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* HasQuantities | SELF :=: temp)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcQuantityArea">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>If a unit is given, the unit type shall be area unit.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcPhysicalSimpleQuantity.Unit)) OR
+                (SELF\IfcPhysicalSimpleQuantity.Unit.UnitType = IfcUnitEnum.AREAUNIT)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>A valid area quantity shall be greater than or equal to zero.</Description>
+          <Definition> AreaValue &gt;= 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcQuantityCount">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The value of the count shall be greater than or equal to zero.</Description>
+          <Definition> CountValue &gt;= 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcQuantityLength">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>If a unit is given, the unit type shall be a length unit.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcPhysicalSimpleQuantity.Unit)) OR
+                (SELF\IfcPhysicalSimpleQuantity.Unit.UnitType = IfcUnitEnum.LENGTHUNIT)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>A valid length quantity shall be greater than or equal to zero.</Description>
+          <Definition> LengthValue &gt;= 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcQuantityTime">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>If a unit is given, the unit type shall be time unit.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcPhysicalSimpleQuantity.Unit)) OR
+                (SELF\IfcPhysicalSimpleQuantity.Unit.UnitType = IfcUnitEnum.TIMEUNIT)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>A valid weight quantity shall be greater than or equal to zero.</Description>
+          <Definition> TimeValue &gt;= 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcQuantityVolume">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>If a unit is given, the unit type shall be volume unit.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcPhysicalSimpleQuantity.Unit)) OR
+                (SELF\IfcPhysicalSimpleQuantity.Unit.UnitType = IfcUnitEnum.VOLUMEUNIT)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>A valid volume quantity shall be greater than or equal to zero.</Description>
+          <Definition> VolumeValue &gt;= 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcQuantityWeight">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>If a unit is given, the unit type shall be mass unit. NOTE: There is no distinction between the concept of "Mass" and "Weight" in the current IFC Release.</Description>
+          <Definition> NOT(EXISTS(SELF\IfcPhysicalSimpleQuantity.Unit)) OR
+                (SELF\IfcPhysicalSimpleQuantity.Unit.UnitType = IfcUnitEnum.MASSUNIT)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>A valid weight quantity shall be greater than or equal to zero.</Description>
+          <Definition> WeightValue &gt;= 0.</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcGeometricRepresentationSubContext">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The parent context shall not be another geometric representation sub context.</Description>
+          <Definition> NOT('IFC2X3.IFCGEOMETRICREPRESENTATIONSUBCONTEXT' IN TYPEOF(ParentContext))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR32">
+          <Description>The attribute UserDefinedTargetView shall be given, if the attribute TargetView is set to USERDEFINED.</Description>
+          <Definition> (TargetView &lt;&gt; IfcGeometricProjectionEnum.USERDEFINED) OR 
+             ((TargetView =  IfcGeometricProjectionEnum.USERDEFINED) AND 
+              EXISTS(UserDefinedTargetView))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcMaterialDefinitionRepresentation">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>Only representations of type IfcStyledRepresentation should be used to represent material through the IfcMaterialRepresentation.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* Representations | 
+               (NOT('IFC2X3.IFCSTYLEDREPRESENTATION' IN TYPEOF(temp)))
+             )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcProductDefinitionShape">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>Only representations of type IfcShapeModel, i.e. either IfcShapeRepresentation or IfcTopologyRepresentation should be used to represent a product through the IfcProductDefinitionShape.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* Representations | 
+               (NOT('IFC2X3.IFCSHAPEMODEL' IN TYPEOF(temp)))
+             )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcShapeModel">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>The IfcShapeModel shall be used by an IfcProductRepresentation, by an IfcRepresentationMap or by an IfcShapeAspect.</Description>
+          <Definition> (SIZEOF(SELF\IfcRepresentation.OfProductRepresentation) = 1) XOR 
+             (SIZEOF(SELF\IfcRepresentation.RepresentationMap) = 1) XOR
+             (SIZEOF(OfShapeAspect) = 1)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcShapeRepresentation">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The context to which the IfcShapeRepresentation is assign, shall be of type IfcGeometricRepresentationContext.</Description>
+          <Definition> 'IFC2X3.IFCGEOMETRICREPRESENTATIONCONTEXT' 
+             IN TYPEOF(SELF\IfcRepresentation.ContextOfItems)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>No topological representation item shall be directly used for shape representations, with the exception of IfcVertexPoint, IfcEdgeCurve, IfcFaceSurface.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* Items | 
+               ('IFC2X3.IFCTOPOLOGICALREPRESENTATIONITEM' IN TYPEOF(temp))
+                 AND (NOT(SIZEOF(
+                   ['IFC2X3.IFCVERTEXPOINT',
+                    'IFC2X3.IFCEDGECURVE',
+                    'IFC2X3.IFCFACESURFACE'] * TYPEOF(temp)) = 1))
+             )) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR23">
+          <Description>A representation type should be given to the shape representation.</Description>
+          <Definition> EXISTS(SELF\IfcRepresentation.RepresentationType)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR24">
+          <Description>Checks the proper use of Items according to the RepresentationType.</Description>
+          <Definition> IfcShapeRepresentationTypes(SELF\IfcRepresentation.RepresentationType, SELF\IfcRepresentation.Items)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStyledRepresentation">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>Only IfcStyledItem's (or subtypes) are allowed as members in the list of Items, inherited from IfcRepresentation.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcRepresentation.Items | 
+               (NOT('IFC2X3.IFCSTYLEDITEM' IN TYPEOF(temp)))
+             )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTopologyRepresentation">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>Only topological representation items should be used.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcRepresentation.Items | 
+               NOT('IFC2X3.IFCTOPOLOGICALREPRESENTATIONITEM' IN TYPEOF(temp))
+             )) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR22">
+          <Description>A representation type should be given to the topology representation.</Description>
+          <Definition> EXISTS(SELF\IfcRepresentation.RepresentationType)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR23">
+          <Description>Checks the proper use of Items according to the RepresentationType.</Description>
+          <Definition> IfcTopologyRepresentationTypes(SELF\IfcRepresentation.RepresentationType, SELF\IfcRepresentation.Items)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDoorLiningProperties">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>Either both parameter, LiningDepth and LiningThickness are given, or only the LiningThickness, then the LiningDepth is variable. It is not valid to only assert the LiningDepth. 
+
+ NOTE  A LiningDepth with NIL ($) value indicates a door style with a lining equal to the wall thickness.</Description>
+          <Definition> NOT(NOT(EXISTS(LiningDepth)) AND EXISTS(LiningThickness))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR32">
+          <Description>Either both parameter, ThresholdDepth and ThresholdThickness are given, or only the ThresholdThickness, then the ThresholdDepth is variable. It is not valid to only assert the ThresholdDepth. 
+
+ NOTE  A ThresholdDepth with NIL ($) value indicates a door style with a lining equal to the wall thickness.</Description>
+          <Definition> NOT(NOT(EXISTS(ThresholdDepth)) AND EXISTS(ThresholdThickness))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR33">
+          <Description>Either both parameter, TransomDepth and TransomThickness are given, or none of them.</Description>
+          <Definition> (EXISTS(TransomOffset) AND EXISTS(TransomThickness)) XOR
+             (NOT(EXISTS(TransomOffset)) AND NOT(EXISTS(TransomThickness)))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR34">
+          <Description>Either both parameter, the CasingDepth and the CasingThickness, are given, or none of them.</Description>
+          <Definition> (EXISTS(CasingDepth) AND EXISTS(CasingThickness)) XOR
+             (NOT(EXISTS(CasingDepth)) AND NOT(EXISTS(CasingThickness)))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR35">
+          <Description>The IfcDoorLiningProperties shall only be used in the context of an IfcDoorStyle.</Description>
+          <Definition> EXISTS(SELF\IfcPropertySetDefinition.DefinesType[1]) AND 
+             ('IFC2X3.IFCDOORSTYLE' IN TYPEOF(SELF\IfcPropertySetDefinition.DefinesType[1]))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcDoorPanelProperties">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The IfcDoorPanelProperties shall only be used in the context of an IfcDoorStyle.</Description>
+          <Definition> EXISTS(SELF\IfcPropertySetDefinition.DefinesType[1]) AND 
+             ('IFC2X3.IFCDOORSTYLE' IN TYPEOF(SELF\IfcPropertySetDefinition.DefinesType[1]))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRailing">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>Either the PredefinedType attribute is unset (e.g. because an IfcRailingType is associated), or the inherited attribute ObjectType shall be given, if the PredefinedType is set to USERDEFINED.</Description>
+          <Definition> NOT(EXISTS(PredefinedType)) OR
+              (PredefinedType &lt;&gt; IfcRailingTypeEnum.USERDEFINED) OR
+              ((PredefinedType = IfcRailingTypeEnum.USERDEFINED) AND EXISTS (SELF\IfcObject.ObjectType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRamp">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Either the ramp is not decomposed into its flights and landings (the ramp can have independent geometry), or the geometry shall not be given at IfcRamp directly.</Description>
+          <Definition> (HIINDEX(SELF\IfcObjectDefinition.IsDecomposedBy) = 0) OR 
+            ((HIINDEX(SELF\IfcObjectDefinition.IsDecomposedBy) = 1) AND (NOT(EXISTS(SELF\IfcProduct.Representation))))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRoof">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Either the roof is not decomposed into its roof slabs (the roof can have independent geometry), or the geometry shall not be given at IfcRoof directly.</Description>
+          <Definition> (HIINDEX(SELF\IfcObjectDefinition.IsDecomposedBy) = 0) OR 
+            ((HIINDEX(SELF\IfcObjectDefinition.IsDecomposedBy) = 1) AND (NOT(EXISTS(SELF\IfcProduct.Representation))))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcSlab">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>Either the PredefinedType attribute is unset (e.g. because an IfcSlabType is associated), or the inherited attribute ObjectType shall be given, if the PredefinedType is set to USERDEFINED.</Description>
+          <Definition> NOT(EXISTS(PredefinedType)) OR
+              (PredefinedType &lt;&gt; IfcSlabTypeEnum.USERDEFINED) OR
+              ((PredefinedType = IfcSlabTypeEnum.USERDEFINED) AND EXISTS (SELF\IfcObject.ObjectType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStair">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Either the stair is not decomposed into its flights and landings (the stair can have independent geometry), or the geometry shall not be given at IfcStair directly.</Description>
+          <Definition> (HIINDEX(SELF\IfcObjectDefinition.IsDecomposedBy) = 0) OR 
+            ((HIINDEX(SELF\IfcObjectDefinition.IsDecomposedBy) = 1) AND (NOT(EXISTS(SELF\IfcProduct.Representation))))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcWall">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>There should be only a maximum of one material information of a wall.</Description>
+          <Definition> SIZEOF (QUERY(temp &lt;* SELF\IfcObjectDefinition.HasAssociations |
+              'IFC2X3.IFCRELASSOCIATESMATERIAL' IN TYPEOF(temp)
+              )) &lt;= 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcWallStandardCase">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The IfcWallStandard relies on the provision of an IfcMaterialLayerSetUsage.</Description>
+          <Definition> SIZEOF (QUERY(temp &lt;* USEDIN(SELF, 'IFC2X3.IFCRELASSOCIATES.RELATEDOBJECTS') |
+                          ('IFC2X3.IFCRELASSOCIATESMATERIAL' IN TYPEOF(temp)) AND
+                          ('IFC2X3.IFCMATERIALLAYERSETUSAGE' IN TYPEOF(temp.RelatingMaterial))
+                          )) = 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcWindowLiningProperties">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>Either both parameter, LiningDepth and LiningThickness are given, or only the LiningThickness, then the LiningDepth is variable. It is not valid to only assert the LiningDepth. 
+
+NOTE  A LiningDepth with NIL ($) value indicates a window style with a lining equal to the wall thickness.</Description>
+          <Definition> NOT(NOT(EXISTS(LiningDepth)) AND EXISTS(LiningThickness))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR32">
+          <Description>Either both parameter, FirstTransomOffset and SecondTransomOffset are given, or only the FirstTransomOffset, or none of both. It is not valid to only assert the SecondTransomOffset.</Description>
+          <Definition> NOT(NOT(EXISTS(FirstTransomOffset)) AND EXISTS(SecondTransomOffset))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR33">
+          <Description>Either both parameter, FirstMullionOffset and SecondMullionOffset are given, or only the FirstMullionOffset, or none of both. It is not valid to only assert the SecondMullionOffset.</Description>
+          <Definition> NOT(NOT(EXISTS(FirstMullionOffset)) AND EXISTS(SecondMullionOffset))</Definition>
+        </WhereRule>
+        <WhereRule Name="WR34">
+          <Description>The IfcWindowLiningProperties shall only be used in the context of an IfcWindowStyle.</Description>
+          <Definition> EXISTS(SELF\IfcPropertySetDefinition.DefinesType[1]) AND 
+             ('IFC2X3.IFCWINDOWSTYLE' IN TYPEOF(SELF\IfcPropertySetDefinition.DefinesType[1]))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcAsset">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Constrains the contents of the group forming the IfcAsset to be instances of IfcElement. This allows for both spatial structures and physical elements to participate in an asset.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* SELF\IfcGroup.IsGroupedBy.RelatedObjects | NOT('IFC2X3.IFCELEMENT' IN TYPEOF(Temp)))) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcInventory">
+      <WhereRules>
+        <WhereRule Name="WR41">
+          <Description>Constrains the type of objects that can be contained within an IfcInventory.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcGroup.IsGroupedBy.RelatedObjects |
+                 NOT( ('IFC2X3.IFCSPACE' IN TYPEOF (temp)) OR 
+                      ('IFC2X3.IFCASSET' IN TYPEOF (temp)) OR
+                      ('IFC2X3.IFCFURNISHINGELEMENT' IN TYPEOF (temp))
+                 ))) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcOccupant">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The attribute ObjectType must be asserted when the value of the IfcOccupantTypeEnum is set to USERDEFINED.</Description>
+          <Definition> NOT(PredefinedType = IfcOccupantTypeEnum.USERDEFINED) 
+             OR EXISTS(SELF\IfcObject.ObjectType)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcServiceLifeFactor">
+      <WhereRules>
+        <WhereRule Name="WR31">
+          <Description>The attribute UserDefinedFactor must be asserted when the value of the IfcServiceLifeFactorEnum is set to USERDEFINED.</Description>
+          <Definition> NOT(PredefinedType = IfcServiceLifeFactorTypeEnum.USERDEFINED)
+             OR EXISTS(SELF\IfcObject.ObjectType)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcRelSchedulesCostItems">
+      <WhereRules>
+        <WhereRule Name="WR11">
+          <Description>All related objects shall be of type IfcCostItem.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF\IfcRelAssigns.RelatedObjects |
+               NOT('IFC2X3.IFCCOSTITEM' IN TYPEOF(temp))
+               )) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR12">
+          <Description>The relating control shall be of type IfcCostSchedule.</Description>
+          <Definition> 'IFC2X3.IFCCOSTSCHEDULE' IN TYPEOF (SELF\IfcRelAssignsToControl.RelatingControl)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStructuralLinearAction">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>A linear action should place either a linear force or a temperature force.</Description>
+          <Definition> SIZEOF(['IFC2X3.IFCSTRUCTURALLOADLINEARFORCE',
+                     'IFC2X3.IFCSTRUCTURALLOADTEMPERATURE']
+             * TYPEOF(SELF\IfcStructuralActivity.AppliedLoad)) = 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStructuralPlanarAction">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>A planar action should place either a planar force or a temperature force.</Description>
+          <Definition> SIZEOF(['IFC2X3.IFCSTRUCTURALLOADPLANARFORCE',
+                     'IFC2X3.IFCSTRUCTURALLOADTEMPERATURE']
+             * TYPEOF(SELF\IfcStructuralActivity.AppliedLoad)) = 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStructuralPointAction">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>A structural point action should place either a single force, or a single displacement.</Description>
+          <Definition> SIZEOF(['IFC2X3.IFCSTRUCTURALLOADSINGLEFORCE',
+                     'IFC2X3.IFCSTRUCTURALLOADSINGLEDISPLACEMENT']
+             * TYPEOF(SELF\IfcStructuralActivity.AppliedLoad)) = 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStructuralPointReaction">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>A structural point reaction should have as a result either a single force, or a single displacement.</Description>
+          <Definition> SIZEOF(['IFC2X3.IFCSTRUCTURALLOADSINGLEFORCE',
+                     'IFC2X3.IFCSTRUCTURALLOADSINGLEDISPLACEMENT']
+             * TYPEOF(SELF\IfcStructuralActivity.AppliedLoad)) = 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcStructuralSurfaceMemberVarying">
+      <WhereRules>
+        <WhereRule Name="WR61">
+          <Description>The inherited Thickness attribute shall have a value assigned.</Description>
+          <Definition> EXISTS(SELF\IfcStructuralSurfaceMember.Thickness)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR62">
+          <Description>All point locations shall be given by only one shape representation item within the list of shape representations of the shape aspect.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF.VaryingThicknessLocation.ShapeRepresentations |
+               NOT(SIZEOF(temp\IfcRepresentation.Items) = 1)
+               )) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR63">
+          <Description>Each shape representation, representing the point at which a varying thickness applies, shall be represented by either a Cartesian point or by a point on surface.</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* SELF.VaryingThicknessLocation.ShapeRepresentations |
+               NOT(('IFC2X3.IFCCARTESIANPOINT' IN TYPEOF(temp\IfcRepresentation.Items[1]))
+                     OR
+                   ('IFC2X3.IFCPOINTONSURFACE' IN TYPEOF(temp\IfcRepresentation.Items[1])))
+               )) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcFooting">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The attribute ObjectType shall be given, if the predefined type is set to USERDEFINED.</Description>
+          <Definition> (PredefinedType &lt;&gt; IfcFootingTypeEnum.USERDEFINED) OR ((PredefinedType = IfcFootingTypeEnum.USERDEFINED) AND EXISTS(SELF\IfcObject.ObjectType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPile">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The attribute ObjectType shall be given, if the predefined type is set to USERDEFINED.</Description>
+          <Definition> (PredefinedType &lt;&gt; IfcPileTypeEnum.USERDEFINED) OR ((PredefinedType = IfcPileTypeEnum.USERDEFINED) AND EXISTS(SELF\IfcObject.ObjectType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcReinforcingBar">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The attribute ObjectType shall be given, if the bar role type is set to USERDEFINED.</Description>
+          <Definition> (BarRole &lt;&gt; IfcReinforcingBarRoleEnum.USERDEFINED) OR ((BarRole = IfcReinforcingBarRoleEnum.USERDEFINED) AND EXISTS(SELF\IfcObject.ObjectType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTendon">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The attribute ObjectType shall be given, if the predefined type is set to USERDEFINED.</Description>
+          <Definition> (PredefinedType &lt;&gt; IfcTendonTypeEnum.USERDEFINED) OR ((PredefinedType = IfcTendonTypeEnum.USERDEFINED) AND EXISTS(SELF\IfcObject.ObjectType))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcEdgeLoop">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The start vertex of the first edge shall be the same as the end vertex of the last edge. This ensures that the path is closed to form a loop.</Description>
+          <Definition> (EdgeList[1].EdgeStart) :=: (EdgeList[Ne].EdgeEnd)</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>The end vertex of each edge shall be the same as the start vertex of its successor.</Description>
+          <Definition> IfcLoopHeadToTail(SELF)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcFace">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>At most one of the bounds shall be of the type IfcFaceOuterBound</Description>
+          <Definition> SIZEOF(QUERY(temp &lt;* Bounds | 'IFC2X3.IFCFACEOUTERBOUND' IN TYPEOF(temp))) &lt;= 1</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcOrientedEdge">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The edge element shall not be an oriented edge.</Description>
+          <Definition> NOT('IFC2X3.IFCORIENTEDEDGE' IN TYPEOF(EdgeElement))</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPath">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>The end vertex of each edge shall be the same as the start vertex of its successor.</Description>
+          <Definition> IfcPathHeadToTail(SELF)</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcPolyLoop">
+      <WhereRules>
+        <WhereRule Name="WR21">
+          <Description>The space dimensionality of all Points shall be the same.</Description>
+          <Definition> SIZEOF(QUERY(Temp &lt;* Polygon | Temp.Dim &lt;&gt; Polygon[1].Dim)) = 0</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+    <TypeRules Type="IfcTable">
+      <WhereRules>
+        <WhereRule Name="WR1">
+          <Description>Ensures that each row defines the same number of cells. This restricts the available table styles in IFC Release 1.5. The rule compares whether all other rows of the IfcTable have the same number of cells as the first row. EXPRESS = SIZEOF(QUERY( Temp  HIINDEX(Rows[1].RowCells))) = 0</Description>
+          <Definition> SIZEOF(QUERY( Temp &lt;* Rows | HIINDEX(Temp.RowCells) &lt;&gt; HIINDEX(Rows[1].RowCells))) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR2">
+          <Description>Ensures that each row defines the same number of cells. This restricts the available table styles in IFC Release 1.5. The rule compares whether all other rows of the IfcTable have the same number of cells as the first row. EXPRESS = SIZEOF(QUERY( Temp  HIINDEX(Rows[1].RowCells))) = 0</Description>
+          <Definition> SIZEOF(QUERY( Temp &lt;* Rows | HIINDEX(Temp.RowCells) &lt;&gt; HIINDEX(Rows[1].RowCells))) = 0</Definition>
+        </WhereRule>
+        <WhereRule Name="WR3">
+          <Description>Ensures that there is one heading row as maximum. This restricts the allowed number of heading rows for this release. This limitation may be removed in future releases. EXPRESS = 0 &lt;= NumberOfHeadings &lt;= 1 }</Description>
+          <Definition> { 0 &lt;= NumberOfHeadings &lt;= 1 }</Definition>
+        </WhereRule>
+      </WhereRules>
+    </TypeRules>
+  </TypeRulesSet>
+</SchemaRules>
