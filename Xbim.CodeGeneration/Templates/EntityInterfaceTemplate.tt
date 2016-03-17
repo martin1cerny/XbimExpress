@@ -41,7 +41,7 @@ namespace <#= Namespace #>
 {
 	[ExpressType("<#= Type.PersistanceName #>", <#= Type.TypeId #>)]
 	// ReSharper disable once PartialTypeWithSinglePart
-	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>, IEqualityComparer<@<#= Name #>>, IEquatable<@<#= Name #>>
+	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>, IEquatable<@<#= Name #>>
 	{
 		#region I<#= Name #> explicit implementation
 <# foreach(var attribute in ExplicitAttributes){ #>
@@ -222,7 +222,7 @@ namespace <#= Namespace #>
 <# } else if (IsAggregation(attribute)){#>
 				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this), "<#= attribute.InvertedAttr.Name #>", this);
 <# } else {#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => (e.<#= attribute.InvertedAttr.Name #> as <#= Name #>) == this, "<#= attribute.InvertedAttr.Name #>", this);
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> == this, "<#= attribute.InvertedAttr.Name #>", this);
 <# } #>
 			} 
 		}
@@ -368,18 +368,6 @@ namespace <#= Namespace #>
             throw new System.IndexOutOfRangeException("There are no attributes defined for this entity");
 <#	}#>
 		}
-		
-		public <#= VirtualOverrideKeyword #> string WhereRule() 
-		{
-<# if (WhereRules.Any()) { #>
-            throw new System.NotImplementedException();
-<# foreach (var rule in WhereRules) {#>
-		/*<#= rule.Description #>*/
-<# } #>
-<# }  else { #>
-			return "";
-<# } #>
-		}
 		#endregion
 
 		#region Equality comparers and operators
@@ -425,16 +413,21 @@ namespace <#= Namespace #>
             return !(left == right);
         }
 
+<#  var selects = Type.IsInSelects.Select(s => s.Name.ToString());
+    foreach (var @select in selects)
+	{
+#>
+        public static bool operator ==(@<#= Name #> left, <#= @select #> right)
+		{
+			return left == right as @<#= Name #>;
+		}
 
-        public bool Equals(@<#= Name #> x, @<#= Name #> y)
-        {
-            return x == y;
-        }
+		public static bool operator !=(@<#= Name #> left, <#= @select #> right)
+		{
+			return !(left == right);
+		}
 
-        public int GetHashCode(@<#= Name #> obj)
-        {
-            return obj == null ? -1 : obj.GetHashCode();
-        }
+<#	} #>
         #endregion
 
 		#region Custom code (will survive code regeneration)
