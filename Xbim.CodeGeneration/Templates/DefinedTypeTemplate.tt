@@ -82,12 +82,17 @@ namespace <#= Namespace #>
 
 <# if (!IsComplex && SimpleType != SimpleTypeEnum.StringType) { //Complex types can't be initialized from string representation
 #>
+<# if (SimpleType == SimpleTypeEnum.NumberType || SimpleType == SimpleTypeEnum.RealType) { #>
+	    private static readonly System.Globalization.CultureInfo Culture =
+	        System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
+<# } #>
 		public <#= Name #>(string val)
         {
 <# switch(SimpleType){  
 		case SimpleTypeEnum.RealType:
 		case SimpleTypeEnum.NumberType: #>
-			_value = System.Convert.ToDouble(val, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+			_value = System.Convert.ToDouble(val, Culture);
 <#			break; 
 		case SimpleTypeEnum.LogicalType: #>
 			if (string.Compare(val, "true", System.StringComparison.OrdinalIgnoreCase) == 0 || string.Compare(val, ".T.", System.StringComparison.OrdinalIgnoreCase) == 0)
@@ -195,11 +200,6 @@ namespace <#= Namespace #>
 <#	} else { #>
             _value = value.<#= GetPropertyValueMember(Type.Domain) #>;
 <#	}#>            
-		}
-
-		string <#= PersistInterface #>.WhereRule()
-		{
-            throw new System.NotImplementedException();
 		}
 		#endregion
 
