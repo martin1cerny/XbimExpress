@@ -21,6 +21,7 @@ namespace <#= Namespace #>
     public class <#= Name #><T> : I<#= Name #><T>
     {
         private readonly List<T> _set;
+		private readonly byte _property;
 
         private <#= ModelInterface #> Model { get { return OwningEntity.Model; } }
 
@@ -32,22 +33,25 @@ namespace <#= Namespace #>
         }
 
 
-        internal <#= Name #>(<#= PersistEntityInterface #> entity)
+        internal <#= Name #>(<#= PersistEntityInterface #> entity, byte property)
         {
             _set = new List<T>();
+			_property = property;
 			OwningEntity = entity;
         }
 
-		internal <#= Name #>(<#= PersistEntityInterface #> entity, int capacity)
+		internal <#= Name #>(<#= PersistEntityInterface #> entity, int capacity, byte property)
         {
 			//this will create internal list of optimal capacity
             _set = new List<T>(capacity > 0 ? capacity : 0);
+			_property = property;
 			OwningEntity = entity;
         }
 
-        internal <#= Name #>(<#= PersistEntityInterface #> entity, IEnumerable<T> collection)
+        internal <#= Name #>(<#= PersistEntityInterface #> entity, IEnumerable<T> collection, byte property)
         {
             _set = new List<T>(collection);
+			_property = property;
 			OwningEntity = entity;
         }
 
@@ -71,7 +75,7 @@ namespace <#= Namespace #>
                 return default(T);
 
             var result = (T) Activator.CreateInstance(typeof (T), BindingFlags.NonPublic | BindingFlags.Instance, null,
-                new object[] {OwningEntity}, null);
+                new object[] {OwningEntity, _property}, null);
             InternalAdd(result);
             return result;
 
@@ -95,7 +99,7 @@ namespace <#= Namespace #>
                 return default(T);
             
             var result = (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, 
-                new object[]{OwningEntity}, null);
+                new object[]{OwningEntity, _property}, null);
             Insert(index, result);
             return result;
         }
@@ -127,7 +131,7 @@ namespace <#= Namespace #>
 				NotifyCountChanged();
 			};
 
-            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
+            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified, _property);
 		}
 
         public T First
@@ -223,7 +227,7 @@ namespace <#= Namespace #>
 				NotifyCountChanged();
 			};
 
-            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
+            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified, _property);
         }
 
 
@@ -251,7 +255,7 @@ namespace <#= Namespace #>
                 NotifyCollectionChanged(NotifyCollectionChangedAction.Add, oldItems);
                 NotifyCountChanged();
             };
-            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
+            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified, _property);
         }
 
         public bool Contains(T item)
@@ -298,7 +302,7 @@ namespace <#= Namespace #>
                 NotifyCollectionChanged(NotifyCollectionChangedAction.Add, item);
                 NotifyCountChanged();
             };
-            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
+            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified, _property);
             
             return true;
         }
@@ -417,7 +421,7 @@ namespace <#= Namespace #>
                     NotifyCollectionChanged(NotifyCollectionChangedAction.Replace, oldValue);
 		        };
 		        
-				Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
+				Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified, _property);
 		    }
 		}
 
@@ -450,7 +454,7 @@ namespace <#= Namespace #>
                 NotifyCollectionChanged(NotifyCollectionChangedAction.Remove, item);
                 NotifyCountChanged();
             };
-            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified);
+            Model.CurrentTransaction.AddReversibleAction(doAction, undoAction, OwningEntity, ChangeType.Modified, _property);
         }
 
         public void RemoveAt(int index)

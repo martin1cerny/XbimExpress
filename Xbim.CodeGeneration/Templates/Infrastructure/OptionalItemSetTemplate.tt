@@ -14,15 +14,15 @@ namespace <#= Namespace #>
     {
         private bool _initialized;
 
-        internal <#= Name #>(IPersistEntity entity) : base(entity)
+        internal <#= Name #>(IPersistEntity entity, byte property) : base(entity, property)
         {
         }
 
-        internal <#= Name #>(IPersistEntity entity, int capacity) : base(entity, capacity)
+        internal <#= Name #>(IPersistEntity entity, int capacity, byte property) : base(entity, capacity, property)
         {
         }
 
-        internal <#= Name #>(IPersistEntity entity, IEnumerable<T> collection) : base(entity, collection)
+        internal <#= Name #>(IPersistEntity entity, IEnumerable<T> collection, byte property) : base(entity, collection, property)
         {
         }
 
