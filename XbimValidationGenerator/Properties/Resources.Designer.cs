@@ -22,7 +22,7 @@ namespace XbimValidationGenerator.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace XbimValidationGenerator.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("XbimValidationGenerator.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace XbimValidationGenerator.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,14 +64,14 @@ namespace XbimValidationGenerator.Properties {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;SchemaRules xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; Schema=&quot;IFC2X3&quot;&gt;
         ///  &lt;TypeRulesSet&gt;
-        ///    &lt;TypeRules Type=&quot;IFCACTORROLE&quot;&gt;
+        ///    &lt;TypeRules Type=&quot;IfcActorRole&quot;&gt;
         ///      &lt;WhereRules&gt;
         ///        &lt;WhereRule Name=&quot;WR1&quot;&gt;
         ///          &lt;Description&gt;When attribute Role has enumeration value USERDEFINED then attribute UserDefinedRole shall also have a value.&lt;/Description&gt;
         ///          &lt;Definition&gt; (Role &amp;lt;&amp;gt; IfcRoleEnum.USERDEFINED) OR
         ///            ((Role = [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string IFC2X3_rules {
+        public static string IFC2X3_rules {
             get {
                 return ResourceManager.GetString("IFC2X3_rules", resourceCulture);
             }
@@ -81,14 +81,14 @@ namespace XbimValidationGenerator.Properties {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;SchemaRules xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; Schema=&quot;IFC4&quot;&gt;
         ///  &lt;TypeRulesSet&gt;
-        ///    &lt;TypeRules Type=&quot;IFCACTORROLE&quot;&gt;
+        ///    &lt;TypeRules Type=&quot;IfcActorRole&quot;&gt;
         ///      &lt;WhereRules&gt;
         ///        &lt;WhereRule Name=&quot;WR1&quot;&gt;
         ///          &lt;Description&gt;If the attribute Role has the enumeration value USERDEFINED then a value for the attribute UserDefinedRole shall be asserted.&lt;/Description&gt;
         ///          &lt;Definition&gt; (Role &amp;lt;&amp;gt; IfcRoleEnum.USERDEFINED) OR
         ///((Role [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string IFC4_rules {
+        public static string IFC4_rules {
             get {
                 return ResourceManager.GetString("IFC4_rules", resourceCulture);
             }

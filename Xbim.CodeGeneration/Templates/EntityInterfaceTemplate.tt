@@ -122,7 +122,7 @@ namespace <#= Namespace #>
 		{ 
 			Model = model; 
 <# foreach (var attribute in AggregatedExplicitAttributes){ #>
-			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this, <#= GetUpperBound(attribute) #> );
+			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this, <#= GetUpperBound(attribute) #>,  <#= GetAttributeOrder(attribute) #>);
 <# } #>
 		}
 
@@ -150,7 +150,7 @@ namespace <#= Namespace #>
 <# if (!(attribute.Domain is AggregationType)) { #>
 			set
 			{
-				SetValue( v =>  <#= GetPrivateFieldName(attribute) #> = v, <#= GetPrivateFieldName(attribute) #>, value,  "<#= attribute.Name #>");
+				SetValue( v =>  <#= GetPrivateFieldName(attribute) #> = v, <#= GetPrivateFieldName(attribute) #>, value,  "<#= attribute.Name #>", <#= GetAttributeOrder(attribute) #>);
 			} 
 <# } #>
 		}	
@@ -222,7 +222,7 @@ namespace <#= Namespace #>
 <# } else if (IsAggregation(attribute)){#>
 				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> != null &&  e.<#= attribute.InvertedAttr.Name #>.Contains(this), "<#= attribute.InvertedAttr.Name #>", this);
 <# } else {#>
-				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => e.<#= attribute.InvertedAttr.Name #> == this, "<#= attribute.InvertedAttr.Name #>", this);
+				return Model.Instances.<#= IsEnumeration(attribute) ? "Where" : "FirstOrDefault" #><<#= inverseType #>>(e => Equals(e.<#= attribute.InvertedAttr.Name #>), "<#= attribute.InvertedAttr.Name #>", this);
 <# } #>
 			} 
 		}
@@ -247,7 +247,7 @@ namespace <#= Namespace #>
 
 		#region Transactional property setting
 
-		protected void SetValue<TProperty>(Action<TProperty> setter, TProperty oldValue, TProperty newValue, string notifyPropertyName)
+		protected void SetValue<TProperty>(Action<TProperty> setter, TProperty oldValue, TProperty newValue, string notifyPropertyName, byte propertyOrder)
 		{
 			//activate for write if it is not activated yet
 			if (ActivationStatus != ActivationStatus.ActivatedReadWrite)
@@ -276,7 +276,7 @@ namespace <#= Namespace #>
 			doAction();
 
 			//do action and THAN add to transaction so that it gets the object in new state
-			txn.AddReversibleAction(doAction, undoAction, this, ChangeType.Modified);
+			txn.AddReversibleAction(doAction, undoAction, this, ChangeType.Modified, propertyOrder);
 		}
 
 		#endregion
@@ -300,7 +300,6 @@ namespace <#= Namespace #>
 		foreach (var attribute in ExplicitAttributes) { #>
 				case <#= GetAttributeIndex(attribute) #>: 
 <#			if (IsEntityOrSelectAggregation(attribute)) { #>
-					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this );
 					<#= GetPrivateFieldName(attribute) #>.InternalAdd((<#= GetAggregationElementType(attribute) #>)value.EntityVal);
 					return;
 <#				continue;
@@ -340,7 +339,6 @@ namespace <#= Namespace #>
 <#				continue;
 			}
 			if (IsSimpleOrDefinedTypeAggregation(attribute)){#>
-					if (<#= GetPrivateFieldName(attribute) #> == null) <#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this );
 					<#= GetPrivateFieldName(attribute) #>.InternalAdd(value.<#= GetPropertyValueMember(attribute.Domain) #>);
 					return;
 <#				continue;

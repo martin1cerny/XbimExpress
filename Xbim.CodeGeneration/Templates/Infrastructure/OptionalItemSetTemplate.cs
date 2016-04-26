@@ -84,23 +84,23 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("(IPersistEntity entity) : base(entity)\r\n        {\r\n        }\r\n\r\n        internal " +
-                    "");
+            this.Write("(IPersistEntity entity, byte property) : base(entity, property)\r\n        {\r\n     " +
+                    "   }\r\n\r\n        internal ");
             
             #line 21 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write("(IPersistEntity entity, int capacity) : base(entity, capacity)\r\n        {\r\n      " +
-                    "  }\r\n\r\n        internal ");
+            this.Write("(IPersistEntity entity, int capacity, byte property) : base(entity, capacity, pro" +
+                    "perty)\r\n        {\r\n        }\r\n\r\n        internal ");
             
             #line 25 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\OptionalItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
-            this.Write(@"(IPersistEntity entity, IEnumerable<T> collection) : base(entity, collection)
+            this.Write(@"(IPersistEntity entity, IEnumerable<T> collection, byte property) : base(entity, collection, property)
         {
         }
 

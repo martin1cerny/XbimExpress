@@ -25,7 +25,8 @@ namespace XbimEssentialsGenerator
             var ifc2X3 = SchemaModel.LoadIfc2x3();
             var ifc2X3Domains = DomainStructure.LoadIfc2X3();
             EnhanceNullStyleInIfc(ifc2X3, ifc2X3Domains);
-            var max = SetTypeNumbers(ifc2X3);
+            //var max = SetTypeNumbers(ifc2X3);
+            SetTypeNumbers(ifc2X3);
 
             var ifc4 = SchemaModel.LoadIfc4Add1();
             var ifc4Domains = DomainStructure.LoadIfc4Add1();
