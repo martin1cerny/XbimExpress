@@ -193,7 +193,12 @@ ENTITY @Type
 	AssetType: OPTIONAL AssetType;
 	Manufacturer: OPTIONAL Contact;
 	ModelNumber: OPTIONAL STRING;
-	Warranty: OPTIONAL Warranty;
+	WarrantyDescription: OPTIONAL STRING;
+	WarrantyGuarantorParts: OPTIONAL Contact;
+	WarrantyDurationParts: OPTIONAL REAL;
+	WarrantyGuarantorLabor: OPTIONAL Contact;
+	WarrantyDurationLabor: OPTIONAL REAL;
+	WarrantyDurationUnit: OPTIONAL DurationUnit;
 	ReplacementCost: OPTIONAL REAL;
 	ExpectedLife: OPTIONAL REAL;
 	DurationUnit: OPTIONAL DurationUnit;
@@ -216,15 +221,6 @@ ENTITY @Type
     Components: SET OF Component FOR @Type;
     Spares: SET OF Spare FOR @Type;
     Jobs: SET OF Job FOR @Type;
-END_ENTITY;
-
-ENTITY Warranty
-	Description: OPTIONAL STRING;
-	GuarantorParts: OPTIONAL Contact;
-	DurationParts: OPTIONAL REAL;
-	GuarantorLabor: OPTIONAL Contact;
-	DurationLabor: OPTIONAL REAL;
-	DurationUnit: OPTIONAL DurationUnit;
 END_ENTITY;
 
 ENTITY Component
