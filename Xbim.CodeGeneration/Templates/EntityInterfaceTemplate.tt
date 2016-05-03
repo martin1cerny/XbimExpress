@@ -428,6 +428,62 @@ namespace <#= Namespace #>
 <#	} #>
         #endregion
 
+<# if(Type.Instantiable) { #>
+		#region IContainsEntityReferences
+		IEnumerable<IPersistEntity> IContainsEntityReferences.References 
+		{
+			get 
+			{
+<#		foreach (var attribute in AllExplicitAttributes) { 
+			if (IsEntityReference(attribute)) {#>
+				if (@<#= attribute.Name #> != null)
+					yield return @<#= attribute.Name #>;
+<#			}
+			if (IsEntityReferenceAggregation(attribute)) {#>
+				foreach(var entity in @<#= attribute.Name #>)
+					yield return entity;
+<#			} 
+			//Fix for IFC4 IfcRelDefinesByProperties where select might be Entity or DefinedType which is List<Entity>
+			if (attribute.Name == "RelatingPropertyDefinition" && attribute.Domain is SelectType) {#>
+				if(RelatingPropertyDefinition != null)
+					foreach (var definition in RelatingPropertyDefinition.PropertySetDefinitions)
+						yield return definition;
+<#			} #>
+<#		} #>
+				yield break;	
+			}
+		}
+		#endregion
+<#		var indexedAttributes = AllExplicitAttributes.Where(a => IsPartOfInverse(a)).ToList();
+		if (indexedAttributes.Any()) { #>
+
+		#region IContainsIndexedReferences
+        IEnumerable<IPersistEntity> IContainsIndexedReferences.IndexedReferences 
+		{ 
+			get
+			{
+<#		foreach (var attribute in indexedAttributes) { 
+			if (IsEntityReference(attribute)) {#>
+				if (@<#= attribute.Name #> != null)
+					yield return @<#= attribute.Name #>;
+<#			}
+			if (IsEntityReferenceAggregation(attribute)) {#>
+				foreach(var entity in @<#= attribute.Name #>)
+					yield return entity;
+<#			} 
+			//Fix for IFC4 IfcRelDefinesByProperties where select might be Entity or DefinedType which is List<Entity>
+			if (attribute.Name == "RelatingPropertyDefinition" && attribute.Domain is SelectType) {#>
+				if(RelatingPropertyDefinition != null)
+					foreach (var definition in RelatingPropertyDefinition.PropertySetDefinitions)
+						yield return definition;
+<#			} #>
+<#		} #>				
+			} 
+		}
+		#endregion
+
+<#		} #>
+<#	} #>
 		#region Custom code (will survive code regeneration)
 		//## Custom code
 		//##

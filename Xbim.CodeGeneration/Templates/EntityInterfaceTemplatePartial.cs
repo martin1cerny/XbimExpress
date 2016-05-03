@@ -43,6 +43,17 @@ namespace Xbim.CodeGeneration.Templates
                 //add own interface
                 items.Add("I" + Name);
 
+                if (Type.Instantiable)
+                {
+                    items.Add("IContainsEntityReferences");
+
+                    var indexedAttributes = AllExplicitAttributes.Where(IsPartOfInverse).ToList();
+                    if (indexedAttributes.Any())
+                        items.Add("IContainsIndexedReferences");
+                }
+                
+                
+
                 //remove selects
                 var selects = Type.IsInSelects.Select(s => s.Name.ToString());
                 foreach (var @select in selects)
@@ -88,6 +99,30 @@ namespace Xbim.CodeGeneration.Templates
 
                 return result.Distinct();
             }
+        }
+
+        private static bool IsEntityReference(BaseType type)
+        {
+            if (type is EntityDefinition)
+                return true;
+
+            var select = type as SelectType;
+            if (select == null)
+                return false;
+
+            var realTypes = SelectTypeTemplate.GetFinalTypes(select);
+            return realTypes.All(t => t is EntityDefinition);
+        }
+
+        private bool IsEntityReference(ExplicitAttribute attribute)
+        {
+            return IsEntityReference(attribute.Domain);
+        }
+
+        private bool IsEntityReferenceAggregation(ExplicitAttribute attribute)
+        {
+            var aggr = attribute.Domain as AggregationType;
+            return aggr != null && IsEntityReference(aggr.ElementType);
         }
     }
 }
