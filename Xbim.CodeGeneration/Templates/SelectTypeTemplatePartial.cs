@@ -70,7 +70,7 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        private static IEnumerable<NamedType> GetFinalTypes(SelectType select)
+        public static IEnumerable<NamedType> GetFinalTypes(SelectType select)
         {
             foreach (var namedType in select.Selections)
             {

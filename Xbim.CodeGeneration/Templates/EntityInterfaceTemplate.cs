@@ -1905,8 +1905,158 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write("        #endregion\r\n\r\n\t\t#region Custom code (will survive code regeneration)\r\n\t\t/" +
-                    "/## Custom code\r\n\t\t//##\r\n\t\t#endregion\r\n\t}\r\n}");
+            this.Write("        #endregion\r\n\r\n");
+            
+            #line 431 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+ if(Type.Instantiable) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t#region IContainsEntityReferences\r\n\t\tIEnumerable<IPersistEntity> IContainsEntit" +
+                    "yReferences.References \r\n\t\t{\r\n\t\t\tget \r\n\t\t\t{\r\n");
+            
+            #line 437 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+		foreach (var attribute in AllExplicitAttributes) { 
+			if (IsEntityReference(attribute)) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tif (@");
+            
+            #line 439 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" != null)\r\n\t\t\t\t\tyield return @");
+            
+            #line 440 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 441 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+			}
+			if (IsEntityReferenceAggregation(attribute)) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tforeach(var entity in @");
+            
+            #line 443 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(")\r\n\t\t\t\t\tyield return entity;\r\n");
+            
+            #line 445 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+			} 
+			//Fix for IFC4 IfcRelDefinesByProperties where select might be Entity or DefinedType which is List<Entity>
+			if (attribute.Name == "RelatingPropertyDefinition" && attribute.Domain is SelectType) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tif(RelatingPropertyDefinition != null)\r\n\t\t\t\t\tforeach (var definition in Relat" +
+                    "ingPropertyDefinition.PropertySetDefinitions)\r\n\t\t\t\t\t\tyield return definition;\r\n");
+            
+            #line 451 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+			} 
+            
+            #line default
+            #line hidden
+            
+            #line 452 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+		} 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tyield break;\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t#endregion\r\n");
+            
+            #line 457 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+		var indexedAttributes = AllExplicitAttributes.Where(a => IsPartOfInverse(a)).ToList();
+		if (indexedAttributes.Any()) { 
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\t#region IContainsIndexedReferences\r\n        IEnumerable<IPersistEntity> ICont" +
+                    "ainsIndexedReferences.IndexedReferences \r\n\t\t{ \r\n\t\t\tget\r\n\t\t\t{\r\n");
+            
+            #line 465 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+		foreach (var attribute in indexedAttributes) { 
+			if (IsEntityReference(attribute)) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tif (@");
+            
+            #line 467 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" != null)\r\n\t\t\t\t\tyield return @");
+            
+            #line 468 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 469 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+			}
+			if (IsEntityReferenceAggregation(attribute)) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tforeach(var entity in @");
+            
+            #line 471 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(attribute.Name));
+            
+            #line default
+            #line hidden
+            this.Write(")\r\n\t\t\t\t\tyield return entity;\r\n");
+            
+            #line 473 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+			} 
+			//Fix for IFC4 IfcRelDefinesByProperties where select might be Entity or DefinedType which is List<Entity>
+			if (attribute.Name == "RelatingPropertyDefinition" && attribute.Domain is SelectType) {
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tif(RelatingPropertyDefinition != null)\r\n\t\t\t\t\tforeach (var definition in Relat" +
+                    "ingPropertyDefinition.PropertySetDefinitions)\r\n\t\t\t\t\t\tyield return definition;\r\n");
+            
+            #line 479 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+			} 
+            
+            #line default
+            #line hidden
+            
+            #line 480 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+		} 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t\r\n\t\t\t} \r\n\t\t}\r\n\t\t#endregion\r\n\r\n");
+            
+            #line 485 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+		} 
+            
+            #line default
+            #line hidden
+            
+            #line 486 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
+	} 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t#region Custom code (will survive code regeneration)\r\n\t\t//## Custom code\r\n\t\t//#" +
+                    "#\r\n\t\t#endregion\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
