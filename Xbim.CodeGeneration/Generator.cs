@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.Build.Construction;
 using Xbim.CodeGeneration.Differences;
 using Xbim.CodeGeneration.Settings;
@@ -30,13 +31,18 @@ namespace Xbim.CodeGeneration
             settings.CrossAccessNamespace = GetNamespace(targetProject) + "." + settings.SchemaInterfacesNamespace;
 
             var entityMatches = EntityDefinitionMatch.GetMatches(schema, remoteSchema).ToList();
-            
-            foreach (var match in entityMatches)
-            {
-                if (match.Target == null) continue;
-                var tmpl = new EntityInterfaceImplementation(settings, match, entityMatches);
-                ProcessTemplate(tmpl, modelProject);
-            }
+
+            var templates =
+                entityMatches.Where(m => m.Target != null)
+                    .Select(m => new EntityInterfaceImplementation(settings, m, entityMatches));
+            Parallel.ForEach(templates, t => ProcessTemplate(t, modelProject));
+
+            //foreach (var match in entityMatches)
+            //{
+            //    if (match.Target == null) continue;
+            //    var tmpl = new EntityInterfaceImplementation(settings, match, entityMatches);
+            //    ProcessTemplate(tmpl, modelProject);
+            //}
 
             modelProject.Save();
             return true;
@@ -80,8 +86,9 @@ namespace Xbim.CodeGeneration
             modelTemplates.Add(new ItemSetTemplate(settings));
             modelTemplates.Add(new OptionalItemSetTemplate(settings));
 
-            foreach (var tmpl in modelTemplates)
-                ProcessTemplate(tmpl, modelProject);
+            Parallel.ForEach(modelTemplates, tmpl => ProcessTemplate(tmpl, modelProject));
+            //foreach (var tmpl in modelTemplates)
+            //    ProcessTemplate(tmpl, modelProject);
 
 
             //var infrastructureTemplates = new List<ICodeTemplate>
@@ -281,7 +288,10 @@ namespace Xbim.CodeGeneration
                 return itemElement != null && itemElement.Include == item;
             })) return;
 
-            includes.AddItem(itemType, item);
+            lock (project)
+            {
+                includes.AddItem(itemType, item);
+            }
         }
 
         public static void RemoveCompilationItem(string item, ProjectRootElement project)

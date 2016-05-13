@@ -43,7 +43,7 @@ namespace Xbim.CodeGeneration.Templates
                 //add own interface
                 items.Add("I" + Name);
 
-                if (Type.Instantiable)
+                if (Type.Instantiable && AllExplicitAttributes.Any(IsEntityRefOrAggr))
                 {
                     items.Add("IContainsEntityReferences");
 
@@ -114,15 +114,42 @@ namespace Xbim.CodeGeneration.Templates
             return realTypes.All(t => t is EntityDefinition);
         }
 
-        private bool IsEntityReference(ExplicitAttribute attribute)
+        private bool IsEntityRefOrAggr(ExplicitAttribute attribute)
+        {
+            if (IsEntityReference(attribute))
+                return true;
+            var aggr = attribute.Domain as AggregationType;
+            if (aggr == null)
+                return false;
+            var nt = GetNamedElementType(aggr);
+            return nt is EntityDefinition;
+        }
+
+        private static bool IsEntityReference(ExplicitAttribute attribute)
         {
             return IsEntityReference(attribute.Domain);
         }
 
-        private bool IsEntityReferenceAggregation(ExplicitAttribute attribute)
+        private static bool IsEntityReferenceAggregation(BaseType type)
         {
-            var aggr = attribute.Domain as AggregationType;
+            var aggr = type as AggregationType;
             return aggr != null && IsEntityReference(aggr.ElementType);
+        }
+
+        private static bool IsEntityReferenceAggregation(ExplicitAttribute attribute)
+        {
+            return IsEntityReferenceAggregation(attribute.Domain);
+        }
+
+        private static bool IsEntityReferenceDoubleAggregation(BaseType type)
+        {
+            var aggr = type as AggregationType;
+            return aggr != null && IsEntityReferenceAggregation(aggr.ElementType);
+        }
+
+        private static bool IsEntityReferenceDoubleAggregation(ExplicitAttribute attribute)
+        {
+            return IsEntityReferenceDoubleAggregation(attribute.Domain);
         }
     }
 }
