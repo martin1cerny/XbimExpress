@@ -562,9 +562,32 @@ namespace Xbim.CodeGeneration.Templates
 
         protected string PersistEntityInterface { get { return Settings.PersistEntityInterface; } }
 
+        protected bool IsAggregation(ExplicitAttribute attribute)
+        {
+            return attribute.Domain is AggregationType;
+        }
+
         protected bool IsAggregation(InverseAttribute attribute)
         {
             return attribute.InvertedAttr.Domain is AggregationType;
+        }
+
+        protected bool CanBeNull(ExplicitAttribute attribute)
+        {
+            if (attribute.Domain is EntityDefinition)
+                return true;
+            if (attribute.Domain is SelectType)
+                return true;
+            if (IsStringType(attribute.Domain))
+                return true;
+            if (attribute.OptionalFlag)
+                return true;
+            return false;
+        }
+
+        protected bool IsEntityOrSelect(ExplicitAttribute attribute)
+        {
+            return attribute.Domain is EntityDefinition || attribute.Domain is SelectType;
         }
 
         protected bool IsEntityOrSelectAggregation(ExplicitAttribute attribute)

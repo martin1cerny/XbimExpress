@@ -21,7 +21,7 @@ namespace <#= InterfaceNamespace #>
 	public partial interface @I<#= Name #> <#= InterfaceInheritance #>
 	{
 <#	foreach(var attribute in ExplicitAttributes){ #>
-		<#= GetInterfaceCSType(attribute) #> @<#= attribute.Name #> { get; }
+		<#= GetInterfaceCSType(attribute) #> @<#= attribute.Name #> { get; <# if (!IsAggregation(attribute)) {#> set; <# } #>}
 <#	} #>
 <#	foreach(var attribute in InverseAttributes){  
 		var inverseType = "I" + attribute.Domain.Name; #>
@@ -45,7 +45,16 @@ namespace <#= Namespace #>
 	{
 		#region I<#= Name #> explicit implementation
 <# foreach(var attribute in ExplicitAttributes){ #>
-		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #> { get { return @<#= attribute.Name #>; } }	
+		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #> { 
+			get { return @<#= attribute.Name #>; } 
+<# if (!IsAggregation(attribute)) {#> 
+<#		if (IsEntityOrSelect(attribute)) {#> 
+			set { <#= attribute.Name #> = value as <#= GetCSType(attribute) #>;}
+<#		}  else {#>
+			set { <#= attribute.Name #> = value;}
+<#		} #>
+<# } #>
+		}	
 <# } #>		 
 <#	foreach(var attribute in InverseAttributes){  
 		var inverseType = "I" + attribute.Domain.Name; #>
@@ -428,7 +437,7 @@ namespace <#= Namespace #>
 <#	} #>
         #endregion
 
-<# if(Type.Instantiable) { #>
+<# if(Type.Instantiable && AllExplicitAttributes.Any(a => IsEntityRefOrAggr(a))) { #>
 		#region IContainsEntityReferences
 		IEnumerable<IPersistEntity> IContainsEntityReferences.References 
 		{
@@ -439,21 +448,30 @@ namespace <#= Namespace #>
 				if (@<#= attribute.Name #> != null)
 					yield return @<#= attribute.Name #>;
 <#			}
-			if (IsEntityReferenceAggregation(attribute)) {#>
+			else if (IsEntityReferenceAggregation(attribute)) {#>
 				foreach(var entity in @<#= attribute.Name #>)
 					yield return entity;
 <#			} 
 			//Fix for IFC4 IfcRelDefinesByProperties where select might be Entity or DefinedType which is List<Entity>
-			if (attribute.Name == "RelatingPropertyDefinition" && attribute.Domain is SelectType) {#>
+			else if (attribute.Name == "RelatingPropertyDefinition" && attribute.Domain is SelectType) {#>
 				if(RelatingPropertyDefinition != null)
 					foreach (var definition in RelatingPropertyDefinition.PropertySetDefinitions)
 						yield return definition;
-<#			} #>
+<#			} 
+			else if (IsEntityReferenceDoubleAggregation(attribute))
+            { #>
+				foreach (var item in @<#= attribute.Name #>)
+					foreach (var entity in item)
+						yield return entity;
+<#			}
+			else if (IsEntityRefOrAggr(attribute)) {  
+				throw new NotSupportedException();
+			} #>
 <#		} #>
-				yield break;	
 			}
 		}
 		#endregion
+
 <#		var indexedAttributes = AllExplicitAttributes.Where(a => IsPartOfInverse(a)).ToList();
 		if (indexedAttributes.Any()) { #>
 
@@ -467,16 +485,17 @@ namespace <#= Namespace #>
 				if (@<#= attribute.Name #> != null)
 					yield return @<#= attribute.Name #>;
 <#			}
-			if (IsEntityReferenceAggregation(attribute)) {#>
+			else if (IsEntityReferenceAggregation(attribute)) {#>
 				foreach(var entity in @<#= attribute.Name #>)
 					yield return entity;
 <#			} 
 			//Fix for IFC4 IfcRelDefinesByProperties where select might be Entity or DefinedType which is List<Entity>
-			if (attribute.Name == "RelatingPropertyDefinition" && attribute.Domain is SelectType) {#>
+			else if (attribute.Name == "RelatingPropertyDefinition" && attribute.Domain is SelectType) {#>
 				if(RelatingPropertyDefinition != null)
 					foreach (var definition in RelatingPropertyDefinition.PropertySetDefinitions)
 						yield return definition;
-<#			} #>
+<#			} 
+			else { throw new NotSupportedException(); } #>
 <#		} #>				
 			} 
 		}
