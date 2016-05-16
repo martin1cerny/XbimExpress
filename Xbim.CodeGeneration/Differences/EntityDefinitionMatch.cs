@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Xbim.ExpressParser.SDAI;
 
@@ -46,6 +47,8 @@ namespace Xbim.CodeGeneration.Differences
                 return;
             }
 
+
+
             //var superTypeMatch = GetSupertypeMatch(source, targetSchema);
             //if (superTypeMatch != null)
             //{
@@ -86,6 +89,7 @@ namespace Xbim.CodeGeneration.Differences
         public EntityMatchType MatchType { get; private set; }
 
         public IEnumerable<ExplicitAttributeMatch> AttributeMatches { get; private set; } 
+        
     }
 
     public enum EntityMatchType

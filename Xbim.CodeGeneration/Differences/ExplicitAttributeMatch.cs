@@ -162,7 +162,11 @@ namespace Xbim.CodeGeneration.Differences
                 var oNamed = o as NamedType;
                 var nNamed = n as NamedType;
                 if (oNamed != null && nNamed != null)
+                {
+                    if (oNamed.Name == "IfcStructuralSurfaceTypeEnum" && nNamed.Name == "IfcStructuralSurfaceMemberTypeEnum")
+                        return true;
                     return string.Compare(oNamed.Name, nNamed.Name, StringComparison.InvariantCultureIgnoreCase) == 0;
+                }
 
                 var oAggregate = o as AggregationType;
                 var nAggregate = n as AggregationType;
@@ -229,7 +233,11 @@ namespace Xbim.CodeGeneration.Differences
                 var oNamed = o as NamedType;
                 var nNamed = n as NamedType;
                 if (oNamed != null && nNamed != null)
+                {
+                    if (oNamed.Name == "IfcStructuralSurfaceTypeEnum" && nNamed.Name == "IfcStructuralSurfaceMemberTypeEnum")
+                        return true;
                     return string.Compare(oNamed.Name, nNamed.Name, StringComparison.InvariantCultureIgnoreCase) == 0;
+                }
 
                 var oAggregate = o as AggregationType;
                 var nAggregate = n as AggregationType;

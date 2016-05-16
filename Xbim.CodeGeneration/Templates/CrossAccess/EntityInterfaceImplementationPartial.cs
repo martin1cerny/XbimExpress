@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Xbim.CodeGeneration.Differences;
 using Xbim.CodeGeneration.Helpers;
@@ -43,6 +44,28 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             return match;
         }
 
+        protected bool IsNew(ExplicitAttribute remoteAttribute)
+        {
+            var hierarchy = _match.Target.AllSupertypes.Select(t => t.Name).Union(new [] {_match.Target.Name}).ToList();
+            var names = NewTargetAttributes.Where(t => hierarchy.Any(i => t.Item1 == i)).Select(t => t.Item2).ToList();
+            return names.Any() && 
+                names.Any(n => string.Equals(n, remoteAttribute.Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private static readonly List<Tuple<string, string>> NewTargetAttributes = new List<Tuple<string, string>>();
+
+        static EntityInterfaceImplementation()
+        {
+            var reader = new StringReader(Properties.Resources.Ifc4_NewProperties);
+            var line = reader.ReadLine();
+            while (!string.IsNullOrEmpty(line))
+            {
+                var parts = line.Split('.').Select(i => i.Trim()).ToList();
+                NewTargetAttributes.Add(new Tuple<string, string>(parts[0], parts[1]));
+                line = reader.ReadLine();
+            }
+        }
+
         protected string GetBaseSystemType(DefinedType type)
         {
             return TypeHelper.GetCSType(type.Domain, Settings);
@@ -61,6 +84,9 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                 tModel.Get<EnumerationType>(
                     t => string.Compare(source.Name, t.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
                     .FirstOrDefault();
+            if (nameMatch == null && source.Name == "IfcStructuralSurfaceTypeEnum")
+                return tModel.Get<EnumerationType>(t => t.Name == "IfcStructuralSurfaceMemberTypeEnum").FirstOrDefault();
+
             return nameMatch;
         }
 

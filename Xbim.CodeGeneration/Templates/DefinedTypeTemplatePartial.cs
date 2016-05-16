@@ -84,6 +84,20 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var parents = Type.IsInSelects.Select(s => s.Name.ToString()).ToList();
                 parents.Add(IsComplex ? "IExpressComplexType" : "IExpressValueType");
+
+                switch (SimpleType)
+                {
+                    case SimpleTypeEnum.BinaryType:
+                    case SimpleTypeEnum.BooleanType:
+                    case SimpleTypeEnum.IntegerType:
+                    case SimpleTypeEnum.LogicalType:
+                    case SimpleTypeEnum.NumberType:
+                    case SimpleTypeEnum.RealType:
+                    case SimpleTypeEnum.StringType:
+                        parents.Add("IExpress" + SimpleType);
+                        break;
+                }
+                
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i))
                     return "";
@@ -91,7 +105,10 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        private string PersistInterface { get { return _settings.PersistInterface; } }
+        private string PersistInterface
+        {
+            get { return _settings.PersistInterface; }
+        }
 
         public IEnumerable<string> Using
         {
@@ -105,7 +122,7 @@ namespace Xbim.CodeGeneration.Templates
                 namedOccurances.AddRange(selects);
 
                 var namedDomain = Type.Domain as NamedType;
-                if(namedDomain != null)
+                if (namedDomain != null)
                     namedOccurances.Add(namedDomain);
 
                 if (IsComplex)
@@ -115,7 +132,7 @@ namespace Xbim.CodeGeneration.Templates
 
                     //get base type
                     var aggrNs = UnderlyingArrayTypeNamespace;
-                    if(aggrNs != null)
+                    if (aggrNs != null)
                         result.Add(aggrNs);
                 }
                 if (_settings.IsInfrastructureSeparate)
@@ -160,9 +177,10 @@ namespace Xbim.CodeGeneration.Templates
                     else
                         break;
                 }
-                
+
                 //special case when defined type contains enumeration
-                if(domain is EnumerationType) return SimpleTypeEnum.EnumerationType;
+                if (domain is EnumerationType) return SimpleTypeEnum.EnumerationType;
+                if(domain is AggregationType) return SimpleTypeEnum.ArrayType;
 
                 if (simple == null) throw new Exception("Unexpected type");
 
@@ -180,13 +198,14 @@ namespace Xbim.CodeGeneration.Templates
 
     public enum SimpleTypeEnum
     {
-        BinaryType,
-        BooleanType,
-        IntegerType,
-        LogicalType,
-        NumberType,
-        RealType,
-        StringType,
-        EnumerationType
+        BinaryType = 0,
+        BooleanType = 1,
+        IntegerType = 2,
+        LogicalType = 3,
+        NumberType = 4,
+        RealType = 5,
+        StringType = 6,
+        EnumerationType = 7,
+        ArrayType = 8
     }
 }

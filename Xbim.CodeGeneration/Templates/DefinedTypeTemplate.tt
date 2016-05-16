@@ -37,8 +37,11 @@ namespace <#= Namespace #>
             get { return _value; }
         }
 
-<# if (!IsComplex ) { //Complex types can't be initialized from string representation
-#>
+<# if ((int)SimpleType < 7) { #> 
+		<#= UnderlyingType #> IExpress<#= SimpleType #>.Value { get { return _value; } }
+
+<# } 
+   if (!IsComplex ) { /*Complex types can't be initialized from string representation */ #>
 		public override string ToString()
         {
 <# switch(SimpleType){  
