@@ -14,17 +14,25 @@ namespace <#= OwnNamespace #>
 {
 	public partial class @<#= Name #> : <#= Interface #>
 	{
-<#	foreach(var attribute in ExplicitAttributesToImplement){ #>
+<#	foreach(var attribute in ExplicitAttributesToImplement.ToList()){ #>
+<#		if (GetMatch(attribute) == null && IsNew(attribute)) { #>
+		private  <#= GetInterfaceCSTypeFull(attribute) #> <#= GetPrivateFieldName(attribute) #>;
+
+<#		} #>
 		<#= GetInterfaceCSTypeFull(attribute) #> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
 		{ 
 			get
 			{
 <#		var match = GetMatch(attribute); 
-		if (match == null || !match.IsTypeCompatible) { #>
+		if (match == null || !match.IsTypeCompatible) { 
+			if (IsNew(attribute)) { #>
+				return <#= GetPrivateFieldName(attribute) #>;
+<#			} else { #>
 				//## Handle return of <#= attribute.Name #> for which no match was found
 				//TODO: Handle return of <#= attribute.Name #> for which no match was found
 				throw new System.NotImplementedException();
 				//##
+<#			}  #>
 <#		} else if (attribute.Domain is DefinedType) { #>
 <#			if (match.SourceAttribute.OptionalFlag) { #>
 				if (!<#= match.SourceAttribute.Name #>.HasValue) return null;
@@ -171,21 +179,31 @@ namespace <#= OwnNamespace #>
 <#		if(!IsAggregation(attribute)){ #>
 			set
 			{
-<#		if (match == null || !match.IsTypeCompatible) { #>
+<#		if (match == null || !match.IsTypeCompatible) { 
+			if (IsNew(attribute)) {#>
+				SetValue(v => <#= GetPrivateFieldName(attribute)#> = v, <#= GetPrivateFieldName(attribute)#>, value, "<#= attribute.Name #>", byte.MaxValue);
+<#			} else { #>
 				//## Handle setting of <#= attribute.Name #> for which no match was found
 				//TODO: Handle setting of <#= attribute.Name #> for which no match was found
 				throw new System.NotImplementedException();
 				//##
+<#			} #>
 <#		} else if (attribute.Domain is DefinedType) { #>
-<#			if (match.SourceAttribute.OptionalFlag) { #>
-				if (!<#= match.SourceAttribute.Name #>.HasValue) return null;
-				return new <#= GetInterfaceCSTypeFull(attribute).Trim('?') #>(<#= match.SourceAttribute.Name #>.Value);
+<#			if (attribute.OptionalFlag) { #>
+				if (!value.HasValue)
+				{
+					<#= match.SourceAttribute.Name #> = <# if (match.SourceAttribute.OptionalFlag) {  #> null <# } else { #> default(<#= GetCSTypeFull(match.SourceAttribute)#>) <# } #>;
+					return;
+				}
+				<#= match.SourceAttribute.Name #> = new <#= GetCSTypeFull(match.SourceAttribute).Trim('?') #>(value.Value);
 <#			} else { #>
-				return new <#= GetInterfaceCSTypeFull(attribute).Trim('?') #>(<#= match.SourceAttribute.Name #>);
+				<#= match.SourceAttribute.Name #> = new <#= GetCSTypeFull(match.SourceAttribute).Trim('?') #>(value);
 <#			} #>
 <#		} else if (attribute.Domain is EntityDefinition) { #>
-				return <#= match.SourceAttribute.Name #><# if(!IsDirectTypeMatch(match)) {#> as <#= GetInterfaceCSTypeFull(attribute) #><# } #>;
-<#		} else if (attribute.Domain is SelectType && !(match.SourceAttribute.Domain is SelectType)) { #>
+				<#= match.SourceAttribute.Name #> = value as <#= GetCSTypeFull(match.SourceAttribute) #>;
+<#		} else if (true) { /* stop here to create */ #>
+				throw new System.NotImplementedException();
+<#		}  else if (attribute.Domain is SelectType && !(match.SourceAttribute.Domain is SelectType)) { #>
 <#			if (match.SourceAttribute.Domain is EntityDefinition) { #>
 				return <#= match.SourceAttribute.Name #>;
 <#			} else if(match.SourceAttribute.Domain is DefinedType) {
@@ -267,7 +285,7 @@ namespace <#= OwnNamespace #>
 <#		} #>
 		}
 <#	} #>
-<# foreach(var attribute in InverseAttributesToImplement){  
+<# foreach(var attribute in InverseAttributesToImplement.ToList()){  
 	var inverseType = "I" + attribute.Domain.Name; #>
 <# if (IsEnumeration(attribute)) { #>
 		IEnumerable<<#=inverseType #>> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
@@ -287,7 +305,7 @@ namespace <#= OwnNamespace #>
 			} 
 		}
 <# } #>
-<#		foreach(var attribute in DerivedAttributesToImplement){ #>
+<#		foreach(var attribute in DerivedAttributesToImplement.ToList()){ #>
 		<#= GetInterfaceCSTypeFull(attribute) #> <#= GetDerivedAttributePlacement(attribute) #>.<#= attribute.Name #> 
 		{
 			get 

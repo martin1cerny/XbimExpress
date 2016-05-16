@@ -35,14 +35,9 @@ namespace Xbim.CodeGeneration
             var templates =
                 entityMatches.Where(m => m.Target != null)
                     .Select(m => new EntityInterfaceImplementation(settings, m, entityMatches));
-            Parallel.ForEach(templates, t => ProcessTemplate(t, modelProject));
 
-            //foreach (var match in entityMatches)
-            //{
-            //    if (match.Target == null) continue;
-            //    var tmpl = new EntityInterfaceImplementation(settings, match, entityMatches);
-            //    ProcessTemplate(tmpl, modelProject);
-            //}
+            //templates.ToList().ForEach(t => ProcessTemplate(t, modelProject));
+            Parallel.ForEach(templates, t => ProcessTemplate(t, modelProject));
 
             modelProject.Save();
             return true;
@@ -86,18 +81,9 @@ namespace Xbim.CodeGeneration
             modelTemplates.Add(new ItemSetTemplate(settings));
             modelTemplates.Add(new OptionalItemSetTemplate(settings));
 
+            //modelTemplates.ForEach(t => ProcessTemplate(t, modelProject));
             Parallel.ForEach(modelTemplates, tmpl => ProcessTemplate(tmpl, modelProject));
-            //foreach (var tmpl in modelTemplates)
-            //    ProcessTemplate(tmpl, modelProject);
-
-
-            //var infrastructureTemplates = new List<ICodeTemplate>
-            //{
-            //};
-            //foreach (var template in infrastructureTemplates)
-            //    ProcessTemplate(template, infraProject);
-
-
+            
             //make sure model project references infrastructural project
             if (modelProject != infraProject)
             {
