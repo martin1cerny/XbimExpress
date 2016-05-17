@@ -79,3 +79,13 @@ IfcPermit.LongDescription
 IfcSurfaceTexture.Mode
 IfcSpaceType.LongName
 IfcZone.LongName
+IfcAsymmetricIShapeProfileDef.BottomFlangeSlope
+IfcAsymmetricIShapeProfileDef.BottomFlangeEdgeRadius
+IfcAsymmetricIShapeProfileDef.TopFlangeEdgeRadius
+IfcAsymmetricIShapeProfileDef.TopFlangeSlope 
+IfcIShapeProfileDef.FlangeEdgeRadius
+IfcIShapeProfileDef.FlangeSlope
+IfcStructuralCurveMember.Axis
+IfcStructuralCurveConnection.Axis
+IfcConstructionResource.Usage
+IfcStructuralPointConnection.ConditionCoordinateSystem

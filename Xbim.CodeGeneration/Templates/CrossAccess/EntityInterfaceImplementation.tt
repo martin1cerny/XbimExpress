@@ -190,12 +190,9 @@ namespace <#= OwnNamespace #>
 <#			} #>
 <#		} else if (attribute.Domain is DefinedType) { #>
 <#			if (attribute.OptionalFlag) { #>
-				if (!value.HasValue)
-				{
-					<#= match.SourceAttribute.Name #> = <# if (match.SourceAttribute.OptionalFlag) {  #> null <# } else { #> default(<#= GetCSTypeFull(match.SourceAttribute)#>) <# } #>;
-					return;
-				}
-				<#= match.SourceAttribute.Name #> = new <#= GetCSTypeFull(match.SourceAttribute).Trim('?') #>(value.Value);
+				<#= match.SourceAttribute.Name #> = value.HasValue ? 
+					new <#= GetCSTypeFull(match.SourceAttribute).Trim('?') #>(value.Value) :  
+					<# if (match.SourceAttribute.OptionalFlag) {  #> new <#= GetCSTypeFull(match.SourceAttribute).Trim('?') #>?() <# } else { #> default(<#= GetCSTypeFull(match.SourceAttribute)#>) <# } #>;
 <#			} else { #>
 				<#= match.SourceAttribute.Name #> = new <#= GetCSTypeFull(match.SourceAttribute).Trim('?') #>(value);
 <#			} #>

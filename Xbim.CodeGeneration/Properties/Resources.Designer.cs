@@ -63,6 +63,29 @@ namespace Xbim.CodeGeneration.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string Ifc4_ChangedNameProperties {
+            get {
+                return ResourceManager.GetString("Ifc4_ChangedNameProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IfcBeam.PredefinedType
+        ///IfcBuilding.LongName
+        ///IfcActionRequest.PredefinedType
+        ///IfcBuildingElementPart.PredefinedType
+        ///IfcColumn.PredefinedType
+        ///IfcConstructionEquipmentResource.PredefinedType
+        ///IfcConstructionProductResource.PredefinedType
+        ///IfcCostItem.PredefinedType
+        ///IfcCrewResource.PredefinedType
+        ///IfcBuildingElementProxy.PredefinedType
+        ///IfcConstructionMaterialResource.PredefinedType 
+        ///IfcCurtainWall.PredefinedType 
+        ///IfcDiscreteAccessory.PredefinedType 
+        ///IfcDiscreteAccessoryType.PredefinedType 
+        ///IfcDistribu [rest of string was truncated]&quot;;.
+        /// </summary>
         internal static string Ifc4_NewProperties {
             get {
                 return ResourceManager.GetString("Ifc4_NewProperties", resourceCulture);
