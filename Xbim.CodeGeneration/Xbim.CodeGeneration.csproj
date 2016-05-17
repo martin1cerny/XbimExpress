@@ -116,6 +116,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Differences\Ifc4_ChangedNameProperties.csv" />
     <None Include="Differences\Ifc4_NewProperties.csv" />
     <None Include="Templates\CrossAccess\EntityInterfaceImplementation.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

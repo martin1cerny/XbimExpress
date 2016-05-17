@@ -1,0 +1,3 @@
+﻿IfcAsymmetricIShapeProfileDef, OverallWidth, BottomFlangeWidth
+IfcAsymmetricIShapeProfileDef, FlangeThickness, BottomFlangeThickness
+IfcAsymmetricIShapeProfileDef, FilletRadius, BottomFlangeFilletRadius

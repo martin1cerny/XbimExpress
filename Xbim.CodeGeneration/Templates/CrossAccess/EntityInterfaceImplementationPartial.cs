@@ -86,6 +86,8 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                     .FirstOrDefault();
             if (nameMatch == null && source.Name == "IfcStructuralSurfaceTypeEnum")
                 return tModel.Get<EnumerationType>(t => t.Name == "IfcStructuralSurfaceMemberTypeEnum").FirstOrDefault();
+            if (nameMatch == null && source.Name == "IfcStructuralCurveTypeEnum")
+                return tModel.Get<EnumerationType>(t => t.Name == "IfcStructuralCurveMemberTypeEnum").FirstOrDefault();
 
             return nameMatch;
         }

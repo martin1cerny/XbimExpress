@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Xbim.ExpressParser.SDAI;
 
@@ -7,15 +8,43 @@ namespace Xbim.CodeGeneration.Differences
 {
     public class ExplicitAttributeMatch
     {
-        private readonly EntityDefinition _source;
-        private readonly EntityDefinition _target;
 
+        private static readonly List<Tuple<string,string,string>> ChangedNames = new List<Tuple<string, string, string>>(); 
         public bool IsTypeCompatible { get; private set; }
 
-        private ExplicitAttributeMatch(EntityDefinition source, EntityDefinition target)
+        private ExplicitAttributeMatch()
         {
-            _source = source;
-            _target = target;
+        }
+
+        static ExplicitAttributeMatch()
+        {
+            var data = Properties.Resources.Ifc4_ChangedNameProperties;
+            var reader = new StringReader(data);
+            var line = reader.ReadLine();
+            while (!string.IsNullOrWhiteSpace(line))
+            {
+                var parts = line.Split(',').Select(v => v.Trim()).ToList();
+                ChangedNames.Add(new Tuple<string, string, string>(parts[0], parts[1], parts[2]));
+                line = reader.ReadLine();
+            }
+        }
+
+        private static string GetNewName(string type, string property)
+        {
+            var candidate = ChangedNames.FirstOrDefault(t =>
+                string.Equals(type, t.Item1, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(property, t.Item2, StringComparison.InvariantCultureIgnoreCase)
+                );
+            return candidate?.Item3;
+        }
+
+        private static string GetOldName(string type, string property)
+        {
+            var candidate = ChangedNames.FirstOrDefault(t =>
+                string.Equals(type, t.Item1, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(property, t.Item3, StringComparison.InvariantCultureIgnoreCase)
+                );
+            return candidate?.Item2;
         }
 
         public static IEnumerable<ExplicitAttributeMatch> FindMatches(EntityDefinition source, EntityDefinition target)
@@ -39,7 +68,7 @@ namespace Xbim.CodeGeneration.Differences
                     allTarget.FirstOrDefault(
                         ta => string.Compare(attribute.Name, ta.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
                 if (nameMatch == null) continue;
-                yield return new ExplicitAttributeMatch(source, target)
+                yield return new ExplicitAttributeMatch
                 {
                     //check type
                     MatchType = AttributeMatchType.Identity,
@@ -56,7 +85,7 @@ namespace Xbim.CodeGeneration.Differences
                 var ac = addedCandidates[0];
                 if (IsCompatibleSystemType(rc.Domain, ac.Domain))
                 {
-                    yield return new ExplicitAttributeMatch(source, target)
+                    yield return new ExplicitAttributeMatch
                     {
                         MatchType = AttributeMatchType.Changed,
                         SourceAttribute = rc,
@@ -72,15 +101,18 @@ namespace Xbim.CodeGeneration.Differences
             foreach (var attribute in addedCandidates)
             {
                 string aName = attribute.Name;
-                var candidates = removedCandidates.Where(ac => ((string)ac.Name).Contains(aName) || aName.Contains(ac.Name)).ToList();
+                var oldName = GetOldName(source.Name, aName);
+                var candidates = oldName != null ?
+                    allSource.Where(ac => ac.Name == oldName).ToList():
+                    removedCandidates.Where(ac => ((string)ac.Name).Contains(aName) || aName.Contains(ac.Name)).ToList();
                 if (candidates.Count == 1 && IsCompatibleSystemType(attribute.Domain, candidates[0].Domain))
                 {
                     toRemove.Add(attribute);
-                    yield return new ExplicitAttributeMatch(source, target)
+                    yield return new ExplicitAttributeMatch
                     {
                         MatchType = AttributeMatchType.Changed,
-                        SourceAttribute = attribute,
-                        TargetAttribute = candidates[0],
+                        SourceAttribute = candidates[0],
+                        TargetAttribute = attribute,
                         IsTypeCompatible = true
                     };
                 }
@@ -99,7 +131,7 @@ namespace Xbim.CodeGeneration.Differences
                 var candidates = removedCandidates.Where(ac => IsTypeNameMatch(ac.Domain, attribute.Domain)).ToList();
                 if (candidates.Count == 1)
                 {
-                    yield return new ExplicitAttributeMatch(source, target)
+                    yield return new ExplicitAttributeMatch
                     {
                         MatchType = AttributeMatchType.Changed,
                         SourceAttribute = attribute,
@@ -113,7 +145,7 @@ namespace Xbim.CodeGeneration.Differences
                 candidates = removedCandidates.Where(ac => IsCompatibleSystemType(ac.Domain, attribute.Domain)).ToList();
                 if (candidates.Count == 1)
                 {
-                    yield return new ExplicitAttributeMatch(source, target)
+                    yield return new ExplicitAttributeMatch
                     {
                         MatchType = AttributeMatchType.Changed,
                         SourceAttribute = attribute,
@@ -127,7 +159,7 @@ namespace Xbim.CodeGeneration.Differences
                 candidates = removedCandidates.Where(ac => ac.Name.ToString().ToUpperInvariant().LevenshteinDistance(attribute.Name.ToString().ToUpperInvariant()) < 4).ToList();
                 if (candidates.Count == 1 && IsCompatibleSystemType(attribute.Domain, candidates[0].Domain))
                 {
-                    yield return new ExplicitAttributeMatch(source, target)
+                    yield return new ExplicitAttributeMatch
                     {
                         MatchType = AttributeMatchType.Changed,
                         SourceAttribute = attribute,
@@ -137,7 +169,7 @@ namespace Xbim.CodeGeneration.Differences
                     continue;
                 }
                 
-                yield return new ExplicitAttributeMatch(source, target)
+                yield return new ExplicitAttributeMatch
                 {
                     MatchType = AttributeMatchType.NotFound,
                     SourceAttribute = attribute,
@@ -163,7 +195,10 @@ namespace Xbim.CodeGeneration.Differences
                 var nNamed = n as NamedType;
                 if (oNamed != null && nNamed != null)
                 {
-                    if (oNamed.Name == "IfcStructuralSurfaceTypeEnum" && nNamed.Name == "IfcStructuralSurfaceMemberTypeEnum")
+                    if (
+                        (oNamed.Name == "IfcStructuralSurfaceTypeEnum" && nNamed.Name == "IfcStructuralSurfaceMemberTypeEnum") ||
+                        (oNamed.Name == "IfcStructuralCurveTypeEnum" && nNamed.Name == "IfcStructuralCurveMemberTypeEnum")
+                        )
                         return true;
                     return string.Compare(oNamed.Name, nNamed.Name, StringComparison.InvariantCultureIgnoreCase) == 0;
                 }
@@ -234,7 +269,10 @@ namespace Xbim.CodeGeneration.Differences
                 var nNamed = n as NamedType;
                 if (oNamed != null && nNamed != null)
                 {
-                    if (oNamed.Name == "IfcStructuralSurfaceTypeEnum" && nNamed.Name == "IfcStructuralSurfaceMemberTypeEnum")
+                    if (
+                        (oNamed.Name == "IfcStructuralSurfaceTypeEnum" && nNamed.Name == "IfcStructuralSurfaceMemberTypeEnum") ||
+                        (oNamed.Name == "IfcStructuralCurveTypeEnum" && nNamed.Name == "IfcStructuralCurveMemberTypeEnum")
+                        )
                         return true;
                     return string.Compare(oNamed.Name, nNamed.Name, StringComparison.InvariantCultureIgnoreCase) == 0;
                 }
@@ -272,18 +310,8 @@ namespace Xbim.CodeGeneration.Differences
         }
 
         public ExplicitAttribute SourceAttribute { get; private set; }
-        //public int SourceAttributeOrder {
-        //    get { return _source.AllExplicitAttributes.ToList().IndexOf(SourceAttribute); }
-        //}
         public ExplicitAttribute TargetAttribute { get; private set; }
-        //public int TargetAttributeOrder
-        //{
-        //    get { return _target.AllExplicitAttributes.ToList().IndexOf(TargetAttribute); }
-        //}
         public AttributeMatchType MatchType { get; private set; }
-
-        //public bool ChangedOrder { get { return SourceAttributeOrder != TargetAttributeOrder; } }
-
         public string Message { get; private set; }
     }
 
