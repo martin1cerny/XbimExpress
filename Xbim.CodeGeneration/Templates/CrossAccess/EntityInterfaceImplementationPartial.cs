@@ -313,6 +313,22 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             return TrimNamespace(fullName);
         }
 
+        protected bool IsSimpleTypeCompatible(ExplicitAttribute n, ExplicitAttribute o)
+        {
+            if (n.OptionalFlag != o.OptionalFlag)
+                return false;
+
+            var s = n.Domain as SimpleType ?? o.Domain as SimpleType;
+            var d = n.Domain as DefinedType ?? o.Domain as DefinedType;
+            if (s == null || d == null)
+                return false;
+
+            var nT = TypeHelper.GetCSType(s, null);
+            var oT = TypeHelper.GetCSType(d.Domain, null);
+            return oT == nT;
+
+        }
+
         protected string GetInterfaceCSTypeFull(NamedType type)
         {
             var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");

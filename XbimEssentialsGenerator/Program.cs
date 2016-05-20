@@ -75,7 +75,7 @@ namespace XbimEssentialsGenerator
 
             watch.Stop();
             Console.WriteLine(@"Finished in {0}s.", watch.ElapsedMilliseconds/1000);
-            Console.Beep(440, 1000);
+            Console.Beep(440, 500);
             Console.ReadKey();
 
         }
