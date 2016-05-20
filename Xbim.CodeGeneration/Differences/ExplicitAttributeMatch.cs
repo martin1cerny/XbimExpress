@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Xbim.CodeGeneration.Helpers;
 using Xbim.ExpressParser.SDAI;
 
 namespace Xbim.CodeGeneration.Differences
@@ -239,8 +240,13 @@ namespace Xbim.CodeGeneration.Differences
                     var specific = GetAllSpecific(targetSelect);
                     if (specific.Any(
                             s => string.Compare(s.Name, sourceNamed.Name, StringComparison.InvariantCultureIgnoreCase) == 0))
-                        return true;
+                        return !(o is DefinedType);
                 }
+
+                //var target = n as DefinedType;
+                //var source = o as SimpleType;
+                //if (target != null && source != null &&  TypeHelper.GetCSType(target, null) == TypeHelper.GetCSType(source, null))
+                //    return true;
 
                 if (o.GetType() != n.GetType()) return false;
 

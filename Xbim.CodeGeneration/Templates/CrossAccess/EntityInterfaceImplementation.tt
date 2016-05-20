@@ -16,6 +16,7 @@ namespace <#= OwnNamespace #>
 	{
 <#	foreach(var attribute in ExplicitAttributesToImplement.ToList()){ #>
 <#		if (GetMatch(attribute) == null && IsNew(attribute)) { #>
+
 		private  <#= GetInterfaceCSTypeFull(attribute) #> <#= GetPrivateFieldName(attribute) #>;
 
 <#		} #>
@@ -182,11 +183,16 @@ namespace <#= OwnNamespace #>
 <#		if (match == null || !match.IsTypeCompatible) { 
 			if (IsNew(attribute)) {#>
 				SetValue(v => <#= GetPrivateFieldName(attribute)#> = v, <#= GetPrivateFieldName(attribute)#>, value, "<#= attribute.Name #>", byte.MaxValue);
+<#			} else if (match != null && IsSimpleTypeCompatible(attribute, match.SourceAttribute)){ #>
+				<#= match.SourceAttribute.Name #> = value;
 <#			} else { #>
 				//## Handle setting of <#= attribute.Name #> for which no match was found
 				//TODO: Handle setting of <#= attribute.Name #> for which no match was found
 				throw new System.NotImplementedException();
 				//##
+<#				if (match == null ||( match != null && attribute.Name != match.SourceAttribute.Name)) { #>
+				NotifyPropertyChanged("<#= attribute.Name #>");
+<#				} #>
 <#			} #>
 <#		} else if (attribute.Domain is DefinedType) { #>
 <#			if (attribute.OptionalFlag) { #>
