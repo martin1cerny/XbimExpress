@@ -78,7 +78,9 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
 
         protected EnumerationType GetMappedEnumerationType(EnumerationType source)
         {
-            var tModel = _match.Target.SchemaModel;
+            var tModel = _match.Target.SchemaModel == source.SchemaModel ?
+                _match.Source.SchemaModel :
+                _match.Target.SchemaModel;
 
             var nameMatch =
                 tModel.Get<EnumerationType>(
@@ -86,8 +88,12 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                     .FirstOrDefault();
             if (nameMatch == null && source.Name == "IfcStructuralSurfaceTypeEnum")
                 return tModel.Get<EnumerationType>(t => t.Name == "IfcStructuralSurfaceMemberTypeEnum").FirstOrDefault();
+            if (nameMatch == null && source.Name == "IfcStructuralSurfaceMemberTypeEnum")
+                return tModel.Get<EnumerationType>(t => t.Name == "IfcStructuralSurfaceTypeEnum").FirstOrDefault();
             if (nameMatch == null && source.Name == "IfcStructuralCurveTypeEnum")
                 return tModel.Get<EnumerationType>(t => t.Name == "IfcStructuralCurveMemberTypeEnum").FirstOrDefault();
+            if (nameMatch == null && source.Name == "IfcStructuralCurveMemberTypeEnum")
+                return tModel.Get<EnumerationType>(t => t.Name == "IfcStructuralCurveTypeEnum").FirstOrDefault();
 
             return nameMatch;
         }
@@ -100,16 +106,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             var identity =
                 target.Elements.FirstOrDefault(
                     e => string.Compare(normValue, NormalizeString(e), StringComparison.InvariantCultureIgnoreCase) == 0);
-            if (identity != default(ExpressId))
-                return identity;
-
-            //var ndef =
-            //    target.Elements.FirstOrDefault(
-            //        e => string.Compare("NOTDEFINED", NormalizeString(e), StringComparison.InvariantCultureIgnoreCase) == 0);
-            //if (ndef != default(ExpressId))
-            //    return ndef;
-
-            return null;
+            return identity != default(ExpressId) ? identity : null;
         }
 
         private string NormalizeString(string input)

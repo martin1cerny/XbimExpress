@@ -105,6 +105,10 @@ namespace <#= OwnNamespace #>
 <#				foreach(var e in enu.Elements) {
 					var translated = GetEnumEquivalent(e, tEnum);#>
 					case <#= GetCSTypeFull(enu) #>.<#= e #>:
+<#					if (e == "USERDEFINED"){ #>
+						//## Optional custom handling of <#= attribute.Name #> == .USERDEFINED. 
+						//##
+<#					} #>
 <#					if (string.IsNullOrWhiteSpace(translated)){#>
 						//## Handle translation of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
 						//TODO: Handle translation of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
@@ -286,10 +290,8 @@ namespace <#= OwnNamespace #>
 					throw new Exception("Unexpected type (enum?)");
 				} #>
 <#			} #>
-<#		} else if (true) { /* stop here to create */ #>
-				throw new System.NotImplementedException();
 <#		} else if (attribute.Domain is EnumerationType) { 
-			var enu = match.SourceAttribute.Domain as EnumerationType;
+			var enu = attribute.Domain as EnumerationType;
 			var tEnum = GetMappedEnumerationType(enu);
 			if (tEnum == null) {#>
 				//## Handle setting of  enumeration <#= enu.Name #> translation in property <#= attribute.Name #>
@@ -297,18 +299,19 @@ namespace <#= OwnNamespace #>
 				throw new System.NotImplementedException();
 				//##
 <#			} else {#>
-				switch (<#= match.SourceAttribute.Name #>)
+				switch (value)
 				{
 <#				foreach(var e in enu.Elements) {
 					var translated = GetEnumEquivalent(e, tEnum);#>
-					case <#= GetCSTypeFull(enu) #>.<#= e #>:
+					case <#= GetInterfaceCSTypeFull(enu) #>.<#= e #>:
 <#					if (string.IsNullOrWhiteSpace(translated)){#>
-						//## Handle setting of  of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
-						//TODO: Handle setting of  of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
+						//## Handle setting of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
+						//TODO: Handle setting of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
 						throw new System.NotImplementedException();
 						//##
 					<# } else { #>
-						return <#= GetInterfaceCSTypeFull(tEnum) #>.<#= e #>;
+						<#= match.SourceAttribute.Name #> = <#= GetCSTypeFull(tEnum) #>.<#= e #>;
+						return;
 <#					} #>					
 <#				} #>					
 					default:
