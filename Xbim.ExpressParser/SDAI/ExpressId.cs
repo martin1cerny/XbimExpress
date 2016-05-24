@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xbim.ExpressParser.SDAI
 {
-    public struct ExpressId
+    public struct ExpressId:IEquatable<string>
     {
         public ExpressId(string value)
         {
@@ -28,6 +28,11 @@ namespace Xbim.ExpressParser.SDAI
         public override bool Equals(object obj)
         {
             return Value != null && Value.Equals(obj);
+        }
+
+        public bool Equals(string other)
+        {
+            return Value.Equals(other);
         }
 
         public override string ToString()
@@ -57,6 +62,16 @@ namespace Xbim.ExpressParser.SDAI
         public static bool operator !=(ExpressId x, ExpressId y)
         {
             return x.Value != y.Value;
+        }
+
+        public static bool operator ==(ExpressId x, string y)
+        {
+            return x.Value == y;
+        }
+
+        public static bool operator !=(ExpressId x, string y)
+        {
+            return x.Value != y;
         }
     }
 }
