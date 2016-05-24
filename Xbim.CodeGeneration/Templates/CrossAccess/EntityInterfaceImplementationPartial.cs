@@ -133,7 +133,19 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
 
         protected DefinedType GetMappedDefinedType(DefinedType source)
         {
-            var tModel = _match.Target.SchemaModel;
+            
+            var tModel = _match.Target.SchemaModel == source.SchemaModel ? 
+                _match.Source.SchemaModel : 
+                _match.Target.SchemaModel;
+
+            if (source.Name == "IfcSoundPowerLevelMeasure")
+                return tModel.Get<DefinedType>(
+                    t => string.Compare("IfcSoundPowerMeasure", t.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    .FirstOrDefault();
+            if (source.Name == "IfcSoundPressureLevelMeasure")
+                return tModel.Get<DefinedType>(
+                    t => string.Compare("IfcSoundPressureMeasure", t.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    .FirstOrDefault();
 
             var nameMatch =
                 tModel.Get<DefinedType>(
@@ -157,6 +169,50 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                     yield return namedType;
                 }
             }
+        }
+
+        protected IEnumerable<NamedType> GetAllSpecificNative(SelectType select)
+        {
+            var remotes = GetAllSpecific(select).ToList();
+            var remoteNames = remotes.Select(s => s.Name).ToList();
+
+            var entities = _matches.Where(m => m.Target != null && remoteNames.Any(r => m.Target.Name == r)).Select(m => m.Source);
+            var types = remotes.OfType<DefinedType>();
+
+            return new NamedType[0]
+                .Concat(entities)
+                .Concat(types);
+        }
+
+        protected IEnumerable<NamedType> GetRemovedTypes(SelectType o, SelectType n)
+        {
+            var oSpecific = GetAllSpecific(o);
+            var nSpecific = GetAllSpecific(n).ToList();
+            return oSpecific.Where(s => nSpecific.All(ns => ns.Name != s.Name));
+        }
+
+        protected IEnumerable<NamedType> GetAddedTypes(SelectType o, SelectType n)
+        {
+            var oSpecific = GetAllSpecific(o).ToList();
+            var nSpecific = GetAllSpecific(n).ToList();
+            return nSpecific.Where(s => oSpecific.All(ns => ns.Name != s.Name));
+        }
+
+        protected IEnumerable<DefinedType> GetAddedDefinedTypes(SelectType o, SelectType n)
+        {
+            return GetAddedTypes(o, n).OfType<DefinedType>();
+        }
+
+        protected bool IsEntitySelection(SelectType select)
+        {
+            return GetAllSpecific(select).All(s => s is EntityDefinition);
+        }
+
+        protected IEnumerable<EntityDefinition> GetAddedEntities(SelectType o, SelectType n)
+        {
+            var candidates = GetAddedTypes(o,n).OfType<EntityDefinition>().Select(c => c.Name).ToList();
+            //find equivalents in old schema
+            return _matches.Where(m => m.Target != null && candidates.Any(c => c == m.Target.Name)).Select(m => m.Source);
         }
 
         protected IEnumerable<ExplicitAttribute> ExplicitAttributesToImplement

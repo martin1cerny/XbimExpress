@@ -14,18 +14,27 @@ namespace <#= OwnNamespace #>
 {
 	public partial class @<#= Name #> : <#= Interface #>
 	{
-<#	foreach(var attribute in ExplicitAttributesToImplement.ToList()){ #>
-<#		if (GetMatch(attribute) == null && IsNew(attribute)) { #>
+<#	var valueSelects = new string[] {"IfcValue", "IfcMetricValueSelect", "IfcAppliedValueSelect"};
+	foreach(var attribute in ExplicitAttributesToImplement.ToList()){ #>
+<#		var match = GetMatch(attribute); 
+		if (match == null && IsNew(attribute)) { #>
 
 		private  <#= GetInterfaceCSTypeFull(attribute) #> <#= GetPrivateFieldName(attribute) #>;
+
+<#		} else if (match != null && attribute.Domain is SelectType && match.SourceAttribute.Domain is EntityDefinition) { #>
+
+		private  <#= GetInterfaceCSTypeFull(attribute) #> <#= GetPrivateFieldName(attribute) #>4;
+
+<#		} else if (match != null && attribute.Domain is SelectType && valueSelects.Any(s => s == ((SelectType)attribute.Domain).Name)) { #>
+
+		private  <#= GetInterfaceCSTypeFull(attribute) #> <#= GetPrivateFieldName(attribute) #>4;
 
 <#		} #>
 		<#= GetInterfaceCSTypeFull(attribute) #> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
 		{ 
 			get
 			{
-<#		var match = GetMatch(attribute); 
-		if (match == null || !match.IsTypeCompatible) { 
+<#		if (match == null || !match.IsTypeCompatible) { 
 			if (IsNew(attribute)) { #>
 				return <#= GetPrivateFieldName(attribute) #>;
 <#			} else { #>
@@ -43,20 +52,12 @@ namespace <#= OwnNamespace #>
 <#			} #>
 <#		} else if (attribute.Domain is EntityDefinition) { #>
 				return <#= match.SourceAttribute.Name #><# if(!IsDirectTypeMatch(match)) {#> as <#= GetInterfaceCSTypeFull(attribute) #><# } #>;
-<#		} else if (attribute.Domain is SelectType && !(match.SourceAttribute.Domain is SelectType)) { #>
-<#			if (match.SourceAttribute.Domain is EntityDefinition) { #>
-				return <#= match.SourceAttribute.Name #>;
-<#			} else if(match.SourceAttribute.Domain is DefinedType) {
-				var dt = match.SourceAttribute.Domain as DefinedType;
-				var targetDt = GetMappedDefinedType(dt); #>
-<#				if(match.SourceAttribute.OptionalFlag) { #> 
-				if(!<#= match.SourceAttribute.Name #>.HasValue) return null;
-				return new <#= GetInterfaceCSTypeFull(targetDt) #>(<#= match.SourceAttribute.Name #>.Value);
-<#				} else { #>
-				return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
-<#				} #>
-<#			} #>
+<#		} else if (attribute.Domain is SelectType && match.SourceAttribute.Domain is EntityDefinition) { #>
+				return  <#= GetPrivateFieldName(attribute) #>4 ?? <#= match.SourceAttribute.Name #>;
 <#		} else if (attribute.Domain is SelectType) { #>
+<#			if (valueSelects.Any(s => s == ((SelectType)attribute.Domain).Name)) { #>
+				if (<#= GetPrivateFieldName(attribute) #>4 != null) return <#= GetPrivateFieldName(attribute) #>4;
+<# } #>
 				if (<#= match.SourceAttribute.Name #> == null) return null;
 <# 			foreach(var st in GetAllSpecific((SelectType)match.SourceAttribute.Domain)) {
 				var ed = st as EntityDefinition;
@@ -76,7 +77,7 @@ namespace <#= OwnNamespace #>
 					var targetDt = GetMappedDefinedType(dt);#>
 				if (<#= match.SourceAttribute.Name #> is <#= GetCSTypeFull(dt) #>) 
 <#					if (targetDt != null && IsInSelect(targetDt, match.TargetAttribute.Domain as SelectType)) { #>
-					return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
+					return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
 <#					} else { #>
 					//## Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
 					//TODO: Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
@@ -89,9 +90,6 @@ namespace <#= OwnNamespace #>
 <#			} #>
 				return null;
 <#		} else if (attribute.Domain is SimpleType) { #>
-<#			if (match.SourceAttribute.OptionalFlag) { #>
-				if (<#= match.SourceAttribute.Name #> == null) return null;
-<#			} #>
 				return <#= match.SourceAttribute.Name #>;
 <#		} else if (attribute.Domain is EnumerationType) { 
 			var enu = match.SourceAttribute.Domain as EnumerationType;
@@ -204,58 +202,88 @@ namespace <#= OwnNamespace #>
 <#			} #>
 <#		} else if (attribute.Domain is EntityDefinition) { #>
 				<#= match.SourceAttribute.Name #> = value as <#= GetCSTypeFull(match.SourceAttribute) #>;
-<#		} else if (true) { /* stop here to create */ #>
-				throw new System.NotImplementedException();
-<#		}  else if (attribute.Domain is SelectType && !(match.SourceAttribute.Domain is SelectType)) { #>
-<#			if (match.SourceAttribute.Domain is EntityDefinition) { #>
-				return <#= match.SourceAttribute.Name #>;
-<#			} else if(match.SourceAttribute.Domain is DefinedType) {
-				var dt = match.SourceAttribute.Domain as DefinedType;
-				var targetDt = GetMappedDefinedType(dt); #>
-<#				if(match.SourceAttribute.OptionalFlag) { #> 
-				if(!<#= match.SourceAttribute.Name #>.HasValue) return null;
-				return new <#= GetInterfaceCSTypeFull(targetDt) #>(<#= match.SourceAttribute.Name #>.Value);
-<#				} else { #>
-				return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
-<#				} #>
-<#			} #>
-<#		} else if (attribute.Domain is SelectType) { #>
-				if (<#= match.SourceAttribute.Name #> == null) return null;
-<# 			foreach(var st in GetAllSpecific((SelectType)match.SourceAttribute.Domain)) {
+<#		}  else if (attribute.Domain is SelectType && match.SourceAttribute.Domain is EntityDefinition) { #>
+				if (value == null)
+				{
+					<#= match.SourceAttribute.Name #> = null;
+					if (<#= GetPrivateFieldName(attribute)#>4 != null)
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+					return;
+				}
+				
+				var val = value as <#= GetCSTypeFull(match.SourceAttribute)#>;
+				if (val != null)
+				{
+					<#= match.SourceAttribute.Name #> = val;
+					if (<#= GetPrivateFieldName(attribute)#>4 != null)
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+					return;
+				} 
+
+				if(<#= match.SourceAttribute.Name #> != null)
+					<#= match.SourceAttribute.Name #> = null;
+				SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, value, "<#= attribute.Name #>", byte.MaxValue);
+<#		} else if (attribute.Domain is SimpleType) { #>
+				<#= match.SourceAttribute.Name #> = value;
+<#		} else if (attribute.Domain is SelectType) { 
+			var addedEntities = GetAddedEntities(match.SourceAttribute.Domain as SelectType, attribute.Domain as SelectType).ToList(); 
+			var addedDefinedTypes = GetAddedDefinedTypes(match.SourceAttribute.Domain as SelectType, attribute.Domain as SelectType).ToList(); 
+#>
+				if (value == null)
+				{
+					<#= match.SourceAttribute.Name #> = null;
+					return;
+				}	
+<# 			foreach(var st in GetAllSpecificNative((SelectType)attribute.Domain)) {
 				var ed = st as EntityDefinition;
 				if(ed != null) {#>
-				var <#= st.Name.ToString().ToLower() #> = <#= match.SourceAttribute.Name #> as <#= GetCSTypeFull(st) #>;
+				var <#= st.Name.ToString().ToLower() #> = value as <#= GetCSTypeFull(st) #>;
 				if (<#= st.Name.ToString().ToLower() #> != null) 
-<#					if (IsInSelect(ed, match.TargetAttribute.Domain as SelectType)) {#>
-					return <#= st.Name.ToString().ToLower() #>;
+				{
+<#					if (IsInSelect(ed, match.SourceAttribute.Domain as SelectType)) {#>
+					<#= match.SourceAttribute.Name #> = <#= st.Name.ToString().ToLower() #>;
+					return;
 <#					} else { #>
 					//## Handle setting of entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
 					//TODO: Handle setting of entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
 					throw new System.NotImplementedException();
 					//##
 <#					} #>
+				}
 <#				} else if(st is DefinedType){ 
 					var dt = st as DefinedType;
-					var targetDt = GetMappedDefinedType(dt);#>
-				if (<#= match.SourceAttribute.Name #> is <#= GetCSTypeFull(dt) #>) 
-<#					if (targetDt != null && IsInSelect(targetDt, match.TargetAttribute.Domain as SelectType)) { #>
-					return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
+					var sourceDt = GetMappedDefinedType(dt);#>
+				if (value is <#= GetInterfaceCSTypeFull(dt) #>) 
+				{
+<#					if (valueSelects.Any(s => s == ((SelectType)attribute.Domain).Name)) {#>
+<#						if (sourceDt != null && IsInSelect(sourceDt, match.SourceAttribute.Domain as SelectType)) { #>
+					<#= match.SourceAttribute.Name #> = new <#= GetCSTypeFull(sourceDt) #>((<#= GetInterfaceCSTypeFull(dt) #>)value);
+					if (<#= GetPrivateFieldName(attribute)#>4 != null)
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+					return;
+<#						} else { #>
+					if (<#= match.SourceAttribute.Name #> != null)
+						<#= match.SourceAttribute.Name #> = null;
+					SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, value, "<#= attribute.Name #>", byte.MaxValue);
+					return;
+<#						}#>
+<#					} else { #>
+<#					if (sourceDt != null && IsInSelect(sourceDt, match.SourceAttribute.Domain as SelectType)) { #>
+					<#= match.SourceAttribute.Name #> = new <#= GetCSTypeFull(sourceDt) #>((<#= GetInterfaceCSTypeFull(dt) #>)value);
+					return;
 <#					} else { #>
 					//## Handle setting of defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
 					//TODO: Handle setting of defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
 					throw new System.NotImplementedException();
 					//##
-<#					}#>
+<#					}}#>
+				}
 <#				} else { 
 					throw new Exception("Unexpected type (enum?)");
 				} #>
 <#			} #>
-				return null;
-<#		} else if (attribute.Domain is SimpleType) { #>
-<#			if (match.SourceAttribute.OptionalFlag) { #>
-				if (<#= match.SourceAttribute.Name #> == null) return null;
-<#			} #>
-				return <#= match.SourceAttribute.Name #>;
+<#		} else if (true) { /* stop here to create */ #>
+				throw new System.NotImplementedException();
 <#		} else if (attribute.Domain is EnumerationType) { 
 			var enu = match.SourceAttribute.Domain as EnumerationType;
 			var tEnum = GetMappedEnumerationType(enu);
