@@ -14,7 +14,7 @@ namespace <#= OwnNamespace #>
 {
 	public partial class @<#= Name #> : <#= Interface #>
 	{
-<#	var valueSelects = new string[] {"IfcValue", "IfcMetricValueSelect", "IfcAppliedValueSelect"};
+<#	var valueSelects = new string[] {"IfcValue", "IfcMetricValueSelect", "IfcAppliedValueSelect", "IfcObjectReferenceSelect"};
 	foreach(var attribute in ExplicitAttributesToImplement.ToList()){ #>
 <#		var match = GetMatch(attribute); 
 		if (match == null && IsNew(attribute)) { #>
@@ -242,6 +242,10 @@ namespace <#= OwnNamespace #>
 				{
 <#					if (IsInSelect(ed, match.SourceAttribute.Domain as SelectType)) {#>
 					<#= match.SourceAttribute.Name #> = <#= st.Name.ToString().ToLower() #>;
+<#						if (valueSelects.Any(s => s == ((SelectType)attribute.Domain).Name)) {#>
+					if (<#= GetPrivateFieldName(attribute)#>4 != null)
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+<#						} #>
 					return;
 <#					} else { #>
 					//## Handle setting of entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
