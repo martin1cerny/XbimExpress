@@ -18,7 +18,7 @@ namespace Xbim.CodeGeneration.Helpers
                 type += "?";
             if (domain is AggregationType)
             {
-                type = type.Replace(settings.ItemSetClassName, "IEnumerable");
+                type = type.Replace(settings.ItemSetClassName, "IItemSet");
             }
 
             return type;
@@ -35,7 +35,7 @@ namespace Xbim.CodeGeneration.Helpers
                 type += "?";
             if (domain is AggregationType)
             {
-                type = type.Replace(settings.ItemSetClassName, "IEnumerable");
+                type = type.Replace(settings.ItemSetClassName, "IItemSet");
             }
 
             return type;

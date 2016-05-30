@@ -46,11 +46,21 @@ namespace <#= Namespace #>
 		#region I<#= Name #> explicit implementation
 <# foreach(var attribute in ExplicitAttributes){ #>
 		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #> { 
+<# if (!IsAggregation(attribute)) { 
+	  var type = ((AggregationType)attribute.Domain).ElementType;
+	  var outerType = GetInterfaceCSType(type);
+	  var innerType = GetCSType(type);
+		if(innerType != outerType){ #>
+			get { return new Xbim.Common.Collections.ProxyItemSet<<#= innerType #>, <#= outerType #>>( @<#= attribute.Name #>); } 
+<#	   } else { #>
 			get { return @<#= attribute.Name #>; } 
-<# if (!IsAggregation(attribute)) {#> 
+<#	   }#>
+<# } else {#> 
 <#		if (IsEntityOrSelect(attribute)) {#> 
+			get { return @<#= attribute.Name #>; } 
 			set { <#= attribute.Name #> = value as <#= GetCSType(attribute) #>;}
 <#		}  else {#>
+			get { return @<#= attribute.Name #>; } 
 			set { <#= attribute.Name #> = value;}
 <#		} #>
 <# } #>
