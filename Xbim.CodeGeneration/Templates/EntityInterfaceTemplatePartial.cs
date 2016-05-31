@@ -68,6 +68,41 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        protected string GetInnerType(string aggrType)
+        {
+            while (true)
+            {
+                if (aggrType.StartsWith("IItemSet"))
+                {
+                    aggrType = aggrType.Substring(9); //remove "IItemSet<"
+                    aggrType = aggrType.Substring(0, aggrType.Length - 1); //remove ">"
+                }
+
+                if (aggrType.StartsWith("ItemSet"))
+                {
+                    aggrType = aggrType.Substring(8); //remove "ItemSet<"
+                    aggrType = aggrType.Substring(0, aggrType.Length - 1); //remove ">"
+                }
+
+                if (aggrType.StartsWith("OptionalItemSet"))
+                {
+                    aggrType = aggrType.Substring(16); //remove "OptionalItemSet<"
+                    aggrType = aggrType.Substring(0, aggrType.Length - 1); //remove ">"
+                }
+
+                if (aggrType.StartsWith("IOptionalItemSet"))
+                {
+                    aggrType = aggrType.Substring(17); //remove "OptionalItemSet<"
+                    aggrType = aggrType.Substring(0, aggrType.Length - 1); //remove ">"
+                }
+
+                if (aggrType.Contains("ItemSet"))
+                    continue;
+
+                return aggrType;
+            }
+        }
+
         protected string InterfaceInheritance
         {
             get
