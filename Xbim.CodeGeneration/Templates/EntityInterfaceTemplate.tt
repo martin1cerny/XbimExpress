@@ -46,12 +46,12 @@ namespace <#= Namespace #>
 		#region I<#= Name #> explicit implementation
 <# foreach(var attribute in ExplicitAttributes){ #>
 		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #> { 
-<# if (!IsAggregation(attribute)) { 
-	  var type = ((AggregationType)attribute.Domain).ElementType;
-	  var outerType = GetInterfaceCSType(type);
-	  var innerType = GetCSType(type);
+<# if (IsAggregation(attribute)) { 
+	  var outerType = GetInnerType(GetInterfaceCSType(attribute));
+	  var innerType = GetInnerType(GetCSType(attribute));
+
 		if(innerType != outerType){ #>
-			get { return new Xbim.Common.Collections.ProxyItemSet<<#= innerType #>, <#= outerType #>>( @<#= attribute.Name #>); } 
+			get { return new Common.Collections.Proxy<#=IsNestedAggregation(attribute) ? "Nested" : ""  #>ItemSet<<#= innerType #>, <#= outerType #>>( @<#= attribute.Name #>); } 
 <#	   } else { #>
 			get { return @<#= attribute.Name #>; } 
 <#	   }#>
@@ -139,16 +139,18 @@ namespace <#= Namespace #>
 		//internal constructor makes sure that objects are not created outside of the model/ assembly controlled area
 		internal <#= Name #>(<#= ModelInterface #> model) <# if (!IsFirst) {#>: base(model) <# } #>
 		{ 
+<# if (IsFirst) {#>
 			Model = model; 
+<# } #>
 <# foreach (var attribute in AggregatedExplicitAttributes){ #>
-			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute) #>( this, <#= GetUpperBound(attribute) #>,  <#= GetAttributeOrder(attribute) #>);
+			<#= GetPrivateFieldName(attribute) #> = new <#= GetCSType(attribute).Substring(1) #>( this, <#= GetUpperBound(attribute) #>,  <#= GetAttributeOrder(attribute) #>);
 <# } #>
 		}
 
 <# if (ExplicitAttributes.Any()) {#>
 		#region Explicit attribute fields
 <# foreach(var attribute in ExplicitAttributes){ #>
-		private <#= GetCSType(attribute) #> <#= GetPrivateFieldName(attribute) #>;
+		private <#= (attribute.Domain is AggregationType) ? "readonly " + GetCSType(attribute).Substring(1) : GetCSType(attribute) #> <#= GetPrivateFieldName(attribute) #>;
 <# } #>
 		#endregion
 	
@@ -364,11 +366,10 @@ namespace <#= Namespace #>
 			}
 			if (IsNestedAggregation(attribute)){
 				var levels = GetLevelOfNesting(attribute); #>
-					<#= GetPrivateFieldName(attribute) #>
+					((ItemSet<<#= GetAggregationElementType(attribute) #>>)<#= GetPrivateFieldName(attribute) #>
 <#                     for (int i = 0; i < levels; i++)
                        {#>
-						.InternalGetAt(nestedIndex[<#= i #>])
-<#                     } #>
+						.InternalGetAt(nestedIndex[<#= i #>]) <# } #>)
 						.InternalAdd((<#= GetAggregationElementType(attribute) #>)(value.<#= GetPropertyValueMember(attribute.Domain) #>));
 					return;
 <#				continue;
@@ -421,7 +422,7 @@ namespace <#= Namespace #>
             if (ReferenceEquals(left, null) || ReferenceEquals(right, null))
                 return false;
 
-            return (left.EntityLabel == right.EntityLabel) && (left.Model == right.Model);
+            return (left.EntityLabel == right.EntityLabel) && (ReferenceEquals(left.Model, right.Model));
 
         }
 

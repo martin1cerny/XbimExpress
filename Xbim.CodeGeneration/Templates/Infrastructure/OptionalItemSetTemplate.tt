@@ -3,7 +3,6 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-using System.Collections.Generic;
 <# foreach(var u in Using) { #>
 using <#= u #>;
 <# } #>
@@ -14,15 +13,7 @@ namespace <#= Namespace #>
     {
         private bool _initialized;
 
-        internal <#= Name #>(IPersistEntity entity, byte property) : base(entity, property)
-        {
-        }
-
         internal <#= Name #>(IPersistEntity entity, int capacity, byte property) : base(entity, capacity, property)
-        {
-        }
-
-        internal <#= Name #>(IPersistEntity entity, IEnumerable<T> collection, byte property) : base(entity, collection, property)
         {
         }
 

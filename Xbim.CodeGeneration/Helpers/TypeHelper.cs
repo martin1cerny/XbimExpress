@@ -18,7 +18,7 @@ namespace Xbim.CodeGeneration.Helpers
                 type += "?";
             if (domain is AggregationType)
             {
-                type = type.Replace(settings.ItemSetClassName, "IItemSet");
+                //type = type.Replace(settings.ItemSetClassName, "IItemSet");
             }
 
             return type;
@@ -35,7 +35,7 @@ namespace Xbim.CodeGeneration.Helpers
                 type += "?";
             if (domain is AggregationType)
             {
-                type = type.Replace(settings.ItemSetClassName, "IItemSet");
+                //type = type.Replace(settings.ItemSetClassName, "IItemSet");
             }
 
             return type;
@@ -52,7 +52,7 @@ namespace Xbim.CodeGeneration.Helpers
                 ))
                 type += "?";
             if (attribute.OptionalFlag && domain is AggregationType)
-                type = "Optional" + type;
+                type = "IOptional" + type.Substring(1);
 
             return type;
         }
@@ -89,7 +89,7 @@ namespace Xbim.CodeGeneration.Helpers
             {
                 return useList ?
                     string.Format("List<{0}>", GetCSType(aggr.ElementType, settings, true, entityAsInterface, fullNamespace))
-                    : string.Format("{0}<{1}>", settings.ItemSetClassName, GetCSType(aggr.ElementType, settings, false, entityAsInterface, fullNamespace));
+                    : string.Format("{0}<{1}>", "I" + settings.ItemSetClassName, GetCSType(aggr.ElementType, settings, false, entityAsInterface, fullNamespace));
             }
 
             //this shouldn't happen
