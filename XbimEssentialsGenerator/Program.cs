@@ -53,14 +53,14 @@ namespace XbimEssentialsGenerator
                 GenerateAllAsInterfaces = true,
                 IgnoreDerivedAttributes = GetIgnoreDerivedAttributes()
             };
-            //Generator.GenerateSchema(settings, ifc2X3);
-            //Console.WriteLine(@"IFC2x3 with interfaces generated");
+            Generator.GenerateSchema(settings, ifc2X3);
+            Console.WriteLine(@"IFC2x3 with interfaces generated");
 
             //generate cross schema access
             settings.CrossAccessProjectPath = "Xbim.Ifc4";
             settings.CrossAccessStructure = ifc4Domains;
-            //Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
-            //Console.WriteLine(@"IFC4 interface acces generated for IFC2x3");
+            Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
+            Console.WriteLine(@"IFC4 interface acces generated for IFC2x3");
 
             settings.Structure = ifc4Domains;
             settings.OutputPath = "Xbim.Ifc4";
@@ -68,10 +68,10 @@ namespace XbimEssentialsGenerator
             Console.WriteLine(@"IFC4 with interfaces generated");
             
             
-            //settings.Structure = null;
-            //settings.OutputPath = "Xbim.CobieExpress";
-            //Generator.GenerateSchema(settings, cobie);
-            //Console.WriteLine(@"COBieExpress generated");
+            settings.Structure = null;
+            settings.OutputPath = "Xbim.CobieExpress";
+            Generator.GenerateSchema(settings, cobie);
+            Console.WriteLine(@"COBieExpress generated");
 
             watch.Stop();
             Console.WriteLine(@"Finished in {0}s.", watch.ElapsedMilliseconds/1000);
