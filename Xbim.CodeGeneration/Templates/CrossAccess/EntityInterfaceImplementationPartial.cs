@@ -411,7 +411,8 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                 {
                     Settings.CrossAccessNamespace, 
                     "System.Collections.Generic",
-                    "System.Linq"
+                    "System.Linq",
+                    "Xbim.Common"
                 };
 
                 return usings.Distinct();
