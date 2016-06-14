@@ -34,13 +34,33 @@ namespace Xbim.CodeGeneration
 
             var templates =
                 entityMatches.Where(m => m.Target != null)
-                    .Select(m => new EntityInterfaceImplementation(settings, m, entityMatches));
+                    .Select(m => new EntityInterfaceImplementation(settings, m, entityMatches) as ICodeTemplate);
+            var selectTemplates =
+                GetSelectsToImplement(schema, remoteSchema, entityMatches)
+                    .Select(s => new SelectInterfaceImplementation(settings, s.Item1, s.Item2));
 
-            //templates.ToList().ForEach(t => ProcessTemplate(t, modelProject));
-            Parallel.ForEach(templates, t => ProcessTemplate(t, modelProject));
+            var toProcess = templates.Concat(selectTemplates);
+
+            //toProcess.ToList().ForEach(t => ProcessTemplate(t, modelProject));
+            Parallel.ForEach(toProcess, t => ProcessTemplate(t, modelProject));
 
             modelProject.Save();
             return true;
+        }
+
+        private static IEnumerable<Tuple<SelectType, SelectType>> GetSelectsToImplement(SchemaModel schema, SchemaModel remote,
+            IEnumerable<EntityDefinitionMatch> matches)
+        {
+            var definitionMatches = matches as IList<EntityDefinitionMatch> ?? matches.ToList();
+            var targets = remote.Get<SelectType>().ToList();
+            foreach (var source in schema.Get<SelectType>())
+            {
+                var target = targets.FirstOrDefault(t => t.Name == source.Name);
+                if (target == null)
+                    continue;
+                if (EntityInterfaceImplementation.IsSelectCompatible(source, target, definitionMatches))
+                    yield return new Tuple<SelectType, SelectType>(source, target);
+            }
         }
 
         public static bool GenerateSchema(GeneratorSettings settings, SchemaModel schema)

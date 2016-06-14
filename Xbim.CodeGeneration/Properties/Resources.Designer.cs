@@ -61,7 +61,15 @@ namespace Xbim.CodeGeneration.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to IfcAsymmetricIShapeProfileDef, OverallWidth, BottomFlangeWidth
+        ///IfcAsymmetricIShapeProfileDef, FlangeThickness, BottomFlangeThickness
+        ///IfcAsymmetricIShapeProfileDef, FilletRadius, BottomFlangeFilletRadius
+        ///IfcStructuralLoadTemperature, DeltaT_Constant, DeltaTConstant
+        ///IfcStructuralLoadTemperature, DeltaT_Y, DeltaTY
+        ///IfcStructuralLoadTemperature, DeltaT_Z, DeltaTZ
+        ///IfcProcedure, ProcedureType, PredefinedType
+        ///IfcBoundaryFaceCondition, LinearStiffnessByAreaX, TranslationalStiffnessByAreaX
+        ///IfcBoundaryFaceCond [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Ifc4_ChangedNameProperties {
             get {
@@ -71,7 +79,6 @@ namespace Xbim.CodeGeneration.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to IfcBeam.PredefinedType
-        ///IfcBuilding.LongName
         ///IfcActionRequest.PredefinedType
         ///IfcBuildingElementPart.PredefinedType
         ///IfcColumn.PredefinedType
@@ -84,11 +91,20 @@ namespace Xbim.CodeGeneration.Properties {
         ///IfcCurtainWall.PredefinedType 
         ///IfcDiscreteAccessory.PredefinedType 
         ///IfcDiscreteAccessoryType.PredefinedType 
-        ///IfcDistribu [rest of string was truncated]&quot;;.
+        ///IfcDistributionChamberElement.Pre [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Ifc4_NewProperties {
             get {
                 return ResourceManager.GetString("Ifc4_NewProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string ReadonlyItemSets {
+            get {
+                return ResourceManager.GetString("ReadonlyItemSets", resourceCulture);
             }
         }
     }

@@ -151,7 +151,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             return nameMatch;
         }
 
-        protected IEnumerable<NamedType> GetAllSpecific(SelectType select)
+        protected static IEnumerable<NamedType> GetAllSpecific(SelectType select)
         {
             foreach (var type in select.Selections)
             {
@@ -179,6 +179,53 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             return new NamedType[0]
                 .Concat(entities)
                 .Concat(types);
+        }
+
+        protected bool IsAggregationEntityCompatible(ExplicitAttribute source, ExplicitAttribute target)
+        {
+            if (source.Domain.GetType() != target.Domain.GetType())
+                return false;
+
+            var sType = source.Domain;
+            var tType = target.Domain;
+
+            if (sType is AggregationType)
+            {
+                sType = ((AggregationType) sType).ElementType;
+                tType = ((AggregationType) tType).ElementType;
+            }
+
+            var sEntity = sType as EntityDefinition;
+            var tEntity = tType as EntityDefinition;
+            if (sEntity != null && tEntity != null)
+            {
+                return _matches.Any(m => m.Source == sEntity && m.Target == tEntity);
+            }
+
+            var sSelect = sType as SelectType;
+            var tSelect = tType as SelectType;
+            if (sSelect != null)
+            {
+                return IsSelectCompatible(sSelect, tSelect, _matches);
+            }
+            return false;
+        }
+
+        internal static bool IsSelectCompatible(SelectType source, SelectType target, IEnumerable<EntityDefinitionMatch> matches)
+        {
+            var sImpls = GetAllSpecific(source).ToList();
+            var tImpls = GetAllSpecific(target).Where(i => matches.Any(m => m.Target == i && m.Source != null)).ToList();
+            if (sImpls.All(s => s is EntityDefinition) && tImpls.All(s => s is EntityDefinition))
+            {
+                return 
+                    tImpls.Count == sImpls.Count && 
+                    sImpls.All(t =>
+                    {
+                        var match = matches.FirstOrDefault(m => m.Source == t);
+                        return match != null && tImpls.Any(s => s == match.Target);
+                    });
+            }
+            return false;
         }
 
         protected IEnumerable<NamedType> GetRemovedTypes(SelectType o, SelectType n)
@@ -401,7 +448,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             return TrimNamespace(fullName);
         }
 
-        protected string Interface { get { return "I" + RemoteType.Name; } }
+        protected string Interface => "I" + RemoteType.Name;
 
         public override IEnumerable<string> Using
         {

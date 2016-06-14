@@ -120,7 +120,6 @@ namespace <#= Namespace #>
 			if (!System.Enum.TryParse(value, true, out _value))
                 throw new System.ArgumentException();
 <#			break; #>
-
 <# } #>
         }
 <# } #>

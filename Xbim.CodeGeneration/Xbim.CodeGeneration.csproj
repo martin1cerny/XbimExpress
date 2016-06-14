@@ -60,6 +60,12 @@
       <DependentUpon>EntityInterfaceImplementation.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\CrossAccess\EntityInterfaceImplementationPartial.cs" />
+    <Compile Include="Templates\CrossAccess\SelectInterfaceImplementation.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SelectInterfaceImplementation.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\CrossAccess\SelectInterfaceImplementationPartial.cs" />
     <Compile Include="Templates\DefinedTypeTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -178,6 +184,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\CrossAccess\SelectInterfaceImplementation.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SelectInterfaceImplementation.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
