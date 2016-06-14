@@ -100,6 +100,8 @@ namespace <#= OwnNamespace #>
 				throw new System.NotImplementedException();
 				//##
 <#			} else {#>
+				//## Custom code to handle enumeration of <#= attribute.Name #>
+				//##
 				switch (<#= match.SourceAttribute.Name #>)
 				{
 <#				foreach(var e in enu.Elements) {
@@ -122,59 +124,22 @@ namespace <#= OwnNamespace #>
 						throw new System.ArgumentOutOfRangeException();
 				}
 <#			}
-        } else if(attribute.Domain is AggregationType) {
-			var targetType =  (attribute.Domain as AggregationType).ElementType; 
-			var sourceType = (match.SourceAttribute.Domain as AggregationType).ElementType; #>
-				foreach (var member in <#= match.SourceAttribute.Name #>)
-				{
-<#			if (targetType is DefinedType) { #>
-					yield return new <#= GetInterfaceCSTypeFull(targetType as NamedType) #>((<#= GetBaseSystemType(sourceType as DefinedType) #>)member);
-<#			} else if (targetType is SimpleType) { #>
-					yield return member;
-<#			} else if (targetType is EntityDefinition) { #>
-					yield return member as <#= GetInterfaceCSTypeFull(targetType as NamedType) #>;
-<#			} else if (targetType is SelectType && !(sourceType is SelectType)) { #>
-<#				if (sourceType is EntityDefinition) { #>
-					yield return member;
-<#				} else if(sourceType is DefinedType) {
-					var dt = sourceType as DefinedType;
-					var targetDt = GetMappedDefinedType(dt); #>
-					yield return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)member);
-<#				} #>
-<#			} else if (targetType is SelectType) { #>
-<# 				foreach(var st in GetAllSpecific((SelectType)sourceType)) {
-					var ed = st as EntityDefinition;
-					if(ed != null) {#>
-					var <#= st.Name.ToString().ToLower() #> = member as <#= GetCSTypeFull(st) #>;
-					if (<#= st.Name.ToString().ToLower() #> != null) 
-<#						if (IsInSelect(ed, targetType as SelectType)) {#>
-						yield return <#= st.Name.ToString().ToLower() #>;
-<#						} else { #>
-						//## Handle entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(targetType as NamedType) #> in property <#= attribute.Name #>
-						//TODO: Handle entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(targetType as NamedType) #> in property <#= attribute.Name #>
-						throw new System.NotImplementedException();
-						//##
-<#						} #>
-<#					} else if (st is DefinedType) { 
-						var dt = st as DefinedType;
-						var targetDt = GetMappedDefinedType(dt);#>
-					if (member is <#= GetCSTypeFull(dt) #>) 
-<#						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType) && !(targetDt.Domain is EnumerationType)) { #>
-						yield return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)member);
-<#						} else { #>
-						//## Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
-						//TODO: Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
-						throw new System.NotImplementedException();
-						//##
-<#						}#>
-<#					} else if (st is EnumerationType) { 
-						Console.WriteLine("Enumeration found as a select member. This is legal in EXPRESS schema but not supported in our implementation");
-					} else { 
-						throw new Exception("Unexpected type (enum?)");
-					} #>
-<#				} #>
+        } else if(attribute.Domain is AggregationType) {#>
+<#			var targetType =  (attribute.Domain as AggregationType).ElementType as NamedType; 
+			var sourceType = (match.SourceAttribute.Domain as AggregationType).ElementType as NamedType; #>
+<#			if (IsAggregationEntityCompatible(match.SourceAttribute, attribute)) { #>			
+				return new Common.Collections.ProxyItemSet<<#= GetCSTypeFull(sourceType) #>, <#= GetInterfaceCSTypeFull(targetType) #>>(<#= match.SourceAttribute.Name #>);
+<#			} else if (targetType is DefinedType && sourceType is DefinedType) { #>			
+				return new Common.Collections.ProxyValueSet<<#= GetCSTypeFull(sourceType) #>, <#= GetInterfaceCSTypeFull(targetType) #>>(<#= match.SourceAttribute.Name #>, 
+					s => new <#= GetInterfaceCSTypeFull(targetType) #>(s), 
+					t => new <#= GetCSTypeFull(sourceType) #>(t));
+<#			} else { #>			
+				return <#= GetPrivateFieldName(attribute) #>Ifc4 ?? (<#= GetPrivateFieldName(attribute) #>Ifc4 = new Common.Collections.ExtendedItemSet<<#= GetCSTypeFull(sourceType) #>, <#= GetInterfaceCSTypeFull(targetType) #>>(
+                    <#= match.SourceAttribute.Name #>, 
+                    new ItemSet<<#= GetInterfaceCSTypeFull(targetType) #>>(this, 0, 255), 
+                    <#= match.SourceAttribute.Name #>ToIfc4, 
+                    <#= match.SourceAttribute.Name #>ToIfc2x3));
 <#			} #>
-				}
 <#		} else { 
 			throw new Exception("Unexpected attribute type");
 		} #>
@@ -299,6 +264,8 @@ namespace <#= OwnNamespace #>
 				throw new System.NotImplementedException();
 				//##
 <#			} else {#>
+				//## Custom code to handle setting of enumeration of <#= attribute.Name #>
+				//##
 				switch (value)
 				{
 <#				foreach(var e in enu.Elements) {
@@ -322,6 +289,73 @@ namespace <#= OwnNamespace #>
 			}
 <#		} #>
 		}
+<#	if (attribute.Domain is AggregationType && match != null && match.IsTypeCompatible && !IsAggregationEntityCompatible(match.SourceAttribute, attribute)) { #>
+<#			var targetType =  (attribute.Domain as AggregationType).ElementType; 
+			var sourceType = (match.SourceAttribute.Domain as AggregationType).ElementType; #>
+<#  if (!(targetType is DefinedType) || !(sourceType is DefinedType)) { #>
+
+		//private field to hold any extended data
+		private <#= GetInterfaceCSTypeFull(attribute) #> <#= GetPrivateFieldName(attribute) #>Ifc4;
+
+		//transformation function to convert/cast IFC2x3 data to appear as IFC4
+		private <#= GetInterfaceCSTypeFull(targetType as NamedType) #> <#= attribute.Name #>ToIfc4 (<#= GetCSTypeFull(sourceType as NamedType) #> member)
+		{
+<#			if (targetType is DefinedType) { #>
+			return new <#= GetInterfaceCSTypeFull(targetType as NamedType) #>(member);
+<#			} else if (targetType is SimpleType) { #>
+			return member;
+<#			} else if (targetType is EntityDefinition) { #>
+			return member;
+<#			} else if (targetType is SelectType && !(sourceType is SelectType)) { #>
+<#				if (sourceType is EntityDefinition) { #>
+			return member;
+<#				} else if(sourceType is DefinedType) {
+					var dt = sourceType as DefinedType;
+					var targetDt = GetMappedDefinedType(dt); #>
+			return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetBaseSystemType(dt) #>)(<#= GetCSTypeFull(dt) #>)member);
+<#				} #>
+<#			} else if (targetType is SelectType) { #>
+<# 				foreach(var st in GetAllSpecific((SelectType)sourceType)) {
+					var ed = st as EntityDefinition;
+					if(ed != null) {#>
+			var <#= st.Name.ToString().ToLower() #> = member as <#= GetCSTypeFull(st) #>;
+			if (<#= st.Name.ToString().ToLower() #> != null) 
+<#						if (IsInSelect(ed, targetType as SelectType)) {#>
+				return <#= st.Name.ToString().ToLower() #>;
+<#						} else { #>
+				//## Handle entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(targetType as NamedType) #> in property <#= attribute.Name #>
+				//TODO: Handle entity <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(targetType as NamedType) #> in property <#= attribute.Name #>
+				throw new System.NotImplementedException();
+				//##
+<#						} #>
+<#					} else if (st is DefinedType) { 
+						var dt = st as DefinedType;
+						var targetDt = GetMappedDefinedType(dt);#>
+			if (member is <#= GetCSTypeFull(dt) #>) 
+<#						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType) && !(targetDt.Domain is EnumerationType)) { #>
+				return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetCSTypeFull(dt) #>)member);
+<#						} else { #>
+				//## Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
+				//TODO: Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
+				throw new System.NotImplementedException();
+				//##
+<#						}#>
+<#					} else if (st is EnumerationType) { 
+						Console.WriteLine("Enumeration found as a select member. This is legal in EXPRESS schema but not supported in our implementation");
+					} else { 
+						throw new Exception("Unexpected type (enum?)");
+					} #>
+<#				} #>
+			throw new System.NotSupportedException();
+<#			} #>
+		}
+
+		//transformation function to convert/cast IFC4 data to appear as IFC2x3 if possible
+		private <#= GetCSTypeFull(sourceType as NamedType) #> <#= attribute.Name #>ToIfc2x3 (<#= GetInterfaceCSTypeFull(targetType as NamedType) #> member){
+			throw new System.NotImplementedException();
+		}
+<#  } #>
+<#  } #>
 <#	} #>
 <# foreach(var attribute in InverseAttributesToImplement.ToList()){  
 	var inverseType = "I" + attribute.Domain.Name; #>
