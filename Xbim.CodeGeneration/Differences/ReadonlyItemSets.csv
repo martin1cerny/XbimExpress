@@ -1,2 +1,4 @@
 ﻿IfcFillAreaStyleTiles, TilingPattern
 IfcFillAreaStyleTiles, Tiles
+IfcAppliedValue, Components
+IfcTextureMap, Vertices
