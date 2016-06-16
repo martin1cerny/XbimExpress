@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Xbim.CodeGeneration.Differences;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
 
@@ -6,7 +8,9 @@ namespace Xbim.CodeGeneration.Helpers
 {
     public class TypeHelper
     {
-        public static string GetInterfaceCSType(ExplicitAttribute attribute, GeneratorSettings settings, string fullNamespace)
+        private static readonly ReadOnlyItemSets ReadOnlyItemSets = new ReadOnlyItemSets(); 
+
+        public static string GetInterfaceCSType(ExplicitAttribute attribute, GeneratorSettings settings, string fullNamespace = null)
         {
             var domain = attribute.Domain;
             var type = GetCSType(domain, settings, false, true, fullNamespace);
@@ -18,24 +22,12 @@ namespace Xbim.CodeGeneration.Helpers
                 type += "?";
             if (domain is AggregationType)
             {
-                //type = type.Replace(settings.ItemSetClassName, "IItemSet");
-            }
-
-            return type;
-        }
-        public static string GetInterfaceCSType(ExplicitAttribute attribute, GeneratorSettings settings)
-        {
-            var domain = attribute.Domain;
-            var type = GetCSType(domain, settings, false, true);
-
-            if (attribute.OptionalFlag && (
-                (domain is SimpleType && !(domain is LogicalType) && !(domain is StringType)) ||
-                domain is DefinedType || domain is EnumerationType
-                ))
-                type += "?";
-            if (domain is AggregationType)
-            {
-                //type = type.Replace(settings.ItemSetClassName, "IItemSet");
+                if (ReadOnlyItemSets.Any(s => s.Attribute == attribute.Name && s.Class == attribute.ParentEntity.Name))
+                {
+                    //replace item set with IEnumerable
+                    type = type.Substring(type.IndexOf('<'));
+                    type = "IEnumerable" + type;
+                }
             }
 
             return type;

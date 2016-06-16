@@ -2,3 +2,6 @@
 IfcFillAreaStyleTiles, Tiles
 IfcAppliedValue, Components
 IfcTextureMap, Vertices
+IfcExtendedProperties, Properties
+IfcMaterialClassificationRelationship, MaterialClassifications
+IfcTextureCoordinateGenerator, Parameter

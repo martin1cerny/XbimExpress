@@ -62,10 +62,10 @@ namespace XbimEssentialsGenerator
             Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
             Console.WriteLine(@"IFC4 interface acces generated for IFC2x3");
 
-            //settings.Structure = ifc4Domains;
-            //settings.OutputPath = "Xbim.Ifc4";
-            //Generator.GenerateSchema(settings, ifc4);
-            //Console.WriteLine(@"IFC4 with interfaces generated");
+            settings.Structure = ifc4Domains;
+            settings.OutputPath = "Xbim.Ifc4";
+            Generator.GenerateSchema(settings, ifc4);
+            Console.WriteLine(@"IFC4 with interfaces generated");
             //
             //
             //settings.Structure = null;

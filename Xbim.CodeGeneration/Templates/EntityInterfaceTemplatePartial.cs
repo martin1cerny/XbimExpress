@@ -78,6 +78,12 @@ namespace Xbim.CodeGeneration.Templates
                     aggrType = aggrType.Substring(0, aggrType.Length - 1); //remove ">"
                 }
 
+                if (aggrType.StartsWith("IEnumerable"))
+                {
+                    aggrType = aggrType.Substring(12); //remove "IEnumerable<"
+                    aggrType = aggrType.Substring(0, aggrType.Length - 1); //remove ">"
+                }
+
                 if (aggrType.StartsWith("ItemSet"))
                 {
                     aggrType = aggrType.Substring(8); //remove "ItemSet<"
