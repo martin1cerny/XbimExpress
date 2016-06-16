@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Differences\EntityDefinitionMatch.cs" />
     <Compile Include="Differences\ExplicitAttributeMatch.cs" />
+    <Compile Include="Differences\ReadOnlyItemSets.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Helpers\NamedTypeHelper.cs" />
     <Compile Include="Helpers\TypeHelper.cs" />
@@ -124,6 +125,7 @@
   <ItemGroup>
     <None Include="Differences\Ifc4_ChangedNameProperties.csv" />
     <None Include="Differences\Ifc4_NewProperties.csv" />
+    <None Include="Differences\ReadonlyItemSets.csv" />
     <None Include="Templates\CrossAccess\EntityInterfaceImplementation.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EntityInterfaceImplementation.cs</LastGenOutput>
