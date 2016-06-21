@@ -119,3 +119,4 @@ IfcActionRequest.Status
 IfcPermit.Status
 IfcDistributionPort.SystemType
 IfcTask.TaskTime
+IfcRelSequence.UserDefinedSequenceType
