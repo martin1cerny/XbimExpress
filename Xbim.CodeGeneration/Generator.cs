@@ -9,6 +9,7 @@ using Xbim.CodeGeneration.Differences;
 using Xbim.CodeGeneration.Settings;
 using Xbim.CodeGeneration.Templates;
 using Xbim.CodeGeneration.Templates.CrossAccess;
+using Xbim.CodeGeneration.Templates.CrossInstantiation;
 using Xbim.CodeGeneration.Templates.Infrastructure;
 using Xbim.ExpressParser.SDAI;
 
@@ -38,8 +39,9 @@ namespace Xbim.CodeGeneration
             var selectTemplates =
                 GetSelectsToImplement(schema, remoteSchema, entityMatches)
                     .Select(s => new SelectInterfaceImplementation(settings, s.Item1, s.Item2));
+            var infrastructureTemplates = new ICodeTemplate[] { new CreatorTemplate(settings, entityMatches) };
 
-            var toProcess = templates.Concat(selectTemplates);
+            var toProcess = templates.Concat(selectTemplates).Concat(infrastructureTemplates);
 
             //toProcess.ToList().ForEach(t => ProcessTemplate(t, modelProject));
             Parallel.ForEach(toProcess, t => ProcessTemplate(t, modelProject));
