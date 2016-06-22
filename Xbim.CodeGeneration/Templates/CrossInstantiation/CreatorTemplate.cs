@@ -7,20 +7,21 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Xbim.CodeGeneration.Templates.Infrastructure
+namespace Xbim.CodeGeneration.Templates.CrossInstantiation
 {
     using System.Linq;
     using System.Text;
     using System.Collections.Generic;
+    using Xbim.CodeGeneration.Differences;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossInstantiation\CreatorTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class ItemSetTemplate : ItemSetTemplateBase
+    public partial class CreatorTemplate : CreatorTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,53 +29,85 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections;\r\nusing System.Reflection;\r\nusing Xbim." +
-                    "Common;\r\n\r\nnamespace ");
-            
-            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n{\r\n    public class ");
-            
-            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write(@"<T> : Common.Collections.ItemSet<T>
-    {
-        internal ItemSet(IPersistEntity entity, int capacity, byte property): base(entity, capacity, property)
-        {
-        }
+            this.Write(@"using System;
+using Xbim.Common;
+using Xbim.Common.Step21;
 
-		//this is to be only used internaly to add object outside of any transaction or event firing
-		//that is typically during parsing operation
-		internal void InternalAdd(T value)
+// ReSharper disable once CheckNamespace
+namespace Xbim.Ifc4.Interfaces
+{
+	public class Create: IDisposable
+	{
+		private readonly IModel _model;
+		private readonly IfcSchemaVersion _version;
+
+		public Create(IModel model)
 		{
-			Internal.Add(value);
+			_model = model;
+
+            var stepSchema = model.Header.FileSchema;
+            foreach (var schema in stepSchema.Schemas)
+            {
+                if (string.Equals(schema, ""Ifc4"", StringComparison.OrdinalIgnoreCase))
+                    _version = IfcSchemaVersion.Ifc4;
+                else if (schema.StartsWith(""Ifc2x"", StringComparison.OrdinalIgnoreCase)) //return this as 2x3
+                    _version = IfcSchemaVersion.Ifc2X3;
+                else
+                    throw new NotSupportedException(""Only IFC2x3 and IFC4 schemas are supported."");
+            }
 		}
-		
-        internal T InternalGetAt(int index)
-        {
-            if (index < Count)
-                return this[index];
 
-            if (index > Count)
-                throw new Exception(""It is not possible to get object which is more that just the next after the last one."");
-            
-            if (!typeof (IItemSet).IsAssignableFrom(typeof (T)))
-                return default(T);
-
-            var result = CreateNestedSet();
-            InternalAdd(result);
-            return result;
-
-        }
-    }
-}
 ");
+            
+            #line 35 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossInstantiation\CreatorTemplate.tt"
+	foreach (var match in Matches.Where(m => m.MatchType != EntityMatchType.NotFound && m.Source.Instantiable && m.Target.Instantiable)) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\tpublic I");
+            
+            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossInstantiation\CreatorTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(match.Target.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
+            
+            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossInstantiation\CreatorTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(match.Target.Name.ToString().Substring(3)));
+            
+            #line default
+            #line hidden
+            this.Write("(Action<I");
+            
+            #line 36 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossInstantiation\CreatorTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(match.Target.Name));
+            
+            #line default
+            #line hidden
+            this.Write("> init = null)\r\n\t\t{\r\n\t\t\tif (_version == IfcSchemaVersion.Ifc4)\r\n\t\t\t\treturn _model" +
+                    ".Instances.New<");
+            
+            #line 39 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossInstantiation\CreatorTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetFullName(match.Target)));
+            
+            #line default
+            #line hidden
+            this.Write(">(init);\r\n\t\t\treturn _model.Instances.New<");
+            
+            #line 40 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossInstantiation\CreatorTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetFullName(match.Source)));
+            
+            #line default
+            #line hidden
+            this.Write(">(init);\r\n\t\t}\r\n\r\n");
+            
+            #line 43 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\CrossInstantiation\CreatorTemplate.tt"
+  } 
+            
+            #line default
+            #line hidden
+            this.Write("\t    public void Dispose()\r\n\t    {\r\n\t    }\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -86,7 +119,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public class ItemSetTemplateBase
+    public class CreatorTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

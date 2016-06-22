@@ -67,6 +67,12 @@
       <DependentUpon>SelectInterfaceImplementation.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\CrossAccess\SelectInterfaceImplementationPartial.cs" />
+    <Compile Include="Templates\CrossInstantiation\CreatorTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreatorTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\CrossInstantiation\CreatorTemplatePartial.cs" />
     <Compile Include="Templates\DefinedTypeTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -191,6 +197,10 @@
     <Content Include="Templates\CrossAccess\SelectInterfaceImplementation.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>SelectInterfaceImplementation.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\CrossInstantiation\CreatorTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>CreatorTemplate.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
