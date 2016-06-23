@@ -68,6 +68,35 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        protected bool IsEntityDefinitionSelect(BaseType type)
+        {
+            var sel = type as SelectType;
+            return sel != null && GetAllSpecific(sel).All(t => t is EntityDefinition);
+        }
+
+        protected bool CouldBeEntityDefinitionSelect(BaseType type)
+        {
+            var sel = type as SelectType;
+            return sel != null && GetAllSpecific(sel).Any(t => t is EntityDefinition);
+        }
+
+        protected static IEnumerable<NamedType> GetAllSpecific(SelectType select)
+        {
+            foreach (var type in select.Selections)
+            {
+                var nested = type as SelectType;
+                if (nested == null)
+                {
+                    yield return type;
+                    continue;
+                }
+                foreach (var namedType in GetAllSpecific(nested))
+                {
+                    yield return namedType;
+                }
+            }
+        }
+
         protected string GetInnerType(string aggrType)
         {
             while (true)
