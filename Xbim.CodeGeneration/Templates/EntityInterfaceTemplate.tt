@@ -171,6 +171,14 @@ namespace <#= Namespace #>
 <# if (!(attribute.Domain is AggregationType)) { #>
 			set
 			{
+<#		if (attribute.Domain is EntityDefinition || IsEntityDefinitionSelect(attribute.Domain)) { #>
+				if (value != null && !(ReferenceEquals(Model, value.Model)))
+					throw new XbimException("Cross model entity assignment.");
+<#		} else if (CouldBeEntityDefinitionSelect(attribute.Domain)) { #>
+				var entity = value as IPersistEntity;
+				if (entity != null && !(ReferenceEquals(Model, entity.Model)))
+					throw new XbimException("Cross model entity assignment.");
+<#		} #>
 				SetValue( v =>  <#= GetPrivateFieldName(attribute) #> = v, <#= GetPrivateFieldName(attribute) #>, value,  "<#= attribute.Name #>", <#= GetAttributeOrder(attribute) #>);
 			} 
 <# } #>
