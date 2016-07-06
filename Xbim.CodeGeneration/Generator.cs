@@ -90,10 +90,7 @@ namespace Xbim.CodeGeneration
             modelTemplates.AddRange(
                 schema.Get<DefinedType>().Select(type => new DefinedTypeTemplate(settings, type)));
             modelTemplates.AddRange(schema.Get<SelectType>().Select(type => new SelectTypeTemplate(settings, type)));
-            modelTemplates.AddRange(
-                settings.GenerateAllAsInterfaces
-                    ? schema.Get<EntityDefinition>().Select(type => new EntityInterfaceTemplate(settings, type))
-                    : schema.Get<EntityDefinition>().Select(type => new EntityTemplate(settings, type)));
+            modelTemplates.AddRange(schema.Get<EntityDefinition>().Select(type => new EntityInterfaceTemplate(settings, type)));
             modelTemplates.AddRange(
                 schema.Get<EnumerationType>().Select(type => new EnumerationTemplate(settings, type)));
             modelTemplates

@@ -60,19 +60,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityInterfaceImplementation.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\CrossAccess\EntityInterfaceImplementationPartial.cs" />
+    <Compile Include="Templates\CrossAccess\EntityInterfaceImplementationPartial.cs">
+      <DependentUpon>EntityInterfaceImplementation.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\CrossAccess\SelectInterfaceImplementation.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SelectInterfaceImplementation.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\CrossAccess\SelectInterfaceImplementationPartial.cs" />
+    <Compile Include="Templates\CrossAccess\SelectInterfaceImplementationPartial.cs">
+      <DependentUpon>SelectInterfaceImplementation.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\CrossInstantiation\CreatorTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CreatorTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\CrossInstantiation\CreatorTemplatePartial.cs" />
+    <Compile Include="Templates\CrossInstantiation\CreatorTemplatePartial.cs" >
+      <DependentUpon>CreatorTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\DefinedTypeTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -83,45 +89,55 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityInterfaceTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\EntityInterfaceTemplatePartial.cs" />
-    <Compile Include="Templates\EntityTemplate1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EntityTemplate.tt</DependentUpon>
+    <Compile Include="Templates\EntityInterfaceTemplatePartial.cs">
+      <DependentUpon>EntityInterfaceTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\EntityTemplatePartial.cs" />
     <Compile Include="Templates\EnumerationTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumerationTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\EnumerationTemplatePartial.cs" />
+    <Compile Include="Templates\EnumerationTemplatePartial.cs">
+      <DependentUpon>EnumerationTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\Infrastructure\CSProjectTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSProjectTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\Infrastructure\CSProjectTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\CSProjectTemplatePartial.cs">
+      <DependentUpon>CSProjectTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\Infrastructure\EntityFactoryTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\Infrastructure\EntityFactoryTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\EntityFactoryTemplatePartial.cs">
+      <DependentUpon>EntityFactoryTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\Infrastructure\ItemSetTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemSetTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\Infrastructure\ItemSetTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\ItemSetTemplatePartial.cs">
+      <DependentUpon>ItemSetTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\Infrastructure\OptionalItemSetTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>OptionalItemSetTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\Infrastructure\OptionalItemSetTemplatePartial.cs" />
-    <Compile Include="Templates\SelectTypeTemplatePartial.cs" />
-    <Compile Include="Templates\DefinedTypeTemplatePartial.cs" />
+    <Compile Include="Templates\Infrastructure\OptionalItemSetTemplatePartial.cs">
+      <DependentUpon>OptionalItemSetTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\SelectTypeTemplatePartial.cs">
+      <DependentUpon>SelectTypeTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\DefinedTypeTemplatePartial.cs">
+      <DependentUpon>DefinedTypeTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\SelectTypeTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -143,10 +159,6 @@
     <None Include="Templates\EntityInterfaceTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EntityInterfaceTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\EntityTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityTemplate1.cs</LastGenOutput>
     </None>
     <None Include="Templates\EnumerationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

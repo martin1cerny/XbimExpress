@@ -50,7 +50,6 @@ namespace XbimEssentialsGenerator
                 Structure = ifc2X3Domains,
                 OutputPath = "Xbim.Ifc2x3",
                 InfrastructureOutputPath = "Xbim.Common",
-                GenerateAllAsInterfaces = true,
                 IgnoreDerivedAttributes = GetIgnoreDerivedAttributes()
             };
             Generator.GenerateSchema(settings, ifc2X3);
