@@ -160,7 +160,7 @@ namespace Xbim.CodeGeneration.Templates
 
         private static string GetPropertyValueMember(UnderlyingType domain)
         {
-            return EntityTemplate.GetPropertyValueMember(domain as BaseType);
+            return EntityInterfaceTemplate.GetPropertyValueMember(domain as BaseType);
         }
 
         private SimpleTypeEnum SimpleType

@@ -13,6 +13,13 @@ namespace <#= Namespace #>
 {
 	public sealed class <#= Name #> <#= Inheritance #>
 	{
+		private readonly System.Reflection.Assembly _assembly;
+		
+		public <#= Name #>()
+		{
+			_assembly = GetType().Assembly;
+		}
+
 		public T New<T>(<#= ModelInterface #> model, int entityLabel, bool activated) where T: <#= InstantiableEntityInterface #>
 		{
 			return (T)New(model, typeof(T), entityLabel, activated);
@@ -28,7 +35,7 @@ namespace <#= Namespace #>
 		public <#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, Type t, int entityLabel, bool activated)
 		{
 			//check that the type is from this assembly
-			if(t.Assembly != GetType().Assembly)
+			if(t.Assembly != _assembly)
 				throw new Exception("This factory only creates types from its assembly");
 
 			return New(model, t.Name, entityLabel, activated);
@@ -43,9 +50,9 @@ namespace <#= Namespace #>
 			switch(name)
 			{
 <# foreach(var entity in NonAbstractEntities) {#>
-				case "<#= entity.Name.ToUpper() #>": return new <#= entity.Name #> ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : ActivationStatus.NotActivated, EntityLabel = entityLabel };
+				case "<#= entity.Name.ToUpper() #>": return new <#= entity.Name #> ( model, entityLabel, activated );
 <#		if (entity.Name.ToUpper() != entity.PersistanceName.ToUpper()) { #>
-				case "<#= entity.PersistanceName.ToUpper() #>": return new <#= entity.Name #> ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : ActivationStatus.NotActivated, EntityLabel = entityLabel };
+				case "<#= entity.PersistanceName.ToUpper() #>": return new <#= entity.Name #> ( model, entityLabel, activated);
 <#		} 
 	} #>
 				default:
@@ -60,7 +67,7 @@ namespace <#= Namespace #>
 			switch(typeId)
 			{
 <# foreach(var entity in NonAbstractEntities) {#>
-				case <#= entity.TypeId #>: return new <#= entity.Name #> ( model ) { ActivationStatus = activated ? ActivationStatus.ActivatedRead : ActivationStatus.NotActivated, EntityLabel = entityLabel };
+				case <#= entity.TypeId #>: return new <#= entity.Name #> ( model, entityLabel, activated );
 <# } #>
 				default:
 					return null;

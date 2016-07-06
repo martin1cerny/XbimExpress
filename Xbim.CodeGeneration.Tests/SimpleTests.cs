@@ -75,7 +75,6 @@ namespace Xbim.CodeGeneration.Tests
             var settings = new GeneratorSettings
             {
                 OutputPath = "Xbim.CIS2",
-                GenerateAllAsInterfaces = true,
                 InfrastructureOutputPath = "Xbim.Commons"
             };
             var schema = SchemaModel.LoadCis2();
@@ -91,7 +90,6 @@ namespace Xbim.CodeGeneration.Tests
             var settings = new GeneratorSettings
             {
                 OutputPath = "Xbim.Step42",
-                GenerateAllAsInterfaces = true
             };
             var schema = SchemaModel.LoadStepGeometry();
 

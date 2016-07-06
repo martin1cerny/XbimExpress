@@ -31,7 +31,6 @@ namespace Xbim.CodeGeneration.Settings
             EntityFactory = "EntityFactory";
             EntityFactoryInterface = "IEntityFactory";
             InstantiableEntityInterface = "IInstantiableEntity";
-            GenerateAllAsInterfaces = false;
             SchemaInterfacesNamespace = "Interfaces";
         }
 
@@ -57,13 +56,6 @@ namespace Xbim.CodeGeneration.Settings
         /// </summary>
         public string CrossAccessProjectPath { get; set; }
         internal string CrossAccessNamespace { get; set; }
-
-        /// <summary>
-        /// When true read-only interface will be generated for all entities.
-        /// This interfaces can be used to query model safely and also to
-        /// implement interoperability layer in other schemas
-        /// </summary>
-        public bool GenerateAllAsInterfaces { get; set; }
 
         /// <summary>
         /// If GenerateAllAsInterfaces is true this namespace will contain all entity interfaces
