@@ -14,7 +14,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
         private readonly EntityDefinitionMatch _match;
         private readonly List<EntityDefinitionMatch> _matches;
         private readonly List<ExplicitAttributeMatch> _superMatches = new List<ExplicitAttributeMatch>();
-        public EntityDefinition RemoteType { get; private set; }
+        public EntityDefinition RemoteType { get; }
 
         private bool _implementsSupertype;
 
@@ -23,6 +23,15 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             _match = match;
             _matches = matches;
             RemoteType = match.Target;
+            AllRemoteExplicitAttributes = RemoteType.AllExplicitAttributes.ToList();
+        }
+
+        protected IList<ExplicitAttribute> AllRemoteExplicitAttributes { get; }
+
+        protected int GetRemoteOrder(ExplicitAttribute attribute)
+        {
+            var idx = AllRemoteExplicitAttributes.IndexOf(attribute);
+            return idx < 0 ? -1 : idx + 1;
         }
 
         protected bool IsDirectTypeMatch(ExplicitAttributeMatch match)
@@ -149,23 +158,6 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                     t => string.Compare(source.Name, t.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
                     .FirstOrDefault();
             return nameMatch;
-        }
-
-        protected static IEnumerable<NamedType> GetAllSpecific(SelectType select)
-        {
-            foreach (var type in select.Selections)
-            {
-                var nested = type as SelectType;
-                if (nested == null)
-                {
-                    yield return type;
-                    continue;
-                }
-                foreach (var namedType in GetAllSpecific(nested))
-                {
-                    yield return namedType;
-                }
-            }
         }
 
         protected IEnumerable<NamedType> GetAllSpecificNative(SelectType select)
@@ -330,22 +322,20 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
         }
 
 
-        protected string OwnNamespace { get { return base.Namespace; } }
+        protected string OwnNamespace => base.Namespace;
 
         /// <summary>
         /// Overriden so that the actual file is separate. This namespace is not used in 
         /// the generated partial class.
         /// </summary>
-        public override string Namespace
-        {
-            get { return string.Format("{0}.{1}.{2}", Settings.Namespace, Settings.SchemaInterfacesNamespace, RemoteType.ParentSchema.Name); }
-        }
+        public override string Namespace =>
+            $"{Settings.Namespace}.{Settings.SchemaInterfacesNamespace}.{RemoteType.ParentSchema.Name}";
 
         protected string GetDerivedAttributePlacement(DerivedAttribute attribute)
         {
             var type = attribute.ParentEntity;
             if (Settings.IgnoreDerivedAttributes == null || !Settings.IgnoreDerivedAttributes.Any())
-                return string.Format("I{0}", attribute.ParentEntity.Name);
+                return $"I{attribute.ParentEntity.Name}";
 
             var select = type.IsInAllSelects.FirstOrDefault(s => Settings.IgnoreDerivedAttributes.Any(i =>
                 string.Compare(i.EntityName, s.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
@@ -355,16 +345,16 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                 var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");
                 var ns = GetFullNamespace(select, baseNamespace, Settings.CrossAccessStructure);
                 ns = TrimNamespace(ns);
-                return string.Format("{0}.{1}", ns, select.Name);
+                return $"{ns}.{@select.Name}";
             }
 
             var entity = type.AllSupertypes.FirstOrDefault(s => Settings.IgnoreDerivedAttributes.Any(i =>
                 string.Compare(i.EntityName, s.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
                 string.Compare(i.Name, attribute.Name, StringComparison.InvariantCultureIgnoreCase) == 0));
             if(entity != null)
-                return string.Format("I{0}", entity.Name);
+                return $"I{entity.Name}";
 
-            return string.Format("I{0}", attribute.ParentEntity.Name);
+            return $"I{attribute.ParentEntity.Name}";
         }
 
         protected bool IsDirectDerived(DerivedAttribute attribute)

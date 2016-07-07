@@ -30,6 +30,8 @@ namespace <#= OwnNamespace #>
 		private  <#= GetInterfaceCSTypeFull(attribute) #> <#= GetPrivateFieldName(attribute) #>4;
 
 <#		} #>
+
+		[CrossSchemaAttribute(typeof(<#= Interface #>), <#= GetRemoteOrder(attribute) #>)]
 		<#= GetInterfaceCSTypeFull(attribute) #> <#= "I" + attribute.ParentEntity.Name #>.<#= attribute.Name #> 
 		{ 
 			get
@@ -136,7 +138,7 @@ namespace <#= OwnNamespace #>
 <#			} else { #>			
 				return <#= GetPrivateFieldName(attribute) #>Ifc4 ?? (<#= GetPrivateFieldName(attribute) #>Ifc4 = new Common.Collections.ExtendedItemSet<<#= GetCSTypeFull(sourceType) #>, <#= GetInterfaceCSTypeFull(targetType) #>>(
                     <#= match.SourceAttribute.Name #>, 
-                    new ItemSet<<#= GetInterfaceCSTypeFull(targetType) #>>(this, 0, 255), 
+                    new ItemSet<<#= GetInterfaceCSTypeFull(targetType) #>>(this, 0, -<#= GetRemoteOrder(attribute) #>), 
 <#				if (sourceType.Name == "IfcValue") { #>
                     v => v.ToIfc4(), 
                     v => v.ToIfc3()));
@@ -154,7 +156,7 @@ namespace <#= OwnNamespace #>
 			{
 <#		if (match == null || !match.IsTypeCompatible) { 
 			if (IsNew(attribute)) {#>
-				SetValue(v => <#= GetPrivateFieldName(attribute)#> = v, <#= GetPrivateFieldName(attribute)#>, value, "<#= attribute.Name #>", byte.MaxValue);
+				SetValue(v => <#= GetPrivateFieldName(attribute)#> = v, <#= GetPrivateFieldName(attribute)#>, value, "<#= attribute.Name #>", -<#= GetRemoteOrder(attribute) #>);
 <#			} else if (match != null && IsSimpleTypeCompatible(attribute, match.SourceAttribute)){ #>
 				<#= match.SourceAttribute.Name #> = value;
 <#			} else { #>
@@ -181,7 +183,7 @@ namespace <#= OwnNamespace #>
 				{
 					<#= match.SourceAttribute.Name #> = null;
 					if (<#= GetPrivateFieldName(attribute)#>4 != null)
-						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", -<#= GetRemoteOrder(attribute) #>);
 					return;
 				}
 				
@@ -190,13 +192,13 @@ namespace <#= OwnNamespace #>
 				{
 					<#= match.SourceAttribute.Name #> = val;
 					if (<#= GetPrivateFieldName(attribute)#>4 != null)
-						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", -<#= GetRemoteOrder(attribute) #>);
 					return;
 				} 
 
 				if(<#= match.SourceAttribute.Name #> != null)
 					<#= match.SourceAttribute.Name #> = null;
-				SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, value, "<#= attribute.Name #>", byte.MaxValue);
+				SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, value, "<#= attribute.Name #>", -<#= GetRemoteOrder(attribute) #>);
 <#		} else if (attribute.Domain is SimpleType) { #>
 				<#= match.SourceAttribute.Name #> = value;
 <#		} else if (attribute.Domain is SelectType) { 
@@ -208,7 +210,7 @@ namespace <#= OwnNamespace #>
 					<#= match.SourceAttribute.Name #> = null;
 <#			if (valueSelects.Any(s => s == ((SelectType)attribute.Domain).Name)) {#>
 					if (<#= GetPrivateFieldName(attribute)#>4 != null)
-						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", -<#= GetRemoteOrder(attribute) #>);
 <#			} #>
 					return;
 				}	
@@ -222,7 +224,7 @@ namespace <#= OwnNamespace #>
 					<#= match.SourceAttribute.Name #> = <#= st.Name.ToString().ToLower() #>;
 <#						if (valueSelects.Any(s => s == ((SelectType)attribute.Domain).Name)) {#>
 					if (<#= GetPrivateFieldName(attribute)#>4 != null)
-						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", -<#= GetRemoteOrder(attribute) #>);
 <#						} #>
 					return;
 <#					} else { #>
@@ -241,12 +243,12 @@ namespace <#= OwnNamespace #>
 <#						if (sourceDt != null && IsInSelect(sourceDt, match.SourceAttribute.Domain as SelectType)) { #>
 					<#= match.SourceAttribute.Name #> = new <#= GetCSTypeFull(sourceDt) #>((<#= GetInterfaceCSTypeFull(dt) #>)value);
 					if (<#= GetPrivateFieldName(attribute)#>4 != null)
-						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", byte.MaxValue);
+						SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, null, "<#= attribute.Name #>", -<#= GetRemoteOrder(attribute) #>);
 					return;
 <#						} else { #>
 					if (<#= match.SourceAttribute.Name #> != null)
 						<#= match.SourceAttribute.Name #> = null;
-					SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, value, "<#= attribute.Name #>", byte.MaxValue);
+					SetValue(v => <#= GetPrivateFieldName(attribute)#>4 = v, <#= GetPrivateFieldName(attribute)#>4, value, "<#= attribute.Name #>", -<#= GetRemoteOrder(attribute) #>);
 					return;
 <#						}#>
 <#					} else { #>

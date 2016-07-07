@@ -83,7 +83,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write(@"(IPersistEntity entity, int capacity, byte property) : base(entity, capacity, property)
+            this.Write(@"(IPersistEntity entity, int capacity, int property) : base(entity, capacity, property)
         {
         }
 
