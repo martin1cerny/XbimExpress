@@ -152,7 +152,11 @@ namespace Xbim.CodeGeneration.Templates
             if (aggr == null)
                 return false;
             var nt = GetNamedElementType(aggr);
-            return nt is EntityDefinition;
+            if (nt is EntityDefinition)
+                return true;
+
+            var select = nt as SelectType;
+            return @select != null && GetAllSpecific(@select).All(s => s is EntityDefinition);
         }
 
         private static bool IsEntityReference(ExplicitAttribute attribute)

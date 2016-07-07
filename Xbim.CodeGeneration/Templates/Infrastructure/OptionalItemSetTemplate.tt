@@ -13,7 +13,7 @@ namespace <#= Namespace #>
     {
         private bool _initialized;
 
-        internal <#= Name #>(IPersistEntity entity, int capacity, byte property) : base(entity, capacity, property)
+        internal <#= Name #>(IPersistEntity entity, int capacity, int property) : base(entity, capacity, property)
         {
         }
 
