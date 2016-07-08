@@ -1744,7 +1744,7 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(" other)\r\n\t    {\r\n\t        return this == other;\r\n\t    }\r\n        #endregion\r\n\r\n");
             
             #line 291 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
- if(Type.Instantiable && AllExplicitAttributes.Any(a => IsEntityRefOrAggr(a))) { 
+ if(Type.Instantiable && AllExplicitAttributes.Any(a => IsDirectEntityRefOrAggr(a))) { 
             
             #line default
             #line hidden
@@ -1816,7 +1816,7 @@ namespace Xbim.CodeGeneration.Templates
             
             #line 317 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\EntityInterfaceTemplate.tt"
 			}
-			else if (IsEntityRefOrAggr(attribute)) {  
+			else if (IsDirectEntityRefOrAggr(attribute)) {  
 				throw new NotSupportedException();
 			} 
             

@@ -144,8 +144,10 @@ namespace Xbim.CodeGeneration.Templates
             return realTypes.All(t => t is EntityDefinition);
         }
 
-        private bool IsEntityRefOrAggr(ExplicitAttribute attribute)
+        private bool IsDirectEntityRefOrAggr(ExplicitAttribute attribute)
         {
+            if (OverridingAttributes.Any(a => a.Name == attribute.Name))
+                return false;
             if (IsEntityReference(attribute))
                 return true;
             var aggr = attribute.Domain as AggregationType;
@@ -231,7 +233,7 @@ namespace Xbim.CodeGeneration.Templates
                 //add own interface
                 parents.Add("I" + Name);
 
-                if (Type.Instantiable && AllExplicitAttributes.Any(IsEntityRefOrAggr))
+                if (Type.Instantiable && AllExplicitAttributes.Any(IsDirectEntityRefOrAggr))
                 {
                     parents.Add("IContainsEntityReferences");
 
