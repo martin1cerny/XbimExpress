@@ -288,7 +288,7 @@ namespace <#= Namespace #>
 	    }
         #endregion
 
-<# if(Type.Instantiable && AllExplicitAttributes.Any(a => IsEntityRefOrAggr(a))) { #>
+<# if(Type.Instantiable && AllExplicitAttributes.Any(a => IsDirectEntityRefOrAggr(a))) { #>
 		#region IContainsEntityReferences
 		IEnumerable<IPersistEntity> IContainsEntityReferences.References 
 		{
@@ -315,7 +315,7 @@ namespace <#= Namespace #>
 					foreach (var entity in item)
 						yield return entity;
 <#			}
-			else if (IsEntityRefOrAggr(attribute)) {  
+			else if (IsDirectEntityRefOrAggr(attribute)) {  
 				throw new NotSupportedException();
 			} #>
 <#		} #>
