@@ -112,15 +112,19 @@ namespace <#= OwnNamespace #>
 <#					if (e == "USERDEFINED"){ #>
 						//## Optional custom handling of <#= attribute.Name #> == .USERDEFINED. 
 						//##
-<#					} #>
-<#					if (string.IsNullOrWhiteSpace(translated)){#>
+<#					} 
+  					if (string.IsNullOrWhiteSpace(translated)){#>
 						//## Handle translation of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
 						//TODO: Handle translation of <#= e #> member from <#= enu.Name #> in property <#= attribute.Name #>
 						throw new System.NotImplementedException();
 						//##
-					<# } else { #>
+<#					} else { #>
 						return <#= GetInterfaceCSTypeFull(tEnum) #>.<#= e #>;
-<#					} #>					
+<#					}					
+				} 
+				if (match.SourceAttribute.OptionalFlag) { #>
+					case null: 
+						return null;
 <#				} #>					
 					default:
 						throw new System.ArgumentOutOfRangeException();
@@ -290,8 +294,19 @@ namespace <#= OwnNamespace #>
 					<# } else { #>
 						<#= match.SourceAttribute.Name #> = <#= GetCSTypeFull(tEnum) #>.<#= e #>;
 						return;
-<#					} #>					
-<#				} #>					
+<#					} 					
+  				} 
+				if (attribute.OptionalFlag) { 
+					if (match.SourceAttribute.OptionalFlag) {#>					
+					case null:
+						<#= match.SourceAttribute.Name #> = null;
+						return;
+<#					} else { #>
+					case null:
+						<#= match.SourceAttribute.Name #> = <#= GetCSTypeFull(tEnum) #>.<#= GetDefaultEnumMember(GetCSTypeFull(tEnum)) #>;
+						return;
+<#					}
+				} #>
 					default:
 						throw new System.ArgumentOutOfRangeException();
 				}

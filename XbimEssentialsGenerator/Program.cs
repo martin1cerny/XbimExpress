@@ -19,7 +19,7 @@ namespace XbimEssentialsGenerator
             watch.Start();
 
             //set working directory
-            Environment.CurrentDirectory = "c:\\CODE\\XbimGit\\XbimEssentials";
+            Environment.CurrentDirectory = @"c:\Users\Martin\Source\Repos\XbimEssentials";//  "c:\\CODE\\XbimGit\\XbimEssentials";
 
             //prepare all schemas
             var ifc2X3 = SchemaModel.LoadIfc2x3();
@@ -59,7 +59,7 @@ namespace XbimEssentialsGenerator
             settings.CrossAccessProjectPath = "Xbim.Ifc4";
             settings.CrossAccessStructure = ifc4Domains;
             Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
-            Console.WriteLine(@"IFC4 interface acces generated for IFC2x3");
+            Console.WriteLine(@"IFC4 interface access generated for IFC2x3");
 
             settings.Structure = ifc4Domains;
             settings.OutputPath = "Xbim.Ifc4";

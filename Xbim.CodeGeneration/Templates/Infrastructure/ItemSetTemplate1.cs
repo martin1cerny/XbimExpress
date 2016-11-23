@@ -18,7 +18,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+    #line 1 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     public partial class ItemSetTemplate : ItemSetTemplateBase
     {
@@ -28,17 +28,16 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections;\r\nusing System.Reflection;\r\nusing Xbim." +
-                    "Common;\r\n\r\nnamespace ");
+            this.Write("\r\nusing System;\r\nusing Xbim.Common;\r\n\r\nnamespace ");
             
-            #line 12 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 10 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public class ");
             
-            #line 14 "C:\CODE\XbimGit\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
+            #line 12 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\ItemSetTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -49,7 +48,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         {
         }
 
-		//this is to be only used internaly to add object outside of any transaction or event firing
+		//this is to be only used internally to add object outside of any transaction or event firing
 		//that is typically during parsing operation
 		internal void InternalAdd(T value)
 		{

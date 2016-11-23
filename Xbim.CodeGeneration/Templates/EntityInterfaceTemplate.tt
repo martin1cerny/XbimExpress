@@ -101,8 +101,8 @@ namespace <#= Namespace #>
 		{ 
 			get 
 			{
-				if(ActivationStatus != ActivationStatus.NotActivated) return <#= GetPrivateFieldName(attribute) #>;
-				((<#= PersistEntityInterface #>)this).Activate(false);
+				if(_activated) return <#= GetPrivateFieldName(attribute) #>;
+				Activate();
 				return <#= GetPrivateFieldName(attribute) #>;
 			} 
 <# if (!(attribute.Domain is AggregationType)) { #>

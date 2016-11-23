@@ -455,5 +455,21 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
                 return usings.Distinct();
             }
         }
+
+        private string GetDefaultEnumMember(string enumeration)
+        {
+            switch (enumeration)
+            {
+                case "IfcChangeActionEnum":
+                    return "NOCHANGE";
+                case "IfcElementCompositionEnum":
+                    return "ELEMENT";
+                case "IfcProjectedOrTrueLengthEnum":
+                    return "TRUE_LENGTH";
+
+                default:
+                    return "NOTDEFINED";
+            }
+        }
     }
 }
