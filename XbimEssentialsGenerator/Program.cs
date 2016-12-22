@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using Xbim.CodeGeneration;
 using Xbim.CodeGeneration.Settings;
-using Xbim.ExpressParser.ExpressDefinitions;
 using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
 
@@ -34,7 +33,7 @@ namespace XbimEssentialsGenerator
             //SetTypeNumbers(ifc4, ifc2X3, max);
             SetTypeNumbers(ifc4);
 
-            var cobie = SchemaModel.Load(Schemas.COBieExpress);
+            var cobie = SchemaModel.LoadCobie();
             SetTypeNumbers(cobie);
 
             //Change names to prevent name clashes

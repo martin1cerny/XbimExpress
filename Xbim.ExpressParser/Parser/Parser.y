@@ -235,6 +235,7 @@ parameter_definition_right
 	| enumerable OF UNIQUE identifier_or_type									{ $$.val = CreateEnumerableAttribute($1.val as AggregationType, $4, true); }
 	| enumerable OF OPTIONAL identifier_or_type									{ $$.val = CreateEnumerableAttribute($1.val as AggregationType, $4, true); }
 	| enumerable OF enumerable OF identifier_or_type							{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $3.val as AggregationType, $5, false); }
+	| enumerable OF enumerable OF UNIQUE identifier_or_type						{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $3.val as AggregationType, $6, false, true); }
 	| enumerable OF UNIQUE enumerable OF identifier_or_type						{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $4.val as AggregationType, $6, true); }
 	| enumerable OF enumerable OF enumerable OF identifier_or_type				{ $$.val = CreateEnumerableOfEnumerableAttribute($1.val as AggregationType, $3.val as AggregationType, $5.val as AggregationType, $7, false); }
 	;

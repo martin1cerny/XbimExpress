@@ -7,13 +7,13 @@ Number of Start Conditions = 1
 Start condition INITIAL:
   number of patterns = 88, number of nfsa states = 507, accept states = 88
 =============================================================================
-GPLEX: NFSA built.   28 msec
+GPLEX: NFSA built.    7 msec
 =============================================================================
-GPLEX: DFSA built.  207 msec
+GPLEX: DFSA built.   37 msec
 =============================================================================
-GPLEX: DFSA minimized.  145 msec
+GPLEX: DFSA minimized.   18 msec
 =============================================================================
-GPLEX: Shortest strings found.   56 msec
+GPLEX: Shortest strings found.    2 msec
 =============================================================================
 DFSA Summary
 =============================================================================
@@ -21,7 +21,7 @@ Number of dfsa instances = 1
 Start condition INITIAL:
   number of dfsa states = 321, number of accept states = 297
 =============================================================================
-GPLEX: C# file emitted.   96 msec
+GPLEX: C# file emitted.   29 msec
 =============================================================================
 GPLEX Summary
 =============================================================================

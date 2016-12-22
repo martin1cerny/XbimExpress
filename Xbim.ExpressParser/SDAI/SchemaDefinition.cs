@@ -8,6 +8,7 @@ namespace Xbim.ExpressParser.SDAI
 {
     public class SchemaDefinition : SchemaEntity
     {
+        public string Source { get; set; }
         public string Name { get; set; }
         public string Identification { get; set; }
 

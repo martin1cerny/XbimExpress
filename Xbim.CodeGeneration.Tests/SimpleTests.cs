@@ -5,6 +5,7 @@ using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.ExpressDefinitions;
 using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
+using Xbim.ExpressParser;
 
 namespace Xbim.CodeGeneration.Tests
 {
@@ -60,7 +61,7 @@ namespace Xbim.CodeGeneration.Tests
                 OutputPath = "Xbim.CobieExpress",
                 InfrastructureOutputPath = "Xbim.Commons"
             };
-            var schema = SchemaModel.Load(Schemas.COBieExpress);
+            var schema = SchemaModel.Load(Schemas.COBieExpress, SchemaSources.COBIE);
             foreach (var entity in schema.Get<EntityDefinition>())
             {
                 entity.Name = "Cobie" + entity.Name;

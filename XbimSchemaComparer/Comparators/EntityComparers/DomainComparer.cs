@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xbim.ExpressParser;
 using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
 using XbimSchemaComparer.Comparators.Results;
@@ -48,12 +49,16 @@ namespace XbimSchemaComparer.Comparators.EntityComparers
 
         private static DomainStructure GetDomain(SchemaDefinition schema)
         {
-            switch (schema.Name)
+            switch (schema.Source)
             {
-                case "IFC2X3":
+                case SchemaSources.IFC2x3_TC1:
                     return DomainStructure.LoadIfc2X3();
-                case "IFC4":
+                case SchemaSources.IFC4:
                     return DomainStructure.LoadIfc4();
+                case SchemaSources.IFC4_ADD1:
+                    return DomainStructure.LoadIfc4Add1();
+                case SchemaSources.IFC4_ADD2:
+                    return DomainStructure.LoadIfc4Add2();
                 default:
                     return null;
             }

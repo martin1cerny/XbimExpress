@@ -85,22 +85,32 @@ namespace Xbim.ExpressParser.SDAI
 
         public static SchemaModel LoadIfc2x3()
         {
-            return Load(ExpressDefinitions.Schemas.IFC2X3_TC1);
+            return Load(ExpressDefinitions.Schemas.IFC2X3_TC1, SchemaSources.IFC2x3_TC1);
         }
 
         public static SchemaModel LoadIfc4()
         {
-            return Load(ExpressDefinitions.Schemas.IFC4);
+            return Load(ExpressDefinitions.Schemas.IFC4, SchemaSources.IFC4);
         }
 
         public static SchemaModel LoadIfc4Add1()
         {
-            return Load(ExpressDefinitions.Schemas.IFC4_ADD1);
+            return Load(ExpressDefinitions.Schemas.IFC4_ADD1, SchemaSources.IFC4_ADD1);
+        }
+
+        public static SchemaModel LoadIfc4Add2()
+        {
+            return Load(ExpressDefinitions.Schemas.IFC4_ADD2, SchemaSources.IFC4_ADD2);
         }
 
         public static SchemaModel LoadCis2()
         {
-            return Load(ExpressDefinitions.Schemas.CIS2_lpm61);
+            return Load(ExpressDefinitions.Schemas.CIS2_lpm61, SchemaSources.CIS2);
+        }
+
+        public static SchemaModel LoadCobie()
+        {
+            return Load(ExpressDefinitions.Schemas.COBieExpress, SchemaSources.COBIE);
         }
 
         public static SchemaModel LoadStepGeometry()
@@ -114,13 +124,13 @@ namespace Xbim.ExpressParser.SDAI
             result += ExpressDefinitions.Schemas.Step44_product_structure_schema;
             result += ExpressDefinitions.Schemas.Step50_mathematical_functions_schema;
             result += ExpressDefinitions.Schemas.ISO13584_generic_expressions_schema;
-            return Load(result);
+            return Load(result, SchemaSources.StepGeometry);
         }
 
-        public static SchemaModel Load(string schema)
+        public static SchemaModel Load(string schema, string source)
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(schema);
+            var result = parser.Parse(schema, source);
             if (!result)
                 throw new Exception("Unexpected parser error: " + parser.Errors.LastOrDefault());
             return parser.SchemaInstance;

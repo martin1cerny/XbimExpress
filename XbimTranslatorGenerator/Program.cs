@@ -17,8 +17,8 @@ namespace XbimTranslatorGenerator
         static void Main(string[] args)
         {
             const string prjPath = "..\\..\\..\\..\\XbimEssentials\\Xbim.SchemaTranslation";
-            var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1);
-            var ifc4 = GetSchema(Schemas.IFC4);
+            var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1, SchemaSources.IFC2x3_TC1);
+            var ifc4 = GetSchema(Schemas.IFC4_ADD1, SchemaSources.IFC4_ADD1);
             Console.WriteLine(@"Generation of the code for translation from {0} to {1}", ifc2X3.FirstSchema.Name, ifc4.FirstSchema.Name);
 
             var project = GetProject(prjPath);
@@ -99,10 +99,10 @@ namespace XbimTranslatorGenerator
             template.WriteLine("// </auto-generated>");
             template.WriteLine("// ------------------------------------------------------------------------------");
         }
-        private static SchemaModel GetSchema(string data)
+        private static SchemaModel GetSchema(string data, string source)
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(data);
+            var result = parser.Parse(data, source);
             if (!result)
                 throw new Exception("Error parsing schema file");
             return parser.SchemaInstance;

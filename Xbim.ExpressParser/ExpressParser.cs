@@ -35,7 +35,7 @@ namespace Xbim.ExpressParser
         /// </summary>
         /// <param name="schema">Stream containing textual Express schema definition</param>
         /// <returns>True if parser finished regularly, False if it crashed unexpectedly</returns>
-        public bool Parse(Stream schema)
+        public bool Parse(Stream schema, string source)
         {
             if (schema.CanSeek)
             {
@@ -45,7 +45,7 @@ namespace Xbim.ExpressParser
             }
             
             var scanner = new Scanner(schema);
-            return Parse(scanner);
+            return Parse(scanner, source);
         }
 
         /// <summary>
@@ -55,17 +55,17 @@ namespace Xbim.ExpressParser
         /// </summary>
         /// <param name="schemaData">String representation of the Express schema</param>
         /// <returns>True if parser finished regularly, False if it crashed unexpectedly</returns>
-        public bool Parse(string schemaData)
+        public bool Parse(string schemaData, string source)
         {
             _data = schemaData;
             var scanner = new Scanner();
             scanner.SetSource(schemaData, 0);
-            return Parse(scanner);
+            return Parse(scanner, source);
         }
 
-        private bool Parse(Scanner scanner)
+        private bool Parse(Scanner scanner, string source)
         {
-            var parser = new Parser(scanner);
+            var parser = new Parser(scanner, source);
             var result = parser.Parse();
 
             Errors = scanner.Errors;

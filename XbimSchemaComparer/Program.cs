@@ -14,12 +14,14 @@ namespace XbimSchemaComparer
     {
         static void Main(string[] args)
         {
-            var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1);
-            var ifc4Add1 = GetSchema(Schemas.IFC4_ADD1);
-            var ifc4 = GetSchema(Schemas.IFC4);
+            var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1, SchemaSources.IFC2x3_TC1);
+            var ifc4Add1 = GetSchema(Schemas.IFC4_ADD1, SchemaSources.IFC4_ADD1);
+            var ifc4Add2 = GetSchema(Schemas.IFC4_ADD2, SchemaSources.IFC4_ADD2);
+            var ifc4 = GetSchema(Schemas.IFC4, SchemaSources.IFC4);
 
             //Compare( ifc2X3, ifc4Add1 );
-            Compare( ifc2X3, ifc4 );
+            //Compare( ifc2X3, ifc4 );
+            Compare( ifc4Add1, ifc4Add2 );
             //Compare( ifc4, ifc4Add1);
 
             Console.ReadLine();
@@ -27,7 +29,7 @@ namespace XbimSchemaComparer
 
         private static void Compare(SchemaModel modelA, SchemaModel modelB)
         {
-            Console.WriteLine(@"Schemas to compare: {0}, {1}", modelA.FirstSchema.Name, modelB.FirstSchema.Name);
+            Console.WriteLine(@"Schemas to compare: {0}, {1}", modelA.FirstSchema.Source, modelB.FirstSchema.Source);
             var schemas = new List<SchemaDefinition> { modelA.FirstSchema, modelB.FirstSchema };
 
             var schemaComparers = new ISchemaComparer[]
@@ -51,32 +53,32 @@ namespace XbimSchemaComparer
             var w = new StringWriter();
             w.WriteLine("Number of entities:");
             foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Name, schema.Entities.Count());
+                w.WriteLine("{0}: {1}", schema.Source, schema.Entities.Count());
             w.WriteLine();
 
             w.WriteLine("Number of non-abstract entities:");
             foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Name, schema.Entities.Count(e => e.Instantiable));
+                w.WriteLine("{0}: {1}", schema.Source, schema.Entities.Count(e => e.Instantiable));
             w.WriteLine();
 
             w.WriteLine("Number of types:");
             foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Name, schema.Types.Count());
+                w.WriteLine("{0}: {1}", schema.Source, schema.Types.Count());
             w.WriteLine();
 
             w.WriteLine("Number of enumerations:");
             foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Name, schema.Enumerations.Count());
+                w.WriteLine("{0}: {1}", schema.Source, schema.Enumerations.Count());
             w.WriteLine();
 
             w.WriteLine("Number of select types:");
             foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Name, schema.SelectTypes.Count());
+                w.WriteLine("{0}: {1}", schema.Source, schema.SelectTypes.Count());
             w.WriteLine();
 
             w.WriteLine("Number of global rules:");
             foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Name, schema.GlobalRules.Count());
+                w.WriteLine("{0}: {1}", schema.Source, schema.GlobalRules.Count());
             w.WriteLine();
 
             foreach (var cmp in schemaComparers)
@@ -92,7 +94,7 @@ namespace XbimSchemaComparer
             }
 
             var log = w.ToString();
-            var logName = String.Format("{0}_{1}.txt", modelA.FirstSchema.Name, modelB.FirstSchema.Name);
+            var logName = String.Format("{0}_{1}.txt", modelA.FirstSchema.Source, modelB.FirstSchema.Source);
             using (var file = File.CreateText(logName))
             {
                 file.Write(log);
@@ -102,10 +104,10 @@ namespace XbimSchemaComparer
             Console.WriteLine();
         }
 
-        private static SchemaModel GetSchema(string data)
+        private static SchemaModel GetSchema(string data, string source)
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(data);
+            var result = parser.Parse(data, source);
             if (!result)
                 throw new Exception("Error parsing schema file");
             return parser.SchemaInstance;

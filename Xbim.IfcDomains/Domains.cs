@@ -50,6 +50,13 @@ namespace Xbim.IfcDomains
             return (DomainStructure)serializer.Deserialize(txtReader);
         }
 
+        public static DomainStructure LoadIfc4Add2()
+        {
+            var txtReader = new StringReader(DomainsData.IFC4Add2);
+            var serializer = new XmlSerializer(typeof(DomainStructure));
+            return (DomainStructure)serializer.Deserialize(txtReader);
+        }
+
         public Domain GetDomainForType(string type)
         {
             if (Domains == null)

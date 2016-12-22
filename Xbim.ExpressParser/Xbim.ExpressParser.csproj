@@ -65,6 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Schemas.resx</DependentUpon>
     </Compile>
+    <Compile Include="SchemaSources.cs" />
     <Compile Include="SDAI\AggregationType.cs" />
     <Compile Include="SDAI\ArrayType.cs" />
     <Compile Include="SDAI\Attribute.cs" />
@@ -105,6 +106,7 @@
   <ItemGroup>
     <Content Include="ExpressDefinitions\COBieExpress.txt" />
     <Content Include="ExpressDefinitions\IFC4_ADD1.txt" />
+    <Content Include="ExpressDefinitions\IFC4_ADD2.txt" />
     <Content Include="ExpressDefinitions\ISO13584_generic_expressions_schema.txt" />
     <Content Include="ExpressDefinitions\Step41_application_context_schema.txt" />
     <Content Include="ExpressDefinitions\Step42_geometry_schema.txt" />

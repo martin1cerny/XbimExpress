@@ -13,7 +13,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseIfc2x3()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.IFC2X3_TC1);
+            var result = parser.Parse(Schemas.IFC2X3_TC1, SchemaSources.IFC2x3_TC1);
             Assert.IsTrue(result);
 
 
@@ -38,7 +38,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseIfc4()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.IFC4);
+            var result = parser.Parse(Schemas.IFC4, SchemaSources.IFC4);
             Assert.IsTrue(result);
 
             var type =
@@ -49,7 +49,15 @@ namespace Xbim.ExpressParser.Tests
         public void ParseIfc4Add1()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.IFC4_ADD1);
+            var result = parser.Parse(Schemas.IFC4_ADD1, SchemaSources.IFC4_ADD1);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ParseIfc4Add2()
+        {
+            var parser = new ExpressParser();
+            var result = parser.Parse(Schemas.IFC4_ADD2, SchemaSources.IFC4_ADD2);
             Assert.IsTrue(result);
         }
 
@@ -57,7 +65,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseCis2()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.CIS2_lpm61);
+            var result = parser.Parse(Schemas.CIS2_lpm61, SchemaSources.CIS2);
             var lastError = parser.Errors.LastOrDefault();
             if (lastError != null)
                 Debug.WriteLine(lastError);
@@ -68,7 +76,7 @@ namespace Xbim.ExpressParser.Tests
         public void ParseCobie()
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(Schemas.COBieExpress);
+            var result = parser.Parse(Schemas.COBieExpress, SchemaSources.COBIE);
             var lastError = parser.Errors.LastOrDefault();
             if (lastError != null)
                 Debug.WriteLine(lastError);
@@ -80,7 +88,7 @@ namespace Xbim.ExpressParser.Tests
         {
             var parser = new ExpressParser();
             var data = GetFullStepDefinitions();
-            var result = parser.Parse(data);
+            var result = parser.Parse(data, SchemaSources.StepGeometry);
             var lastError = parser.Errors.LastOrDefault();
             if (lastError != null)
                 Debug.WriteLine(lastError);

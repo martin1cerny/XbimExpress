@@ -31,10 +31,11 @@ namespace Xbim.ExpressParser
             get { return _aliases[_currentSchema]; }
         }
 
-        internal Parser(Scanner lex) : base(lex)
+        internal Parser(Scanner lex, string source) : base(lex)
         {
             Model = new SchemaModel();
             _currentSchema = Model.FirstSchema;
+            _currentSchema.Source = source;
             _aliases.Add(_currentSchema, new Dictionary<string, string>());
         }
 
@@ -496,12 +497,13 @@ namespace Xbim.ExpressParser
         }
 
         private ExplicitAttribute CreateEnumerableOfEnumerableAttribute(AggregationType outerAggregation,
-            AggregationType innerAggregation, ValueType data, bool unique)
+            AggregationType innerAggregation, ValueType data, bool uniqueOuterElements, bool uniqueInnerElements = false)
         {
             var result = Model.New<ExplicitAttribute>(_currentSchema);
             result.Domain = outerAggregation;
             outerAggregation.ElementType = innerAggregation;
-            outerAggregation.UniqueElements = unique;
+            outerAggregation.UniqueElements = uniqueOuterElements;
+            innerAggregation.UniqueElements = uniqueInnerElements;
 
             if (data.tokVal == Tokens.TYPE)
             {
