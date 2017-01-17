@@ -189,7 +189,7 @@ namespace Xbim.CodeGeneration.Templates
             
             #line default
             #line hidden
-            this.Write("            return _value.ToString(\"R\");\r\n");
+            this.Write("            return _value.ToString(\"R\", Culture);\r\n");
             
             #line 51 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break; 
@@ -220,13 +220,22 @@ namespace Xbim.CodeGeneration.Templates
             #line 65 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break;
 		case SimpleTypeEnum.BinaryType: 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\tif (_value == null)\r\n\t\t\t\treturn \"\";\r\n            var hex = new System.Text.Str" +
+                    "ingBuilder(_value.Length * 2);\r\n            foreach (byte b in _value)\r\n        " +
+                    "        hex.AppendFormat(\"{0:X2}\", b);\r\n            return hex.ToString();\r\n");
+            
+            #line 73 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+			break; 
 		case SimpleTypeEnum.StringType: 
             
             #line default
             #line hidden
             this.Write("\t\t\treturn _value ?? \"\";\r\n");
             
-            #line 69 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 76 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break; 
 		case SimpleTypeEnum.EnumerationType: 
             
@@ -234,76 +243,76 @@ namespace Xbim.CodeGeneration.Templates
             #line hidden
             this.Write("\t\t\treturn _value.ToString();\r\n");
             
-            #line 72 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 79 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break;
             
             #line default
             #line hidden
             
-            #line 73 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 80 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("        }\r\n");
             
-            #line 75 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 82 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("        public ");
             
-            #line 76 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 83 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 76 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 83 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
             
             #line default
             #line hidden
             this.Write(" val)\r\n        {\r\n");
             
-            #line 78 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 85 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  if (IsComplex){ 
             
             #line default
             #line hidden
             this.Write("\t\t\t//copy items into new inner list\r\n\t\t\t_value = new ");
             
-            #line 80 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 87 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
             
             #line default
             #line hidden
             this.Write("(val);\r\n");
             
-            #line 81 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 88 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("            _value = val;\r\n");
             
-            #line 83 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 90 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("        }\r\n\r\n");
             
-            #line 86 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
- if (!IsComplex && SimpleType != SimpleTypeEnum.StringType && SimpleType != SimpleTypeEnum.BinaryType) { //Complex types can't be initialized from string representation
+            #line 93 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+ if (!IsComplex && SimpleType != SimpleTypeEnum.StringType) { //Complex types can't be initialized from string representation
 
             
             #line default
             #line hidden
             
-            #line 88 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 95 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  if (SimpleType == SimpleTypeEnum.NumberType || SimpleType == SimpleTypeEnum.RealType) { 
             
             #line default
@@ -311,21 +320,21 @@ namespace Xbim.CodeGeneration.Templates
             this.Write("\t    private static readonly System.Globalization.CultureInfo Culture =\r\n\t       " +
                     " System.Globalization.CultureInfo.CreateSpecificCulture(\"en-US\");\r\n\r\n");
             
-            #line 92 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 99 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\tpublic ");
             
-            #line 93 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 100 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(string val)\r\n        {\r\n");
             
-            #line 95 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 102 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  switch(SimpleType){  
 		case SimpleTypeEnum.RealType:
 		case SimpleTypeEnum.NumberType: 
@@ -334,7 +343,7 @@ namespace Xbim.CodeGeneration.Templates
             #line hidden
             this.Write("\t\t\t_value = System.Convert.ToDouble(val, Culture);\r\n");
             
-            #line 99 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 106 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break; 
 		case SimpleTypeEnum.LogicalType: 
             
@@ -348,7 +357,7 @@ namespace Xbim.CodeGeneration.Templates
                 _value = null;
 ");
             
-            #line 107 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 114 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break;
 		case SimpleTypeEnum.IntegerType: 
             
@@ -356,7 +365,7 @@ namespace Xbim.CodeGeneration.Templates
             #line hidden
             this.Write("\t\t\t_value = System.Convert.ToInt64(val);\r\n");
             
-            #line 110 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 117 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break; 
 		case SimpleTypeEnum.BooleanType: 
             
@@ -367,7 +376,7 @@ namespace Xbim.CodeGeneration.Templates
                     "\r\n                _value = true;\r\n            else\r\n                _value = fal" +
                     "se;\r\n");
             
-            #line 116 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 123 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break;
 		case SimpleTypeEnum.EnumerationType: 
             
@@ -376,83 +385,97 @@ namespace Xbim.CodeGeneration.Templates
             this.Write("\t\t\tvar value = val.Trim(\'.\');\r\n\t\t\tif (!System.Enum.TryParse(value, true, out _val" +
                     "ue))\r\n                throw new System.ArgumentException();\r\n");
             
-            #line 121 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 128 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+			break;
+		case SimpleTypeEnum.BinaryType: 
+            
+            #line default
+            #line hidden
+            this.Write(@"			var hex = val.Trim('""').Substring(1); //trim eventual leading and ending apostrophe and leading offset number
+			int numChars = hex.Length;
+            _value = new byte[numChars / 2];
+            for (int i = 0; i < numChars; i += 2)
+                _value[i / 2] = System.Convert.ToByte(hex.Substring(i, 2), 16);
+");
+            
+            #line 135 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 			break; 
             
             #line default
             #line hidden
+            this.Write("\r\n");
             
-            #line 122 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 137 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("        }\r\n");
             
-            #line 124 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 139 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n        public static implicit operator ");
             
-            #line 126 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 141 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 126 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 141 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
             
             #line default
             #line hidden
             this.Write(" value)\r\n        {\r\n            return new ");
             
-            #line 128 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 143 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(value);\r\n        }\r\n\r\n        public static implicit operator ");
             
-            #line 131 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 146 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 131 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 146 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" obj)\r\n        {\r\n");
             
-            #line 133 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 148 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  if (IsComplex){ 
             
             #line default
             #line hidden
             this.Write("\t\t\t//return copy so that underlying collection is not exposed\r\n\t\t\treturn new ");
             
-            #line 135 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 150 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
             
             #line default
             #line hidden
             this.Write("(obj._value);\r\n");
             
-            #line 136 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 151 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("            return obj._value;\r\n");
             
-            #line 138 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 153 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } 
             
             #line default
@@ -474,42 +497,42 @@ namespace Xbim.CodeGeneration.Templates
 
 ");
             
-            #line 154 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 169 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	if (!IsComplex) { 
             
             #line default
             #line hidden
             this.Write("            return ((");
             
-            #line 155 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 170 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(") obj)._value == _value;\r\n");
             
-            #line 156 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 171 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	} else { 
             
             #line default
             #line hidden
             this.Write("            return System.Linq.Enumerable.SequenceEqual(((");
             
-            #line 157 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 172 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(") obj)._value, _value);\r\n");
             
-            #line 158 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 173 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	} 
             
             #line default
             #line hidden
             this.Write("        }\r\n\r\n\t\tpublic bool Equals(");
             
-            #line 161 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 176 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
             
             #line default
@@ -517,14 +540,14 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(" other)\r\n\t    {\r\n\t        return this == other;\r\n\t    }\r\n\r\n        public static " +
                     "bool operator ==(");
             
-            #line 166 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 181 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" obj1, ");
             
-            #line 166 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 181 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -532,14 +555,14 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(" obj2)\r\n        {\r\n            return Equals(obj1, obj2);\r\n        }\r\n\r\n        p" +
                     "ublic static bool operator !=(");
             
-            #line 171 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 186 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" obj1, ");
             
-            #line 171 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 186 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
@@ -547,7 +570,7 @@ namespace Xbim.CodeGeneration.Templates
             this.Write(" obj2)\r\n        {\r\n            return !Equals(obj1, obj2);\r\n        }\r\n\r\n        " +
                     "public override int GetHashCode()\r\n        {\r\n");
             
-            #line 178 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 193 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	if (IsComplex) { 
             
             #line default
@@ -555,28 +578,28 @@ namespace Xbim.CodeGeneration.Templates
             this.Write("            return Value != null ? _value.Sum(o => o.GetHashCode()) : base.GetHas" +
                     "hCode();\r\n");
             
-            #line 180 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 195 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	} else { 
             
             #line default
             #line hidden
             this.Write("            return Value != null ? _value.GetHashCode() : base.GetHashCode();\r\n");
             
-            #line 182 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 197 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	} 
             
             #line default
             #line hidden
             this.Write("        }\r\n\r\n\t\t#region ");
             
-            #line 185 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 200 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
             
             #line default
             #line hidden
             this.Write(" implementation\r\n\t\tvoid ");
             
-            #line 186 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 201 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PersistInterface));
             
             #line default
@@ -585,62 +608,62 @@ namespace Xbim.CodeGeneration.Templates
                     "ndex != 0)\r\n\t\t\t\tthrow new XbimParserException(string.Format(\"Attribute index {0}" +
                     " is out of range for {1}\", propIndex + 1, GetType().Name.ToUpper()));\r\n");
             
-            #line 190 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 205 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	if (IsComplex) { 
             
             #line default
             #line hidden
             this.Write("\t\t\tif (_value == null)\r\n\t\t\t\t_value = new ");
             
-            #line 192 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 207 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
             
             #line default
             #line hidden
             this.Write("();\r\n");
             
-            #line 193 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 208 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 		if (IsComplexOfEntities) { 
             
             #line default
             #line hidden
             this.Write("            _value.Add(value.");
             
-            #line 194 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 209 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetPropertyValueMember(Type.Domain)));
             
             #line default
             #line hidden
             this.Write(" as ");
             
-            #line 194 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 209 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingArrayType));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 195 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 210 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 		} else { 
             
             #line default
             #line hidden
             this.Write("            _value.Add(value.");
             
-            #line 196 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 211 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetPropertyValueMember(Type.Domain)));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 197 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 212 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 		} 
             
             #line default
             #line hidden
             
-            #line 198 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 213 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	} 
 	else if(SimpleType == SimpleTypeEnum.EnumerationType) { 
             
@@ -648,28 +671,28 @@ namespace Xbim.CodeGeneration.Templates
             #line hidden
             this.Write("            System.Enum.TryParse(value.");
             
-            #line 200 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 215 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetPropertyValueMember(Type.Domain)));
             
             #line default
             #line hidden
             this.Write(", true, out _value);\r\n");
             
-            #line 201 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 216 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	} else { 
             
             #line default
             #line hidden
             this.Write("            _value = value.");
             
-            #line 202 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 217 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GetPropertyValueMember(Type.Domain)));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 203 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 218 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
 	}
             
             #line default
@@ -678,14 +701,14 @@ namespace Xbim.CodeGeneration.Templates
                     "      System.Type IExpressValueType.UnderlyingSystemType { \r\n\t\t\tget \r\n\t\t\t{\r\n\t\t\t\t" +
                     "return typeof(");
             
-            #line 211 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 226 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(UnderlyingType));
             
             #line default
             #line hidden
             this.Write(");\r\n\t\t\t}\r\n\t\t}\r\n\t\t#endregion\r\n\r\n");
             
-            #line 216 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 231 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  if (IsComplex) { 
             
             #line default
@@ -703,7 +726,7 @@ namespace Xbim.CodeGeneration.Templates
 		#endregion
 ");
             
-            #line 228 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
+            #line 243 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\DefinedTypeTemplate.tt"
  } 
             
             #line default
