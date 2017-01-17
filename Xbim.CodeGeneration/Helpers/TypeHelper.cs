@@ -54,7 +54,7 @@ namespace Xbim.CodeGeneration.Helpers
             var simple = type as SimpleType;
             if (simple != null)
             {
-                if (simple is BinaryType) return "long";
+                if (simple is BinaryType) return "string";
                 if (simple is BooleanType) return "bool";
                 if (simple is IntegerType) return "long";
                 if (simple is LogicalType) return "bool?";

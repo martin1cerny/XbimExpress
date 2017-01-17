@@ -57,13 +57,13 @@ namespace <#= Namespace #>
             else
                 return "unknown";
 <#			break;
-		case SimpleTypeEnum.BinaryType: 
 		case SimpleTypeEnum.IntegerType: #>
 			return _value.ToString();
 <#			break; 
 		case SimpleTypeEnum.BooleanType: #>
 			return _value ? "true" : "false";
 <#			break;
+		case SimpleTypeEnum.BinaryType: 
 		case SimpleTypeEnum.StringType: #>
 			return _value ?? "";
 <#			break; 
@@ -83,7 +83,7 @@ namespace <#= Namespace #>
 <# } #>
         }
 
-<# if (!IsComplex && SimpleType != SimpleTypeEnum.StringType) { //Complex types can't be initialized from string representation
+<# if (!IsComplex && SimpleType != SimpleTypeEnum.StringType && SimpleType != SimpleTypeEnum.BinaryType) { //Complex types can't be initialized from string representation
 #>
 <# if (SimpleType == SimpleTypeEnum.NumberType || SimpleType == SimpleTypeEnum.RealType) { #>
 	    private static readonly System.Globalization.CultureInfo Culture =
@@ -105,7 +105,6 @@ namespace <#= Namespace #>
             else
                 _value = null;
 <#			break;
-		case SimpleTypeEnum.BinaryType: 
 		case SimpleTypeEnum.IntegerType: #>
 			_value = System.Convert.ToInt64(val);
 <#			break; 
