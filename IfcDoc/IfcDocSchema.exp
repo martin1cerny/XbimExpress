@@ -1,0 +1,667 @@
+SCHEMA IFCDOC_10_7;
+
+TYPE DocCategoryEnum = ENUMERATION OF (
+    Definition,
+    Agreement,
+    Diagram,
+    Instantiation,
+    Example);
+END_TYPE;
+
+TYPE DocXsdFormatEnum = ENUMERATION OF (
+    Default,
+    Element,
+    Attribute,
+    @Type,
+    Hidden,
+    Simple,
+    Content);
+END_TYPE;
+
+TYPE DocFormatSchemaEnum = ENUMERATION OF (
+    XML,
+    STEP,
+    SQL,
+    OWL,
+    JSON,
+    CS);
+END_TYPE;
+
+TYPE DocFormatOptionEnum = ENUMERATION OF (
+    None,
+    @Schema,
+    Examples,
+    Markup);
+END_TYPE;
+
+TYPE DocOpCode = ENUMERATION OF (
+    NoOperation,
+    LoadArgument,
+    @And,
+    @Or,
+    @Xor,
+    LoadString,
+    IsInstance,
+    LoadField,
+    LoadLength,
+    CompareEqual,
+    CompareGreaterThan,
+    CompareGreaterThanOrEqual,
+    CompareLessThan,
+    CompareLessThanOrEqual,
+    CompareNotEqual,
+    IsIncluded,
+    IsUnique);
+END_TYPE;
+
+TYPE DocTemplateOperator = ENUMERATION OF (
+    @And,
+    @Or,
+    @Not,
+    Nand,
+    Nor,
+    @Xor,
+    Nxor);
+END_TYPE;
+
+TYPE DocExchangeApplicabilityEnum = ENUMERATION OF (
+    Export,
+    Import);
+END_TYPE;
+
+TYPE DocExchangeRequirementEnum = ENUMERATION OF (
+    Mandatory,
+    @Optional,
+    NotRelevant,
+    NotRecommended,
+    Excluded);
+END_TYPE;
+
+TYPE DocMetricEnum = ENUMERATION OF (
+    Value,
+    Size,
+    @Type,
+    @Unique,
+    @Exists);
+END_TYPE;
+
+TYPE DocOperatorEnum = ENUMERATION OF (
+    EQUAL,
+    NOT_EQUAL,
+    GREATER_THAN,
+    GREATER_THAN_OR_EQUAL,
+    LESS_THAN,
+    LESS_THAN_OR_EQUAL);
+END_TYPE;
+
+TYPE DocAggregationEnum = ENUMERATION OF (
+    NONE,
+    @LIST,
+    @ARRAY,
+    @SET,
+    @BAG);
+END_TYPE;
+
+TYPE DocStateEnum = ENUMERATION OF (
+    READWRITE,
+    READONLY,
+    LOCKED,
+    READWRITELOCKED,
+    READONLYLOCKED);
+END_TYPE;
+
+TYPE DocPropertyTemplateTypeEnum = ENUMERATION OF (
+    P_SINGLEVALUE,
+    P_ENUMERATEDVALUE,
+    P_BOUNDEDVALUE,
+    P_LISTVALUE,
+    P_TABLEVALUE,
+    P_REFERENCEVALUE,
+    COMPLEX);
+END_TYPE;
+
+TYPE DocQuantityTemplateTypeEnum = ENUMERATION OF (
+    Q_LENGTH,
+    Q_AREA,
+    Q_VOLUME,
+    Q_COUNT,
+    Q_WEIGHT,
+    Q_TIME);
+END_TYPE;
+
+TYPE DocChangeActionEnum = ENUMERATION OF (
+    NOCHANGE,
+    ADDED,
+    DELETED,
+    MODIFIED,
+    MOVED);
+END_TYPE;
+
+TYPE DocChangeAspectEnum = ENUMERATION OF (
+    NAME,
+    @TYPE,
+    INSTANTIATION,
+    AGGREGATION,
+    @SCHEMA,
+    XSDFORMAT,
+    XSDTAGLESS);
+END_TYPE;
+
+TYPE DocExpressType = ENUMERATION OF (
+    OBJECT,
+    @BOOLEAN,
+    @LOGICAL,
+    @INTEGER,
+    @REAL,
+    @NUMBER,
+    @STRING,
+    @BINARY);
+END_TYPE;
+
+TYPE DocDefinitionScopeEnum = ENUMERATION OF (
+    None,
+    TypeConstant,
+    EntityAttribute,
+    PsetProperty,
+    @Type,
+    @Entity,
+    Pset,
+    PEnum,
+    PEnumConstant,
+    QsetQuantity,
+    Qset,
+    Default);
+END_TYPE;
+
+ENTITY DocLocalization
+    Locale: OPTIONAL STRING;
+    Category: OPTIONAL DocCategoryEnum;
+    Name: OPTIONAL STRING;
+    Documentation: OPTIONAL STRING;
+    URL: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocObject
+  ABSTRACT SUPERTYPE ;
+    Name: OPTIONAL STRING;
+    Documentation: OPTIONAL STRING;
+    Uuid: OPTIONAL STRING;
+    Code: OPTIONAL STRING;
+    Version: OPTIONAL STRING;
+    Status: OPTIONAL STRING;
+    Author: OPTIONAL STRING;
+    Owner: OPTIONAL STRING;
+    Copyright: OPTIONAL STRING;
+    Localization: OPTIONAL LIST OF DocLocalization;
+END_ENTITY;
+
+ENTITY DocFormat
+    FormatType: OPTIONAL DocFormatSchemaEnum;
+    FormatOptions: OPTIONAL DocFormatOptionEnum;
+END_ENTITY;
+
+ENTITY DocPublication
+  SUBTYPE OF (DocObject);
+    Views: OPTIONAL LIST OF DocModelView;
+    Formats: OPTIONAL LIST OF DocFormat;
+    Locales: OPTIONAL LIST OF STRING;
+    Annotations: OPTIONAL LIST OF DocAnnotation;
+    Header: OPTIONAL STRING;
+    Footer: OPTIONAL STRING;
+    HideHistory: OPTIONAL BOOLEAN;
+    ISO: OPTIONAL BOOLEAN;
+    UML: OPTIONAL BOOLEAN;
+    Comparison: OPTIONAL BOOLEAN;
+    Exchanges: OPTIONAL BOOLEAN;
+    HtmlExamples: OPTIONAL BOOLEAN;
+END_ENTITY;
+
+ENTITY DocProject
+    Sections: OPTIONAL LIST OF DocSection;
+    Annexes: OPTIONAL LIST OF DocAnnex;
+    Templates: OPTIONAL LIST OF DocTemplateDefinition;
+    ModelViews: OPTIONAL LIST OF DocModelView;
+    ChangeSets: OPTIONAL LIST OF DocChangeSet;
+    Examples: OPTIONAL LIST OF DocExample;
+    NormativeReferences: OPTIONAL LIST OF DocReference;
+    InformativeReferences: OPTIONAL LIST OF DocReference;
+    Terms: OPTIONAL LIST OF DocTerm;
+    Abbreviations: OPTIONAL LIST OF DocAbbreviation;
+    Annotations: OPTIONAL LIST OF DocAnnotation;
+    Publications: OPTIONAL LIST OF DocPublication;
+END_ENTITY;
+
+ENTITY DocTemplateDefinition
+  SUBTYPE OF (DocObject);
+    @Type: OPTIONAL STRING;
+    Description: OPTIONAL STRING;
+    ContentListHead: OPTIONAL STRING;
+    ContentListItem: OPTIONAL STRING;
+    ContentListTail: OPTIONAL STRING;
+    FieldType1: OPTIONAL STRING;
+    FieldType2: OPTIONAL STRING;
+    FieldType3: OPTIONAL STRING;
+    FieldType4: OPTIONAL STRING;
+    Rules: OPTIONAL LIST OF DocModelRule;
+    Templates: OPTIONAL LIST OF DocTemplateDefinition;
+    disabled: OPTIONAL BOOLEAN;
+END_ENTITY;
+
+ENTITY DocXsdFormat
+    @Entity: OPTIONAL STRING;
+    Attribute: OPTIONAL STRING;
+    XsdFormat: OPTIONAL DocXsdFormatEnum;
+    XsdTagless: OPTIONAL LOGICAL;
+END_ENTITY;
+
+ENTITY DocModelView
+  SUBTYPE OF (DocObject);
+    Exchanges: OPTIONAL LIST OF DocExchangeDefinition;
+    ConceptRoots: OPTIONAL LIST OF DocConceptRoot;
+    BaseView: OPTIONAL STRING;
+    XsdUri: OPTIONAL STRING;
+    XsdFormats: OPTIONAL LIST OF DocXsdFormat;
+    IncludeAllDefinitions: OPTIONAL BOOLEAN;
+    RootEntity: OPTIONAL STRING;
+    Icon: OPTIONAL BINARY;
+END_ENTITY;
+
+ENTITY DocConceptRoot
+  SUBTYPE OF (DocObject);
+    ApplicableEntity: OPTIONAL DocEntity;
+    Concepts: OPTIONAL LIST OF DocTemplateUsage;
+    ApplicableTemplate: OPTIONAL DocTemplateDefinition;
+    ApplicableItems: OPTIONAL LIST OF DocTemplateItem;
+    ApplicableOperator: OPTIONAL DocTemplateOperator;
+END_ENTITY;
+
+ENTITY DocExchangeDefinition
+  SUBTYPE OF (DocObject);
+    Description: OPTIONAL STRING;
+    Icon: OPTIONAL BINARY;
+    Applicability: OPTIONAL DocExchangeApplicabilityEnum;
+    ExchangeClass: OPTIONAL STRING;
+    SenderClass: OPTIONAL STRING;
+    ReceiverClass: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocModelRule
+  ABSTRACT SUPERTYPE ;
+    Name: OPTIONAL STRING;
+    Description: OPTIONAL STRING;
+    Identification: OPTIONAL STRING;
+    Rules: OPTIONAL LIST OF DocModelRule;
+    CardinalityMin: OPTIONAL INTEGER;
+    CardinalityMax: OPTIONAL INTEGER;
+END_ENTITY;
+
+ENTITY DocModelRuleAttribute
+  SUBTYPE OF (DocModelRule);
+END_ENTITY;
+
+ENTITY DocModelRuleEntity
+  SUBTYPE OF (DocModelRule);
+    References: OPTIONAL LIST OF DocTemplateDefinition;
+    Prefix: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocModelRuleConstraint
+  SUBTYPE OF (DocModelRule);
+    Expression: OPTIONAL DocOpExpression;
+END_ENTITY;
+
+ENTITY DocOp
+  ABSTRACT SUPERTYPE ;
+    Operation: OPTIONAL DocOpCode;
+END_ENTITY;
+
+ENTITY DocOpExpression
+  ABSTRACT SUPERTYPE   SUBTYPE OF (DocOp);
+END_ENTITY;
+
+ENTITY DocOpStatement
+  SUBTYPE OF (DocOpExpression);
+    @Reference: OPTIONAL DocOpReference;
+    Value: OPTIONAL DocOpValue;
+    Metric: OPTIONAL DocOpCode;
+END_ENTITY;
+
+ENTITY DocOpLogical
+  SUBTYPE OF (DocOpExpression);
+    ExpressionA: OPTIONAL DocOpExpression;
+    ExpressionB: OPTIONAL DocOpExpression;
+END_ENTITY;
+
+ENTITY DocOpValue
+  ABSTRACT SUPERTYPE   SUBTYPE OF (DocOp);
+END_ENTITY;
+
+ENTITY DocOpParameter
+  SUBTYPE OF (DocOpValue);
+    AttributeRule: OPTIONAL DocModelRuleAttribute;
+END_ENTITY;
+
+ENTITY DocOpReference
+  SUBTYPE OF (DocOpValue);
+    EntityRule: OPTIONAL DocModelRuleEntity;
+END_ENTITY;
+
+ENTITY DocOpLiteral
+  SUBTYPE OF (DocOpValue);
+    Literal: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocTemplateUsage
+  SUBTYPE OF (DocObject);
+    Definition: OPTIONAL DocTemplateDefinition;
+    Items: OPTIONAL LIST OF DocTemplateItem;
+    Exchanges: OPTIONAL LIST OF DocExchangeItem;
+    Override: OPTIONAL BOOLEAN;
+    Suppress: OPTIONAL BOOLEAN;
+    Concepts: OPTIONAL LIST OF DocTemplateUsage;
+    Operator: OPTIONAL DocTemplateOperator;
+END_ENTITY;
+
+ENTITY DocExchangeItem
+    Exchange: OPTIONAL DocExchangeDefinition;
+    Applicability: OPTIONAL DocExchangeApplicabilityEnum;
+    Requirement: OPTIONAL DocExchangeRequirementEnum;
+END_ENTITY;
+
+ENTITY DocTemplateItem
+  SUBTYPE OF (DocObject);
+    Concepts: OPTIONAL LIST OF DocTemplateUsage;
+    @Optional: OPTIONAL BOOLEAN;
+    Field2: OPTIONAL STRING;
+    Field3: OPTIONAL STRING;
+    Field4: OPTIONAL STRING;
+    RuleInstanceID: OPTIONAL STRING;
+    RuleParameters: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocSection
+  SUBTYPE OF (DocObject);
+    Annotations: OPTIONAL LIST OF DocAnnotation;
+    Schemas: OPTIONAL LIST OF DocSchema;
+END_ENTITY;
+
+ENTITY DocAnnex
+  SUBTYPE OF (DocObject);
+END_ENTITY;
+
+ENTITY DocAnnotation
+  SUBTYPE OF (DocObject);
+    Annotations: OPTIONAL LIST OF DocAnnotation;
+END_ENTITY;
+
+ENTITY DocReference
+  SUBTYPE OF (DocObject);
+END_ENTITY;
+
+ENTITY DocTerm
+  SUBTYPE OF (DocObject);
+    Terms: OPTIONAL LIST OF DocTerm;
+END_ENTITY;
+
+ENTITY DocAbbreviation
+  SUBTYPE OF (DocObject);
+END_ENTITY;
+
+ENTITY DocGeometry
+  ABSTRACT SUPERTYPE ;
+END_ENTITY;
+
+ENTITY DocPoint
+  SUBTYPE OF (DocGeometry);
+    X: OPTIONAL REAL;
+    Y: OPTIONAL REAL;
+END_ENTITY;
+
+ENTITY DocLine
+    DiagramLine: OPTIONAL LIST OF DocPoint;
+    Tree: OPTIONAL LIST OF DocLine;
+    Definition: OPTIONAL DocDefinition;
+END_ENTITY;
+
+ENTITY DocRectangle
+  SUBTYPE OF (DocGeometry);
+    X: OPTIONAL REAL;
+    Y: OPTIONAL REAL;
+    Width: OPTIONAL REAL;
+    Height: OPTIONAL REAL;
+END_ENTITY;
+
+ENTITY DocSchemaRef
+  SUBTYPE OF (DocObject);
+    Definitions: OPTIONAL LIST OF DocDefinitionRef;
+END_ENTITY;
+
+ENTITY DocDefinition
+  ABSTRACT SUPERTYPE   SUBTYPE OF (DocObject);
+    DiagramRectangle: OPTIONAL DocRectangle;
+    DiagramNumber: OPTIONAL INTEGER;
+END_ENTITY;
+
+ENTITY DocDefinitionRef
+  SUBTYPE OF (DocDefinition);
+    Tree: OPTIONAL LIST OF DocLine;
+END_ENTITY;
+
+ENTITY DocComment
+  SUBTYPE OF (DocDefinition);
+END_ENTITY;
+
+ENTITY DocSchema
+  SUBTYPE OF (DocObject);
+    Annotations: OPTIONAL LIST OF DocAnnotation;
+    Types: OPTIONAL LIST OF DocType;
+    Entities: OPTIONAL LIST OF DocEntity;
+    Functions: OPTIONAL LIST OF DocFunction;
+    GlobalRules: OPTIONAL LIST OF DocGlobalRule;
+    PropertySets: OPTIONAL LIST OF DocPropertySet;
+    QuantitySets: OPTIONAL LIST OF DocQuantitySet;
+    PageTargets: OPTIONAL LIST OF DocPageTarget;
+    SchemaRefs: OPTIONAL LIST OF DocSchemaRef;
+    Comments: OPTIONAL LIST OF DocComment;
+    PropertyEnums: OPTIONAL LIST OF DocPropertyEnumeration;
+    Primitives: OPTIONAL LIST OF DocPrimitive;
+    DiagramPagesHorz: OPTIONAL INTEGER;
+    DiagramPagesVert: OPTIONAL INTEGER;
+END_ENTITY;
+
+ENTITY DocPageTarget
+  SUBTYPE OF (DocDefinition);
+    DiagramLine: OPTIONAL LIST OF DocPoint;
+    Sources: OPTIONAL LIST OF DocPageSource;
+    Definition: OPTIONAL DocDefinition;
+END_ENTITY;
+
+ENTITY DocPageSource
+  SUBTYPE OF (DocDefinition);
+END_ENTITY;
+
+ENTITY DocPrimitive
+  SUBTYPE OF (DocDefinition);
+END_ENTITY;
+
+ENTITY DocEntity
+  SUBTYPE OF (DocDefinition);
+    BaseDefinition: OPTIONAL STRING;
+    EntityFlags: OPTIONAL INTEGER;
+    Subtypes: OPTIONAL LIST OF DocSubtype;
+    Attributes: OPTIONAL LIST OF DocAttribute;
+    UniqueRules: OPTIONAL LIST OF DocUniqueRule;
+    WhereRules: OPTIONAL LIST OF DocWhereRule;
+    Templates: OPTIONAL LIST OF DocTemplateUsage;
+    Description: OPTIONAL STRING;
+    DiagramLine: OPTIONAL LIST OF DocPoint;
+    Tree: OPTIONAL LIST OF DocLine;
+END_ENTITY;
+
+ENTITY DocSubtype
+  SUBTYPE OF (DocObject);
+    DefinedType: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocAttribute
+  SUBTYPE OF (DocObject);
+    DefinedType: OPTIONAL STRING;
+    Definition: OPTIONAL DocDefinition;
+    AttributeFlags: OPTIONAL INTEGER;
+    AggregationType: OPTIONAL INTEGER;
+    AggregationFlag: OPTIONAL INTEGER;
+    AggregationLower: OPTIONAL STRING;
+    AggregationUpper: OPTIONAL STRING;
+    @Inverse: OPTIONAL STRING;
+    @Derived: OPTIONAL STRING;
+    AggregationAttribute: OPTIONAL DocAttribute;
+    DiagramLine: OPTIONAL LIST OF DocPoint;
+    DiagramLabel: OPTIONAL DocRectangle;
+    XsdFormat: OPTIONAL DocXsdFormatEnum;
+    XsdTagless: OPTIONAL LOGICAL;
+END_ENTITY;
+
+ENTITY DocConstraint
+  ABSTRACT SUPERTYPE   SUBTYPE OF (DocObject);
+    Expression: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocUniqueRule
+  SUBTYPE OF (DocConstraint);
+    Items: OPTIONAL LIST OF DocUniqueRuleItem;
+END_ENTITY;
+
+ENTITY DocUniqueRuleItem
+  SUBTYPE OF (DocObject);
+END_ENTITY;
+
+ENTITY DocWhereRule
+  SUBTYPE OF (DocConstraint);
+END_ENTITY;
+
+ENTITY DocType
+  ABSTRACT SUPERTYPE   SUBTYPE OF (DocDefinition);
+END_ENTITY;
+
+ENTITY DocDefined
+  SUBTYPE OF (DocType);
+    DefinedType: OPTIONAL STRING;
+    Definition: OPTIONAL DocDefinition;
+    WhereRules: OPTIONAL LIST OF DocWhereRule;
+    Length: OPTIONAL INTEGER;
+    Aggregation: OPTIONAL DocAttribute;
+    DiagramLine: OPTIONAL LIST OF DocPoint;
+END_ENTITY;
+
+ENTITY DocSelect
+  SUBTYPE OF (DocType);
+    Selects: OPTIONAL LIST OF DocSelectItem;
+    Tree: OPTIONAL LIST OF DocLine;
+END_ENTITY;
+
+ENTITY DocSelectItem
+  SUBTYPE OF (DocObject);
+    DiagramLine: OPTIONAL LIST OF DocPoint;
+END_ENTITY;
+
+ENTITY DocEnumeration
+  SUBTYPE OF (DocType);
+    Constants: OPTIONAL LIST OF DocConstant;
+END_ENTITY;
+
+ENTITY DocConstant
+  SUBTYPE OF (DocObject);
+END_ENTITY;
+
+ENTITY DocFunction
+  SUBTYPE OF (DocConstraint);
+    Parameters: OPTIONAL LIST OF DocParameter;
+    ReturnValue: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocParameter
+  SUBTYPE OF (DocObject);
+    DefinedType: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocGlobalRule
+  SUBTYPE OF (DocConstraint);
+    WhereRules: OPTIONAL LIST OF DocWhereRule;
+    ApplicableEntity: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocVariableSet
+  ABSTRACT SUPERTYPE   SUBTYPE OF (DocObject);
+    ApplicableType: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocPropertySet
+  SUBTYPE OF (DocVariableSet);
+    PropertySetType: OPTIONAL STRING;
+    Properties: OPTIONAL LIST OF DocProperty;
+END_ENTITY;
+
+ENTITY DocProperty
+  SUBTYPE OF (DocObject);
+    PropertyType: OPTIONAL DocPropertyTemplateTypeEnum;
+    PrimaryDataType: OPTIONAL STRING;
+    SecondaryDataType: OPTIONAL STRING;
+    Elements: OPTIONAL LIST OF DocProperty;
+    AccessState: OPTIONAL DocStateEnum;
+END_ENTITY;
+
+ENTITY DocPropertyEnumeration
+  SUBTYPE OF (DocObject);
+    Constants: OPTIONAL LIST OF DocPropertyConstant;
+END_ENTITY;
+
+ENTITY DocPropertyConstant
+  SUBTYPE OF (DocObject);
+END_ENTITY;
+
+ENTITY DocQuantitySet
+  SUBTYPE OF (DocVariableSet);
+    Quantities: OPTIONAL LIST OF DocQuantity;
+END_ENTITY;
+
+ENTITY DocQuantity
+  SUBTYPE OF (DocObject);
+    QuantityType: OPTIONAL DocQuantityTemplateTypeEnum;
+    AccessState: OPTIONAL DocStateEnum;
+END_ENTITY;
+
+ENTITY DocChangeSet
+  SUBTYPE OF (DocObject);
+    ChangesEntities: OPTIONAL LIST OF DocChangeAction;
+    VersionCompared: OPTIONAL STRING;
+    VersionBaseline: OPTIONAL STRING;
+    ChangesProperties: OPTIONAL LIST OF DocChangeAction;
+    ChangesQuantities: OPTIONAL LIST OF DocChangeAction;
+END_ENTITY;
+
+ENTITY DocChangeAction
+  SUBTYPE OF (DocObject);
+    Action: OPTIONAL DocChangeActionEnum;
+    Aspects: OPTIONAL LIST OF DocChangeAspect;
+    Changes: OPTIONAL LIST OF DocChangeAction;
+    ImpactSPF: OPTIONAL BOOLEAN;
+    ImpactXML: OPTIONAL BOOLEAN;
+END_ENTITY;
+
+ENTITY DocChangeAspect
+    Aspect: OPTIONAL DocChangeAspectEnum;
+    OldValue: OPTIONAL STRING;
+    NewValue: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY DocExample
+  SUBTYPE OF (DocVariableSet);
+    Examples: OPTIONAL LIST OF DocExample;
+    ApplicableTemplates: OPTIONAL LIST OF DocTemplateDefinition;
+    ModelView: OPTIONAL DocModelView;
+    File: OPTIONAL BINARY;
+    Views: OPTIONAL LIST OF DocModelView;
+    Path: OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;

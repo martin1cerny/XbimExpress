@@ -16,7 +16,7 @@ namespace Xbim.CodeGeneration.Helpers
             var type = GetCSType(domain, settings, false, true, fullNamespace);
 
             if (attribute.OptionalFlag && (
-                (domain is SimpleType && !(domain is LogicalType) && !(domain is StringType)) ||
+                (domain is SimpleType && !(domain is LogicalType) && !(domain is StringType) && !(domain is BinaryType)) ||
                 domain is DefinedType || domain is EnumerationType
                 ))
                 type += "?";
@@ -39,7 +39,7 @@ namespace Xbim.CodeGeneration.Helpers
             var type = GetCSType(domain, settings);
 
             if(attribute.OptionalFlag && (
-                (domain is SimpleType && !(domain is LogicalType) && !(domain is StringType)) ||
+                (domain is SimpleType && !(domain is LogicalType) && !(domain is StringType) && !(domain is BinaryType)) ||
                 domain is DefinedType || domain is EnumerationType
                 ))
                 type += "?";
