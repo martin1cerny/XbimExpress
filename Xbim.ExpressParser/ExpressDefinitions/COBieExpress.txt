@@ -303,6 +303,8 @@ ENTITY Impact
 	Duration: OPTIONAL REAL;
 	LeadOutTime: OPTIONAL REAL;
 	DurationUnit: OPTIONAL DurationUnit;
+  INVERSE
+    RelatedAssets: SET OF Asset FOR Impacts;
 END_ENTITY;
 
 ENTITY Document
@@ -316,6 +318,8 @@ ENTITY Document
 	@Reference: OPTIONAL STRING;
 	Directory: OPTIONAL STRING;
 	File: OPTIONAL STRING;
+  INVERSE
+    RelatedAssets: SET OF Asset FOR Documents;
 END_ENTITY;
 
 ENTITY Attribute
@@ -326,6 +330,8 @@ ENTITY Attribute
 	Value: AttributeValue;
 	Unit: OPTIONAL STRING;
 	AllowedValues: OPTIONAL LIST [0:?] OF STRING;
+  INVERSE
+    RelatedAssets: SET OF Asset FOR Attributes;
   DERIVE
     PropertySet: ExternalObject := SELF\ReferencedObject.ExternalObject;
 END_ENTITY;
@@ -354,6 +360,8 @@ ENTITY Coordinate
 	RotationX: OPTIONAL REAL;
 	RotationY: OPTIONAL REAL;
 	RotationZ: OPTIONAL REAL;
+  INVERSE
+    RelatedAssets: SET OF Asset FOR Representations;
 END_ENTITY;
 
 TYPE CoordinateTypeEnum = ENUMERATION OF
