@@ -162,7 +162,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
 
         protected IEnumerable<NamedType> GetAllSpecificNative(SelectType select)
         {
-            var remotes = GetAllSpecific(select).ToList();
+            var remotes = GetAllSpecificMatches(select, _matches).ToList();
             var remoteNames = remotes.Select(s => s.Name).ToList();
 
             var entities = _matches.Where(m => m.Target != null && remoteNames.Any(r => m.Target.Name == r)).Select(m => m.Source);
@@ -206,7 +206,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
         internal static bool IsSelectCompatible(SelectType source, SelectType target, IEnumerable<EntityDefinitionMatch> matches)
         {
             var sImpls = GetAllSpecific(source).ToList();
-            var tImpls = GetAllSpecific(target).Where(i => matches.Any(m => m.Target == i && m.Source != null)).ToList();
+            var tImpls = GetAllSpecificMatches(target, matches).ToList();
             if (sImpls.All(s => s is EntityDefinition) && tImpls.All(s => s is EntityDefinition))
             {
                 return 
@@ -242,6 +242,42 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
         protected bool IsEntitySelection(SelectType select)
         {
             return GetAllSpecific(select).All(s => s is EntityDefinition);
+        }
+
+        private static IEnumerable<NamedType> GetAllSpecificMatches(SelectType select, IEnumerable<EntityDefinitionMatch> matches)
+        {
+            var specific = GetAllSpecific(select);
+            foreach (var spec in specific)
+            {
+                if (spec is DefinedType)
+                {
+                    yield return spec;
+                    continue;
+                }
+
+                if (matches.Any(m => m.Target != null && m.Target.Name == spec.Name))
+                {
+                    yield return spec;
+                    continue;
+                }
+
+                if (spec is EntityDefinition entity)
+                {
+                    if (entity.SubTypes.All(s => matches.Any(m => m.Target != null && m.Target.Name == s.Name)))
+                    {
+                        foreach (var item in entity.SubTypes)
+                        {
+                            yield return item;
+                        }
+                        continue;
+                    }
+                    foreach (var item in entity.AllSubTypes.Where(s => matches.Any(m => m.Target != null && m.Target.Name == s.Name)))
+                    {
+                        yield return item;
+                    }
+                    continue;
+                }
+            }
         }
 
         protected IEnumerable<EntityDefinition> GetAddedEntities(SelectType o, SelectType n)

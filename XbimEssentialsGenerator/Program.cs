@@ -27,8 +27,8 @@ namespace XbimEssentialsGenerator
             //var max = SetTypeNumbers(ifc2X3);
             SetTypeNumbers(ifc2X3);
 
-            var ifc4 = SchemaModel.LoadIfc4Add1();
-            var ifc4Domains = DomainStructure.LoadIfc4Add1();
+            var ifc4 = SchemaModel.LoadIfc4Add2();
+            var ifc4Domains = DomainStructure.LoadIfc4Add2();
             EnhanceNullStyleInIfc(ifc4, ifc4Domains);
             //SetTypeNumbers(ifc4, ifc2X3, max);
             SetTypeNumbers(ifc4);
@@ -64,8 +64,8 @@ namespace XbimEssentialsGenerator
             settings.OutputPath = "Xbim.Ifc4";
             Generator.GenerateSchema(settings, ifc4);
             Console.WriteLine(@"IFC4 with interfaces generated");
-            
-            
+
+
             settings.Structure = null;
             settings.OutputPath = "Xbim.CobieExpress";
             Generator.GenerateSchema(settings, cobie);

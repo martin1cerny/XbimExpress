@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 using System;
 using System.Collections.Generic;
+using Xbim.Common.Step21;
 <# foreach(var u in Using) { #>
 using <#= u #>;
 <# } #>
@@ -95,6 +96,24 @@ namespace <#= Namespace #>
 
 		private static readonly List<string> _schemasIds = new List<string> { <#= string.Join(", ", SchemasIds.Select(i => "\"" + i + "\"")) #> };
 		public IEnumerable<string> SchemasIds { get { return _schemasIds; } }
+
+		/// <summary>
+        /// Gets the Ifc Schema version of the model if this is IFC schema
+        /// </summary>
+		public IfcSchemaVersion SchemaVersion { 
+			get
+			{
+<# if (SchemasIds.Any(i => i == "IFC2X3")) { #>
+				return IfcSchemaVersion.Ifc2X3;
+<# } else if (SchemasIds.Any(i => i == "IFC4")) { #>
+				return IfcSchemaVersion.Ifc4;
+<# } else if (SchemasIds.Any(i => i == "COBIE_EXPRESS")) { #>
+				return IfcSchemaVersion.Cobie2X4;
+<#	} else { #>
+				return IfcSchemaVersion.Unsupported;
+<# } #>
+			}
+		}
 
 	}
 }
