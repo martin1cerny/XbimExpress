@@ -10,6 +10,13 @@ using Xbim.IfcDomains;
 
 namespace DomainsExtractor
 {
+    /// <summary>
+    /// This utility extracts domains structure from HTML documentation. EXPRESS schema file 
+    /// doesn't contain any namespaces. But IFC documentation is divided into sections by topic
+    /// which makes it easier for orientation. These domains are used to set up namespaces
+    /// in code generator. It would also be possible to create this domains structure from IFCDOC
+    /// definition file as an alternative.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)

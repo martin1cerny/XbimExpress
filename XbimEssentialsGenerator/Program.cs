@@ -10,6 +10,11 @@ using Xbim.IfcDomains;
 
 namespace XbimEssentialsGenerator
 {
+    /// <summary>
+    /// This is the main entry point which generates schema implementations for
+    /// xBIM Essentials. It generates IFC2x3TC1, IFC4Add2 and COBieExpress which is
+    /// our opinioned view on COBie after several implementation attempts.
+    /// </summary>
     internal class Program
     {
         private static void Main()

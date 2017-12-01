@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace XbimDerivedAttributesPort
 {
+    /// <summary>
+    /// This is one time utility which was used between xBIM 3 and xBIM 4.
+    /// xBIM 3 was completely manual implementation of IFC2x3. xBIM 4 uses code generation
+    /// for schema implementations but there are parts which were too complex to generate
+    /// so original code was ported between the implementations for derived attributes.
+    /// This was than reviewer and checked.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)

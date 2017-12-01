@@ -11,6 +11,13 @@ using XbimValidationGenerator.Templates;
 
 namespace XbimValidationGenerator
 {
+    /// <summary>
+    /// This utility creates stubs for validation library. This library is external to schema implementations
+    /// but has library dependencies on it. The general approach is that validation is only needed for development
+    /// when it is necessary to evaluate validity of the data created so it should be external to actual
+    /// schema implementation used to work with data. Generated library contains error messages, rule names and rules.
+    /// Most of the actual functionality has to be implemented manualy but is identified as a task with TODO comment.
+    /// </summary>
     internal class Program
     {
         private static void Main(string[] args)

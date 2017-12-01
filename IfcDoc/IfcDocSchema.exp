@@ -1,3 +1,10 @@
+(*
+This schema is a result of reverse engineering and is not an official
+schema for IFCDOC files. Use it on your risk.
+
+Created by:
+Martin Cerny (martin.cerny@xbim.cz)
+*)
 SCHEMA IFCDOC_10_7;
 
 TYPE DocCategoryEnum = ENUMERATION OF (

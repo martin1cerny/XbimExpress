@@ -7,6 +7,10 @@ using Xbim.ExpressParser.SDAI;
 
 namespace Xbim.ExpressParser
 {
+    /// <summary>
+    /// Parser which can read EXPRESS schema into SDAI object model.
+    /// That can be used for code generation or other tasks.
+    /// </summary>
     public class ExpressParser
     {
         private string _data;

@@ -260,7 +260,9 @@ namespace Xbim.ExpressParser
                     {
                         var type = Model.Get<NamedType>(t => t.Name == typeInfo.Value.strVal).FirstOrDefault();
                         if (type == null)
-                            throw new InstanceNotFoundException();
+                            type = Model.Get<NamedType>(t => string.Equals(t.Name, typeInfo.Value.strVal, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                        if (type == null)
+                                throw new InstanceNotFoundException();
 
                         if (aggregations.Any())
                             aggregations.Last().ElementType = type;

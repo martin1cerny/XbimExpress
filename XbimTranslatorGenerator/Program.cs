@@ -11,6 +11,10 @@ using XbimTranslatorGenerator.Templates;
 
 namespace XbimTranslatorGenerator
 {
+    /// <summary>
+    /// This is unfinished attempt to generate translator which could convert between IFC2x3 and IFC4
+    /// based on automated entity matches between schemas.
+    /// </summary>
     class Program
     {
         // ReSharper disable once UnusedParameter.Local

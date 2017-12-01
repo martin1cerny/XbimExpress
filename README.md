@@ -4,6 +4,13 @@ This repository contains utilities to generate C# code from EXPRESS schema defin
 Resulting code depends on [Xbim.Common](https://github.com/xBimTeam/XbimEssentials/tree/master/Xbim.Common) 
 which contains common interfaces and abstract classes designed for work with generated schema implementations. 
 
+This project contains an implementation of part of [SDAI](https://en.wikipedia.org/wiki/ISO_10303-22)
+which describes structure of EXPRESS language. Parser generated with [GPPG](https://gppg.codeplex.com/)/[GPLEX](https://gplex.codeplex.com/)
+is used to load EXPRESS schema into object model. This is a separate project and can be used on its own 
+to perform other tasks based on the instantiated EXPRESS schema. We use this only to feed 
+[T4](https://en.wikipedia.org/wiki/Text_Template_Transformation_Toolkit) templates to generate C# code.
+But it could equally be used for late bingind applications as well as various analyses of the schema.
+
 Generator is not able to process any arbitrary EXPRESS definition but was implemented to
 the level where it can generate implementation of IFC schemas. It can generate any schema which 
 uses the same constrains and design patterns. EXPRESS language allows for multiple instance inheritance

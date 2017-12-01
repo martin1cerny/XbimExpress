@@ -10,6 +10,12 @@ using XbimSchemaComparer.Comparators.SchemaComparers;
 
 namespace XbimSchemaComparer
 {
+    /// <summary>
+    /// This utility can be used to compare two similar schemas (schema versions).
+    /// It was used to compare IFC2x3 and various versions of IFC4 as an independent
+    /// identification of changes and also to estimate amount of changes and their impact
+    /// between versions.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)

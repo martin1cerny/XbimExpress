@@ -9,12 +9,16 @@ using WhereRule = XbimValidationGenerator.Schema.WhereRule;
 
 namespace XbimTypeInstanceExtractor
 {
+    /// <summary>
+    /// This utility is used to create reports of types and type hierarchies
+    /// from IFC2x3 and IFC4 starting from IfcElement and IfcElementType.
+    /// These results can be used in loosely coupled systems to mimic IFC
+    /// hierarchical structure.
+    /// </summary>
     internal class Program
     {
         private static void Main()
         {
-            var data = XbimValidationGenerator.Properties.Resources.IFC4_rules;
-            var rules = new XmlSerializer(typeof(SchemaRules)).Deserialize(new StringReader(data)) as SchemaRules;
             var schema = SchemaModel.LoadIfc4Add1();
             using (var w = File.CreateText("ElementTypesIFC4.csv"))
             {

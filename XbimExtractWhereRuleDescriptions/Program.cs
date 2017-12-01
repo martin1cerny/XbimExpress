@@ -9,6 +9,10 @@ using XbimValidationGenerator.Schema;
 
 namespace XbimExtractWhereRuleDescriptions
 {
+    /// <summary>
+    /// This utility extracts descriptions for where rules from HTML documentation. IFCDOC definition 
+    /// file would be better source for this information.
+    /// </summary>
     internal class Program
     {
         private static void Main()
