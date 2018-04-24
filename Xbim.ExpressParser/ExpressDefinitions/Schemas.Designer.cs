@@ -19,7 +19,7 @@ namespace Xbim.ExpressParser.ExpressDefinitions {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Schemas {
@@ -177,6 +177,56 @@ namespace Xbim.ExpressParser.ExpressDefinitions {
         public static string IFC4_ADD2 {
             get {
                 return ResourceManager.GetString("IFC4_ADD2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (*
+        ///Copyright by:
+        ///buildingSMART International Limited, 1996-2017
+        ///
+        ///Any technical documentation made available by buildingSMART International Limited
+        ///is the copyrighted work of buildingSMART International Limited and is owned by the 
+        ///buildingSMART International Limited. It may be photocopied, used in software development, 
+        ///or translated into another computer language without prior written consent from 
+        ///buildingSMART International Limited provided that full attribution is given. 
+        ///Prior written consent  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IFC4x1_RC3 {
+            get {
+                return ResourceManager.GetString("IFC4x1_RC3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SCHEMA IFC4X1;
+        ///
+        ///REFERENCE FROM IFC4
+        ///  (IfcLabel,
+        ///   IfcLengthMeasure,
+        ///   IfcProduct,
+        ///   IfcBoundedCurve,
+        ///   IfcBoolean,
+        ///   IfcPlaneAngleMeasure,
+        ///   IfcCartesianPoint,
+        ///   IfcPositiveLengthMeasure,
+        ///   IfcRatioMeasure);
+        ///
+        ///TYPE IfcAlignmentTypeEnum = ENUMERATION OF (
+        /// ABSOLUTE,
+        /// USERDEFINED,
+        /// NOTDEFINED);
+        ///END_TYPE;
+        ///
+        ///ENTITY IfcAlignment
+        /// SUBTYPE OF (IfcPositioningElement);
+        ///  PredefinedType : OPTIONAL IfcAlignmentTypeEnum;
+        ///  Horizontal : OPTIONAL IfcAlignment2DHorizontal;
+        ///  Vertical : OPTION [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IfcAlignmentExtension {
+            get {
+                return ResourceManager.GetString("IfcAlignmentExtension", resourceCulture);
             }
         }
         

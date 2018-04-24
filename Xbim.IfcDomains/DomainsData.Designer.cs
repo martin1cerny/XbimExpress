@@ -19,7 +19,7 @@ namespace Xbim.IfcDomains {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class DomainsData {
@@ -139,6 +139,26 @@ namespace Xbim.IfcDomains {
         public static string IFC4Add2 {
             get {
                 return ResourceManager.GetString("IFC4Add2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Schema xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; Name=&quot;IFC4_ADD2&quot;&gt;
+        ///  &lt;Domain Name=&quot;ActorResource&quot;&gt;
+        ///    &lt;Type&gt;IfcActorRole&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcActorSelect&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcAddress&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcAddressTypeEnum&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcOrganization&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcOrganizationRelationship&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcPerson&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcPersonAndOrganization&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcPostalAddress&lt;/Type [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IFC4x1 {
+            get {
+                return ResourceManager.GetString("IFC4x1", resourceCulture);
             }
         }
     }

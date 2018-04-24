@@ -93,6 +93,20 @@ namespace Xbim.ExpressParser.SDAI
             return Load(ExpressDefinitions.Schemas.IFC4, SchemaSources.IFC4);
         }
 
+        public static SchemaModel LoadIfc4x1()
+        {
+            return Load(ExpressDefinitions.Schemas.IFC4x1_RC3, SchemaSources.IFC4X1);
+        }
+
+        public static SchemaModel LoadIfc4Add2WithAlignmentExtension()
+        {
+            var result = "";
+            result += ExpressDefinitions.Schemas.IFC4_ADD2;
+            result += ExpressDefinitions.Schemas.IfcAlignmentExtension;
+
+            return Load(result, SchemaSources.IFC4_ADD2);
+        }
+
         public static SchemaModel LoadIfc4Add1()
         {
             return Load(ExpressDefinitions.Schemas.IFC4_ADD1, SchemaSources.IFC4_ADD1);

@@ -62,6 +62,13 @@ namespace Xbim.ExpressParser.Tests
         }
 
         [TestMethod]
+        public void ParseIfc4Add2WithAlignment()
+        {
+            var result = SchemaModel.LoadIfc4Add2WithAlignmentExtension();
+            Assert.IsTrue(result != null);
+        }
+
+        [TestMethod]
         public void ParseCis2()
         {
             var parser = new ExpressParser();

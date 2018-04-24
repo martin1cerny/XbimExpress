@@ -105,8 +105,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExpressDefinitions\COBieExpress.txt" />
+    <Content Include="ExpressDefinitions\IFC4x1_RC3.txt" />
     <Content Include="ExpressDefinitions\IFC4_ADD1.txt" />
     <Content Include="ExpressDefinitions\IFC4_ADD2.txt" />
+    <Content Include="ExpressDefinitions\IfcAlignmentExtension.txt" />
     <Content Include="ExpressDefinitions\ISO13584_generic_expressions_schema.txt" />
     <Content Include="ExpressDefinitions\Step41_application_context_schema.txt" />
     <Content Include="ExpressDefinitions\Step42_geometry_schema.txt" />

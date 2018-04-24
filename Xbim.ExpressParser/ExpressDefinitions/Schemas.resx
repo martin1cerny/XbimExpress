@@ -130,11 +130,17 @@
   <data name="IFC4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ifc4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="IFC4x1_RC3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ifc4x1_rc3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="IFC4_ADD1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ifc4_add1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IFC4_ADD2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ifc4_add2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="IfcAlignmentExtension" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ifcalignmentextension.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ISO13584_generic_expressions_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>iso13584_generic_expressions_schema.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

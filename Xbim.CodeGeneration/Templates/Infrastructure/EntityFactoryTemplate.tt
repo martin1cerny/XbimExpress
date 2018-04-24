@@ -47,7 +47,7 @@ namespace <#= Namespace #>
 			if (model == null || typeName == null)
 				throw new ArgumentNullException();
 
-			var name = typeName.ToUpper();
+			var name = typeName.ToUpperInvariant();
 			switch(name)
 			{
 <# foreach(var entity in NonAbstractEntities) {#>
@@ -80,7 +80,7 @@ namespace <#= Namespace #>
 		if (typeName == null)
 				throw new ArgumentNullException();
 
-			var name = typeName.ToUpper();
+			var name = typeName.ToUpperInvariant();
 			switch(name)
 			{
 <# foreach(var type in DefinedTypes) {#>

@@ -1,0 +1,116 @@
+SCHEMA IFC4X1;
+
+REFERENCE FROM IFC4
+  (IfcLabel,
+   IfcLengthMeasure,
+   IfcProduct,
+   IfcBoundedCurve,
+   IfcBoolean,
+   IfcPlaneAngleMeasure,
+   IfcCartesianPoint,
+   IfcPositiveLengthMeasure,
+   IfcRatioMeasure);
+
+TYPE IfcAlignmentTypeEnum = ENUMERATION OF (
+ ABSOLUTE,
+ USERDEFINED,
+ NOTDEFINED);
+END_TYPE;
+
+ENTITY IfcAlignment
+ SUBTYPE OF (IfcPositioningElement);
+  PredefinedType : OPTIONAL IfcAlignmentTypeEnum;
+  Horizontal : OPTIONAL IfcAlignment2DHorizontal;
+  Vertical : OPTIONAL IfcAlignment2DVertical;
+  LinearRefMethod : OPTIONAL IfcLabel;
+ WHERE
+  ValidCombination : (EXISTS(Horizontal) AND EXISTS(Vertical)) OR (EXISTS(Horizontal) AND NOT(EXISTS(Vertical))) OR (NOT(EXISTS(Horizontal)) AND NOT(EXISTS(Vertical)));
+END_ENTITY;
+
+ENTITY IfcPositioningElement
+ ABSTRACT SUPERTYPE OF(IfcAlignment)
+ SUBTYPE OF (IfcProduct);
+END_ENTITY;
+
+ENTITY IfcAlignment2DHorizontal;
+  StartDistAlong : OPTIONAL IfcLengthMeasure;
+  Segments : LIST [1:?] OF IfcAlignment2DHorizontalSegment;
+ INVERSE
+  ToAlignment : SET [1:?] OF IfcAlignment FOR Horizontal;
+END_ENTITY;
+
+ENTITY IfcAlignment2DHorizontalSegment
+ SUBTYPE OF (IfcAlignment2DSegment);
+  CurveGeometry : IfcCurveSegment2D;
+ INVERSE
+  ToHorizontal : SET [1:1] OF IfcAlignment2DHorizontal FOR Segments;
+END_ENTITY;
+
+ENTITY IfcAlignment2DSegment
+ ABSTRACT SUPERTYPE OF(ONEOF(IfcAlignment2DHorizontalSegment, IfcAlignment2DVerticalSegment));
+  TangentialContinuity : OPTIONAL IfcBoolean;
+  StartTag : OPTIONAL IfcLabel;
+  EndTag : OPTIONAL IfcLabel;
+END_ENTITY;
+
+ENTITY IfcAlignment2DVerSegCircularArc
+ SUBTYPE OF (IfcAlignment2DVerticalSegment);
+  Radius : IfcPositiveLengthMeasure;
+  IsConvex : IfcBoolean;
+END_ENTITY;
+
+ENTITY IfcAlignment2DVerSegLine
+ SUBTYPE OF (IfcAlignment2DVerticalSegment);
+END_ENTITY;
+
+ENTITY IfcAlignment2DVerSegParabolicArc
+ SUBTYPE OF (IfcAlignment2DVerticalSegment);
+  ParabolaConstant : IfcPositiveLengthMeasure;
+  IsConvex : IfcBoolean;
+END_ENTITY;
+
+ENTITY IfcAlignment2DVertical;
+  Segments : LIST [1:?] OF IfcAlignment2DVerticalSegment;
+ INVERSE
+  ToAlignment : SET [1:1] OF IfcAlignment FOR Vertical;
+END_ENTITY;
+
+ENTITY IfcAlignment2DVerticalSegment
+ ABSTRACT SUPERTYPE OF(ONEOF(IfcAlignment2DVerSegCircularArc, IfcAlignment2DVerSegLine, IfcAlignment2DVerSegParabolicArc))
+ SUBTYPE OF (IfcAlignment2DSegment);
+  StartDistAlong : IfcLengthMeasure;
+  HorizontalLength : IfcPositiveLengthMeasure;
+  StartHeight : IfcLengthMeasure;
+  StartGradient : IfcRatioMeasure;
+ INVERSE
+  ToVertical : SET [1:1] OF IfcAlignment2DVertical FOR Segments;
+END_ENTITY;
+
+ENTITY IfcCircularArcSegment2D
+ SUBTYPE OF (IfcCurveSegment2D);
+  Radius : IfcPositiveLengthMeasure;
+  IsCCW : IfcBoolean;
+END_ENTITY;
+
+ENTITY IfcClothoidalArcSegment2D
+ SUBTYPE OF (IfcCurveSegment2D);
+  StartRadius : OPTIONAL IfcPositiveLengthMeasure;
+  IsCCW : IfcBoolean;
+  IsEntry : IfcBoolean;
+  ClothoidConstant : IfcReal;
+END_ENTITY;
+
+ENTITY IfcCurveSegment2D
+ ABSTRACT SUPERTYPE OF(ONEOF(IfcCircularArcSegment2D, IfcClothoidalArcSegment2D, IfcLineSegment2D))
+ SUBTYPE OF (IfcBoundedCurve);
+  StartPoint : IfcCartesianPoint;
+  StartDirection : IfcPlaneAngleMeasure;
+  SegmentLength : IfcPositiveLengthMeasure;
+END_ENTITY;
+
+ENTITY IfcLineSegment2D
+ SUBTYPE OF (IfcCurveSegment2D);
+END_ENTITY;
+
+
+END_SCHEMA;
