@@ -32,7 +32,7 @@ namespace XbimEssentialsGenerator
             //var max = SetTypeNumbers(ifc2X3);
             SetTypeNumbers(ifc2X3);
 
-            var ifc4 = SchemaModel.LoadIfc4Add2();
+            var ifc4 = SchemaModel.LoadIfc4Add2WithAlignmentExtension();
             var ifc4Domains = DomainStructure.LoadIfc4x1();
             EnhanceNullStyleInIfc(ifc4, ifc4Domains);
             //SetTypeNumbers(ifc4, ifc2X3, max);

@@ -12,6 +12,8 @@ namespace Xbim.ExpressParser.SDAI
         public string Name { get; set; }
         public string Identification { get; set; }
 
+        public List<SchemaDefinition> ReferencesSchemas { get; set; } = new List<SchemaDefinition>();
+
         #region Inverse members
 
         public IEnumerable<EntityDefinition> Entities
@@ -38,6 +40,9 @@ namespace Xbim.ExpressParser.SDAI
         {
             get { return SchemaModel.Get<GlobalRule>(r => r.ParentSchema == this); }
         }
+
+        public IEnumerable<SchemaDefinition> ReferencedInSchemas 
+            => SchemaModel.Get<SchemaDefinition>(s => s.ReferencesSchemas.Contains(this));
 
         #endregion
     }

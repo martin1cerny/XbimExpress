@@ -93,8 +93,10 @@ namespace Xbim.CodeGeneration
             modelTemplates.AddRange(schema.Get<EntityDefinition>().Select(type => new EntityInterfaceTemplate(settings, type)));
             modelTemplates.AddRange(
                 schema.Get<EnumerationType>().Select(type => new EnumerationTemplate(settings, type)));
-            modelTemplates
-                .Add(new EntityFactoryTemplate(settings, schema));
+
+            // entity factory for this schema and any extensions
+            modelTemplates.AddRange(
+                schema.Schemas.Select(s => new EntityFactoryTemplate(settings, s)));
             
             //inner model infrastructure
             modelTemplates.Add(new ItemSetTemplate(settings));

@@ -1,4 +1,4 @@
-// Parser Conflict Information for grammar file "Parser.y - 22/12/2016 13:30:56"
+// Parser Conflict Information for grammar file "Parser.y - 25/04/2018 11:48:43"
 
 Shift/Reduce conflict on symbol "IDENTIFIER", parser will shift
  Reduce 77:	where_section -> WHERE, where_rules

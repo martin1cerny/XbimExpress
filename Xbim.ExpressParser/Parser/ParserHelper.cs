@@ -96,6 +96,19 @@ namespace Xbim.ExpressParser
             });
         }
 
+        private void AddSchemaReference(string schemaName)
+        {
+            var schema = _currentSchema;
+            ToDoActions.Add(() => {
+                var reference = Model
+                    .Get<SchemaDefinition>(s => string.Equals(s.Identification, schemaName, StringComparison.InvariantCultureIgnoreCase))
+                    .FirstOrDefault();
+                if (reference == null)
+                    throw new InstanceNotFoundException();
+                schema.ReferencesSchemas.Add(reference);
+            });
+        }
+
         private void CreateSelectType(string name, List<string> selections)
         {
             var select = Model.New(_currentSchema, (SelectType e) =>

@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-VAJP4OB
-// DateTime: 22/12/2016 13:33:45
+// DateTime: 25/04/2018 11:48:55
 // UserName: Martin
-// Input file <Parser.y - 22/12/2016 13:30:56>
+// Input file <Parser.y - 25/04/2018 11:48:43>
 
 // options: conflicts lines gplex conflicts listing
 
@@ -15,9 +15,9 @@ using System.Collections.Generic;
 using System.CodeDom.Compiler;
 using System.Globalization;
 using System.Text;
+using QUT.Xbim.Gppg;
 using System.Linq.Expressions;
 using Xbim.ExpressParser.SDAI;
-using QUT.Xbim.Gppg;
 
 namespace Xbim.ExpressParser
 {
@@ -67,11 +67,11 @@ internal class ScanObj {
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
 internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from Parser.y - 22/12/2016 13:30:56
+  // Verbatim content from Parser.y - 25/04/2018 11:48:43
 #line 2 "Parser.y"
 	
 #line default
-  // End verbatim content from Parser.y - 22/12/2016 13:30:56
+  // End verbatim content from Parser.y - 25/04/2018 11:48:43
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
@@ -644,6 +644,21 @@ internal partial class Parser: ShiftReduceParser<ValueType, LexLocation>
       case 5: // schema_definition -> SCHEMA, IDENTIFIER, ';', definitions, END_SCHEMA, ';'
 #line 108 "Parser.y"
                                                     { FinishSchema(ValueStack[ValueStack.Depth-5].strVal); }
+#line default
+        break;
+      case 16: // reference -> REFERENCE, FROM, IDENTIFIER, identifier_list, ';'
+#line 128 "Parser.y"
+                                                     { AddSchemaReference(ValueStack[ValueStack.Depth-3].strVal); }
+#line default
+        break;
+      case 17: // reference -> REFERENCE, FROM, IDENTIFIER, alias_list, ';'
+#line 129 "Parser.y"
+                                                 { AddSchemaReference(ValueStack[ValueStack.Depth-3].strVal); }
+#line default
+        break;
+      case 18: // reference -> REFERENCE, FROM, IDENTIFIER, ';'
+#line 130 "Parser.y"
+                                         { AddSchemaReference(ValueStack[ValueStack.Depth-2].strVal); }
 #line default
         break;
       case 23: // alias -> IDENTIFIER, AS, IDENTIFIER

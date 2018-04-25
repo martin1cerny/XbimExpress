@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Xbim.CodeGeneration.Helpers;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
@@ -8,9 +9,9 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
     public partial class EntityFactoryTemplate: ICodeTemplate
     {
         private readonly GeneratorSettings _settings;
-        private readonly SchemaModel _schema;
+        private readonly SchemaDefinition _schema;
 
-        public EntityFactoryTemplate(GeneratorSettings settings, SchemaModel schema)
+        public EntityFactoryTemplate(GeneratorSettings settings, SchemaDefinition schema)
         {
             _settings = settings;
             _schema = schema;
@@ -18,7 +19,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
 
         public string Name
         {
-            get { return _settings.EntityFactory; }
+            get { return $"{_settings.EntityFactory}_{_schema.Identification}" ; }
         }
 
         public string Namespace
@@ -57,19 +58,13 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             }
         }
 
-        private string InstantiableEntityInterface { get { return _settings.InstantiableEntityInterface; } }
-        private string ModelInterface { get { return _settings.ModelInterface; } }
+        private string InstantiableEntityInterface  => _settings.InstantiableEntityInterface; 
+        private string ModelInterface  => _settings.ModelInterface; 
 
-        private IEnumerable<EntityDefinition> NonAbstractEntities { get
-        {
-            return _schema.Get<EntityDefinition>(d => d.Instantiable);
-        } }
+        private IEnumerable<EntityDefinition> NonAbstractEntities  => _schema.Entities.Where(d => d.Instantiable);
 
-        private IEnumerable<DefinedType> DefinedTypes
-        {
-            get { return _schema.Get<DefinedType>(); }
-        }
+        private IEnumerable<DefinedType> DefinedTypes => _schema.Types; 
 
-        private IEnumerable<string> SchemasIds { get { return _settings.SchemasIds; } }
+        private IEnumerable<string> SchemasIds  => new[] { _schema.Identification }; 
     }
 }

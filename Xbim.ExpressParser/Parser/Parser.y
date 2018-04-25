@@ -125,9 +125,9 @@ definition
 	;
 
 reference
-	: REFERENCE FROM IDENTIFIER identifier_list ';'
-	| REFERENCE FROM IDENTIFIER alias_list ';'
-	| REFERENCE FROM IDENTIFIER ';'
+	: REFERENCE FROM IDENTIFIER identifier_list ';'					{ AddSchemaReference($3.strVal); }
+	| REFERENCE FROM IDENTIFIER alias_list ';'						{ AddSchemaReference($3.strVal); }
+	| REFERENCE FROM IDENTIFIER ';'									{ AddSchemaReference($3.strVal); }
 	;
 
 alias_list
