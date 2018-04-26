@@ -15,12 +15,20 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
         {
             _settings = settings;
             _schema = schema;
+
+            var id = schema.Identification;
+            Name = settings.EntityFactory + id[0].ToString().ToUpperInvariant() + id.Substring(1).ToLowerInvariant();
+            var nameChars = Name.ToCharArray().ToList();
+            while (nameChars.Contains('_'))
+            {
+                var idx = nameChars.IndexOf('_');
+                nameChars.RemoveAt(idx);
+                nameChars[idx] = nameChars[idx].ToString().ToUpperInvariant()[0];
+            }
+            Name = new string(nameChars.ToArray());
         }
 
-        public string Name
-        {
-            get { return $"{_settings.EntityFactory}_{_schema.Identification}" ; }
-        }
+        public string Name { get; }
 
         public string Namespace
         {
@@ -57,6 +65,10 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
                 
             }
         }
+
+        private bool HasReferences => _schema.ReferencesSchemas.Any();
+
+        private IEnumerable<string> ReferencedSchemas => _schema.ReferencesSchemas.Select(r => new EntityFactoryTemplate(_settings, r).Name);
 
         private string InstantiableEntityInterface  => _settings.InstantiableEntityInterface; 
         private string ModelInterface  => _settings.ModelInterface; 

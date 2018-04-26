@@ -14,11 +14,21 @@ namespace <#= Namespace #>
 {
 	public sealed class <#= Name #> <#= Inheritance #>
 	{
-		private readonly System.Reflection.Assembly _assembly;
+		private static readonly System.Reflection.Assembly _assembly;
+<# if (HasReferences) { #>
+		private static readonly IEnumerable<IEntityFactory> _references;
+<# } #>
 		
-		public <#= Name #>()
+		static <#= Name #>()
 		{
-			_assembly = GetType().Assembly;
+			_assembly = typeof(<#= Name #>).Assembly;
+<# if (HasReferences) { #>
+			_references = new IEntityFactory[] {
+<#	foreach(var r in ReferencedSchemas) {#>
+				new <#=r#>(),
+<#	}#>				
+			};
+<# } #>
 		}
 
 		public T New<T>(<#= ModelInterface #> model, int entityLabel, bool activated) where T: <#= InstantiableEntityInterface #>
@@ -29,7 +39,8 @@ namespace <#= Namespace #>
 		public T New<T>(<#= ModelInterface #> model, Action<T> init, int entityLabel, bool activated) where T: <#= InstantiableEntityInterface #>
 		{
 			var o = New<T>(model, entityLabel, activated);
-			init(o);
+			if (init != null)
+				init(o);
 			return o;
 		}
 
@@ -44,9 +55,17 @@ namespace <#= Namespace #>
 
 		public <#= InstantiableEntityInterface #> New(<#= ModelInterface #> model, string typeName, int entityLabel, bool activated)
 		{
-			if (model == null || typeName == null)
+			if (model == null || string.IsNullOrWhiteSpace(typeName) || entityLabel < 0)
 				throw new ArgumentNullException();
 
+<# if (HasReferences) { #>
+			foreach (var r in _references) 
+			{
+				var result = r.New(model, typeName, entityLabel, activated);
+				if (result != null)
+					return result;
+			}
+<# } #>
 			var name = typeName.ToUpperInvariant();
 			switch(name)
 			{
@@ -65,6 +84,15 @@ namespace <#= Namespace #>
 			if (model == null)
 				throw new ArgumentNullException();
 
+<# if (HasReferences) { #>
+			foreach (var r in _references) 
+			{
+				var result = r.New(model, typeId, entityLabel, activated);
+				if (result != null)
+					return result;
+			}
+<# } #>
+
 			switch(typeId)
 			{
 <# foreach(var entity in NonAbstractEntities) {#>
@@ -77,9 +105,17 @@ namespace <#= Namespace #>
 
 		public IExpressValueType New(string typeName)
 		{
-		if (typeName == null)
+			if (typeName == null)
 				throw new ArgumentNullException();
 
+<# if (HasReferences) { #>
+			foreach (var r in _references) 
+			{
+				var result = r.New(typeName);
+				if (result != null)
+					return result;
+			}
+<# } #>
 			var name = typeName.ToUpperInvariant();
 			switch(name)
 			{
@@ -107,6 +143,8 @@ namespace <#= Namespace #>
 				return IfcSchemaVersion.Ifc2X3;
 <# } else if (SchemasIds.Any(i => i == "IFC4")) { #>
 				return IfcSchemaVersion.Ifc4;
+<# } else if (SchemasIds.Any(i => i == "IFC4X1")) { #>
+				return IfcSchemaVersion.Ifc4x1;
 <# } else if (SchemasIds.Any(i => i == "COBIE_EXPRESS")) { #>
 				return IfcSchemaVersion.Cobie2X4;
 <#	} else { #>
