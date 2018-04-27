@@ -9,7 +9,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
         public RemovedTypesComparer() : base(
             "Defined types removed from schema",
             new Guid("036AB9BE-A331-4296-B673-05F8094B10FE"),
-            s => s.Types,
+            s => s.Get<DefinedType>(),
             AddedRemovedEnum.Removed,
             (o, n) => new DefinedTypeComparisonResult(o, n)
             )

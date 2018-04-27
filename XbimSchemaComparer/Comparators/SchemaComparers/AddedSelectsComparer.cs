@@ -9,7 +9,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
         public AddedSelectsComparer() : base(
             "Selects added to schema",
             new Guid("B820DAC7-580A-4F41-9C4A-9101EF61475D"),
-            s => s.SelectTypes,
+            s => s.Get<SelectType>(),
             AddedRemovedEnum.Added,
             (o, n) => new SelectComparisonResult(o, n)
             )

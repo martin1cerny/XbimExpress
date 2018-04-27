@@ -24,19 +24,27 @@ namespace XbimSchemaComparer
             var ifc4Add1 = GetSchema(Schemas.IFC4_ADD1, SchemaSources.IFC4_ADD1);
             var ifc4Add2 = GetSchema(Schemas.IFC4_ADD2, SchemaSources.IFC4_ADD2);
             var ifc4 = GetSchema(Schemas.IFC4, SchemaSources.IFC4);
+            var ifc4x1 = GetSchema(Schemas.IFC4x1_FINAL, SchemaSources.IFC4X1_FINAL);
+            var ifc4x1Extension = GetSchema(Schemas.IFC4_ADD2 + Schemas.IfcAlignmentExtension, SchemaSources.IFC4X1_FINAL);
 
             //Compare( ifc2X3, ifc4Add1 );
             //Compare( ifc2X3, ifc4 );
-            Compare( ifc4Add1, ifc4Add2 );
+            //Compare( ifc4Add1, ifc4Add2 );
             //Compare( ifc4, ifc4Add1);
+            Compare( ifc4x1, ifc4x1Extension);
 
             Console.ReadLine();
+        }
+
+        private static string Schema(SchemaModel model)
+        {
+            return string.Join(", ", model.Get<SchemaDefinition>().Select(s => s.Name));
         }
 
         private static void Compare(SchemaModel modelA, SchemaModel modelB)
         {
             Console.WriteLine(@"Schemas to compare: {0}, {1}", modelA.FirstSchema.Source, modelB.FirstSchema.Source);
-            var schemas = new List<SchemaDefinition> { modelA.FirstSchema, modelB.FirstSchema };
+            var models = new [] { modelA, modelB };
 
             var schemaComparers = new ISchemaComparer[]
             {
@@ -48,43 +56,45 @@ namespace XbimSchemaComparer
                 new RemovedSelectsComparer(), 
                 new RemovedTypesComparer(),
                 new RemovedEnumerationsComparer(),
-                new ChangedEntitiesComparer()
+                new ChangedEntitiesComparer(),
+                new ChangedSelectsComparer(),
+                new ChangedEnumerationsComparer()
             };
             foreach (var comparer in schemaComparers)
             {
-                comparer.Compare(modelA.FirstSchema, modelB.FirstSchema);
+                comparer.Compare(modelA, modelB);
             }
 
 
             var w = new StringWriter();
             w.WriteLine("Number of entities:");
-            foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Source, schema.Entities.Count());
+            foreach (var model in models)
+                w.WriteLine("{0}: {1}", Schema(model), model.Get<EntityDefinition>().Count());
             w.WriteLine();
 
             w.WriteLine("Number of non-abstract entities:");
-            foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Source, schema.Entities.Count(e => e.Instantiable));
+            foreach (var model in models)
+                w.WriteLine("{0}: {1}", Schema(model), model.Get<EntityDefinition>().Count(e => e.Instantiable));
             w.WriteLine();
 
             w.WriteLine("Number of types:");
-            foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Source, schema.Types.Count());
+            foreach (var model in models)
+                w.WriteLine("{0}: {1}", Schema(model), model.Get<DefinedType>().Count());
             w.WriteLine();
 
             w.WriteLine("Number of enumerations:");
-            foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Source, schema.Enumerations.Count());
+            foreach (var model in models)
+                w.WriteLine("{0}: {1}", Schema(model), model.Get<EnumerationType>().Count());
             w.WriteLine();
 
             w.WriteLine("Number of select types:");
-            foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Source, schema.SelectTypes.Count());
+            foreach (var model in models)
+                w.WriteLine("{0}: {1}", Schema(model), model.Get<SelectType>().Count());
             w.WriteLine();
 
             w.WriteLine("Number of global rules:");
-            foreach (var schema in schemas)
-                w.WriteLine("{0}: {1}", schema.Source, schema.GlobalRules.Count());
+            foreach (var model in models)
+                w.WriteLine("{0}: {1}", Schema(model), model.Get<GlobalRule>().Count());
             w.WriteLine();
 
             foreach (var cmp in schemaComparers)

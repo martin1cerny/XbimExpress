@@ -9,7 +9,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
         public AddedTypesComparer() : base(
             "Defined types added to schema",
             new Guid("95813F6F-0528-410C-ABD1-DA596F7F47A3"),
-            s => s.Types,
+            s => s.Get<DefinedType>(),
             AddedRemovedEnum.Added,
             (o, n) => new DefinedTypeComparisonResult(o, n)
             )

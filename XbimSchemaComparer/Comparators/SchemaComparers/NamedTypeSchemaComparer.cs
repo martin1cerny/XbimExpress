@@ -5,16 +5,16 @@ using Xbim.ExpressParser.SDAI;
 
 namespace XbimSchemaComparer.Comparators.SchemaComparers
 {
-    public abstract class NamedTypeSchemaComparer<TResult> : ISchemaComparer<SchemaDefinition, IComparisonResult<TResult>> 
+    public abstract class NamedTypeSchemaComparer<TResult> : ISchemaComparer<SchemaModel, IComparisonResult<TResult>> 
         where TResult : NamedType
     {
         private readonly List<IComparisonResult<TResult>> _results = new List<IComparisonResult<TResult>>();
-        private readonly Func<SchemaDefinition, IEnumerable<TResult>> _accessor;
+        private readonly Func<SchemaModel, IEnumerable<TResult>> _accessor;
 
         protected NamedTypeSchemaComparer(
             string name, 
             Guid id,
-            Func<SchemaDefinition, IEnumerable<TResult>> accessor)
+            Func<SchemaModel, IEnumerable<TResult>> accessor)
         {
             Name = name;
             Id = id;
@@ -33,7 +33,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
 
         protected abstract IEnumerable<ISchemaComparer<TResult, IComparisonResult<TResult>>> Comparers { get; } 
 
-        public IEnumerable<IComparisonResult<TResult>> Compare(SchemaDefinition oldObject, SchemaDefinition newObject)
+        public IEnumerable<IComparisonResult<TResult>> Compare(SchemaModel oldObject, SchemaModel newObject)
         {
             var results = new List<IComparisonResult<TResult>>();
             
@@ -72,7 +72,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
 
         IEnumerable<IComparisonResult> ISchemaComparer.Compare(object oldObject, object newObject)
         {
-            return Compare(oldObject as SchemaDefinition, newObject as SchemaDefinition);
+            return Compare(oldObject as SchemaModel, newObject as SchemaModel);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
         public ChangedEntitiesComparer(): base(
             "Changed entity definitions",
             new Guid("6445EE3E-263B-47CC-AC7B-F7695AB7BAE3"),
-            s => s.Entities
+            s => s.Get<EntityDefinition>()
             )
         {
             _comparers.Add(new AttributeComparer());

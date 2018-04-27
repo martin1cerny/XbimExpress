@@ -56,6 +56,8 @@
     <Compile Include="Comparators\Results\SelectComparisonResult.cs" />
     <Compile Include="Comparators\SchemaComparers\AddedEnumerationsComparer.cs" />
     <Compile Include="Comparators\SchemaComparers\ChangedEntitiesComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\ChangedEnumerationsComparer.cs" />
+    <Compile Include="Comparators\SchemaComparers\ChangedSelectsComparer.cs" />
     <Compile Include="Comparators\SchemaComparers\NamedTypeSchemaComparer.cs" />
     <Compile Include="Comparators\SchemaComparers\NamedTypeAddedRemovedComparer.cs" />
     <Compile Include="Comparators\SchemaComparers\AddedEntitiesComparer.cs" />

@@ -105,7 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExpressDefinitions\COBieExpress.txt" />
-    <Content Include="ExpressDefinitions\IFC4x1_RC3.txt" />
+    <Content Include="ExpressDefinitions\IFC4x1_FINAL.txt" />
     <Content Include="ExpressDefinitions\IFC4_ADD1.txt" />
     <Content Include="ExpressDefinitions\IFC4_ADD2.txt" />
     <Content Include="ExpressDefinitions\IfcAlignmentExtension.txt" />
@@ -121,6 +121,7 @@
     <Content Include="ExpressDefinitions\Step50_mathematical_functions_schema.txt" />
     <Content Include="ExpressDefinitions\Step55_procedural_model_schema.txt" />
     <Content Include="ExpressDefinitions\Step56_state_observed_schema.txt" />
+    <Content Include="IFC4_ADD2-IFC4x1.txt" />
     <None Include="Parser\makeparser.bat" />
     <None Include="Parser\Parser.y" />
     <None Include="Parser\Scanner.lex" />

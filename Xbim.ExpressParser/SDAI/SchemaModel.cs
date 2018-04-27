@@ -95,7 +95,7 @@ namespace Xbim.ExpressParser.SDAI
 
         public static SchemaModel LoadIfc4x1()
         {
-            return Load(ExpressDefinitions.Schemas.IFC4x1_RC3, SchemaSources.IFC4X1);
+            return Load(ExpressDefinitions.Schemas.IFC4x1_FINAL, SchemaSources.IFC4X1_FINAL);
         }
 
         public static SchemaModel LoadIfc4Add2WithAlignmentExtension()

@@ -231,6 +231,8 @@
     <Type>IfcAlignment2DVerSegParabolicArc</Type>
     <Type>IfcAlignment2DVertical</Type>
     <Type>IfcAlignment2DVerticalSegment</Type>
+    <Type>IfcAlignmentCurve</Type>
+    <Type>IfcLinearPlacement</Type>
 
     <Type>IfcConnectionCurveGeometry</Type>
     <Type>IfcConnectionGeometry</Type>
@@ -251,6 +253,10 @@
     <Type>IfcVirtualGridIntersection</Type>
   </Domain>
   <Domain Name="GeometricModelResource">
+    <Type>IfcSectionedSolid</Type>
+    <Type>IfcSectionedSolidHorizontal</Type>
+    <Type>IfcTriangulatedIrregularNetwork</Type>
+    
     <Type>IfcAdvancedBrep</Type>
     <Type>IfcAdvancedBrepWithVoids</Type>
     <Type>IfcBlock</Type>
@@ -305,6 +311,12 @@
     <Type>IfcClothoidalArcSegment2D</Type>
     <Type>IfcCurveSegment2D</Type>
     <Type>IfcLineSegment2D</Type>
+    <Type>IfcTransitionCurveType</Type>
+    <Type>IfcDistanceExpression</Type>
+    <Type>IfcOffsetCurve</Type>
+    <Type>IfcOffsetCurveByDistances</Type>
+    <Type>IfcOrientationExpression</Type>
+    <Type>IfcTransitionCurveSegment2D</Type>
     
     <Type>IfcArcIndex</Type>
     <Type>IfcAssociatedSurface</Type>
@@ -868,6 +880,9 @@
     <Type>IfcAlignmentTypeEnum</Type>
     <Type>IfcAlignment</Type>
     <Type>IfcPositioningElement</Type>
+    <Type>IfcLinearPositioningElement</Type>
+    <Type>IfcReferentTypeEnum</Type>
+    <Type>IfcReferent</Type>
 
     <Type>IfcAnnotation</Type>
     <Type>IfcAssemblyPlaceEnum</Type>

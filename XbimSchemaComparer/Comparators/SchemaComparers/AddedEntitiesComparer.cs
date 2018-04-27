@@ -9,7 +9,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
         public AddedEntitiesComparer() : base(
             "Entities added to schema",
             new Guid("2B422591-1D9C-494F-AD4F-7E7429BBC2F4"),
-            s => s.Entities,
+            s => s.Get<EntityDefinition>(),
             AddedRemovedEnum.Added,
             (o, n) => new EntityComparisonResult(o, n)
             )

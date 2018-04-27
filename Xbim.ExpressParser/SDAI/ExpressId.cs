@@ -27,7 +27,15 @@ namespace Xbim.ExpressParser.SDAI
 
         public override bool Equals(object obj)
         {
-            return Value != null && Value.Equals(obj);
+            if (Value == null)
+                return false;
+
+            if (obj is ExpressId id)
+                return Equals(id);
+            if (obj is string str)
+                return Equals(str);
+
+            return false;
         }
 
         public bool Equals(string other)

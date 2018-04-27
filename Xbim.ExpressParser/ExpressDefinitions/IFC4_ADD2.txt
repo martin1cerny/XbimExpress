@@ -3024,6 +3024,10 @@ TYPE IfcPropertySetDefinitionSelect = SELECT
 	,IfcPropertySetDefinitionSet);
 END_TYPE;
 
+(*
+	IfcShapeAspect member was introduced in IfcAlignment (IFC4x1)
+	and should not be used when creating pure IFC4 models.
+*)
 TYPE IfcResourceObjectSelect = SELECT
 	(IfcActorRole
 	,IfcAppliedValue
@@ -3040,6 +3044,7 @@ TYPE IfcResourceObjectSelect = SELECT
 	,IfcPhysicalQuantity
 	,IfcProfileDef
 	,IfcPropertyAbstraction
+	,IfcShapeAspect
 	,IfcTimeSeries);
 END_TYPE;
 
@@ -4035,14 +4040,24 @@ ENTITY IfcCartesianPointList
 	Dim : IfcDimensionCount := IfcPointListDim(SELF);
 END_ENTITY;
 
+(*
+	TagList introduced in IfcAlignment extension. Should not be used
+	in pure IFC4 models.
+*)
 ENTITY IfcCartesianPointList2D
  SUBTYPE OF (IfcCartesianPointList);
 	CoordList : LIST [1:?] OF LIST [2:2] OF IfcLengthMeasure;
+	TagList : OPTIONAL LIST [1:?] OF IfcLabel;
 END_ENTITY;
 
+(*
+	TagList introduced in IfcAlignment extension. Should not be used
+	in pure IFC4 models.
+*)
 ENTITY IfcCartesianPointList3D
  SUBTYPE OF (IfcCartesianPointList);
 	CoordList : LIST [1:?] OF LIST [3:3] OF IfcLengthMeasure;
+	TagList : OPTIONAL LIST [1:?] OF IfcLabel;
 END_ENTITY;
 
 ENTITY IfcCartesianTransformationOperator
@@ -7077,9 +7092,21 @@ ENTITY IfcOccupant
 OR EXISTS(SELF\IfcObject.ObjectType);
 END_ENTITY;
 
-ENTITY IfcOffsetCurve2D
+(*
+  IfcOffsetCurve was introduced by IfcAlignment in IFC4x1
+  but is placed here to allow clear extension mechanism.
+  Also, this change is binary compatible and new type is abstract.
+*)
+ENTITY IfcOffsetCurve
+ ABSTRACT SUPERTYPE OF (ONEOF
+    (IfcOffsetCurve2D
+    ,IfcOffsetCurve3D))
  SUBTYPE OF (IfcCurve);
 	BasisCurve : IfcCurve;
+END_ENTITY;
+
+ENTITY IfcOffsetCurve2D
+ SUBTYPE OF (IfcOffsetCurve);
 	Distance : IfcLengthMeasure;
 	SelfIntersect : IfcLogical;
  WHERE
@@ -7087,13 +7114,12 @@ ENTITY IfcOffsetCurve2D
 END_ENTITY;
 
 ENTITY IfcOffsetCurve3D
- SUBTYPE OF (IfcCurve);
-	BasisCurve : IfcCurve;
+ SUBTYPE OF (IfcOffsetCurve);
 	Distance : IfcLengthMeasure;
 	SelfIntersect : IfcLogical;
 	RefDirection : IfcDirection;
  WHERE
-	DimIs2D : BasisCurve.Dim = 3;
+	DimIs3D : BasisCurve.Dim = 3;
 END_ENTITY;
 
 ENTITY IfcOpenShell

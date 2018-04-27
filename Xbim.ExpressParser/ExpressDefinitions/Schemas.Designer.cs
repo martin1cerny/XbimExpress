@@ -192,9 +192,9 @@ namespace Xbim.ExpressParser.ExpressDefinitions {
         ///buildingSMART International Limited provided that full attribution is given. 
         ///Prior written consent  [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string IFC4x1_RC3 {
+        public static string IFC4x1_FINAL {
             get {
-                return ResourceManager.GetString("IFC4x1_RC3", resourceCulture);
+                return ResourceManager.GetString("IFC4x1_FINAL", resourceCulture);
             }
         }
         

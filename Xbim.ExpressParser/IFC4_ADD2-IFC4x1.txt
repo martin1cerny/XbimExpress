@@ -1,0 +1,46 @@
+﻿Entities added to schema (25):
+    *Added EntityDefinition: IfcAlignment
+    *Added EntityDefinition: IfcAlignment2DHorizontal
+    *Added EntityDefinition: IfcAlignment2DHorizontalSegment
+    *Added EntityDefinition: IfcAlignment2DSegment
+    *Added EntityDefinition: IfcAlignment2DVerSegCircularArc
+    *Added EntityDefinition: IfcAlignment2DVerSegLine
+    *Added EntityDefinition: IfcAlignment2DVerSegParabolicArc
+    *Added EntityDefinition: IfcAlignment2DVertical
+    *Added EntityDefinition: IfcAlignment2DVerticalSegment
+    *Added EntityDefinition: IfcAlignmentCurve
+    *Added EntityDefinition: IfcCircularArcSegment2D
+    *Added EntityDefinition: IfcCurveSegment2D
+    *Added EntityDefinition: IfcDistanceExpression
+    *Added EntityDefinition: IfcLineSegment2D
+    *Added EntityDefinition: IfcLinearPlacement
+    *Added EntityDefinition: IfcLinearPositioningElement
+    *Added EntityDefinition: IfcOffsetCurve
+    *Added EntityDefinition: IfcOffsetCurveByDistances
+    *Added EntityDefinition: IfcOrientationExpression
+    *Added EntityDefinition: IfcPositioningElement
+    *Added EntityDefinition: IfcReferent
+    *Added EntityDefinition: IfcSectionedSolid
+    *Added EntityDefinition: IfcSectionedSolidHorizontal
+    *Added EntityDefinition: IfcTransitionCurveSegment2D
+    *Added EntityDefinition: IfcTriangulatedIrregularNetwork
+
+
+Enumerations added to schema (3):
+    *Added EnumerationType: IfcAlignmentTypeEnum
+    *Added EnumerationType: IfcReferentTypeEnum
+    *Added EnumerationType: IfcTransitionCurveType
+
+
+Changed entity definitions (2):
+Entity: IfcCartesianPointList2D
+    Added attribute: TagList 
+
+Entity: IfcCartesianPointList3D
+    Added attribute: TagList 
+
+
+Changed selects (1):
+Select type IfcResourceObjectSelect:
+    Added select: IfcShapeAspect
+

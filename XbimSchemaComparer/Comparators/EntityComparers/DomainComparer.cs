@@ -59,7 +59,7 @@ namespace XbimSchemaComparer.Comparators.EntityComparers
                     return DomainStructure.LoadIfc4Add1();
                 case SchemaSources.IFC4_ADD2:
                     return DomainStructure.LoadIfc4Add2();
-                case SchemaSources.IFC4X1:
+                case SchemaSources.IFC4X1_FINAL:
                     return DomainStructure.LoadIfc4x1();
                 default:
                     return null;

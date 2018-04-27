@@ -10,7 +10,7 @@ namespace XbimSchemaComparer.Comparators.SchemaComparers
             : base(
                 "Enumerations added to schema",
                 new Guid("6E12F539-941A-4D2C-9F87-52557F695C9F"),
-                s => s.Enumerations,
+                s => s.Get<EnumerationType>(),
                 AddedRemovedEnum.Added,
                 (o, n) => new EnumerationComparisonResult(o, n)
                 )
