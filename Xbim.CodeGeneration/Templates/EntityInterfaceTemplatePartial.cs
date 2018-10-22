@@ -9,7 +9,7 @@ using Attribute = Xbim.ExpressParser.SDAI.Attribute;
 
 namespace Xbim.CodeGeneration.Templates
 {
-    public partial class EntityInterfaceTemplate: ICodeTemplate
+    public partial class EntityInterfaceTemplate : ICodeTemplate
     {
         public EntityInterfaceTemplate(GeneratorSettings settings, EntityDefinition type)
         {
@@ -123,9 +123,9 @@ namespace Xbim.CodeGeneration.Templates
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i)) return "";
                 return ": " + i;
-            } 
+            }
         }
-        
+
         private static bool IsEntityReference(BaseType type)
         {
             if (type is EntityDefinition)
@@ -462,7 +462,7 @@ namespace Xbim.CodeGeneration.Templates
                 GetAttributeType(aggr.ElementType);
         }
 
-        protected int GetAttributeMinCardinality(Attribute attribute)
+        protected string GetAttributeMinCardinality(Attribute attribute)
         {
             var domain = GetDomain(attribute);
             if (domain == null)
@@ -471,24 +471,26 @@ namespace Xbim.CodeGeneration.Templates
             if (attribute is InverseAttribute inverse)
                 domain = inverse.AggregationType;
 
-            //drill down to the last aggregation
-            if (!(domain is AggregationType enumType)) return -1;
-            while (enumType.ElementType is AggregationType)
+            //collect all levels of the aggregation
+            if (!(domain is AggregationType enumType))
+                return "null";
+            var cardinality = new List<int>();
+            while (enumType is AggregationType)
             {
-                domain = enumType.ElementType;
-                enumType = (AggregationType)domain;
+                if (enumType is VariableSizeAggregationType aggr)
+                    cardinality.Add(aggr.LowerBound);
+                else if (enumType is ArrayType arr)
+                    cardinality.Add(arr.LowerIndex);
+                else
+                    cardinality.Add(-1);
+
+                enumType = enumType.ElementType as AggregationType;
             }
 
-            if (domain is VariableSizeAggregationType aggr)
-                return aggr.LowerBound;
-
-            if (domain is ArrayType arr)
-                return arr.LowerIndex;
-
-            return -1;
+            return $"new int [] {{ {string.Join(", ", cardinality)} }}";
         }
 
-        protected int GetAttributeMaxCardinality(Attribute attribute)
+        protected string GetAttributeMaxCardinality(Attribute attribute)
         {
             var domain = GetDomain(attribute);
             if (domain == null)
@@ -497,21 +499,23 @@ namespace Xbim.CodeGeneration.Templates
             if (attribute is InverseAttribute inverse)
                 domain = inverse.AggregationType;
 
-            //drill down to the last aggregation
-            if (!(domain is AggregationType enumType)) return -1;
-            while (enumType.ElementType is AggregationType)
+            //collect all levels of the aggregation
+            if (!(domain is AggregationType enumType))
+                return "null";
+            var cardinality = new List<int>();
+            while (enumType is AggregationType)
             {
-                domain = enumType.ElementType;
-                enumType = (AggregationType)domain;
+                if (enumType is VariableSizeAggregationType aggr)
+                    cardinality.Add(aggr.UpperBound ?? -1);
+                else if (enumType is ArrayType arr)
+                    cardinality.Add(arr.UpperIndex);
+                else
+                    cardinality.Add(-1);
+
+                enumType = enumType.ElementType as AggregationType;
             }
 
-            if (domain is VariableSizeAggregationType aggr)
-                return aggr.UpperBound ?? -1;
-
-            if (domain is ArrayType arr)
-                return arr.UpperIndex;
-
-            return -1;
+            return $"new int [] {{ {string.Join(", ", cardinality)} }}";
         }
 
         protected int GetAttributeOrder(Attribute attribute)
