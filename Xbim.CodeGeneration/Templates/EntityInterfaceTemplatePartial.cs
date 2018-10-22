@@ -29,11 +29,9 @@ namespace Xbim.CodeGeneration.Templates
         {
             while (true)
             {
-                var expl = attribute as ExplicitAttribute;
-                if (expl != null)
+                if (attribute is ExplicitAttribute expl)
                     return TypeHelper.GetInterfaceCSType(expl, Settings);
-                var der = attribute as DerivedAttribute;
-                if (der == null) return "";
+                if (!(attribute is DerivedAttribute der)) return "";
 
                 attribute = der.Redeclaring;
             }
@@ -43,22 +41,19 @@ namespace Xbim.CodeGeneration.Templates
 
         protected bool IsEntityDefinitionSelect(BaseType type)
         {
-            var sel = type as SelectType;
-            return sel != null && GetAllSpecific(sel).All(t => t is EntityDefinition);
+            return type is SelectType sel && GetAllSpecific(sel).All(t => t is EntityDefinition);
         }
 
         protected bool CouldBeEntityDefinitionSelect(BaseType type)
         {
-            var sel = type as SelectType;
-            return sel != null && GetAllSpecific(sel).Any(t => t is EntityDefinition);
+            return type is SelectType sel && GetAllSpecific(sel).Any(t => t is EntityDefinition);
         }
 
         protected static IEnumerable<NamedType> GetAllSpecific(SelectType select)
         {
             foreach (var type in select.Selections)
             {
-                var nested = type as SelectType;
-                if (nested == null)
+                if (!(type is SelectType nested))
                 {
                     yield return type;
                     continue;
@@ -136,8 +131,7 @@ namespace Xbim.CodeGeneration.Templates
             if (type is EntityDefinition)
                 return true;
 
-            var select = type as SelectType;
-            if (select == null)
+            if (!(type is SelectType select))
                 return false;
 
             var realTypes = SelectTypeTemplate.GetFinalTypes(select);
@@ -150,15 +144,13 @@ namespace Xbim.CodeGeneration.Templates
                 return false;
             if (IsEntityReference(attribute))
                 return true;
-            var aggr = attribute.Domain as AggregationType;
-            if (aggr == null)
+            if (!(attribute.Domain is AggregationType aggr))
                 return false;
             var nt = GetNamedElementType(aggr);
             if (nt is EntityDefinition)
                 return true;
 
-            var select = nt as SelectType;
-            return @select != null && GetAllSpecific(@select).All(s => s is EntityDefinition);
+            return nt is SelectType select && GetAllSpecific(@select).All(s => s is EntityDefinition);
         }
 
         private static bool IsEntityReference(ExplicitAttribute attribute)
@@ -168,8 +160,7 @@ namespace Xbim.CodeGeneration.Templates
 
         private static bool IsEntityReferenceAggregation(BaseType type)
         {
-            var aggr = type as AggregationType;
-            return aggr != null && IsEntityReference(aggr.ElementType);
+            return type is AggregationType aggr && IsEntityReference(aggr.ElementType);
         }
 
         private static bool IsEntityReferenceAggregation(ExplicitAttribute attribute)
@@ -179,8 +170,7 @@ namespace Xbim.CodeGeneration.Templates
 
         private static bool IsEntityReferenceDoubleAggregation(BaseType type)
         {
-            var aggr = type as AggregationType;
-            return aggr != null && IsEntityReferenceAggregation(aggr.ElementType);
+            return type is AggregationType aggr && IsEntityReferenceAggregation(aggr.ElementType);
         }
 
         private static bool IsEntityReferenceDoubleAggregation(ExplicitAttribute attribute)
@@ -260,8 +250,7 @@ namespace Xbim.CodeGeneration.Templates
         {
             while (true)
             {
-                var expl = attribute as ExplicitAttribute;
-                if (expl != null)
+                if (attribute is ExplicitAttribute expl)
                     return TypeHelper.GetCSType(expl, Settings);
                 var der = attribute as DerivedAttribute;
                 if (der != null && der.Redeclaring == null)
@@ -292,8 +281,7 @@ namespace Xbim.CodeGeneration.Templates
         protected virtual string TweekDerivedType(DerivedAttribute attribute, string type)
         {
             var domain = attribute.Domain;
-            var aggr = domain as AggregationType;
-            if (aggr != null)
+            if (domain is AggregationType aggr)
             {
                 //drill down
                 while (aggr != null)
@@ -374,8 +362,7 @@ namespace Xbim.CodeGeneration.Templates
             var aggr = attribute.Domain as VariableSizeAggregationType;
             if (aggr?.UpperBound != null && aggr.UpperBound.Value > 0)
                 return aggr.UpperBound ?? -1;
-            var arr = attribute.Domain as ArrayType;
-            if (arr != null && arr.UpperIndex > 0)
+            if (attribute.Domain is ArrayType arr && arr.UpperIndex > 0)
                 return arr.UpperIndex;
             return 0;
         }
@@ -399,12 +386,10 @@ namespace Xbim.CodeGeneration.Templates
             if (expl != null)
                 return enu + "Mandatory";
 
-            var inverse = attribute as InverseAttribute;
-            if (inverse != null)
+            if (attribute is InverseAttribute inverse)
                 return enu + "Mandatory";
 
-            var derived = attribute as DerivedAttribute;
-            if (derived != null)
+            if (attribute is DerivedAttribute derived)
                 return derived.Redeclaring != null ? enu + "DerivedOverride" : enu + "Derived";
 
             throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
@@ -413,14 +398,11 @@ namespace Xbim.CodeGeneration.Templates
         protected static BaseType GetDomain(Attribute attribute)
         {
             BaseType domain = null;
-            var expl = attribute as ExplicitAttribute;
-            if (expl != null)
+            if (attribute is ExplicitAttribute expl)
                 domain = expl.Domain;
-            var inverse = attribute as InverseAttribute;
-            if (inverse != null)
+            if (attribute is InverseAttribute inverse)
                 domain = inverse.Domain;
-            var derived = attribute as DerivedAttribute;
-            if (derived != null)
+            if (attribute is DerivedAttribute derived)
                 domain = derived.Domain;
 
             return domain;
@@ -429,8 +411,7 @@ namespace Xbim.CodeGeneration.Templates
         protected string GetAttributeType(BaseType domain)
         {
             const string enu = "EntityAttributeType.";
-            var list = domain as ListType;
-            if (list != null)
+            if (domain is ListType list)
                 return list.UniqueFlag ? enu + "ListUnique" : enu + "List";
 
             if (domain is SetType)
@@ -439,8 +420,7 @@ namespace Xbim.CodeGeneration.Templates
             if (domain is BagType)
                 return enu + "Bag";
 
-            var arr = domain as ArrayType;
-            if (arr != null)
+            if (domain is ArrayType arr)
                 return arr.UniqueFlag ? enu + "ArrayUnique" : enu + "Array";
 
             if (domain is EntityDefinition || domain is SelectType)
@@ -474,12 +454,10 @@ namespace Xbim.CodeGeneration.Templates
             if (domain == null)
                 throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
 
-            var inv = attribute as InverseAttribute;
-            if (inv != null)
+            if (attribute is InverseAttribute inv)
                 return GetAttributeType(inv.Domain);
 
-            var aggr = domain as AggregationType;
-            return aggr == null ?
+            return !(domain is AggregationType aggr) ?
                 "EntityAttributeType.None" :
                 GetAttributeType(aggr.ElementType);
         }
@@ -490,25 +468,21 @@ namespace Xbim.CodeGeneration.Templates
             if (domain == null)
                 throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
 
-            var inverse = attribute as InverseAttribute;
-            if (inverse != null)
+            if (attribute is InverseAttribute inverse)
                 domain = inverse.AggregationType;
 
             //drill down to the last aggregation
-            var enumType = domain as AggregationType;
-            if (enumType == null) return -1;
+            if (!(domain is AggregationType enumType)) return -1;
             while (enumType.ElementType is AggregationType)
             {
                 domain = enumType.ElementType;
                 enumType = (AggregationType)domain;
             }
 
-            var aggr = domain as VariableSizeAggregationType;
-            if (aggr != null)
+            if (domain is VariableSizeAggregationType aggr)
                 return aggr.LowerBound;
 
-            var arr = domain as ArrayType;
-            if (arr != null)
+            if (domain is ArrayType arr)
                 return arr.LowerIndex;
 
             return -1;
@@ -520,25 +494,21 @@ namespace Xbim.CodeGeneration.Templates
             if (domain == null)
                 throw new NotSupportedException("Unexpected type or configuration of attribute " + attribute.Name);
 
-            var inverse = attribute as InverseAttribute;
-            if (inverse != null)
+            if (attribute is InverseAttribute inverse)
                 domain = inverse.AggregationType;
 
             //drill down to the last aggregation
-            var enumType = domain as AggregationType;
-            if (enumType == null) return -1;
+            if (!(domain is AggregationType enumType)) return -1;
             while (enumType.ElementType is AggregationType)
             {
                 domain = enumType.ElementType;
                 enumType = (AggregationType)domain;
             }
 
-            var aggr = domain as VariableSizeAggregationType;
-            if (aggr != null)
+            if (domain is VariableSizeAggregationType aggr)
                 return aggr.UpperBound ?? -1;
 
-            var arr = domain as ArrayType;
-            if (arr != null)
+            if (domain is ArrayType arr)
                 return arr.UpperIndex;
 
             return -1;
@@ -546,8 +516,7 @@ namespace Xbim.CodeGeneration.Templates
 
         protected int GetAttributeOrder(Attribute attribute)
         {
-            var expl = attribute as ExplicitOrDerived;
-            if (expl != null)
+            if (attribute is ExplicitOrDerived expl)
                 return GetAttributeIndex(expl) + 1;
             return -1;
         }
@@ -621,11 +590,9 @@ namespace Xbim.CodeGeneration.Templates
         {
             while (true)
             {
-                var expl = attribute as ExplicitAttribute;
-                if (expl != null)
+                if (attribute is ExplicitAttribute expl)
                     return AllExplicitAttributes.IndexOf(expl);
-                var derived = attribute as DerivedAttribute;
-                if (derived == null) return -1;
+                if (!(attribute is DerivedAttribute derived)) return -1;
                 attribute = derived.Redeclaring;
             }
         }
@@ -709,8 +676,7 @@ namespace Xbim.CodeGeneration.Templates
                 if (type is SimpleType)
                     return "System";
 
-                var namedType = type as NamedType;
-                if (namedType != null)
+                if (type is NamedType namedType)
                 {
                     var domain = structure.GetDomainForType(namedType.Name);
                     return domain != null ?
@@ -719,8 +685,7 @@ namespace Xbim.CodeGeneration.Templates
                         mainNamespace;
 
                 }
-                var aggr = type as AggregationType;
-                if (aggr != null)
+                if (type is AggregationType aggr)
                 {
                     type = aggr.ElementType;
                     continue;
@@ -736,11 +701,9 @@ namespace Xbim.CodeGeneration.Templates
         {
             if (aggregation.ElementType is SimpleType) return null;
 
-            var named = aggregation.ElementType as NamedType;
-            if (named != null) return named;
+            if (aggregation.ElementType is NamedType named) return named;
 
-            var aggr = aggregation.ElementType as AggregationType;
-            if (aggr != null)
+            if (aggregation.ElementType is AggregationType aggr)
                 return GetNamedElementType(aggr);
 
             throw new NotSupportedException();
@@ -778,8 +741,7 @@ namespace Xbim.CodeGeneration.Templates
 
         protected bool IsEntityOrSelectAggregation(ExplicitAttribute attribute)
         {
-            var aggr = attribute.Domain as AggregationType;
-            if (aggr == null) return false;
+            if (!(attribute.Domain is AggregationType aggr)) return false;
             return aggr.ElementType is EntityDefinition || aggr.ElementType is SelectType;
         }
 
@@ -788,8 +750,7 @@ namespace Xbim.CodeGeneration.Templates
             while (true)
             {
                 if (type is StringType) return true;
-                var defType = type as DefinedType;
-                if (defType == null) return false;
+                if (!(type is DefinedType defType)) return false;
 
                 type = defType.Domain as BaseType;
             }
@@ -800,8 +761,7 @@ namespace Xbim.CodeGeneration.Templates
             while (true)
             {
                 if (type is IntegerType) return true;
-                var defType = type as DefinedType;
-                if (defType == null) return false;
+                if (!(type is DefinedType defType)) return false;
 
                 type = defType.Domain as BaseType;
             }
@@ -812,8 +772,7 @@ namespace Xbim.CodeGeneration.Templates
             while (true)
             {
                 if (type is BooleanType || type is LogicalType) return true;
-                var defType = type as DefinedType;
-                if (defType == null) return false;
+                if (!(type is DefinedType defType)) return false;
 
                 type = defType.Domain as BaseType;
             }
@@ -824,8 +783,7 @@ namespace Xbim.CodeGeneration.Templates
             while (true)
             {
                 if (type is RealType) return true;
-                var defType = type as DefinedType;
-                if (defType == null) return false;
+                if (!(type is DefinedType defType)) return false;
 
                 type = defType.Domain as BaseType;
             }
@@ -836,8 +794,7 @@ namespace Xbim.CodeGeneration.Templates
             while (true)
             {
                 if (type is NumberType) return true;
-                var defType = type as DefinedType;
-                if (defType == null) return false;
+                if (!(type is DefinedType defType)) return false;
 
                 type = defType.Domain as BaseType;
             }
@@ -848,8 +805,7 @@ namespace Xbim.CodeGeneration.Templates
             while (true)
             {
                 if (type is BinaryType) return true;
-                var defType = type as DefinedType;
-                if (defType == null) return false;
+                if (!(type is DefinedType defType)) return false;
 
                 type = defType.Domain as BaseType;
             }
@@ -861,8 +817,7 @@ namespace Xbim.CodeGeneration.Templates
             {
                 if (domain is EntityDefinition) return "EntityVal";
 
-                var aggr = domain as AggregationType;
-                if (aggr != null)
+                if (domain is AggregationType aggr)
                 {
                     domain = aggr.ElementType;
                     continue;
@@ -896,8 +851,7 @@ namespace Xbim.CodeGeneration.Templates
 
         protected bool IsSimpleOrDefinedTypeAggregation(ExplicitAttribute attribute)
         {
-            var aggr = attribute.Domain as AggregationType;
-            if (aggr == null) return false;
+            if (!(attribute.Domain is AggregationType aggr)) return false;
 
             return aggr.ElementType is SimpleType || aggr.ElementType is DefinedType;
         }
@@ -911,8 +865,7 @@ namespace Xbim.CodeGeneration.Templates
 
         protected int GetLevelOfNesting(ExplicitAttribute attribute)
         {
-            var aggr = attribute.Domain as AggregationType;
-            if (aggr == null) throw new Exception("This is not a nested list attribute.");
+            if (!(attribute.Domain is AggregationType aggr)) throw new Exception("This is not a nested list attribute.");
             var level = -1;
             while (aggr != null)
             {
@@ -942,8 +895,7 @@ namespace Xbim.CodeGeneration.Templates
 
         protected bool IsReferenceTypeAggregation(ExplicitAttribute attribute)
         {
-            var agg = attribute.Domain as AggregationType;
-            if (agg == null) return false;
+            if (!(attribute.Domain is AggregationType agg)) return false;
             return
                 agg.ElementType is EntityDefinition ||
                 agg.ElementType is SelectType ||
@@ -953,8 +905,7 @@ namespace Xbim.CodeGeneration.Templates
 
         protected bool IsValueTypeAggregation(ExplicitAttribute attribute)
         {
-            var agg = attribute.Domain as AggregationType;
-            if (agg == null) return false;
+            if (!(attribute.Domain is AggregationType agg)) return false;
             return
                 agg.ElementType is SimpleType &&
                 !(agg.ElementType is StringType ||
