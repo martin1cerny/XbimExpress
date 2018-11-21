@@ -19,31 +19,21 @@ namespace XbimEssentialsGenerator
     {
         private static void Main()
         {
-            var watch = new Stopwatch();
-            watch.Start();
+            var watch = Stopwatch.StartNew();
 
             //set working directory
-            Environment.CurrentDirectory = @"c:\Users\Martin\Source\Repos\XbimEssentials";//  "c:\\CODE\\XbimGit\\XbimEssentials";
+            Environment.CurrentDirectory = @"c:\Users\Martin\Source\Repos\XbimEssentials";
 
             //prepare all schemas
             var ifc2X3 = SchemaModel.LoadIfc2x3();
             var ifc2X3Domains = DomainStructure.LoadIfc2X3();
             EnhanceNullStyleInIfc(ifc2X3, ifc2X3Domains);
-            //var max = SetTypeNumbers(ifc2X3);
-            SetTypeNumbers(ifc2X3);
 
             var ifc4 = SchemaModel.LoadIfc4Add2WithAlignmentExtension();
             var ifc4Domains = DomainStructure.LoadIfc4x1();
             EnhanceNullStyleInIfc(ifc4, ifc4Domains);
-            //SetTypeNumbers(ifc4, ifc2X3, max);
-            SetTypeNumbers(ifc4);
 
-            var cobie = SchemaModel.LoadCobie();
-            SetTypeNumbers(cobie);
-
-            //Change names to prevent name clashes
-            foreach (var entity in cobie.Get<EntityDefinition>())
-                entity.Name = "Cobie" + entity.Name;
+            
 
 
             //Move enums into Interfaces namespace in IFC4
@@ -70,10 +60,15 @@ namespace XbimEssentialsGenerator
             Console.WriteLine(@"IFC4 with interfaces generated");
 
 
-            settings.Structure = null;
-            settings.OutputPath = "Xbim.CobieExpress";
-            Generator.GenerateSchema(settings, cobie);
-            Console.WriteLine(@"COBieExpress generated");
+            //var cobie = SchemaModel.LoadCobie();
+            //
+            ////Change names to prevent name clashes
+            //foreach (var entity in cobie.Get<EntityDefinition>())
+            //    entity.Name = "Cobie" + entity.Name;
+            // settings.Structure = null;
+            // settings.OutputPath = "Xbim.CobieExpress";
+            // Generator.GenerateSchema(settings, cobie);
+            // Console.WriteLine(@"COBieExpress generated");
 
             watch.Stop();
             Console.WriteLine(@"Finished in {0}s.", watch.ElapsedMilliseconds/1000);
@@ -159,83 +154,8 @@ namespace XbimEssentialsGenerator
             domain.Types.Add("IfcNullStyleEnum");
         }
 
-        private static int SetTypeNumbers(SchemaModel model, SchemaModel dependency = null, int max = 0)
-        {
-            var types = model.Get<NamedType>().ToList();
-            const string extension = "_TYPE_IDS.csv";
+       
 
-
-            var ids = new Dictionary<string, int>();
-            var file = model.FirstSchema.Name + extension;
-            var depFile = dependency != null ? dependency.FirstSchema.Name + extension : null;
-
-            var source = depFile ?? file;
-            if (File.Exists(source))
-            {
-                var data = File.ReadAllText(source);
-                var kvps = data.Trim().Split('\n');
-                foreach (var vals in kvps.Select(kvp => kvp.Split(',')))
-                {
-                    ids.Add(vals[0], int.Parse(vals[1]));
-                }
-            }
-
-            //reset latest values
-            foreach (var type in types.ToList())
-            {
-                int id;
-                if (!ids.TryGetValue(type.PersistanceName, out id)) continue;
-                type.TypeId = id;
-                max = Math.Max(max, id);
-                types.Remove(type);
-            }
-
-            //set new values to the new types
-            foreach (var type in types)
-                type.TypeId = ++max;
-
-            using (var o = File.CreateText(file))
-            {
-                //save for the next processing
-                foreach (var type in model.Get<NamedType>())
-                {
-                    o.Write("{0},{1}\n", type.PersistanceName, type.TypeId);
-                }
-                o.Close();
-            }
-
-            return max;
-        }
-
-        private static int SetTypeNumbersForIfc2X3(SchemaModel model, int max = -1)
-        {
-            var types = model.Get<NamedType>().ToList();
-
-            var values = Enum.GetValues(typeof (IfcEntityNameEnum)).Cast<short>();
-            foreach (var value in values)
-            {
-                var s = Enum.GetName(typeof (IfcEntityNameEnum), value);
-                if (s == null) continue;
-                var name = s.ToUpperInvariant();
-                var type = types.FirstOrDefault(t => string.Compare(t.PersistanceName, name, StringComparison.InvariantCultureIgnoreCase) == 0);
-                if (type == null)
-                {
-                    Console.WriteLine(@"Type {0} not found in {1}", name, model.FirstSchema.Name);
-                    continue;
-                }
-
-                type.TypeId = value;
-                if (value > max) max = value;
-                types.Remove(type);
-            }
-
-            //change all other type IDs so that there are no duplicates
-            foreach (var type in types)
-            {
-                type.TypeId = ++max;
-            }
-
-            return max;
-        }
+     
     }
 }

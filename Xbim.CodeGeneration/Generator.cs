@@ -20,14 +20,11 @@ namespace Xbim.CodeGeneration
 
         public static bool GenerateCrossAccess(GeneratorSettings settings, SchemaModel schema, SchemaModel remoteSchema)
         {
-            var modelPrjPath = GetDirectory(settings.OutputPath);
-            var targetPrjPath = GetDirectory(settings.CrossAccessProjectPath);
-
             //set the right target namespace for usings
             settings.Namespace = settings.OutputPath;
             if (!settings.Namespace.StartsWith("Xbim."))
                 settings.Namespace = "Xbim." + settings.Namespace;
-            settings.CrossAccessNamespace = settings.Namespace + "." + settings.SchemaInterfacesNamespace;
+            settings.CrossAccessNamespace = settings.CrossAccessProjectPath + "." + settings.SchemaInterfacesNamespace;
 
             var entityMatches = EntityDefinitionMatch.GetMatches(schema, remoteSchema).ToList();
 
@@ -41,7 +38,7 @@ namespace Xbim.CodeGeneration
 
             var toProcess = templates.Concat(selectTemplates).Concat(infrastructureTemplates);
 
-            //toProcess.ToList().ForEach(t => ProcessTemplate(t, modelProject));
+            //toProcess.ToList().ForEach(t => ProcessTemplate(t, settings.Namespace));
             Parallel.ForEach(toProcess, t => ProcessTemplate(t, settings.Namespace));
 
             return true;
@@ -64,6 +61,9 @@ namespace Xbim.CodeGeneration
 
         public static bool GenerateSchema(GeneratorSettings settings, SchemaModel schema)
         {
+            // make sure IDs are stable over regenerations
+            SetTypeNumbers(schema, settings.OutputPath);
+
             //set schema IDs for this generation session
             settings.SchemasIds = schema.Schemas.Select(s => s.Identification);
 
@@ -73,54 +73,81 @@ namespace Xbim.CodeGeneration
                 settings.Namespace = "Xbim." + settings.Namespace;
             settings.InfrastructureNamespace = @"Xbim.Common";
 
-            var modelTemplates = new List<ICodeTemplate>();
-            modelTemplates.AddRange(
+            var templates = new List<ICodeTemplate>();
+            templates.AddRange(
                 schema.Get<DefinedType>().Select(type => new DefinedTypeTemplate(settings, type)));
-            modelTemplates.AddRange(schema.Get<SelectType>().Select(type => new SelectTypeTemplate(settings, type)));
-            modelTemplates.AddRange(schema.Get<EntityDefinition>().Select(type => new EntityInterfaceTemplate(settings, type)));
-            modelTemplates.AddRange(
+            templates.AddRange(schema.Get<SelectType>().Select(type => new SelectTypeTemplate(settings, type)));
+            templates.AddRange(schema.Get<EntityDefinition>().Select(type => new EntityInterfaceTemplate(settings, type)));
+            templates.AddRange(
                 schema.Get<EnumerationType>().Select(type => new EnumerationTemplate(settings, type)));
 
             // entity factory for this schema and any extensions
-            modelTemplates.AddRange(
+            templates.AddRange(
                 schema.Schemas.Select(s => new EntityFactoryTemplate(settings, s)));
             
             //inner model infrastructure
-            modelTemplates.Add(new ItemSetTemplate(settings));
-            modelTemplates.Add(new OptionalItemSetTemplate(settings));
+            templates.Add(new ItemSetTemplate(settings));
+            templates.Add(new OptionalItemSetTemplate(settings));
 
             //modelTemplates.ForEach(t => ProcessTemplate(t, settings.Namespace));
-            Parallel.ForEach(modelTemplates, tmpl => ProcessTemplate(tmpl, settings.Namespace));
+            Parallel.ForEach(templates, tmpl => ProcessTemplate(tmpl, settings.Namespace));
             
             return true;
         }
 
-        private static void ReferenceProject(ProjectRootElement referenced, ProjectRootElement referencing)
+        /// <summary>
+        /// Use this method before you generate the source code to keep type IDs consistent even when you
+        /// move the content in the EXPRESS file. When you rename an entity type in EXPRESS this will make
+        /// sure that new Entity will have new ID unless you modify the ID file manually.
+        /// </summary>
+        /// <param name="model">Schema model</param>
+        /// <param name="directory">Target directory</param>
+        /// <returns></returns>
+        private static int SetTypeNumbers(SchemaModel model, string directory)
         {
-            //get project references 
-            const string itemType = "ProjectReference";
-            var references = referencing.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == itemType)) ??
-                             referencing.AddItemGroup();
+            var max = 0;
+            var types = model.Get<NamedType>().ToList();
+            const string extension = "_TYPE_IDS.csv";
 
-            var referencedPath = new Uri(referenced.FullPath, UriKind.Absolute);
-            var referencingPathString = (Path.GetDirectoryName(referencing.FullPath) ?? "") +
-                                        Path.DirectorySeparatorChar;
-            var referencingPath = new Uri(referencingPathString, UriKind.Absolute);
 
-            var relPath = referencingPath.MakeRelativeUri(referencedPath).ToString();
+            var ids = new Dictionary<string, int>();
+            var file = model.FirstSchema.Name + extension;
 
-            //check if it is not there already
-            if (references.Children.Any(c =>
+            var source = Path.Combine(directory, file);
+            if (File.Exists(source))
             {
-                var itemElement = c as ProjectItemElement;
-                return itemElement != null && itemElement.Include == relPath;
-            })) return;
+                var data = File.ReadAllText(source);
+                var kvps = data.Trim().Split('\n');
+                foreach (var vals in kvps.Select(kvp => kvp.Split(',')))
+                {
+                    ids.Add(vals[0], int.Parse(vals[1]));
+                }
+            }
 
-            references.AddItem(itemType, relPath, new[]
+            //reset latest values
+            foreach (var type in types.ToList())
             {
-                new KeyValuePair<string, string>("Project", GetProjectId(referenced)),
-                new KeyValuePair<string, string>("Name", Path.GetFileNameWithoutExtension(referenced.FullPath))
-            });
+                if (!ids.TryGetValue(type.PersistanceName, out int id)) continue;
+                type.TypeId = id;
+                max = Math.Max(max, id);
+                types.Remove(type);
+            }
+
+            //set new values to the new types
+            foreach (var type in types)
+                type.TypeId = ++max;
+
+            using (var o = File.CreateText(source))
+            {
+                //save for the next processing
+                foreach (var type in model.Get<NamedType>())
+                {
+                    o.Write("{0},{1}\n", type.PersistanceName, type.TypeId);
+                }
+                o.Close();
+            }
+
+            return max;
         }
 
 
@@ -199,24 +226,6 @@ namespace Xbim.CodeGeneration
                 file.Write(code);
                 file.Close();
             }
-        }
-
-        private static string GetNamespace(ProjectRootElement project)
-        {
-            var element =
-                project.PropertyGroups.Select(
-                    g => g.Children.FirstOrDefault(e => ((ProjectPropertyElement) e).Name == "RootNamespace"))
-                    .FirstOrDefault(e => e != null) as ProjectPropertyElement;
-            return element != null ? element.Value : Path.GetFileNameWithoutExtension(project.FullPath);
-        }
-
-        private static string GetProjectId(ProjectRootElement project)
-        {
-            var element =
-                project.PropertyGroups.Select(
-                    g => g.Children.FirstOrDefault(e => ((ProjectPropertyElement) e).Name == "ProjectGuid"))
-                    .FirstOrDefault(e => e != null) as ProjectPropertyElement;
-            return element != null ? element.Value : "";
         }
     }
 }
