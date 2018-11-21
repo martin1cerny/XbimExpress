@@ -35,13 +35,6 @@ namespace Xbim.CodeGeneration.Settings
         }
 
 
-        internal bool IsInfrastructureSeparate {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(InfrastructureOutputPath) && InfrastructureOutputPath != OutputPath;
-            }
-        }
-
         /// <summary>
         /// List of derived attributes to be left out. Derived attributes are kind of a mess in IFC express 
         /// schema. They are sometimes assumed to exist on a higher level or on the level of select types which is
@@ -78,13 +71,6 @@ namespace Xbim.CodeGeneration.Settings
         /// serializers/deserializers using this interface alongside with the others.
         /// </summary>
         public string EntityFactoryInterface { get; set; }
-
-        /// <summary>
-        /// If you set this path to a different path from OutputPath interfaces will be 
-        /// created in a separate project. You can use this option if you want to
-        /// define common interfaces for multiple generated schemas.
-        /// </summary>
-        public string InfrastructureOutputPath { get; set; }
 
         /// <summary>
         /// Name of the class which will be used for all lists, sets and arrays in the generated code.

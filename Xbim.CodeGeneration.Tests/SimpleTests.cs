@@ -31,8 +31,7 @@ namespace Xbim.CodeGeneration.Tests
             var settings = new GeneratorSettings
             {
                 Structure = DomainStructure.LoadIfc2X3(),
-                OutputPath = "Xbim.Ifc2x3",
-                InfrastructureOutputPath = "Xbim.Commons"
+                OutputPath = "Xbim.Ifc2x3"
             };
             var schema = SchemaModel.LoadIfc2x3();
 
@@ -45,8 +44,7 @@ namespace Xbim.CodeGeneration.Tests
             var settings = new GeneratorSettings
             {
                 Structure = DomainStructure.LoadIfc4(),
-                OutputPath = "Xbim.Ifc4",
-                InfrastructureOutputPath = "Xbim.Commons"
+                OutputPath = "Xbim.Ifc4"
             };
             var schema = SchemaModel.LoadIfc4();
 
@@ -58,8 +56,7 @@ namespace Xbim.CodeGeneration.Tests
         {
             var settings = new GeneratorSettings
             {
-                OutputPath = "Xbim.CobieExpress",
-                InfrastructureOutputPath = "Xbim.Commons"
+                OutputPath = "Xbim.CobieExpress"
             };
             var schema = SchemaModel.Load(Schemas.COBieExpress, SchemaSources.COBIE);
             foreach (var entity in schema.Get<EntityDefinition>())
@@ -75,8 +72,7 @@ namespace Xbim.CodeGeneration.Tests
         {
             var settings = new GeneratorSettings
             {
-                OutputPath = "Xbim.CIS2",
-                InfrastructureOutputPath = "Xbim.Commons"
+                OutputPath = "Xbim.CIS2"
             };
             var schema = SchemaModel.LoadCis2();
 

@@ -646,22 +646,13 @@ namespace Xbim.CodeGeneration.Templates
                 {
                     //for INotifyPropertyChanged
                     result.Add("System.ComponentModel");
-                    if (Settings.IsInfrastructureSeparate)
-                        result.Add(Settings.InfrastructureNamespace + ".Metadata");
-                    else
-                        result.Add(Settings.Namespace + ".Metadata");
+                    result.Add(Settings.InfrastructureNamespace + ".Metadata");
 
                 }
 
-                if (Settings.IsInfrastructureSeparate)
-                {
-                    result.Add(Settings.InfrastructureNamespace);
-                    result.Add(Settings.InfrastructureNamespace + ".Exceptions");
-                }
-                else
-                {
-                    result.Add(Settings.Namespace + ".Exceptions");
-                }
+                result.Add(Settings.InfrastructureNamespace);
+                result.Add(Settings.InfrastructureNamespace + ".Exceptions");
+
 
                 result.Add(InterfaceNamespace);
                 result.Add(Namespace);

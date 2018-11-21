@@ -136,19 +136,19 @@ namespace <#= Namespace #>
 		/// <summary>
         /// Gets the Ifc Schema version of the model if this is IFC schema
         /// </summary>
-		public IfcSchemaVersion SchemaVersion { 
+		public XbimSchemaVersion SchemaVersion { 
 			get
 			{
 <# if (SchemasIds.Any(i => i == "IFC2X3")) { #>
-				return IfcSchemaVersion.Ifc2X3;
+				return XbimSchemaVersion.Ifc2X3;
 <# } else if (SchemasIds.Any(i => i == "IFC4")) { #>
-				return IfcSchemaVersion.Ifc4;
+				return XbimSchemaVersion.Ifc4;
 <# } else if (SchemasIds.Any(i => i == "IFC4X1")) { #>
-				return IfcSchemaVersion.Ifc4x1;
+				return XbimSchemaVersion.Ifc4x1;
 <# } else if (SchemasIds.Any(i => i == "COBIE_EXPRESS")) { #>
-				return IfcSchemaVersion.Cobie2X4;
+				return XbimSchemaVersion.Cobie2X4;
 <#	} else { #>
-				return IfcSchemaVersion.Unsupported;
+				return XbimSchemaVersion.Unsupported;
 <# } #>
 			}
 		}

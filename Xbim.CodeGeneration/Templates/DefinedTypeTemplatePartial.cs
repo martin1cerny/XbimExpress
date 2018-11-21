@@ -17,7 +17,7 @@ namespace Xbim.CodeGeneration.Templates
         private readonly NamedTypeHelper _helper;
 
         private readonly GeneratorSettings _settings;
-        
+
         public DefinedTypeTemplate(GeneratorSettings settings, DefinedType type)
         {
             _settings = settings;
@@ -97,7 +97,7 @@ namespace Xbim.CodeGeneration.Templates
                         parents.Add("IExpress" + SimpleType);
                         break;
                 }
-                
+
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i))
                     return "";
@@ -135,15 +135,9 @@ namespace Xbim.CodeGeneration.Templates
                     if (aggrNs != null)
                         result.Add(aggrNs);
                 }
-                if (_settings.IsInfrastructureSeparate)
-                {
-                    result.Add(_settings.InfrastructureNamespace);
-                    result.Add(_settings.InfrastructureNamespace + ".Exceptions");
-                }
-                else
-                {
-                    result.Add(_settings.Namespace + ".Exceptions");
-                }
+
+                result.Add(_settings.InfrastructureNamespace);
+                result.Add(_settings.InfrastructureNamespace + ".Exceptions");
 
                 foreach (var type in namedOccurances)
                 {
@@ -180,7 +174,7 @@ namespace Xbim.CodeGeneration.Templates
 
                 //special case when defined type contains enumeration
                 if (domain is EnumerationType) return SimpleTypeEnum.EnumerationType;
-                if(domain is AggregationType) return SimpleTypeEnum.ArrayType;
+                if (domain is AggregationType) return SimpleTypeEnum.ArrayType;
 
                 if (simple == null) throw new Exception("Unexpected type");
 

@@ -21,15 +21,13 @@ namespace Xbim.CodeGeneration
         public static bool GenerateCrossAccess(GeneratorSettings settings, SchemaModel schema, SchemaModel remoteSchema)
         {
             var modelPrjPath = GetDirectory(settings.OutputPath);
-            var modelProject = GetProject(modelPrjPath);
             var targetPrjPath = GetDirectory(settings.CrossAccessProjectPath);
-            var targetProject = GetProject(targetPrjPath);
 
-            //add reference if not added already
-            ReferenceProject(targetProject, modelProject);
             //set the right target namespace for usings
-            settings.Namespace = GetNamespace(modelProject);
-            settings.CrossAccessNamespace = GetNamespace(targetProject) + "." + settings.SchemaInterfacesNamespace;
+            settings.Namespace = settings.OutputPath;
+            if (!settings.Namespace.StartsWith("Xbim."))
+                settings.Namespace = "Xbim." + settings.Namespace;
+            settings.CrossAccessNamespace = settings.Namespace + "." + settings.SchemaInterfacesNamespace;
 
             var entityMatches = EntityDefinitionMatch.GetMatches(schema, remoteSchema).ToList();
 
@@ -44,9 +42,8 @@ namespace Xbim.CodeGeneration
             var toProcess = templates.Concat(selectTemplates).Concat(infrastructureTemplates);
 
             //toProcess.ToList().ForEach(t => ProcessTemplate(t, modelProject));
-            Parallel.ForEach(toProcess, t => ProcessTemplate(t, modelProject));
+            Parallel.ForEach(toProcess, t => ProcessTemplate(t, settings.Namespace));
 
-            modelProject.Save();
             return true;
         }
 
@@ -67,24 +64,14 @@ namespace Xbim.CodeGeneration
 
         public static bool GenerateSchema(GeneratorSettings settings, SchemaModel schema)
         {
-            //get output paths
-            var modelPrjPath = GetDirectory(settings.OutputPath);
-            var infraPrjPath = settings.IsInfrastructureSeparate
-                ? GetDirectory(settings.InfrastructureOutputPath)
-                : modelPrjPath;
-
             //set schema IDs for this generation session
             settings.SchemasIds = schema.Schemas.Select(s => s.Identification);
 
-            //get or create target CS projects
-            var modelProject = GetProject(modelPrjPath);
-            var infraProject = settings.IsInfrastructureSeparate ? GetProject(infraPrjPath) : modelProject;
-
             //set namespaces
-            settings.Namespace = GetNamespace(modelProject);
-            settings.InfrastructureNamespace = settings.IsInfrastructureSeparate
-                ? GetNamespace(infraProject)
-                : settings.Namespace;
+            settings.Namespace = settings.OutputPath;
+            if (!settings.Namespace.StartsWith("Xbim."))
+                settings.Namespace = "Xbim." + settings.Namespace;
+            settings.InfrastructureNamespace = @"Xbim.Common";
 
             var modelTemplates = new List<ICodeTemplate>();
             modelTemplates.AddRange(
@@ -102,19 +89,9 @@ namespace Xbim.CodeGeneration
             modelTemplates.Add(new ItemSetTemplate(settings));
             modelTemplates.Add(new OptionalItemSetTemplate(settings));
 
-            //modelTemplates.ForEach(t => ProcessTemplate(t, modelProject));
-            Parallel.ForEach(modelTemplates, tmpl => ProcessTemplate(tmpl, modelProject));
+            //modelTemplates.ForEach(t => ProcessTemplate(t, settings.Namespace));
+            Parallel.ForEach(modelTemplates, tmpl => ProcessTemplate(tmpl, settings.Namespace));
             
-            //make sure model project references infrastructural project
-            if (modelProject != infraProject)
-            {
-                ReferenceProject(infraProject, modelProject);
-            }
-
-            //save changes to the projects
-            modelProject.Save();
-            infraProject.Save();
-
             return true;
         }
 
@@ -146,15 +123,6 @@ namespace Xbim.CodeGeneration
             });
         }
 
-        public static ProjectRootElement GetProject(string directoryPath)
-        {
-            if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
-            var suggestedName = new DirectoryInfo(directoryPath).Name;
-
-            var projFile =
-                Directory.EnumerateFiles(directoryPath, "*.csproj", SearchOption.TopDirectoryOnly).FirstOrDefault();
-            return projFile != null ? OpenProject(projFile) : InitProject(suggestedName, directoryPath);
-        }
 
         private static string GetDirectory(string suggestedPath)
         {
@@ -195,15 +163,13 @@ namespace Xbim.CodeGeneration
             return result;
         }
 
-        private static void ProcessTemplate(ICodeTemplate template, ProjectRootElement project)
+        private static void ProcessTemplate(ICodeTemplate template, string rootNamespace)
         {
-            var rootNamespace = GetNamespace(project);
             var localNamespace = template.Namespace.Substring(rootNamespace.Length);
 
             var fileName = template.Name + ".cs";
             var localPath = Path.Combine(localNamespace.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries));
-            var projectPath = Path.GetDirectoryName(project.FullPath) ?? "";
-            var fullPath = Path.Combine(projectPath, localPath);
+            var fullPath = Path.Combine(rootNamespace, localPath);
 
             if (!Directory.Exists(fullPath) && !String.IsNullOrWhiteSpace(fullPath))
                 Directory.CreateDirectory(fullPath);
@@ -228,16 +194,11 @@ namespace Xbim.CodeGeneration
                 }
             }
 
-            
-
             using (var file = File.CreateText(filePath))
             {
                 file.Write(code);
                 file.Close();
             }
-
-            var projectFilePath = Path.Combine(localPath, fileName);
-            AddCompilationItem(projectFilePath, project);
         }
 
         private static string GetNamespace(ProjectRootElement project)
@@ -256,65 +217,6 @@ namespace Xbim.CodeGeneration
                     g => g.Children.FirstOrDefault(e => ((ProjectPropertyElement) e).Name == "ProjectGuid"))
                     .FirstOrDefault(e => e != null) as ProjectPropertyElement;
             return element != null ? element.Value : "";
-        }
-
-        private static ProjectRootElement InitProject(string name, string directory)
-        {
-            var tmpl = new CSProjectTemplate(name);
-            var data = tmpl.TransformText();
-            var fileName = Path.Combine(directory, name + ".csproj");
-
-            using (var w = File.CreateText(fileName))
-            {
-                w.Write(data);
-                w.Close();
-            }
-
-            return OpenProject(fileName);
-        }
-
-        private static ProjectRootElement OpenProject(string path)
-        {
-            var projElement = ProjectRootElement.Open(path);
-            if (projElement == null)
-                throw new Exception("Failed to open existing CS project: " + path);
-
-            return projElement;
-        }
-
-        public static void AddCompilationItem(string item, ProjectRootElement project)
-        {
-            const string itemType = "Compile";
-            var includes = project.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == itemType)) ??
-                           project.AddItemGroup();
-
-            //check if it is not there already
-            if (includes.Children.Any(c =>
-            {
-                var itemElement = c as ProjectItemElement;
-                return itemElement != null && itemElement.Include == item;
-            })) return;
-
-            lock (project)
-            {
-                includes.AddItem(itemType, item);
-            }
-        }
-
-        public static void RemoveCompilationItem(string item, ProjectRootElement project)
-        {
-            const string itemType = "Compile";
-            var includes = project.ItemGroups.FirstOrDefault(g => g.Items.All(i => i.ItemType == itemType)) ??
-                           project.AddItemGroup();
-
-            //check if it is not there already
-            var existing = includes.Children.FirstOrDefault(c =>
-            {
-                var itemElement = c as ProjectItemElement;
-                return itemElement != null && itemElement.Include == item;
-            });
-            if (existing == null) return;
-            includes.RemoveChild(existing);
         }
     }
 }

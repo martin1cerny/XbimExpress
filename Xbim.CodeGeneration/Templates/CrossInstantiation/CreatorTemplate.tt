@@ -14,7 +14,7 @@ namespace Xbim.Ifc4.Interfaces
 	public class Create: IDisposable
 	{
 		private readonly IModel _model;
-		private readonly IfcSchemaVersion _version;
+		private readonly XbimSchemaVersion _version;
 
 		public Create(IModel model)
 		{
@@ -24,9 +24,9 @@ namespace Xbim.Ifc4.Interfaces
             foreach (var schema in stepSchema.Schemas)
             {
                 if (string.Equals(schema, "Ifc4", StringComparison.OrdinalIgnoreCase))
-                    _version = IfcSchemaVersion.Ifc4;
+                    _version = XbimSchemaVersion.Ifc4;
                 else if (schema.StartsWith("Ifc2x", StringComparison.OrdinalIgnoreCase)) //return this as 2x3
-                    _version = IfcSchemaVersion.Ifc2X3;
+                    _version = XbimSchemaVersion.Ifc2X3;
                 else
                     throw new NotSupportedException("Only IFC2x3 and IFC4 schemas are supported.");
             }
@@ -35,7 +35,7 @@ namespace Xbim.Ifc4.Interfaces
 <#	foreach (var match in Matches.Where(m => m.MatchType != EntityMatchType.NotFound && m.Source.Instantiable && m.Target.Instantiable)) { #>
 		public I<#= match.Target.Name #> <#= match.Target.Name.ToString().Substring(3) #>(Action<I<#= match.Target.Name #>> init = null)
 		{
-			if (_version == IfcSchemaVersion.Ifc4)
+			if (_version == XbimSchemaVersion.Ifc4)
 				return _model.Instances.New<<#= GetFullName(match.Target) #>>(init);
 			return _model.Instances.New<<#= GetFullName(match.Source) #>>(init);
 		}

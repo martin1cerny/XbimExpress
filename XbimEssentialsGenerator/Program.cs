@@ -53,7 +53,6 @@ namespace XbimEssentialsGenerator
             {
                 Structure = ifc2X3Domains,
                 OutputPath = "Xbim.Ifc2x3",
-                InfrastructureOutputPath = "Xbim.Common",
                 IgnoreDerivedAttributes = GetIgnoreDerivedAttributes()
             };
             Generator.GenerateSchema(settings, ifc2X3);
@@ -115,7 +114,6 @@ namespace XbimEssentialsGenerator
                 iDomain = new Domain{Name = iName, Types = new List<string>()};
                 domains.Domains.Add(iDomain);
             }
-            var project = Generator.GetProject(Path.Combine(dir, prj));
             foreach (var enumeration in enums)
             {
                 var enumName = enumeration.PersistanceName;
@@ -129,10 +127,6 @@ namespace XbimEssentialsGenerator
                     var path = Path.Combine(dir, prj, domain.Name, enumName + ".cs");
                     if(File.Exists(path))
                         File.Delete(path);
-
-                    //remove from the project
-                    var compilPath = Path.Combine(domain.Name, enumName + ".cs");
-                    Generator.RemoveCompilationItem(compilPath, project);
                 }
                 //add to interfaces namespace
                 iDomain.Types.Add(enumName);

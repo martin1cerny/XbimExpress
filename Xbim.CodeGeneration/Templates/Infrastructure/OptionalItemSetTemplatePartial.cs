@@ -7,7 +7,7 @@ using Xbim.CodeGeneration.Settings;
 
 namespace Xbim.CodeGeneration.Templates.Infrastructure
 {
-    public partial class OptionalItemSetTemplate: ICodeTemplate
+    public partial class OptionalItemSetTemplate : ICodeTemplate
     {
         private readonly GeneratorSettings _settings;
 
@@ -36,8 +36,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             get
             {
                 var result = new List<string>();
-                if (_settings.IsInfrastructureSeparate)
-                    result.Add(_settings.InfrastructureNamespace);
+                result.Add(_settings.InfrastructureNamespace);
                 return result;
             }
         }

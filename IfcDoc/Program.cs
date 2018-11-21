@@ -32,8 +32,7 @@ namespace IfcDoc
 
             var settings = new GeneratorSettings
             {
-                OutputPath = "Xbim.IfcDoc",
-                InfrastructureOutputPath = "Xbim.Common",
+                OutputPath = "Xbim.IfcDoc"
             };
 
             Generator.GenerateSchema(settings, ifcDoc);

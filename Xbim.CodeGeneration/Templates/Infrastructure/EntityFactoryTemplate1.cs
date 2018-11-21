@@ -402,7 +402,7 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             #line hidden
             this.Write(" };\r\n\t\tpublic IEnumerable<string> SchemasIds { get { return _schemasIds; } }\r\n\r\n\t" +
                     "\t/// <summary>\r\n        /// Gets the Ifc Schema version of the model if this is " +
-                    "IFC schema\r\n        /// </summary>\r\n\t\tpublic IfcSchemaVersion SchemaVersion { \r\n" +
+                    "IFC schema\r\n        /// </summary>\r\n\t\tpublic XbimSchemaVersion SchemaVersion { \r\n" +
                     "\t\t\tget\r\n\t\t\t{\r\n");
             
             #line 142 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
@@ -410,35 +410,35 @@ namespace Xbim.CodeGeneration.Templates.Infrastructure
             
             #line default
             #line hidden
-            this.Write("\t\t\t\treturn IfcSchemaVersion.Ifc2X3;\r\n");
+            this.Write("\t\t\t\treturn XbimSchemaVersion.Ifc2X3;\r\n");
             
             #line 144 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
  } else if (SchemasIds.Any(i => i == "IFC4")) { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\treturn IfcSchemaVersion.Ifc4;\r\n");
+            this.Write("\t\t\t\treturn XbimSchemaVersion.Ifc4;\r\n");
             
             #line 146 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
  } else if (SchemasIds.Any(i => i == "IFC4X1")) { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\treturn IfcSchemaVersion.Ifc4x1;\r\n");
+            this.Write("\t\t\t\treturn XbimSchemaVersion.Ifc4x1;\r\n");
             
             #line 148 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
  } else if (SchemasIds.Any(i => i == "COBIE_EXPRESS")) { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\treturn IfcSchemaVersion.Cobie2X4;\r\n");
+            this.Write("\t\t\t\treturn XbimSchemaVersion.Cobie2X4;\r\n");
             
             #line 150 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
 	} else { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\treturn IfcSchemaVersion.Unsupported;\r\n");
+            this.Write("\t\t\t\treturn XbimSchemaVersion.Unsupported;\r\n");
             
             #line 152 "c:\Users\Martin\Source\Repos\XbimExpress\Xbim.CodeGeneration\Templates\Infrastructure\EntityFactoryTemplate.tt"
  } 
