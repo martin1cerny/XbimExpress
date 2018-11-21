@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.CodeGeneration;
 using Xbim.CodeGeneration.Settings;
 using Xbim.ExpressParser.SDAI;
@@ -14,22 +12,30 @@ namespace SimpleGenerator
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
+            if (args.Length > 0)
             {
-                Console.WriteLine("Not enough arguments.");
+
+                var wd = args[0];
+                if (!Directory.Exists(wd))
+                    Directory.CreateDirectory(wd);
+                Environment.CurrentDirectory = wd;
+            }
+
+            var schemas = Directory
+                .EnumerateFiles(Environment.CurrentDirectory, "*.exp", SearchOption.TopDirectoryOnly)
+                .ToList();
+            if (schemas.Count == 0)
+            {
+                Console.WriteLine($"There are no EXPRESS files in '{Environment.CurrentDirectory}'");
                 return;
             }
 
-            var wd = args[0];
-            if (!Directory.Exists(wd))
-                Directory.CreateDirectory(wd);
-            Environment.CurrentDirectory = wd;
-
-            var schemas = Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exp", SearchOption.TopDirectoryOnly);
-
+            var watch = Stopwatch.StartNew();
             foreach (var schemaFile in schemas)
             {
                 var ns = Path.GetFileNameWithoutExtension(schemaFile);
+                if (!ns.StartsWith("Xbim."))
+                    ns = "Xbim." + ns;
 
                 if (!File.Exists(schemaFile))
                 {
@@ -43,11 +49,17 @@ namespace SimpleGenerator
                 };
 
 
+
                 var schemaData = File.ReadAllText(schemaFile);
                 var schema = SchemaModel.Load(schemaData, ns);
 
                 Generator.GenerateSchema(settings, schema);
+                Console.WriteLine($"Schema {schema.FirstSchema.Name} generated.");
+
             }
+            watch.Stop();
+            Console.WriteLine(@"Finished in {0}s.", watch.ElapsedMilliseconds / 1000);
+            Console.Beep(440, 500);
         }
     }
 }

@@ -61,6 +61,9 @@ namespace Xbim.CodeGeneration
 
         public static bool GenerateSchema(GeneratorSettings settings, SchemaModel schema)
         {
+            if (!Directory.Exists(settings.OutputPath))
+                Directory.CreateDirectory(settings.OutputPath);
+
             // make sure IDs are stable over regenerations
             SetTypeNumbers(schema, settings.OutputPath);
 

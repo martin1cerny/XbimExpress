@@ -60,17 +60,6 @@ namespace XbimEssentialsGenerator
             Generator.GenerateSchema(settings, ifc4);
             Console.WriteLine(@"IFC4 with interfaces generated");
 
-            //var cobie = Load(File.ReadAllText("COBieExpress.exp", "COBIE")
-            //
-            ////Change names to prevent name clashes
-            //foreach (var entity in cobie.Get<EntityDefinition>())
-            //    entity.Name = "Cobie" + entity.Name;
-            // settings.Structure = null;
-            // settings.OutputPath = "Xbim.CobieExpress";
-            // Generator.GenerateSchema(settings, cobie);
-            // Console.WriteLine(@"COBieExpress generated");
-
-
             watch.Stop();
             Console.WriteLine(@"Finished in {0}s.", watch.ElapsedMilliseconds/1000);
             Console.Beep(440, 500);

@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IfcDoc", "IfcDoc\IfcDoc.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGenerator", "SimpleGenerator\SimpleGenerator.csproj", "{95B52832-AAFF-404F-9EC3-21C559FC43A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimCobieGenerator", "XbimCobieGenerator\XbimCobieGenerator.csproj", "{18DC1DD6-67F2-4531-BB00-0684ABB2732F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{95B52832-AAFF-404F-9EC3-21C559FC43A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95B52832-AAFF-404F-9EC3-21C559FC43A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95B52832-AAFF-404F-9EC3-21C559FC43A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18DC1DD6-67F2-4531-BB00-0684ABB2732F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18DC1DD6-67F2-4531-BB00-0684ABB2732F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18DC1DD6-67F2-4531-BB00-0684ABB2732F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DC1DD6-67F2-4531-BB00-0684ABB2732F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +112,7 @@ Global
 		{1B986904-1979-462A-8F19-5542E728109E} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 		{FD7C8E64-E9E2-4DB4-8DDE-695D74E9C057} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 		{95B52832-AAFF-404F-9EC3-21C559FC43A6} = {F7E394B0-3188-44C2-8317-6C14EF009307}
+		{18DC1DD6-67F2-4531-BB00-0684ABB2732F} = {F7E394B0-3188-44C2-8317-6C14EF009307}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {239640EE-3D06-4AD9-A2D4-94932253DF2C}
