@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Xbim.ExpressParser;
-using Xbim.ExpressParser.ExpressDefinitions;
 using Xbim.ExpressParser.SDAI;
 using XbimSchemaComparer.Comparators;
 using XbimSchemaComparer.Comparators.SchemaComparers;
@@ -20,12 +19,14 @@ namespace XbimSchemaComparer
     {
         static void Main(string[] args)
         {
-            var ifc2X3 = GetSchema(Schemas.IFC2X3_TC1, SchemaSources.IFC2x3_TC1);
-            var ifc4Add1 = GetSchema(Schemas.IFC4_ADD1, SchemaSources.IFC4_ADD1);
-            var ifc4Add2 = GetSchema(Schemas.IFC4_ADD2, SchemaSources.IFC4_ADD2);
-            var ifc4 = GetSchema(Schemas.IFC4, SchemaSources.IFC4);
-            var ifc4x1 = GetSchema(Schemas.IFC4x1_FINAL, SchemaSources.IFC4X1_FINAL);
-            var ifc4x1Extension = GetSchema(Schemas.IFC4_ADD2 + Schemas.IfcAlignmentExtension, SchemaSources.IFC4X1_FINAL);
+            Environment.CurrentDirectory = @"c:\Users\Martin\Source\Repos\XbimEssentials\Schemas";
+
+            var ifc2X3 = GetSchema(File.ReadAllText("IFC2X3_TC1.exp"), SchemaSources.IFC2x3_TC1);
+            var ifc4Add1 = GetSchema(File.ReadAllText("IFC4_ADD1.exp"), SchemaSources.IFC4_ADD1);
+            var ifc4Add2 = GetSchema(File.ReadAllText("IFC4_ADD2.exp"), SchemaSources.IFC4_ADD2);
+            var ifc4 = GetSchema(File.ReadAllText("IFC4.exp"), SchemaSources.IFC4);
+            var ifc4x1 = GetSchema(File.ReadAllText("IFC4x1_FINAL.exp"), SchemaSources.IFC4X1_FINAL);
+            var ifc4x1Extension = GetSchema(File.ReadAllText("IFC4_ADD2.exp") + File.ReadAllText("IfcAlignmentExtension.exp"), SchemaSources.IFC4X1_FINAL);
 
             //Compare( ifc2X3, ifc4Add1 );
             //Compare( ifc2X3, ifc4 );

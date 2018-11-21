@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 using Xbim.ExpressParser.SDAI;
 using XbimValidationGenerator.Schema;
 using WhereRule = XbimValidationGenerator.Schema.WhereRule;
@@ -19,7 +18,7 @@ namespace XbimTypeInstanceExtractor
     {
         private static void Main()
         {
-            var schema = SchemaModel.LoadIfc4Add1();
+            var schema = SchemaModel.Load(File.ReadAllText("IFC4_ADD2.exp"), "IFC4_ADD2");
             using (var w = File.CreateText("ElementTypesIFC4.csv"))
             {
                 WriteElementTypes(schema, w);
@@ -32,7 +31,7 @@ namespace XbimTypeInstanceExtractor
                 w.Close();
             }
 
-            schema = SchemaModel.LoadIfc2x3();
+            schema = SchemaModel.Load(File.ReadAllText("IFC2X3_TC1.exp"), "IFC2X3_TC1");
             using (var w = File.CreateText("ElementTypesIFC2x3.csv"))
             {
                 WriteElementTypes(schema, w);

@@ -60,11 +60,6 @@
     <Compile Include="Parser\ScannerHelper.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ExpressDefinitions\Schemas.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Schemas.resx</DependentUpon>
-    </Compile>
     <Compile Include="SchemaSources.cs" />
     <Compile Include="SDAI\AggregationType.cs" />
     <Compile Include="SDAI\ArrayType.cs" />
@@ -104,45 +99,17 @@
     <Compile Include="SDAI\WhereRule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ExpressDefinitions\COBieExpress.txt" />
-    <Content Include="ExpressDefinitions\IFC4x1_FINAL.txt" />
-    <Content Include="ExpressDefinitions\IFC4_ADD1.txt" />
-    <Content Include="ExpressDefinitions\IFC4_ADD2.txt" />
-    <Content Include="ExpressDefinitions\IfcAlignmentExtension.txt" />
-    <Content Include="ExpressDefinitions\ISO13584_generic_expressions_schema.txt" />
-    <Content Include="ExpressDefinitions\Step41_application_context_schema.txt" />
-    <Content Include="ExpressDefinitions\Step42_geometry_schema.txt" />
-    <Content Include="ExpressDefinitions\Step43_representation_schema.txt" />
-    <Content Include="ExpressDefinitions\Step44_product_structure_schema.txt" />
-    <Content Include="ExpressDefinitions\Step45_material_property_definition_schema.txt" />
-    <Content Include="ExpressDefinitions\Step46_presentation_organization_schema.txt" />
-    <Content Include="ExpressDefinitions\Step47_shape_aspect_definition_schema.txt" />
-    <Content Include="ExpressDefinitions\Step49_method_definition_schema.txt" />
-    <Content Include="ExpressDefinitions\Step50_mathematical_functions_schema.txt" />
-    <Content Include="ExpressDefinitions\Step55_procedural_model_schema.txt" />
-    <Content Include="ExpressDefinitions\Step56_state_observed_schema.txt" />
     <Content Include="IFC4_ADD2-IFC4x1.txt" />
     <None Include="Parser\makeparser.bat" />
     <None Include="Parser\Parser.y" />
     <None Include="Parser\Scanner.lex" />
-    <Content Include="ExpressDefinitions\CIS2_lpm6.txt" />
-    <Content Include="ExpressDefinitions\IFC4.txt" />
     <None Include="SDAI\SDAI.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ExpressDefinitions\IFC2X3_TC1.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Parser\gplex.exe" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Parser\gppg.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ExpressDefinitions\Schemas.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Schemas.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

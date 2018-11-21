@@ -67,6 +67,17 @@
       <Name>Xbim.IfcDomains</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Schemas\COBieExpress.exp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Schemas\IFC2X3_TC1.exp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Schemas\IFC4_ADD2.exp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

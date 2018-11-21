@@ -2,54 +2,70 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.CodeGeneration.Settings;
-using Xbim.ExpressParser.ExpressDefinitions;
 using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
 using Xbim.ExpressParser;
+using System.IO;
+using System.Diagnostics;
 
 namespace Xbim.CodeGeneration.Tests
 {
     [TestClass]
+    [DeploymentItem("Schemas")]
     public class SimpleTests
     {
+        [TestMethod]
+        public void ParseIfc2x3()
+        {
+            var parser = new ExpressParser.ExpressParser();
+            var result = parser.Parse(File.ReadAllText("IFC2X3_TC1.exp"), SchemaSources.IFC2x3_TC1);
+            Assert.IsTrue(result);
+
+
+            var wall = parser.SchemaInstance.Get<EntityDefinition>(d => d.Name == "IfcWall").FirstOrDefault();
+            Assert.IsNotNull(wall, "There should be a definition of IfcWall entity.");
+            var wallExplicitAttrs = wall.AllExplicitAttributes.ToList();
+            Assert.IsTrue(wallExplicitAttrs.Any(), "There should be some explicit attributes for a wall.");
+            Assert.AreEqual(8, wallExplicitAttrs.Count, "There should be 8 explicit attributes for a wall.");
+
+            var bTypes = parser.SchemaInstance.Get<DefinedType>(t => t.Domain is BooleanType).ToList();
+            var bAttributes = parser.SchemaInstance.Get<ExplicitAttribute>(t => t.Domain is BooleanType || bTypes.Contains(t.Domain));
+            foreach (var attribute in bAttributes)
+            {
+                var typeName = attribute.Domain is SimpleType
+                    ? attribute.Domain.GetType().Name
+                    : ((NamedType)attribute.Domain).Name.ToString();
+                Debug.WriteLine("{0} -> {1} ({2})", attribute.ParentEntity.Name, attribute.Name, typeName);
+            }
+        }
+
         [TestMethod]
         public void GenerateIfc2X3()
         {
             var settings = new GeneratorSettings
             {
                 Structure = DomainStructure.LoadIfc2X3(),
-                OutputPath = "Xbim2.Ifc2x3"
+                OutputPath = "Xbim.Ifc2x3"
             };
-            var schema = SchemaModel.LoadIfc2x3();
+            var schema = SchemaModel.Load(File.ReadAllText("IFC2X3_TC1.exp"), "IFC2X3_TC1");
+
 
             Generator.GenerateSchema(settings, schema);
         }
 
         [TestMethod]
-        public void GenerateIfc2X3WithCommons()
+        public void GenerateIfc4()
         {
             var settings = new GeneratorSettings
             {
                 Structure = DomainStructure.LoadIfc2X3(),
-                OutputPath = "Xbim.Ifc2x3"
-            };
-            var schema = SchemaModel.LoadIfc2x3();
-
-            Generator.GenerateSchema(settings, schema);
-        }
-
-        [TestMethod]
-        public void GenerateIfc4WithCommons()
-        {
-            var settings = new GeneratorSettings
-            {
-                Structure = DomainStructure.LoadIfc4(),
                 OutputPath = "Xbim.Ifc4"
             };
-            var schema = SchemaModel.LoadIfc4();
+            var schema = SchemaModel.Load(File.ReadAllText("IFC4_ADD2.exp"), "IFC4_ADD2");
 
             Generator.GenerateSchema(settings, schema);
         }
+
 
         [TestMethod]
         public void GenerateCobieExpress()
@@ -58,65 +74,13 @@ namespace Xbim.CodeGeneration.Tests
             {
                 OutputPath = "Xbim.CobieExpress"
             };
-            var schema = SchemaModel.Load(Schemas.COBieExpress, SchemaSources.COBIE);
+            var schema = SchemaModel.Load(File.ReadAllText("COBieExpress.exp"), "COBieExpress");
             foreach (var entity in schema.Get<EntityDefinition>())
             {
                 entity.Name = "Cobie" + entity.Name;
             }
 
             Generator.GenerateSchema(settings, schema);
-        }
-
-        [TestMethod]
-        public void GenerateCisAsInterfaces()
-        {
-            var settings = new GeneratorSettings
-            {
-                OutputPath = "Xbim.CIS2"
-            };
-            var schema = SchemaModel.LoadCis2();
-
-            //change names to be more like C#
-            ProcessNames(schema, "Cis");
-            Generator.GenerateSchema(settings, schema);
-        }
-
-        [TestMethod]
-        public void GenerateStepAsInterfaces()
-        {
-            var settings = new GeneratorSettings
-            {
-                OutputPath = "Xbim.Step42",
-            };
-            var schema = SchemaModel.LoadStepGeometry();
-
-            //change names to be more like C#
-            ProcessNames(schema, "Stp");
-            Generator.GenerateSchema(settings, schema);
-        }
-
-        private static void ProcessNames(SchemaModel model, string prefix)
-        {
-            //change names to be more like C#
-            foreach (var type in model.Get<NamedType>())
-            {
-                type.Name = prefix + MakeCamelCaseFromUnderscore(type.Name);
-
-                var entity = type as EntityDefinition;
-                if(entity == null) continue;
-
-                foreach (var attribute in entity.Attributes)
-                {
-                    attribute.Name = MakeCamelCaseFromUnderscore(attribute.Name);
-                }
-            }
-        }
-
-        private static string MakeCamelCaseFromUnderscore(string value)
-        {
-            var parts = value.Split('_');
-            var upper = parts.Select(p => p.First().ToString().ToUpper() + p.Substring(1).ToLower());
-            return String.Join("", upper);
         }
     }
 }

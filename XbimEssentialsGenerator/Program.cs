@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Xbim.CodeGeneration;
 using Xbim.CodeGeneration.Settings;
+using Xbim.ExpressParser;
 using Xbim.ExpressParser.SDAI;
 using Xbim.IfcDomains;
 
@@ -25,11 +26,11 @@ namespace XbimEssentialsGenerator
             Environment.CurrentDirectory = @"c:\Users\Martin\Source\Repos\XbimEssentials";
 
             //prepare all schemas
-            var ifc2X3 = SchemaModel.LoadIfc2x3();
+            var ifc2X3 = LoadIfc2x3();
             var ifc2X3Domains = DomainStructure.LoadIfc2X3();
             EnhanceNullStyleInIfc(ifc2X3, ifc2X3Domains);
 
-            var ifc4 = SchemaModel.LoadIfc4Add2WithAlignmentExtension();
+            var ifc4 = LoadIfc4Add2WithAlignmentExtension();
             var ifc4Domains = DomainStructure.LoadIfc4x1();
             EnhanceNullStyleInIfc(ifc4, ifc4Domains);
 
@@ -59,8 +60,7 @@ namespace XbimEssentialsGenerator
             Generator.GenerateSchema(settings, ifc4);
             Console.WriteLine(@"IFC4 with interfaces generated");
 
-
-            //var cobie = SchemaModel.LoadCobie();
+            //var cobie = Load(File.ReadAllText("COBieExpress.exp", "COBIE")
             //
             ////Change names to prevent name clashes
             //foreach (var entity in cobie.Get<EntityDefinition>())
@@ -70,11 +70,26 @@ namespace XbimEssentialsGenerator
             // Generator.GenerateSchema(settings, cobie);
             // Console.WriteLine(@"COBieExpress generated");
 
+
             watch.Stop();
             Console.WriteLine(@"Finished in {0}s.", watch.ElapsedMilliseconds/1000);
             Console.Beep(440, 500);
             Console.ReadKey();
 
+        }
+
+        public static SchemaModel LoadIfc4Add2WithAlignmentExtension()
+        {
+            var result = "";
+            result += File.ReadAllText(@"Schemas\IFC4_ADD2.exp");
+            result += File.ReadAllText(@"Schemas\IfcAlignmentExtension.exp");
+
+            return SchemaModel.Load(result, "IFC4_ADD2");
+        }
+
+        public static SchemaModel LoadIfc2x3()
+        {
+            return SchemaModel.Load(File.ReadAllText(@"Schemas\IFC2X3_TC1.exp"), SchemaSources.IFC2x3_TC1);
         }
 
         private static List<AttributeInfo> GetIgnoreDerivedAttributes()

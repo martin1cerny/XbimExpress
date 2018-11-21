@@ -83,68 +83,10 @@ namespace Xbim.ExpressParser.SDAI
             get { return Get<SchemaDefinition>(); }
         }
 
-        public static SchemaModel LoadIfc2x3()
-        {
-            return Load(ExpressDefinitions.Schemas.IFC2X3_TC1, SchemaSources.IFC2x3_TC1);
-        }
-
-        public static SchemaModel LoadIfc4()
-        {
-            return Load(ExpressDefinitions.Schemas.IFC4, SchemaSources.IFC4);
-        }
-
-        public static SchemaModel LoadIfc4x1()
-        {
-            return Load(ExpressDefinitions.Schemas.IFC4x1_FINAL, SchemaSources.IFC4X1_FINAL);
-        }
-
-        public static SchemaModel LoadIfc4Add2WithAlignmentExtension()
-        {
-            var result = "";
-            result += ExpressDefinitions.Schemas.IFC4_ADD2;
-            result += ExpressDefinitions.Schemas.IfcAlignmentExtension;
-
-            return Load(result, SchemaSources.IFC4_ADD2);
-        }
-
-        public static SchemaModel LoadIfc4Add1()
-        {
-            return Load(ExpressDefinitions.Schemas.IFC4_ADD1, SchemaSources.IFC4_ADD1);
-        }
-
-        public static SchemaModel LoadIfc4Add2()
-        {
-            return Load(ExpressDefinitions.Schemas.IFC4_ADD2, SchemaSources.IFC4_ADD2);
-        }
-
-        public static SchemaModel LoadCis2()
-        {
-            return Load(ExpressDefinitions.Schemas.CIS2_lpm61, SchemaSources.CIS2);
-        }
-
-        public static SchemaModel LoadCobie()
-        {
-            return Load(ExpressDefinitions.Schemas.COBieExpress, SchemaSources.COBIE);
-        }
-
-        public static SchemaModel LoadStepGeometry()
-        {
-            var result = "";
-            result += ExpressDefinitions.Schemas.Step42_geometry_schema;
-            result += ExpressDefinitions.Schemas.Step43_representation_schema;
-            result += ExpressDefinitions.Schemas.Step41_application_context_schema;
-            result += ExpressDefinitions.Schemas.Step49_method_definition_schema;
-            result += ExpressDefinitions.Schemas.Step45_material_property_definition_schema;
-            result += ExpressDefinitions.Schemas.Step44_product_structure_schema;
-            result += ExpressDefinitions.Schemas.Step50_mathematical_functions_schema;
-            result += ExpressDefinitions.Schemas.ISO13584_generic_expressions_schema;
-            return Load(result, SchemaSources.StepGeometry);
-        }
-
-        public static SchemaModel Load(string schema, string source)
+        public static SchemaModel Load(string schemaData, string sourceIdentifier)
         {
             var parser = new ExpressParser();
-            var result = parser.Parse(schema, source);
+            var result = parser.Parse(schemaData, sourceIdentifier);
             if (!result)
                 throw new Exception("Unexpected parser error: " + parser.Errors.LastOrDefault());
             return parser.SchemaInstance;
