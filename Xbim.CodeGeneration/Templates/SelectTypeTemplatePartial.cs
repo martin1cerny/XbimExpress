@@ -12,11 +12,11 @@ namespace Xbim.CodeGeneration.Templates
 
         private readonly NamedTypeHelper _helper;
 
-        private readonly GeneratorSettings _settings;
+        private readonly GeneratorSettings Settings;
         
         public SelectTypeTemplate(GeneratorSettings settings, SelectType type)
         {
-            _settings = settings;
+            Settings = settings;
             _helper = new NamedTypeHelper(type, settings);
             Type = type;
         }
@@ -31,7 +31,7 @@ namespace Xbim.CodeGeneration.Templates
 
         public string InterfaceNamespace
         {
-            get { return _settings.Namespace + "." + _settings.SchemaInterfacesNamespace; }
+            get { return Settings.Namespace + "." + Settings.SchemaInterfacesNamespace; }
         }
 
         public string Name { get { return Type.Name; } }
@@ -41,7 +41,21 @@ namespace Xbim.CodeGeneration.Templates
             get
             {
                 var parents = Type.IsInSelects.Select(s => s.Name).ToList();
-                parents.Add("I" + Name);
+                if (Settings.GenerateInterfaces)
+                    parents.Add("I" + Name);
+                else
+                {
+                    if (parents.Count == 0) parents.Add("IExpressSelectType");
+
+                    //mark it as an entity if all subtypes are entities
+                    if (GetFinalTypes(Type).All(s => s is EntityDefinition))
+                        parents.Add(Settings.PersistEntityInterface);
+
+
+                    //mark it as an espress value type if all subtypes are defined types
+                    if (GetFinalTypes(Type).All(s => s is DefinedType))
+                        parents.Add("IExpressValueType");
+                }
                 var i = string.Join(", ", parents);
                 if (string.IsNullOrWhiteSpace(i)) return "";
                 return ": " + i;
@@ -57,7 +71,7 @@ namespace Xbim.CodeGeneration.Templates
 
                 //mark it as an entity if all subtypes are entities
                 if (GetFinalTypes(Type).All(s => s is EntityDefinition))
-                    parents.Add(_settings.PersistEntityInterface);
+                    parents.Add(Settings.PersistEntityInterface);
 
 
                 //mark it as an espress value type if all subtypes are defined types
@@ -99,14 +113,14 @@ namespace Xbim.CodeGeneration.Templates
 
                 foreach (var type in namedOccurances)
                 {
-                    var helper = new NamedTypeHelper(type, _settings);
+                    var helper = new NamedTypeHelper(type, Settings);
                     var ns = helper.FullNamespace;
                     if (ns == Namespace) continue;
                     if (result.Contains(ns)) continue;
                     result.Add(ns);
                 }
 
-                result.Add(_settings.InfrastructureNamespace);
+                result.Add(Settings.InfrastructureNamespace);
                 result.Add(InterfaceNamespace);
 
                 return result;

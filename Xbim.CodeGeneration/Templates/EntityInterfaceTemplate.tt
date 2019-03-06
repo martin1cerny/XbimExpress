@@ -12,6 +12,7 @@ using <#= u #>;
 //## Custom using statements
 //##
 
+<# if (Settings.GenerateInterfaces) { #>
 namespace <#= InterfaceNamespace #>
 {
 	/// <summary>
@@ -36,6 +37,7 @@ namespace <#= InterfaceNamespace #>
 <#		} #>	
 	}
 }
+<# }#>
 
 namespace <#= Namespace #>
 {
@@ -43,6 +45,7 @@ namespace <#= Namespace #>
 	// ReSharper disable once PartialTypeWithSinglePart
 	public <#= AbstractKeyword #> partial class @<#= Name #> <#= Inheritance #>, IEquatable<@<#= Name #>>
 	{
+<# if (Settings.GenerateInterfaces) { #>
 		#region I<#= Name #> explicit implementation
 <# foreach(var attribute in ExplicitAttributes){ #>
 		<#= GetInterfaceCSType(attribute) #> I<#= Name #>.<#= attribute.Name #> { 
@@ -75,6 +78,7 @@ namespace <#= Namespace #>
 <#		}
 	} #>
 		#endregion
+<# }#>
 
 		//internal constructor makes sure that objects are not created outside of the model/ assembly controlled area
 		internal <#= Name #>(<#= ModelInterface #> model, int label, bool activated) : base(model, label, activated)  

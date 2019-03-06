@@ -35,6 +35,8 @@ namespace Xbim.CodeGeneration.Settings
         }
 
 
+        public bool GenerateInterfaces { get; set; } = false;
+
         /// <summary>
         /// List of derived attributes to be left out. Derived attributes are kind of a mess in IFC express 
         /// schema. They are sometimes assumed to exist on a higher level or on the level of select types which is

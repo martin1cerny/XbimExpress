@@ -23,6 +23,7 @@ namespace <#= Namespace #>
 	}
 }
 
+<# if (this.Settings.GenerateInterfaces) { #>
 namespace <#= InterfaceNamespace #>
 {
 	public partial interface I<#= Name #> <#= InterfaceInheritance #>
@@ -33,3 +34,4 @@ namespace <#= InterfaceNamespace #>
 		#endregion
 	}
 }
+<# }#>

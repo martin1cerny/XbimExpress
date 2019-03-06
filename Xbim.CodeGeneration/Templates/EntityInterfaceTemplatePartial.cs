@@ -213,15 +213,18 @@ namespace Xbim.CodeGeneration.Templates
                 else
                     parents.AddRange(Type.Supertypes.Select(t => t.Name.ToString()));
 
-                //add any interfaces
-                parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
 
                 //sign types to be instantiable in entity factory
                 if (Type.Instantiable)
                     parents.Add(Settings.InstantiableEntityInterface);
 
                 //add own interface
-                parents.Add("I" + Name);
+                if (Settings.GenerateInterfaces)
+                    parents.Add("I" + Name);
+                else
+                    //add any select interfaces
+                    parents.AddRange(Type.IsInSelects.Select(s => s.Name.ToString()));
+
 
                 if (Type.Instantiable && AllExplicitAttributes.Any(IsDirectEntityRefOrAggr))
                 {
@@ -230,13 +233,6 @@ namespace Xbim.CodeGeneration.Templates
                     var indexedAttributes = AllExplicitAttributes.Where(IsPartOfInverse).ToList();
                     if (indexedAttributes.Any())
                         parents.Add("IContainsIndexedReferences");
-                }
-
-                //remove selects
-                var selects = Type.IsInSelects.Select(s => s.Name.ToString());
-                foreach (var @select in selects)
-                {
-                    parents.Remove(@select);
                 }
 
                 //merge to a single string
