@@ -78,7 +78,7 @@ namespace <#= OwnNamespace #>
 					var dt = st as DefinedType;
 					var targetDt = GetMappedDefinedType(dt);#>
 				if (<#= match.SourceAttribute.Name #> is <#= GetCSTypeFull(dt) #>) 
-<#					if (targetDt != null && IsInSelect(targetDt, match.TargetAttribute.Domain as SelectType)) { #>
+<#					if (targetDt != null && IsInSelect(targetDt, match.TargetAttribute.Domain as SelectType) && !(targetDt.Domain is AggregationType tdtat && tdtat.ElementType is EntityDefinition)) { #>
 					return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetCSTypeFull(dt) #>)<#= match.SourceAttribute.Name #>);
 <#					} else { #>
 					//## Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
@@ -130,6 +130,16 @@ namespace <#= OwnNamespace #>
 						throw new System.ArgumentOutOfRangeException();
 				}
 <#			}
+        } else if(attribute.Domain is AggregationType at && at.ElementType is AggregationType nestedArrgType) {
+			var targetType = nestedArrgType .ElementType as NamedType;
+			var sourceType = ((match.SourceAttribute.Domain as AggregationType).ElementType as AggregationType).ElementType as NamedType;
+			if (targetType is DefinedType) { #>
+				return new Common.Collections.ProxyNestedValueSet<<#= GetCSTypeFull(sourceType) #>, <#= GetInterfaceCSTypeFull(targetType) #>>(<#= match.SourceAttribute.Name #>, 
+					s => new <#= GetInterfaceCSTypeFull(targetType) #>(s), 
+					t => new <#= GetCSTypeFull(sourceType) #>(t));
+<#			} else { #>
+				return new Common.Collections.ProxyNestedItemSet<<#= GetCSTypeFull(sourceType) #>, <#= GetInterfaceCSTypeFull(targetType) #>>(<#= match.SourceAttribute.Name #>);
+<# 			}
         } else if(attribute.Domain is AggregationType) {#>
 <#			var targetType =  (attribute.Domain as AggregationType).ElementType as NamedType; 
 			var sourceType = (match.SourceAttribute.Domain as AggregationType).ElementType as NamedType; #>
@@ -256,7 +266,7 @@ namespace <#= OwnNamespace #>
 					return;
 <#						}#>
 <#					} else { #>
-<#					if (sourceDt != null && IsInSelect(sourceDt, match.SourceAttribute.Domain as SelectType)) { #>
+<#					if (sourceDt != null && IsInSelect(sourceDt, match.SourceAttribute.Domain as SelectType)  && !(dt.Domain is AggregationType tdtat && tdtat.ElementType is EntityDefinition)) { #>
 					<#= match.SourceAttribute.Name #> = new <#= GetCSTypeFull(sourceDt) #>((<#= GetInterfaceCSTypeFull(dt) #>)value);
 					return;
 <#					} else { #>
@@ -315,7 +325,7 @@ namespace <#= OwnNamespace #>
 			}
 <#		} #>
 		}
-<#	if (attribute.Domain is AggregationType && match != null && match.IsTypeCompatible && !IsAggregationEntityCompatible(match.SourceAttribute, attribute)) { #>
+<#	if (attribute.Domain is AggregationType && match != null && match.IsTypeCompatible && !IsAggregationEntityCompatible(match.SourceAttribute, attribute) && !IsNestedListCompatible(match.SourceAttribute, attribute)) { #>
 <#			var targetType =  (attribute.Domain as AggregationType).ElementType; 
 			var sourceType = (match.SourceAttribute.Domain as AggregationType).ElementType; #>
 <#  if (!(targetType is DefinedType) || !(sourceType is DefinedType)) { #>
@@ -360,7 +370,7 @@ namespace <#= OwnNamespace #>
 <#					} else if (st is DefinedType) { 
 						var dt = st as DefinedType;
 						var targetDt = GetMappedDefinedType(dt);#>
-<#						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType) && !(targetDt.Domain is EnumerationType)) { #>
+<#						if (targetDt != null && IsInSelect(targetDt, targetType as SelectType) && !(targetDt.Domain is EnumerationType) && !(targetDt.Domain is AggregationType)) { #>
 					return new <#= GetInterfaceCSTypeFull(targetDt) #>((<#= GetCSTypeFull(dt) #>)member);
 <#						} else { #>
 					//## Handle defined type <#= st.Name #> which is not a part of the target select interface <#= GetInterfaceCSTypeFull(attribute) #> in property <#= attribute.Name #>
@@ -419,7 +429,7 @@ namespace <#= OwnNamespace #>
 <#					} else if (st is DefinedType) { 
 						var dt = st as DefinedType;
 						var targetDt = GetMappedDefinedType(dt);#>
-<#						if (targetDt != null && IsInSelect(targetDt, sourceType as SelectType) && !(targetDt.Domain is EnumerationType)) { #>
+<#						if (targetDt != null && IsInSelect(targetDt, sourceType as SelectType) && !(targetDt.Domain is EnumerationType) && !(targetDt.Domain is AggregationType)) { #>
 					return new <#= GetCSTypeFull(targetDt) #>((<#= GetInterfaceCSTypeFull(dt) #>)member);
 <#						} else { #>
 					//## Handle return defined type <#= st.Name #> which is not a part of the target select interface <#= GetCSTypeFull(sourceType as NamedType) #> in property <#= attribute.Name #>

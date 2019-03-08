@@ -53,7 +53,7 @@ namespace Xbim.CodeGeneration.Settings
         internal string CrossAccessNamespace { get; set; }
 
         /// <summary>
-        /// If GenerateAllAsInterfaces is true this namespace will contain all entity interfaces
+        /// If GenerateInterfaces is true this namespace will contain all entity interfaces and enumerations
         /// </summary>
         public string SchemaInterfacesNamespace { get; set; }
 

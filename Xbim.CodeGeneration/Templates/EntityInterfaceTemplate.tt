@@ -33,7 +33,7 @@ namespace <#= InterfaceNamespace #>
 <#		} #>
 <#	} #>
 <#	foreach(var attribute in DerivedAttributes.Where(a => !IsOverwritting(a) && !IsIgnored(a))){ #>
-		<#= GetCSType(attribute) #> @<#= attribute.Name #>  { get ; }
+		<#= GetInterfaceCSType(attribute) #> @<#= attribute.Name #>  { get ; }
 <#		} #>	
 	}
 }
@@ -68,8 +68,18 @@ namespace <#= Namespace #>
 <#		} #>
 <# } #>
 		}	
-<# } #>		 
-<#	foreach(var attribute in InverseAttributes){  
+<# } #>
+<#	foreach(var attribute in DerivedAttributes.Where(a => !IsOverwritting(a) && !IsIgnored(a))){ 
+		var derIntType = GetInterfaceCSType(attribute);
+		if (derIntType.StartsWith("List<"))
+        { #>
+		<#= derIntType #> I<#= Name #>.@<#= attribute.Name #>  { get { return new <#= derIntType #>(@<#= attribute.Name #>); } }
+<#		}
+		else { #>
+		<#= derIntType #> I<#= Name #>.@<#= attribute.Name #>  { get { return @<#= attribute.Name #>; } }
+<#		}
+    } 
+  	foreach(var attribute in InverseAttributes){  
 		var inverseType = "I" + attribute.Domain.Name; #>
 <#		if (IsEnumeration(attribute)) { #>
 		IEnumerable<<#=inverseType #>> I<#= Name #>.<#= attribute.Name #> {  get { return @<#= attribute.Name #>; } }

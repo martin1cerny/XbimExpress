@@ -29,10 +29,7 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
-        public string InterfaceNamespace
-        {
-            get { return Settings.Namespace + "." + Settings.SchemaInterfacesNamespace; }
-        }
+        public string InterfaceNamespace => Settings.SchemaInterfacesNamespace;
 
         public string Name { get { return Type.Name; } }
 
@@ -121,7 +118,8 @@ namespace Xbim.CodeGeneration.Templates
                 }
 
                 result.Add(Settings.InfrastructureNamespace);
-                result.Add(InterfaceNamespace);
+                if (Settings.GenerateInterfaces)
+                    result.Add(InterfaceNamespace);
 
                 return result;
             }

@@ -181,7 +181,7 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             var sType = source.Domain;
             var tType = target.Domain;
 
-            if (sType is AggregationType)
+            while (sType is AggregationType)
             {
                 sType = ((AggregationType) sType).ElementType;
                 tType = ((AggregationType) tType).ElementType;
@@ -200,6 +200,46 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             {
                 return IsSelectCompatible(sSelect, tSelect, _matches);
             }
+
+            return false;
+        }
+
+        protected bool IsNestedListCompatible(ExplicitAttribute source, ExplicitAttribute target)
+        {
+            var sType = source.Domain;
+            var tType = target.Domain;
+            var isAggregation = false;
+            var levels = 0;
+
+            while (sType is AggregationType)
+            {
+                isAggregation = true;
+                levels++;
+                sType = ((AggregationType)sType).ElementType;
+                tType = ((AggregationType)tType).ElementType;
+            }
+
+            if (!isAggregation || levels < 2)
+                return false;
+
+            var sEntity = sType as EntityDefinition;
+            var tEntity = tType as EntityDefinition;
+            if (sEntity != null && tEntity != null)
+            {
+                return _matches.Any(m => m.Source == sEntity && m.Target == tEntity);
+            }
+
+            var sSelect = sType as SelectType;
+            var tSelect = tType as SelectType;
+            if (sSelect != null)
+            {
+                return IsSelectCompatible(sSelect, tSelect, _matches);
+            }
+
+            var sDefined = sType as DefinedType;
+            var tDefined = tType as DefinedType;
+            if (sDefined != null)
+                return sDefined.Name == tDefined.Name;
             return false;
         }
 
@@ -436,6 +476,8 @@ namespace Xbim.CodeGeneration.Templates.CrossAccess
             var baseNamespace = Settings.CrossAccessNamespace.Replace("." + Settings.SchemaInterfacesNamespace, "");
             var fullName = TypeHelper.GetCSType(attribute.Domain, Settings,true, true, GetFullNamespace(attribute.Domain, baseNamespace, Settings.CrossAccessStructure));
             fullName = TweekDerivedType(attribute, fullName);
+            //fullName = fullName.Replace("List<", "IEnumerable<");
+
             return TrimNamespace(fullName);
         }
 

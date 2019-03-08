@@ -33,9 +33,21 @@ namespace Xbim.CodeGeneration.Templates
             }
         }
 
+        private string _uType;
         private string UnderlyingType
         {
-            get { return TypeHelper.GetCSType(Type.Domain, _settings); }
+            get {
+                if (_uType != null)
+                    return _uType;
+
+                var type = TypeHelper.GetCSType(Type.Domain, _settings);
+
+                if (_settings.GenerateInterfaces && Type.Domain is AggregationType at && at.ElementType is EntityDefinition)
+                    type = type.Replace("List<", "List<I");
+
+                _uType = type;
+                return _uType;
+            }
         }
 
         private string UnderlyingArrayType
@@ -44,7 +56,12 @@ namespace Xbim.CodeGeneration.Templates
             {
                 var aggrType = Type.Domain as AggregationType;
                 if (aggrType == null) throw new Exception("Underlying type is not an array type. This is not a complex type.");
-                return TypeHelper.GetCSType(aggrType.ElementType, _settings);
+                var type = TypeHelper.GetCSType(aggrType.ElementType, _settings);
+
+                if (_settings.GenerateInterfaces && aggrType.ElementType is EntityDefinition)
+                    type = "I" + type;
+
+                return type;
             }
         }
 
@@ -135,6 +152,9 @@ namespace Xbim.CodeGeneration.Templates
                     if (aggrNs != null)
                         result.Add(aggrNs);
                 }
+
+                if (_settings.GenerateInterfaces && Type.Domain is AggregationType at && at.ElementType is EntityDefinition)
+                    result.Add(_settings.SchemaInterfacesNamespace);
 
                 result.Add(_settings.InfrastructureNamespace);
                 result.Add(_settings.InfrastructureNamespace + ".Exceptions");

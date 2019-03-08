@@ -26,13 +26,15 @@ namespace XbimSchemaComparer
             var ifc4Add2 = GetSchema(File.ReadAllText("IFC4_ADD2.exp"), SchemaSources.IFC4_ADD2);
             var ifc4 = GetSchema(File.ReadAllText("IFC4.exp"), SchemaSources.IFC4);
             var ifc4x1 = GetSchema(File.ReadAllText("IFC4x1_FINAL.exp"), SchemaSources.IFC4X1_FINAL);
-            var ifc4x1Extension = GetSchema(File.ReadAllText("IFC4_ADD2.exp") + File.ReadAllText("IfcAlignmentExtension.exp"), SchemaSources.IFC4X1_FINAL);
+            var ifc4x1Extension = GetSchema(File.ReadAllText("IFC4_ADD2.exp") + File.ReadAllText("IfcAlignmentExtension.exp"), SchemaSources.IFC4X1_FINAL + "_Extension");
+            var ifcRail = GetSchema(File.ReadAllText(@"c:\Users\Martin\Source\IfcRail\IFC_Rail_pilot_EXPRESS_V0.5.exp"), "IFCRail");
 
             //Compare( ifc2X3, ifc4Add1 );
             //Compare( ifc2X3, ifc4 );
             //Compare( ifc4Add1, ifc4Add2 );
             //Compare( ifc4, ifc4Add1);
-            Compare( ifc4x1, ifc4x1Extension);
+            Compare( ifc4x1Extension, ifcRail);
+            Compare( ifc4x1, ifcRail);
 
             Console.ReadLine();
         }

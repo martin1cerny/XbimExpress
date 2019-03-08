@@ -31,13 +31,22 @@ namespace Xbim.CodeGeneration.Templates
             {
                 if (attribute is ExplicitAttribute expl)
                     return TypeHelper.GetInterfaceCSType(expl, Settings);
-                if (!(attribute is DerivedAttribute der)) return "";
-
-                attribute = der.Redeclaring;
+                if (attribute is DerivedAttribute der)
+                {
+                    if (der.Redeclaring == null)
+                    {
+                        var result = TypeHelper.GetCSType(der.Domain, Settings, true, true);
+                        result = TweekDerivedType(der, result);
+                        //result = result.Replace("List<", "IEnumerable<");
+                        return result;
+                    }
+                    attribute = der.Redeclaring;
+                }
+                return "";
             }
         }
 
-        public string InterfaceNamespace => Settings.Namespace + "." + Settings.SchemaInterfacesNamespace;
+        public string InterfaceNamespace => Settings.SchemaInterfacesNamespace;
 
         protected bool IsEntityDefinitionSelect(BaseType type)
         {
@@ -649,8 +658,8 @@ namespace Xbim.CodeGeneration.Templates
                 result.Add(Settings.InfrastructureNamespace);
                 result.Add(Settings.InfrastructureNamespace + ".Exceptions");
 
-
-                result.Add(InterfaceNamespace);
+                if (Settings.GenerateInterfaces)
+                    result.Add(InterfaceNamespace);
                 result.Add(Namespace);
 
                 return result.Distinct();

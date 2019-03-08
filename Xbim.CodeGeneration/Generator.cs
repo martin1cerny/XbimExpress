@@ -35,9 +35,9 @@ namespace Xbim.CodeGeneration
                     .Select(s => new SelectInterfaceImplementation(settings, s.Item1, s.Item2));
             var infrastructureTemplates = new ICodeTemplate[] { new CreatorTemplate(settings, entityMatches) };
 
-            var toProcess = templates.Concat(selectTemplates).Concat(infrastructureTemplates);
+            var toProcess = templates.Concat(selectTemplates).Concat(infrastructureTemplates).ToList();
 
-            //toProcess.ToList().ForEach(t => ProcessTemplate(t, settings.Namespace));
+            //toProcess.ForEach(t => ProcessTemplate(t, settings.Namespace));
             Parallel.ForEach(toProcess, t => ProcessTemplate(t, settings.Namespace));
 
             return true;
@@ -91,7 +91,7 @@ namespace Xbim.CodeGeneration
             templates.Add(new ItemSetTemplate(settings));
             templates.Add(new OptionalItemSetTemplate(settings));
 
-            //modelTemplates.ForEach(t => ProcessTemplate(t, settings.Namespace));
+            //templates.ForEach(t => ProcessTemplate(t, settings.Namespace));
             Parallel.ForEach(templates, tmpl => ProcessTemplate(tmpl, settings.Namespace));
             
             return true;
