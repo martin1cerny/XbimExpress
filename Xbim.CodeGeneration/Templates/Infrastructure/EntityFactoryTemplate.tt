@@ -145,6 +145,10 @@ namespace <#= Namespace #>
 				return XbimSchemaVersion.Ifc4;
 <# } else if (SchemasIds.Any(i => i == "IFC4X1")) { #>
 				return XbimSchemaVersion.Ifc4x1;
+<# } else if (SchemasIds.Any(i => i == "IFC_Rail_Pilot")) { #>
+				return XbimSchemaVersion.IfcRail;
+<# } else if (SchemasIds.Any(i => i == "IFC4x3_RC1")) { #>
+				return XbimSchemaVersion.IFC4x3_RC1;
 <# } else if (SchemasIds.Any(i => i == "COBIE_EXPRESS")) { #>
 				return XbimSchemaVersion.Cobie2X4;
 <#	} else { #>

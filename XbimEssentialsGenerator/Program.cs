@@ -37,9 +37,9 @@ namespace XbimEssentialsGenerator
             MoveEnumsToInterfaces(ifc4Domains, ifc4, Environment.CurrentDirectory, "Xbim.Ifc4");
 
 
-            var ifcRail = LoadIfcRail();
-            var ifcRailDomains = DomainStructure.LoadIfcRail();
-            EnhanceNullStyleInIfc(ifcRail, ifcRailDomains);
+            var ifc4x3 = LoadIfc4x3_RC1();
+            var ifc4x3Domains = DomainStructure.LoadIfc4x3();
+            EnhanceNullStyleInIfc(ifc4x3, ifc4x3Domains);
 
 
             var settings = new GeneratorSettings
@@ -66,17 +66,17 @@ namespace XbimEssentialsGenerator
             Generator.GenerateSchema(settings, ifc4);
             Console.WriteLine(@"IFC4 with interfaces generated");
 
-            settings.Structure = ifcRailDomains;
-            settings.OutputPath = "Xbim.IfcRail";
+            settings.Structure = ifc4x3Domains;
+            settings.OutputPath = "Xbim.Ifc4x3";
             settings.GenerateInterfaces = false;
-            Generator.GenerateSchema(settings, ifcRail);
-            Console.WriteLine(@"IFC Rail without interfaces generated");
+            Generator.GenerateSchema(settings, ifc4x3);
+            Console.WriteLine(@"IFC4x3 RC1 without interfaces generated");
 
             //generate cross schema access
             settings.CrossAccessProjectPath = "Xbim.Ifc4";
             settings.CrossAccessStructure = ifc4Domains;
             settings.SchemaInterfacesNamespace = "Interfaces";
-            Generator.GenerateCrossAccess(settings, ifcRail, ifc4);
+            Generator.GenerateCrossAccess(settings, ifc4x3, ifc4);
             Console.WriteLine(@"IFC4 interface access generated for IFC Rail");
 
             watch.Stop();
@@ -100,9 +100,9 @@ namespace XbimEssentialsGenerator
             return SchemaModel.Load(File.ReadAllText(@"Schemas\IFC2X3_TC1.exp"), SchemaSources.IFC2x3_TC1);
         }
 
-        public static SchemaModel LoadIfcRail()
+        public static SchemaModel LoadIfc4x3_RC1()
         {
-            return SchemaModel.Load(File.ReadAllText(@"Schemas\IFC_Rail_V0.5.exp"), "IFC_RAIL");
+            return SchemaModel.Load(File.ReadAllText(@"Schemas\IFC4x3_RC1.exp"), "IFC4X3_RC1");
         }
 
         private static List<AttributeInfo> GetIgnoreDerivedAttributes()

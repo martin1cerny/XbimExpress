@@ -23,7 +23,8 @@ namespace DomainsExtractor
         {
             var inputs = new[] {
                 //@"c:\IFC_2x3_TC1",
-                @"c:\Users\Martin\Source\IFC4_ADD2\schema"
+                // @"c:\Users\Martin\Source\IFC4_ADD2\schema"
+                @"c:\Users\Martin\Source\IFC4x3_RC1\RC1\HTML\schema"
             };
 
             foreach (var input in inputs)
