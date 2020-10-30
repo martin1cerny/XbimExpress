@@ -49,22 +49,22 @@ namespace XbimEssentialsGenerator
                 IgnoreDerivedAttributes = GetIgnoreDerivedAttributes(),
                 GenerateInterfaces = false
             };
-            Generator.GenerateSchema(settings, ifc2X3);
-            Console.WriteLine(@"IFC2x3 without interfaces generated");
-
-            //generate cross schema access
-            settings.CrossAccessProjectPath = "Xbim.Ifc4";
-            settings.CrossAccessStructure = ifc4Domains;
-            settings.SchemaInterfacesNamespace = "Interfaces";
-            Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
-            Console.WriteLine(@"IFC4 interface access generated for IFC2x3");
-
-            settings.Structure = ifc4Domains;
-            settings.OutputPath = "Xbim.Ifc4";
-            settings.GenerateInterfaces = true;
-            settings.SchemaInterfacesNamespace = "Xbim.Ifc4.Interfaces";
-            Generator.GenerateSchema(settings, ifc4);
-            Console.WriteLine(@"IFC4 with interfaces generated");
+            // Generator.GenerateSchema(settings, ifc2X3);
+            // Console.WriteLine(@"IFC2x3 without interfaces generated");
+            // 
+            // //generate cross schema access
+            // settings.CrossAccessProjectPath = "Xbim.Ifc4";
+            // settings.CrossAccessStructure = ifc4Domains;
+            // settings.SchemaInterfacesNamespace = "Interfaces";
+            // Generator.GenerateCrossAccess(settings, ifc2X3, ifc4);
+            // Console.WriteLine(@"IFC4 interface access generated for IFC2x3");
+            // 
+            // settings.Structure = ifc4Domains;
+            // settings.OutputPath = "Xbim.Ifc4";
+            // settings.GenerateInterfaces = true;
+            // settings.SchemaInterfacesNamespace = "Xbim.Ifc4.Interfaces";
+            // Generator.GenerateSchema(settings, ifc4);
+            // Console.WriteLine(@"IFC4 with interfaces generated");
 
             settings.Structure = ifc4x3Domains;
             settings.OutputPath = "Xbim.Ifc4x3";
@@ -72,12 +72,12 @@ namespace XbimEssentialsGenerator
             Generator.GenerateSchema(settings, ifc4x3);
             Console.WriteLine(@"IFC4x3 RC1 without interfaces generated");
 
-            //generate cross schema access
-            settings.CrossAccessProjectPath = "Xbim.Ifc4";
-            settings.CrossAccessStructure = ifc4Domains;
-            settings.SchemaInterfacesNamespace = "Interfaces";
-            Generator.GenerateCrossAccess(settings, ifc4x3, ifc4);
-            Console.WriteLine(@"IFC4 interface access generated for IFC Rail");
+            // //generate cross schema access
+            // settings.CrossAccessProjectPath = "Xbim.Ifc4";
+            // settings.CrossAccessStructure = ifc4Domains;
+            // settings.SchemaInterfacesNamespace = "Interfaces";
+            // Generator.GenerateCrossAccess(settings, ifc4x3, ifc4);
+            // Console.WriteLine(@"IFC4 interface access generated for IFC 4x3");
 
             watch.Stop();
             Console.WriteLine(@"Finished in {0}s.", watch.ElapsedMilliseconds/1000);
