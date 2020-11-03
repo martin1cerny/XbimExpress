@@ -91,6 +91,8 @@ namespace Xbim.ExpressParser.SDAI
                 throw new Exception("Unexpected parser error: " + parser.Errors.LastOrDefault());
             return parser.SchemaInstance;
         }
+
+        public int LastTypeId => _entities.OfType<NamedType>().OrderBy(t => t.TypeId).LastOrDefault()?.TypeId ?? 0;
     }
 
     internal class EntityDictionary : IDictionary<Type, List<ISchemaEntity>>

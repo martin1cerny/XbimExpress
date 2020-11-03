@@ -9,6 +9,9 @@
 using <#= u #>;
 <# } #>
 
+//## Custom using statements
+//##
+
 // ReSharper disable once CheckNamespace
 namespace <#= OwnNamespace #>
 {

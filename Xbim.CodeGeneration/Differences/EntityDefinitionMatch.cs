@@ -34,6 +34,10 @@ namespace Xbim.CodeGeneration.Differences
             //try to find identity
             var identity = targetSchema.Get<EntityDefinition>(
                 e => string.Compare(source.Name, e.Name, StringComparison.InvariantCultureIgnoreCase) == 0).FirstOrDefault();
+
+            if (identity == null)
+                identity = TryHandleBuildingElementMatch(source, targetSchema);
+
             if (identity != null)
             {
                 Target = identity;
@@ -58,6 +62,31 @@ namespace Xbim.CodeGeneration.Differences
             //    if (!HasAllExplicitAttributes())
             //        throw new Exception();
             //}
+        }
+
+        private EntityDefinition TryHandleBuildingElementMatch(EntityDefinition source, SchemaModel targetSchema)
+        {
+            if (string.Equals(source.Name, "IfcBuildingElement", StringComparison.OrdinalIgnoreCase))
+            {
+                return targetSchema.Get<EntityDefinition>(e => string.Equals(e.Name, "IfcBuiltElement", StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault();
+            }
+            if (string.Equals(source.Name, "IfcBuildingElementType", StringComparison.OrdinalIgnoreCase))
+            {
+                return targetSchema.Get<EntityDefinition>(e => string.Equals(e.Name, "IfcBuiltElementType", StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault();
+            }
+            if (string.Equals(source.Name, "IfcBuiltElement", StringComparison.OrdinalIgnoreCase))
+            {
+                return targetSchema.Get<EntityDefinition>(e => string.Equals(e.Name, "IfcBuildingElement", StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault();
+            }
+            if (string.Equals(source.Name, "IfcBuiltElementType", StringComparison.OrdinalIgnoreCase))
+            {
+                return targetSchema.Get<EntityDefinition>(e => string.Equals(e.Name, "IfcBuildingElementType", StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault();
+            }
+            return null;
         }
 
         private bool HasAllExplicitAttributes()
