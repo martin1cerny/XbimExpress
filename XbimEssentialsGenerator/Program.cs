@@ -38,8 +38,8 @@ namespace XbimEssentialsGenerator
             MoveEnumsToInterfaces(ifc4Domains, ifc4, Environment.CurrentDirectory, "Xbim.Ifc4");
 
 
-            var ifc4x3 = LoadIfc4x3_RC1();
-            var ifc4x3Domains = DomainStructure.LoadIfc4x3();
+            var ifc4x3 = LoadIfc4x3_RC2();
+            var ifc4x3Domains = DomainStructure.LoadIfc4x3_RC2();
             EnhanceNullStyleInIfc(ifc4x3, ifc4x3Domains);
             FixEnumerationSelect(ifc4x3, ifc4x3Domains);
 
@@ -72,7 +72,7 @@ namespace XbimEssentialsGenerator
             settings.OutputPath = "Xbim.Ifc4x3";
             settings.GenerateInterfaces = false;
             Generator.GenerateSchema(settings, ifc4x3);
-            Console.WriteLine(@"IFC4x3 RC1 without interfaces generated");
+            Console.WriteLine(@"IFC4x3 RC2 without interfaces generated");
 
             //generate cross schema access
             settings.CrossAccessProjectPath = "Xbim.Ifc4";
@@ -107,6 +107,11 @@ namespace XbimEssentialsGenerator
         public static SchemaModel LoadIfc4x3_RC1()
         {
             return SchemaModel.Load(File.ReadAllText(@"Schemas\IFC4x3_RC1.exp"), "IFC4X3_RC1");
+        }
+
+        public static SchemaModel LoadIfc4x3_RC2()
+        {
+            return SchemaModel.Load(File.ReadAllText(@"Schemas\IFC4x3_RC2.exp"), "IFC4X3_RC2");
         }
 
         private static List<AttributeInfo> GetIgnoreDerivedAttributes()

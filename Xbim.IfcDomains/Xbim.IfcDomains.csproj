@@ -52,6 +52,7 @@
     <Content Include="Schemas\IFC4Add1.xml" />
     <Content Include="Schemas\IFC4.xml" />
     <Content Include="Schemas\IFC4x3_RC1.xml" />
+    <Content Include="Schemas\IFC4x3_RC2.xml" />
     <Content Include="Schemas\IFCRail.xml" />
     <Content Include="Schemas\IFC4x1.xml" />
     <Content Include="Schemas\IFC4Add2.xml" />

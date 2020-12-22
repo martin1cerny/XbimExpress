@@ -71,9 +71,16 @@ namespace Xbim.IfcDomains
             return (DomainStructure)serializer.Deserialize(txtReader);
         }
 
-        public static DomainStructure LoadIfc4x3()
+        public static DomainStructure LoadIfc4x3_RC1()
         {
             var txtReader = new StringReader(DomainsData.IFC4x3_RC1);
+            var serializer = new XmlSerializer(typeof(DomainStructure));
+            return (DomainStructure)serializer.Deserialize(txtReader);
+        }
+
+        public static DomainStructure LoadIfc4x3_RC2()
+        {
+            var txtReader = new StringReader(DomainsData.IFC4x3_RC2);
             var serializer = new XmlSerializer(typeof(DomainStructure));
             return (DomainStructure)serializer.Deserialize(txtReader);
         }

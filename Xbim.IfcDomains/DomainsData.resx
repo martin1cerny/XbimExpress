@@ -136,6 +136,9 @@
   <data name="IFC4x3_RC1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>schemas\ifc4x3_rc1.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="IFC4x3_RC2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>schemas\ifc4x3_rc2.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="IFCRail" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>schemas\ifcrail.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

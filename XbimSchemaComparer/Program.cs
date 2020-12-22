@@ -27,7 +27,8 @@ namespace XbimSchemaComparer
             var ifc4 = GetSchema(File.ReadAllText("IFC4.exp"), SchemaSources.IFC4);
             var ifc4x1 = GetSchema(File.ReadAllText("IFC4x1_FINAL.exp"), SchemaSources.IFC4X1_FINAL);
             var ifc4x1Extension = GetSchema(File.ReadAllText("IFC4_ADD2.exp") + File.ReadAllText("IfcAlignmentExtension.exp"), SchemaSources.IFC4X1_FINAL + "_Extension");
-            var ifc4x3 = GetSchema(File.ReadAllText("IFC4X3_RC1.exp"), SchemaSources.IFC4x3_RC1);
+            var ifc4x3_RC1 = GetSchema(File.ReadAllText("IFC4X3_RC1.exp"), SchemaSources.IFC4x3_RC1);
+            var ifc4x3_RC2 = GetSchema(File.ReadAllText("IFC4X3_RC2.exp"), SchemaSources.IFC4x3_RC2);
             var ifcRail = GetSchema(File.ReadAllText(@"c:\Users\Martin\Source\IfcRail\schemas\v0.5\IFC_Rail_pilot_EXPRESS_V0.5.exp"), "IFCRail");
             var ifcBridge = GetSchema(File.ReadAllText(@"c:\Users\Martin\Downloads\BRie.exp"), "IFCBridge");
 
@@ -41,7 +42,8 @@ namespace XbimSchemaComparer
             // Compare(ifc4Add2, ifcRail);
             // Compare(ifc4Add2, ifcRail);
             // Compare(ifcRail, ifcBridge);
-            Compare( ifc4x1Extension, ifc4x3);
+            // Compare( ifc4x1Extension, ifc4x3_RC1);
+            Compare(ifc4x3_RC1, ifc4x3_RC2);
 
             Console.ReadLine();
         }

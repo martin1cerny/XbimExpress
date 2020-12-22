@@ -184,6 +184,26 @@ namespace Xbim.IfcDomains {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Schema xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; Name=&quot;IFC4x3_RC2&quot;&gt;
+        ///  &lt;Domain Name=&quot;ActorResource&quot;&gt;
+        ///    &lt;Type&gt;IfcActorRole&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcActorSelect&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcAddress&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcAddressTypeEnum&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcOrganization&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcOrganizationRelationship&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcPerson&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcPersonAndOrganization&lt;/Type&gt;
+        ///    &lt;Type&gt;IfcPostalAddress&lt;/Typ [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IFC4x3_RC2 {
+            get {
+                return ResourceManager.GetString("IFC4x3_RC2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;Schema xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; Name=&quot;IFC4_ADD2&quot;&gt;
         ///  &lt;Domain Name=&quot;ActorResource&quot;&gt;
         ///    &lt;Type&gt;IfcActorRole&lt;/Type&gt;
